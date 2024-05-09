@@ -7,7 +7,7 @@ renderer = class{
     draw = function(self)
         local currentGamestate = gamestate.current()
 
-        if gamestate.objects then
+        if currentGamestate.objects then
             for key,object in ipairs(currentGamestate.objects) do
                 object:draw()
             end
