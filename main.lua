@@ -6,44 +6,30 @@ push = require "lib.push.push"
 require "game.misc.mathhelpers"
 require "game.render.renderer"
 
-require "game.objects.player"
-
-local test = gamestate.new()
-local newplayer = player(10, 10)
-
-test.objects = {}
-table.insert(test.objects, newplayer)
-
-function test:load()
-    
-end
-
-function test:update()
-    for index,object in ipairs(self.objects) do
-        object:update()
-    end
-end
+require "game.gamestates.menustate"
 
 function love.load()
-    love.graphics.setDefaultFilter("nearest", "nearest")
-    love.graphics.setLineStyle("rough")
-
+    -- Set up the gamestate
     gamestate.registerEvents()
-    gamestate.switch(test)
+    gamestate.switch(menustate)
+
+    -- Create a new renderer
     gamerenderer = renderer()
     
+    --Set up push
     gameWidth = 320
     gameHeight = 180
     windowWidth, windowHeight = love.window.getDesktopDimensions();
     windowWidth = windowWidth * 0.7
     windowHeight = windowHeight * 0.7
+    love.graphics.setDefaultFilter("nearest", "nearest")
+    love.graphics.setLineStyle("rough")
 
     push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false, pixelperfect = true})
 end
 
 function love.update()
     gamerenderer:update()
-    test:update()
 end
 
 function love.draw()
