@@ -3,11 +3,11 @@ require "game.objects.gameobject"
 player = class{
     __includes = gameobject,
     
-    steeringSpeedMoving = 0.05,
-    steeringSpeedStationary = 0.1,
-    accelerationSpeed = 0.001,
-    friction = 0.99,
-    maxSpeed = 2,
+    steeringSpeedMoving = 0.1,
+    steeringSpeedStationary = 0.2,
+    accelerationSpeed = 0.002,
+    friction = 0.995,
+    maxSpeed = 3,
     maxHealth = 3,
 
     health = 3,
