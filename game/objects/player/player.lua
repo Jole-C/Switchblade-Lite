@@ -27,18 +27,12 @@ local player = class{
         self.sprite = love.graphics.newImage("/game/assets/sprites/player/player.png")
         self.sprite:setFilter("nearest")
 
-        self.collider =
-        {
-            x = 0,
-            y = 0,
-            w = 4,
-            h = 4,
-        }
-
-        gamestate.current()
+        gamestate.current().world:add(self, 0, 0, 10, 10)
     end,
 
     update = function(self, dt)
+        dt = dt or 0
+
         -- Create a vector holding the direction the ship is expected to move in
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
         
@@ -85,14 +79,25 @@ local player = class{
             self.position.y = 0
         end
 
-        -- Handle collision
-        self.collider.moveTo(self.position)
+        -- Check collision
+        local world = gamestate.current().world
+        local x, y, cols, len = world:check(self, self.position.x, self.position.y)
+        world:update(self, self.position.x, self.position.y)
+
+        for i = 1, len do
+            local collidedObject = cols[i].other
+
+            if collidedObject.name == "test" then
+
+            end
+        end
     end,
 
     draw = function(self)
         local xOffset, yOffset = self.sprite:getDimensions();
         xOffset = xOffset/2
         yOffset = yOffset/2
+        
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     end,
 }

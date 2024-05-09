@@ -2,6 +2,7 @@ gamestate = require "lib.hump.gamestate"
 class = require "lib.hump.class"
 vector = require "lib.hump.vector"
 push = require "lib.push.push"
+bump = require "lib.bump.bump"
 
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
@@ -28,8 +29,8 @@ function love.load()
     push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false, pixelperfect = true})
 end
 
-function love.update()
-    gamerenderer:update()
+function love.update(dt)
+    gamerenderer:update(dt)
 end
 
 function love.draw()

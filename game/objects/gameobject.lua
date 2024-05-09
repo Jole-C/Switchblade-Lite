@@ -2,6 +2,7 @@
 
 local gameobject = class{
     position,
+    name = "",
 
     init = function(self, x, y)
         self.position = vector.new(x, y)
