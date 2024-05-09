@@ -3,6 +3,7 @@
 local gameobject = class{
     position,
     name = "",
+    markedForDelete = false,
 
     init = function(self, x, y)
         self.position = vector.new(x, y)
@@ -12,7 +13,16 @@ local gameobject = class{
 
     end,
 
-    draw = function(self, dt)
+    draw = function(self)
+
+    end,
+
+    destroy = function(self)
+        self.markedForDelete = true
+        self:cleanup()    
+    end,
+
+    cleanup = function(self)
 
     end
 }
