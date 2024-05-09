@@ -4,26 +4,40 @@ local playerBullet = require "game.objects.player.playerbullet"
 local player = class{
     __includes = gameobject,
     
-    steeringSpeedMoving = 0.1,
-    steeringSpeedStationary = 0.2,
-    accelerationSpeed = 0.002,
-    friction = 0.995,
-    maxSpeed = 3,
+    -- Generic parameters of the ship
     maxHealth = 3,
 
+    -- Movement parameters of the ship
+    steeringSpeedMoving = 0.1,
+    steeringSpeedStationary = 0.2,
+    accelerationSpeed = 0.005,
+    boostingAccelerationSpeed = 0.02,
+    friction = 0.99,
+    maxSpeed = 3,
+    maxBoostingSpeed = 6,
+    maxShipTemperature = 100,
+    shipHeatAccumulation = 1,
+    shipCoolingRate = 1,
+    shipOverheatCoolingRate = 0.4,
+
+    -- Firing parameters of the ship
+    fireCooldown = 0.05,
+    bulletSpeed = 5,
+    bulletDamage = 3,
+    maxAmmo = 30,
+
+    -- Ship variables
     health = 3,
     movementSpeed = 0,
     steeringSpeed = 0,
     angle = 0,
     velocity,
-
-    canFire = true,
-    fireCooldown = 0.05,
-    bulletSpeed = 5,
-    bulletDamage = 3,
-    maxAmmo = 30,
-    ammo = 0,
+    isBoosting = false,
+    isOverheating = false,
+    shipTemperature = 0,
     fireResetTimer,
+    ammo = 0,
+    canFire = true,
 
     init = function(self, x, y)
         gameobject.init(self, x, y)
@@ -39,7 +53,8 @@ local player = class{
     end,
 
     update = function(self, dt)
-        dt = dt or 0
+        -- Boosting is always assumed to be false
+        self.isBoosting = false
 
         -- Create a vector holding the direction the ship is expected to move in
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
@@ -47,27 +62,79 @@ local player = class{
         -- Set the steering speed to its default value
         self.steeringSpeed = self.steeringSpeedStationary
 
-        -- Apply a force to the ship when the thrust button is held down and set the steering speed
-        if love.keyboard.isDown("w") then
-            self.movementSpeed = self.movementSpeed + self.accelerationSpeed
-            self.movementSpeed = math.clamp(self.movementSpeed, 0, self.maxSpeed)
+        -- Handle ship functionality, moving boosting and firing
+        if self.isOverheating == false then
 
-            self.velocity = self.velocity + movementDirection * self.movementSpeed
+            -- Apply a forward thrust to the ship
+            if love.keyboard.isDown("w") then
+                self.movementSpeed = self.movementSpeed + self.accelerationSpeed
+                self.movementSpeed = math.clamp(self.movementSpeed, 0, self.maxSpeed)
 
-            self.steeringSpeed = self.steeringSpeedMoving
+                self.velocity = self.velocity + movementDirection * self.movementSpeed
+
+                self.steeringSpeed = self.steeringSpeedMoving
+            end
+
+            -- Boost the ship
+            if love.keyboard.isDown("lshift") then
+                self.isBoosting = true
+                self.movementSpeed = self.movementSpeed + self.boostingAccelerationSpeed
+                self.velocity = self.velocity + movementDirection * self.movementSpeed
+                self.steeringSpeed = self.steeringSpeedMoving
+
+                self.shipTemperature = self.shipTemperature + self.shipHeatAccumulation
+            end
+
+            -- Steer the ship
+            if love.keyboard.isDown("a") and self.isBoosting == false then
+                self.angle = self.angle - self.steeringSpeed
+            end
+
+            if love.keyboard.isDown("d") and self.isBoosting == false then
+                self.angle = self.angle + self.steeringSpeed
+            end
+
+            -- Fire gun
+            if self.canFire == true and love.keyboard.isDown("space") and self.ammo > 0 and self.isBoosting == false then
+                local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage)
+                gamestate.current():addObject(newBullet)
+    
+                self.canFire = false
+                self.fireResetTimer = timer.after(self.fireCooldown, function() self:setCanFire() end)
+                self.ammo = self.ammo - 1
+            end
         end
 
-        -- Steer the ship
-        if love.keyboard.isDown("a") then
-            self.angle = self.angle - self.steeringSpeed
+        -- Handle overheating
+        if self.shipTemperature >= self.maxShipTemperature then
+            self.isOverheating = true
+        end
+        
+        local coolingRate = self.shipCoolingRate
+
+        if self.isOverheating == true then
+            self.isBoosting = false
+            coolingRate = self.shipOverheatCoolingRate
+            
+            if self.shipTemperature <= 0 then
+                self.isOverheating = false
+            end
         end
 
-        if love.keyboard.isDown("d") then
-            self.angle = self.angle + self.steeringSpeed
+        if self.isBoosting == false then
+            self.shipTemperature = self.shipTemperature - coolingRate
         end
+
+        self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
 
         -- Apply the velocity to the ship and then apply friction
-        self.velocity = self.velocity:trimmed(self.maxSpeed)
+        local trimmedSpeed = self.maxSpeed
+
+        if self.isBoosting then
+            trimmedSpeed = self.maxBoostingSpeed
+        end
+
+        self.velocity = self.velocity:trimmed(trimmedSpeed)
         self.position = self.position + self.velocity
 
         self.movementSpeed = self.movementSpeed * self.friction
@@ -98,16 +165,6 @@ local player = class{
             if collidedObject.name == "test" then
 
             end
-        end
-
-        -- Fire gun
-        if self.canFire == true and love.keyboard.isDown("space") and self.ammo > 0 then
-            local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage)
-            gamestate.current():addObject(newBullet)
-
-            self.canFire = false
-            self.fireResetTimer = timer.after(self.fireCooldown, function() self:setCanFire() end)
-            self.ammo = self.ammo - 1
         end
     end,
 
