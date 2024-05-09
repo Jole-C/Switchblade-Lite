@@ -16,6 +16,8 @@ local player = class{
     angle = 0,
     velocity,
 
+    collider,
+
     init = function(self, x, y)
         gameobject.init(self, x, y)
 
@@ -24,6 +26,16 @@ local player = class{
 
         self.sprite = love.graphics.newImage("/game/assets/sprites/player/player.png")
         self.sprite:setFilter("nearest")
+
+        self.collider =
+        {
+            x = 0,
+            y = 0,
+            w = 4,
+            h = 4,
+        }
+
+        gamestate.current()
     end,
 
     update = function(self, dt)
@@ -72,6 +84,9 @@ local player = class{
         if self.position.y > gameHeight then
             self.position.y = 0
         end
+
+        -- Handle collision
+        self.collider.moveTo(self.position)
     end,
 
     draw = function(self)
