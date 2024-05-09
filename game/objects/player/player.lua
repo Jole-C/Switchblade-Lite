@@ -1,4 +1,5 @@
 local gameobject = require "game.objects.gameobject"
+local playerBullet = require "game.objects.player.playerbullet"
 
 local player = class{
     __includes = gameobject,
@@ -16,13 +17,20 @@ local player = class{
     angle = 0,
     velocity,
 
-    collider,
+    canFire = true,
+    fireCooldown = 0.05,
+    bulletSpeed = 5,
+    bulletDamage = 3,
+    maxAmmo = 30,
+    ammo = 0,
+    fireResetTimer,
 
     init = function(self, x, y)
         gameobject.init(self, x, y)
 
         self.velocity = vector.new(0, 0)
         self.health = self.maxHealth
+        self.ammo = self.maxAmmo
 
         self.sprite = love.graphics.newImage("/game/assets/sprites/player/player.png")
         self.sprite:setFilter("nearest")
@@ -91,15 +99,29 @@ local player = class{
 
             end
         end
+
+        -- Fire gun
+        if self.canFire == true and love.keyboard.isDown("space") and self.ammo > 0 then
+            local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage)
+            gamestate.current():addObject(newBullet)
+
+            self.canFire = false
+            self.fireResetTimer = timer.after(self.fireCooldown, function() self:setCanFire() end)
+            self.ammo = self.ammo - 1
+        end
     end,
 
     draw = function(self)
         local xOffset, yOffset = self.sprite:getDimensions();
         xOffset = xOffset/2
         yOffset = yOffset/2
-        
+
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     end,
+
+    setCanFire = function(self)
+        self.canFire = true
+    end
 }
 
 return player

@@ -1,6 +1,7 @@
 gamestate = require "lib.hump.gamestate"
 class = require "lib.hump.class"
 vector = require "lib.hump.vector"
+timer = require "lib.hump.timer"
 push = require "lib.push.push"
 bump = require "lib.bump.bump"
 
@@ -31,6 +32,7 @@ end
 
 function love.update(dt)
     gamerenderer:update(dt)
+    timer.update(dt)
 end
 
 function love.draw()
