@@ -1,6 +1,6 @@
 
 
-gameobject = class{
+local gameobject = class{
     position,
 
     init = function(self, x, y)
@@ -15,3 +15,5 @@ gameobject = class{
 
     end
 }
+
+return gameobject

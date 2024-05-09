@@ -4,14 +4,14 @@ vector = require "lib.hump.vector"
 push = require "lib.push.push"
 
 require "game.misc.mathhelpers"
-require "game.render.renderer"
+local renderer = require "game.render.renderer"
 
-require "game.gamestates.menustate"
+local menu = require "game.gamestates.menustate"
 
 function love.load()
     -- Set up the gamestate
     gamestate.registerEvents()
-    gamestate.switch(menustate)
+    gamestate.switch(menu)
 
     -- Create a new renderer
     gamerenderer = renderer()

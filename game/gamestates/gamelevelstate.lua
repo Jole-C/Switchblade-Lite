@@ -1,6 +1,6 @@
-require "game.objects.player"
+local player = require "game.objects.player"
 
-gamelevelstate = gamestate.new()
+local gamelevelstate = gamestate.new()
 gamelevelstate.objects = {}
 
 function gamelevelstate:init()
@@ -15,5 +15,6 @@ function gamelevelstate:update()
 end
 
 function gamelevelstate:draw()
-    love.graphics.print("current gamestate: game")
 end
+
+return gamelevelstate

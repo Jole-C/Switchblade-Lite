@@ -1,5 +1,5 @@
 
-renderer = class{
+local renderer = class{
 
     update = function(self)
     end,
@@ -14,3 +14,5 @@ renderer = class{
         end
     end
 }
+
+return renderer

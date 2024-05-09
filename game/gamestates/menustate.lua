@@ -1,14 +1,15 @@
-require "game.gamestates.gamelevelstate"
+local gamelevel = require "game.gamestates.gamelevelstate"
 
-menustate = gamestate.new()
+local menustate = gamestate.new()
 
 function menustate:init()
 end
 
 function menustate:update()
-    gamestate.switch(gamelevelstate)
+    gamestate.switch(gamelevel)
 end
 
 function menustate:draw()
-    love.graphics.print("current gamestate: menu")
 end
+
+return menustate

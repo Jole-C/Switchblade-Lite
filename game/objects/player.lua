@@ -1,6 +1,6 @@
-require "game.objects.gameobject"
+local gameobject = require "game.objects.gameobject"
 
-player = class{
+local player = class{
     __includes = gameobject,
     
     steeringSpeedMoving = 0.1,
@@ -81,3 +81,5 @@ player = class{
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     end,
 }
+
+return player
