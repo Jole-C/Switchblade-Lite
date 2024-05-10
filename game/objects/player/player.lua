@@ -21,7 +21,7 @@ local player = class{
     shipCoolingRate = 40,
     shipOverheatCoolingRate = 20,
     boostDamage = 5,
-    boostEnemyHitHeatAccumulation = 10,
+    boostEnemyHitHeatAccumulation = 25,
     contactDamageHeatMultiplier = 10,
 
     -- Firing parameters of the ship
@@ -29,7 +29,7 @@ local player = class{
     bulletSpeed = 5,
     bulletDamage = 3,
     maxAmmo = 30,
-    shipKnockbackForce = 0.25,
+    shipKnockbackForce = 10,
 
     -- Ship variables
     health = 3,
@@ -198,7 +198,7 @@ local player = class{
                             end
                         end
                     else
-                        self:onHit(4)
+                        self:onHit(collidedObject.contactDamage)
                         collidedObject:destroy()
                     end
                 end
