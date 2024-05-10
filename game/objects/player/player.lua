@@ -22,13 +22,14 @@ local player = class{
     shipOverheatCoolingRate = 20,
     boostDamage = 5,
     boostEnemyHitHeatAccumulation = 10,
+    contactDamageHeatMultiplier = 10,
 
     -- Firing parameters of the ship
     fireCooldown = 0.05,
     bulletSpeed = 5,
     bulletDamage = 3,
     maxAmmo = 30,
-    shipKnockackForce = 0.25,
+    shipKnockbackForce = 0.25,
 
     -- Ship variables
     health = 3,
@@ -171,8 +172,12 @@ local player = class{
 
         -- Check collision
         local world = gamestate.current().world
-        local x, y, cols, len = world:check(self.collider, self.position.x, self.position.y)
-        world:update(self.collider, self.position.x, self.position.y)
+        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
+        colliderPositionX = self.position.x - colliderWidth/2
+        colliderPositionY = self.position.y - colliderHeight/2
+
+        local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
+        world:update(self.collider, colliderPositionX, colliderPositionY)
 
         for i = 1, len do
             local collidedObject = cols[i].other.owner
@@ -182,10 +187,14 @@ local player = class{
                 goto continue
             end
 
-            if self.isBoosting == true and colliderDefinition == colliderDefinitions.enemy then
-                if collidedObject.onHit then
-                    collidedObject:onHit(self.boostDamage)
-                    self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
+            if colliderDefinition = colliderDefinitions.enemy then
+                if self.isBoosting == true  then
+                    if collidedObject.onHit then
+                        collidedObject:onHit(self.boostDamage)
+                        self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
+                    end
+                else
+                    self:onHit(collidedObject.contactDamage)
                 end
             end
 
@@ -199,12 +208,20 @@ local player = class{
         yOffset = yOffset/2
 
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
-
         love.graphics.print(self.shipTemperature, 0, 0)
     end,
 
     setCanFire = function(self)
         self.canFire = true
+    end,
+
+    onHit = function(self, damage)
+        self.health = self.health - damage
+        self.temperature = self.temperature + (self.contactDamageHeatMultiplier * damage)
+    end
+
+    cleanup = function(self)
+        gamestate.current().world:remove(self.collider)
     end
 }
 

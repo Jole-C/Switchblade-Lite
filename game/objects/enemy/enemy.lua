@@ -8,11 +8,10 @@ local enemy = class{
     invulnerableTime = 0.5,
     isInvulnerable = false,
     invulnerableTimer,
+    contactDamage = 1,
 
     init = function(self, x, y)
         gameobject.init(self, x, y)
-        
-        self.colliderDefinition = colliderDefinitions.enemy
     end,
 
     update = function(self, dt)
