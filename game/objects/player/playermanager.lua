@@ -1,7 +1,7 @@
 local player = require "game.objects.player.player"
 
 local playerManager = class{
-    playerReference = {},
+    playerReference,
 
     init = function(self)
 
@@ -20,6 +20,16 @@ local playerManager = class{
 
     doesPlayerExist = function(self)
         return self.playerReference ~= nil
+    end,
+
+    update = function(self)
+        if self.playerReference == nil then
+            return
+        end
+
+        if self.playerReference.health <= 0 then
+            self.playerReference = nil
+        end
     end
 }
 
