@@ -1,5 +1,6 @@
 local wall = require "game.objects.wall"
 local chargerEnemy = require "game.objects.enemy.chargerenemy"
+local director = require "game.director"
 
 local gamelevelstate = gamestate.new()
 gamelevelstate.objects = {}
@@ -18,12 +19,14 @@ function gamelevelstate:enter()
     self:addObject(leftWall)
     self:addObject(rightWall)
 
-    local newPlayer = playerManager:spawnPlayer()
-
     local testEnemy = chargerEnemy(100, 100)
     self:addObject(testEnemy)
 
+    local newPlayer = playerManager:spawnPlayer()
     self:addObject(newPlayer)
+
+    local director = director(0, 0)
+    self:addObject(director)
 end
 
 function gamelevelstate:update(dt)
@@ -45,6 +48,13 @@ end
 
 function gamelevelstate:removeObject(index)
     table.remove(self.objects, index)
+end
+
+function gamelevelstate:cleanup()
+    for index,object in ipairs(self.objects) do
+        object:destroy()
+        self:removeObject(index)
+    end
 end
 
 return gamelevelstate
