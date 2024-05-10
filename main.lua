@@ -4,6 +4,7 @@ vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 push = require "lib.push.push"
 bump = require "lib.bump.bump"
+love.math.pi = 3.14159265
 
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
@@ -18,7 +19,7 @@ function SetupResources()
     resourceManager:addResource(playerSprite, "player sprite")
 
     local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/chargerenemy.png")
-    resourceManager:addResource(playerSprite, "charger enemy sprite")
+    resourceManager:addResource(chargerEnemy, "charger enemy sprite")
 end
 
 function love.load()
