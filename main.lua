@@ -7,9 +7,19 @@ bump = require "lib.bump.bump"
 
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
+local resource = require "game.resourcemanager"
 colliderdefinitions = require "game.collision.colliderdefinitions"
 
 local menu = require "game.gamestates.menustate"
+
+function SetupResources()
+    -- In game resources
+    local playerSprite = love.graphics.newImage("game/assets/sprites/player/player.png")
+    resourceManager:addResource(playerSprite, "player sprite")
+
+    local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/chargerenemy.png")
+    resourceManager:addResource(playerSprite, "charger enemy sprite")
+end
 
 function love.load()
     -- Set up the gamestate
@@ -17,7 +27,11 @@ function love.load()
     gamestate.switch(menu)
 
     -- Create a new renderer
-    gamerenderer = renderer()
+    gameRenderer = renderer()
+
+    -- Create the resource manager
+    resourceManager = resource()
+    SetupResources()
     
     --Set up push
     gameWidth = 320
@@ -32,12 +46,12 @@ function love.load()
 end
 
 function love.update(dt)
-    gamerenderer:update(dt)
+    gameRenderer:update(dt)
     timer.update(dt)
 end
 
 function love.draw()
     push:start()
-    gamerenderer:draw()
+    gameRenderer:draw()
     push:finish()
 end

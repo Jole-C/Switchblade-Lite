@@ -39,6 +39,8 @@ local player = class{
     fireResetTimer,
     ammo = 0,
     canFire = true,
+    
+    sprite,
 
     init = function(self, x, y)
         gameobject.init(self, x, y)
@@ -47,7 +49,7 @@ local player = class{
         self.health = self.maxHealth
         self.ammo = self.maxAmmo
 
-        self.sprite = love.graphics.newImage("/game/assets/sprites/player/player.png")
+        self.sprite = resourceManager:getResource("player sprite")
         self.sprite:setFilter("nearest")
 
         self.colliderdefinition = colliderdefinitions.player
@@ -169,14 +171,14 @@ local player = class{
         for i = 1, len do
             local collidedObject = cols[i].other
 
-            if collidedObject.name == "test" then
+            if collidedObject.colliderdefinition == "test" then
 
             end
         end
     end,
 
     draw = function(self)
-        local xOffset, yOffset = self.sprite:getDimensions();
+        local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = xOffset/2
         yOffset = yOffset/2
 
