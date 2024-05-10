@@ -1,5 +1,6 @@
 local player = require "game.objects.player.player"
 local wall = require "game.objects.wall"
+local chargerEnemy = require "game.objects.enemy.chargerenemy"
 
 local gamelevelstate = gamestate.new()
 gamelevelstate.objects = {}
@@ -7,8 +8,6 @@ gamelevelstate.world = {}
 
 function gamelevelstate:enter()
     self.world = bump.newWorld()
-
-    local newPlayer = player(0, 0)
 
     local upperWall = wall(0, -20, gameWidth, 20)
     local lowerWall = wall(0, gameHeight, gameWidth, 20)
@@ -19,6 +18,11 @@ function gamelevelstate:enter()
     self:addObject(lowerWall)
     self:addObject(leftWall)
     self:addObject(rightWall)
+
+    local newPlayer = player(0, 0)
+
+    local testEnemy = chargerEnemy(100, 100)
+    self:addObject(testEnemy)
 
     self:addObject(newPlayer)
 end

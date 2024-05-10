@@ -8,8 +8,7 @@ local chargerEnemy = class{
     angle,
 
     sprite,
-    wallBouncePoint = {},
-    wallBouncePosition,
+    wallBounceCheckPosition,
 
     init = function(self, x, y)
         enemy.init(self, x, y)
@@ -18,10 +17,7 @@ local chargerEnemy = class{
 
         self.sprite = resourceManager:getResource("charger enemy sprite")
         self.sprite:setFilter("nearest")
-        self.wallBouncePosition = vector.new(0, 0)
-        
-        gamestate.current().world:add(self.wallBouncePoint, x, y, 1, 1)
-        
+        self.wallBounceCheckPosition = vector.new(0, 0)
     end,
 
     update = function(self)
@@ -30,16 +26,14 @@ local chargerEnemy = class{
         self.position = self.position + movementDirection * self.speed
 
         -- Handle collision between the border
-        self.wallBouncePosition = self.position + movementDirection * self.speed
-        gamestate.current().world:update(self.wallBouncePoint, self.wallBouncePosition.x, self.wallBouncePosition.y)
-
-        local x, y, cols, len = world:check(self, self.position.x, self.position.y)
+        self.wallBounceCheckPosition = self.position + movementDirection * 30
+        local cols, len = gamestate.current().world:queryPoint(self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y)
 
         for i = 1, len do
-            local collidedObject = cols[i].other
+            local collidedObject = cols[i]
 
-            if collidedObject.colliderdefinition == collider then
-
+            if collidedObject.colliderDefinition == colliderDefinitions.wall then
+                self.angle = self.angle + love.math.pi
             end
         end
     end,
@@ -50,6 +44,9 @@ local chargerEnemy = class{
         yOffset = yOffset/2
 
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
+        local cols, len = gamestate.current().world:queryPoint(self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y)
+
+        love.graphics.circle("fill", self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y, 2)
     end
 }
 

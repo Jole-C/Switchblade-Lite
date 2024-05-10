@@ -1,5 +1,5 @@
 
-local colliderdefinitions = {
+local colliderDefinitions = {
     player = "player",
     enemy = "enemy",
     playerbullet = "playerbullet",
@@ -8,4 +8,4 @@ local colliderdefinitions = {
     wall = "wall"
 }
 
-return colliderdefinitions
+return colliderDefinitions
