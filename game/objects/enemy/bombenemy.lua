@@ -1,4 +1,4 @@
-local enemy = require "game.objects.enemy.bombenemy"
+local enemy = require "game.objects.enemy.enemy"
 
 local bombenemy = class{
     __includes = enemy,
