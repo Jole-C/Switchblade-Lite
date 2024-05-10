@@ -7,7 +7,6 @@ local director = class{
         local player = playerManager.playerReference
 
         if playerManager:doesPlayerExist() == false then
-            gamestate.current():cleanup()
             gamestate.switch(menu)
         end
     end

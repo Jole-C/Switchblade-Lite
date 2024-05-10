@@ -43,8 +43,9 @@ local player = class{
     fireResetTimer,
     ammo = 0,
     canFire = true,
-    collider,
     
+    -- Ship components
+    collider,
     sprite,
 
     init = function(self, x, y)
@@ -56,8 +57,6 @@ local player = class{
 
         self.sprite = resourceManager:getResource("player sprite")
         self.sprite:setFilter("nearest")
-
-        self.colliderDefinition = colliderDefinitions.player
 
         self.collider = collider(colliderDefinitions.player, self)
         gamestate.current().world:add(self.collider, 0, 0, 10, 10)
@@ -75,7 +74,6 @@ local player = class{
 
         -- Handle ship functionality, moving boosting and firing
         if self.isOverheating == false then
-
             -- Apply a forward thrust to the ship
             if love.keyboard.isDown("w") then
                 self.movementSpeed = self.movementSpeed + (self.accelerationSpeed * dt)
@@ -172,33 +170,41 @@ local player = class{
 
         -- Check collision
         local world = gamestate.current().world
-        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
-        colliderPositionX = self.position.x - colliderWidth/2
-        colliderPositionY = self.position.y - colliderHeight/2
 
-        local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
-        world:update(self.collider, colliderPositionX, colliderPositionY)
-
-        for i = 1, len do
-            local collidedObject = cols[i].other.owner
-            local colliderDefinition = cols[i].other.colliderDefinition
-
-            if not collidedObject or not colliderDefinition then
-                goto continue
-            end
-
-            if colliderDefinition == colliderDefinitions.enemy then
-                if self.isBoosting == true  then
-                    if collidedObject.onHit then
-                        collidedObject:onHit(self.boostDamage)
-                        self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
-                    end
-                else
-                    self:onHit(collidedObject.contactDamage)
+        if world:hasItem(self.collider) then
+            local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
+            colliderPositionX = self.position.x - colliderWidth/2
+            colliderPositionY = self.position.y - colliderHeight/2
+    
+            local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
+            world:update(self.collider, colliderPositionX, colliderPositionY)
+    
+            for i = 1, len do
+                local collidedObject = cols[i].other.owner
+                local colliderDefinition = cols[i].other.colliderDefinition
+    
+                if not collidedObject or not colliderDefinition then
+                    goto continue
                 end
-            end
+    
+                if colliderDefinition == colliderDefinitions.enemy then
+                    if self.isBoosting == true  then
+                        if collidedObject.onHit then
+                            collidedObject:onHit(self.boostDamage)
+                            self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
-            ::continue::
+                            if collidedObject.health <= 0 then
+                                self.ammo = self.maxAmmo
+                            end
+                        end
+                    else
+                        self:onHit(4)
+                        collidedObject:destroy()
+                    end
+                end
+    
+                ::continue::
+            end
         end
     end,
 
@@ -217,7 +223,11 @@ local player = class{
 
     onHit = function(self, damage)
         self.health = self.health - damage
-        self.temperature = self.temperature + (self.contactDamageHeatMultiplier * damage)
+        self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
+
+        if self.health <= 0 then
+            self:destroy()
+        end
     end,
 
     cleanup = function(self)

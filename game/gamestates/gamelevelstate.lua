@@ -4,10 +4,12 @@ local director = require "game.director"
 
 local gamelevelstate = gamestate.new()
 gamelevelstate.objects = {}
-gamelevelstate.world = {}
+gamelevelstate.world = nil
 
 function gamelevelstate:enter()
-    self.world = bump.newWorld()
+    if not self.world then
+        self.world = bump.newWorld()
+    end
 
     local upperWall = wall(0, -20, gameWidth, 20)
     local lowerWall = wall(0, gameHeight, gameWidth, 20)
@@ -50,10 +52,14 @@ function gamelevelstate:removeObject(index)
     table.remove(self.objects, index)
 end
 
-function gamelevelstate:cleanup()
+function gamelevelstate:leave()
     for index,object in ipairs(self.objects) do
-        object:destroy()
-        self:removeObject(index)
+        if object.markedForDelete == true then
+            self:removeObject(index)
+        else
+            object:destroy()
+            self:removeObject(index)
+        end
     end
 end
 
