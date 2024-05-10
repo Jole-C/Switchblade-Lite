@@ -33,7 +33,15 @@ local chargerEnemy = class{
         self.wallBouncePosition = self.position + movementDirection * self.speed
         gamestate.current().world:update(self.wallBouncePoint, self.wallBouncePosition.x, self.wallBouncePosition.y)
 
-        
+        local x, y, cols, len = world:check(self, self.position.x, self.position.y)
+
+        for i = 1, len do
+            local collidedObject = cols[i].other
+
+            if collidedObject.colliderdefinition == collider then
+
+            end
+        end
     end,
 
     draw = function(self)

@@ -52,7 +52,7 @@ local player = class{
         self.sprite = resourceManager:getResource("player sprite")
         self.sprite:setFilter("nearest")
 
-        self.colliderdefinition = colliderdefinitions.player
+        self.colliderDefinition = colliderDefinitions.player
         gamestate.current().world:add(self, 0, 0, 10, 10)
     end,
 
@@ -171,7 +171,7 @@ local player = class{
         for i = 1, len do
             local collidedObject = cols[i].other
 
-            if collidedObject.colliderdefinition == "test" then
+            if collidedObject.colliderDefinition == "test" then
 
             end
         end

@@ -10,7 +10,7 @@ local wall = class{
         gameobject.init(self, x, y)
 
         self.dimensions = vector.new(w, h)
-        self.colliderdefinition = colliderdefinitions.wall
+        self.colliderDefinition = colliderDefinitions.wall
         gamestate.current().world:add(self, self.position.x, self.position.y, self.dimensions.x, self.dimensions.y)
     end,
 

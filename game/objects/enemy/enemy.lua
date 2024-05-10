@@ -9,7 +9,7 @@ local enemy = class{
     init = function(self, x, y)
         gameobject.init(self, x, y)
         
-        self.colliderdefinition = colliderdefinitions.enemy
+        self.colliderDefinition = colliderDefinitions.enemy
     end,
 
     onHit = function(self, damage)

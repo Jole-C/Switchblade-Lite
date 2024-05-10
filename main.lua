@@ -8,7 +8,7 @@ bump = require "lib.bump.bump"
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
-colliderdefinitions = require "game.collision.colliderdefinitions"
+colliderDefinitions = require "game.collision.colliderdefinitions"
 
 local menu = require "game.gamestates.menustate"
 
