@@ -108,7 +108,7 @@ local player = class{
 
             -- Fire gun
             if self.canFire == true and love.keyboard.isDown("space") and self.ammo > 0 and self.isBoosting == false then
-                local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage)
+                local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage, 5, colliderDefinitions.player, 8, 8)
                 gamestate.current():addObject(newBullet)
     
                 self.canFire = false
@@ -171,7 +171,7 @@ local player = class{
         -- Check collision
         local world = gamestate.current().world
 
-        if world:hasItem(self.collider) then
+        if world and world:hasItem(self.collider) then
             local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
             colliderPositionX = self.position.x - colliderWidth/2
             colliderPositionY = self.position.y - colliderHeight/2
