@@ -30,10 +30,10 @@ end
 function gamelevelstate:update(dt)
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
-            self:removeObject(object)
+            self:removeObject(index)
+        else
+            object:update(dt)
         end
-
-        object:update(dt)
     end
 end
 
@@ -44,8 +44,8 @@ function gamelevelstate:addObject(object)
     table.insert(self.objects, object)
 end
 
-function gamelevelstate:removeObject(object)
-    table.remove(self.objects, object)
+function gamelevelstate:removeObject(index)
+    table.remove(self.objects, index)
 end
 
 return gamelevelstate
