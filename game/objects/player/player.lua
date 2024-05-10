@@ -1,5 +1,6 @@
 local gameobject = require "game.objects.gameobject"
 local playerBullet = require "game.objects.player.playerbullet"
+local collider = require "game.collision.collider"
 
 local player = class{
     __includes = gameobject,
@@ -41,6 +42,7 @@ local player = class{
     fireResetTimer,
     ammo = 0,
     canFire = true,
+    collider,
     
     sprite,
 
@@ -55,7 +57,9 @@ local player = class{
         self.sprite:setFilter("nearest")
 
         self.colliderDefinition = colliderDefinitions.player
-        gamestate.current().world:add(self, 0, 0, 10, 10)
+
+        self.collider = collider(colliderDefinitions.player, self)
+        gamestate.current().world:add(self.collider, 0, 0, 10, 10)
     end,
 
     update = function(self, dt)
@@ -167,18 +171,25 @@ local player = class{
 
         -- Check collision
         local world = gamestate.current().world
-        local x, y, cols, len = world:check(self, self.position.x, self.position.y)
-        world:update(self, self.position.x, self.position.y)
+        local x, y, cols, len = world:check(self.collider, self.position.x, self.position.y)
+        world:update(self.collider, self.position.x, self.position.y)
 
         for i = 1, len do
-            local collidedObject = cols[i].other
+            local collidedObject = cols[i].other.owner
+            local colliderDefinition = cols[i].other.colliderDefinition
 
-            if self.isBoosting == true and collidedObject.colliderDefinition == colliderDefinitions.enemy then
+            if not collidedObject or not colliderDefinition then
+                goto continue
+            end
+
+            if self.isBoosting == true and colliderDefinition == colliderDefinitions.enemy then
                 if collidedObject.onHit then
                     collidedObject:onHit(self.boostDamage)
                     self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
                 end
             end
+
+            ::continue::
         end
     end,
 

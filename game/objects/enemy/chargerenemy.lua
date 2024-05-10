@@ -23,7 +23,7 @@ local chargerEnemy = class{
 
     update = function(self, dt)
         enemy.update(self, dt)
-        
+
         -- Move the enemy
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
         self.position = self.position + movementDirection * self.speed * dt
@@ -33,11 +33,18 @@ local chargerEnemy = class{
         local cols, len = gamestate.current().world:queryPoint(self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y)
 
         for i = 1, len do
-            local collidedObject = cols[i]
+            local collidedObject = cols[i].owner
+            local colliderDefinition = cols[i].colliderDefinition
 
-            if collidedObject.colliderDefinition == colliderDefinitions.wall then
+            if not collidedObject or not colliderDefinition then
+                goto continue
+            end
+
+            if colliderDefinition == colliderDefinitions.wall then
                 self.angle = self.angle + love.math.random(love.math.pi + 10, love.math.pi - 10)
             end
+
+            ::continue::
         end
     end,
 
