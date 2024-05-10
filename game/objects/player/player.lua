@@ -173,7 +173,7 @@ local player = class{
         for i = 1, len do
             local collidedObject = cols[i].other
 
-            if self.isBoosting == true and collidedObject.colliderDefinition = colliderdefinitions.enemy then
+            if self.isBoosting == true and collidedObject.colliderDefinition == colliderDefinitions.enemy then
                 if collidedObject.onHit then
                     collidedObject:onHit(self.boostDamage)
                     self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
