@@ -43,6 +43,8 @@ function love.load()
     gameWidth = 320
     gameHeight = 180
     windowWidth, windowHeight = love.window.getDesktopDimensions();
+    windowWidth = windowWidth * 0.7
+    windowHeight = windowHeight * 0.7
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
 
