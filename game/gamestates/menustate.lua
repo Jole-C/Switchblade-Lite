@@ -1,15 +1,16 @@
-local gamelevel = require "game.gamestates.gamelevelstate"
-
 local menustate = gamestate.new()
 
 function menustate:init()
 end
 
 function menustate:update()
-    gamestate.switch(gamelevel)
+    if love.keyboard.isDown("space") then
+        gamestate.switch(gameLevel)
+    end
 end
 
 function menustate:draw()
+    love.graphics.print("main menu", 10, 10)
 end
 
 return menustate
