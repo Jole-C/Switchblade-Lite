@@ -12,7 +12,8 @@ local resource = require "game.resourcemanager"
 local playerHandler = require "game.objects.player.playermanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
-local menu = require "game.gamestates.menustate"
+menu = require "game.gamestates.menustate"
+gameLevel = require "game.gamestates.gamelevelstate"
 
 function SetupResources()
     -- In game resources
@@ -50,6 +51,7 @@ end
 
 function love.update(dt)
     gameRenderer:update(dt)
+    playerManager:update(dt)
     timer.update(dt)
 end
 
