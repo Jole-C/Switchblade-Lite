@@ -19,6 +19,8 @@ local player = class{
     shipHeatAccumulationRate = 1,
     shipCoolingRate = 40,
     shipOverheatCoolingRate = 20,
+    boostDamage = 5,
+    boostEnemyHitHeatAccumulation = 10,
 
     -- Firing parameters of the ship
     fireCooldown = 0.05,
@@ -171,8 +173,11 @@ local player = class{
         for i = 1, len do
             local collidedObject = cols[i].other
 
-            if collidedObject.colliderDefinition == "test" then
-
+            if self.isBoosting == true and collidedObject.colliderDefinition = colliderdefinitions.enemy then
+                if collidedObject.onHit then
+                    collidedObject:onHit(self.boostDamage)
+                    self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
+                end
             end
         end
     end,
