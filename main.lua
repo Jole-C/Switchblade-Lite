@@ -9,6 +9,7 @@ love.math.pi = 3.14159265
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
+local playerHandler = require "game.objects.player.playermanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
 local menu = require "game.gamestates.menustate"
@@ -33,6 +34,9 @@ function love.load()
     -- Create the resource manager
     resourceManager = resource()
     SetupResources()
+
+    -- Create the player manager
+    playerManager = playerHandler()
     
     --Set up push
     gameWidth = 320

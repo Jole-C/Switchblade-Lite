@@ -1,4 +1,3 @@
-local player = require "game.objects.player.player"
 local wall = require "game.objects.wall"
 local chargerEnemy = require "game.objects.enemy.chargerenemy"
 
@@ -19,7 +18,7 @@ function gamelevelstate:enter()
     self:addObject(leftWall)
     self:addObject(rightWall)
 
-    local newPlayer = player(0, 0)
+    local newPlayer = playerManager:spawnPlayer()
 
     local testEnemy = chargerEnemy(100, 100)
     self:addObject(testEnemy)

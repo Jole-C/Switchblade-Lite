@@ -117,7 +117,7 @@ local player = class{
                 self.fireResetTimer = timer.after(self.fireCooldown, function() self:setCanFire() end)
                 self.ammo = self.ammo - 1
 
-                self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockackForce * dt)
+                self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
             end
         end
 
