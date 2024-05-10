@@ -187,7 +187,7 @@ local player = class{
                 goto continue
             end
 
-            if colliderDefinition = colliderDefinitions.enemy then
+            if colliderDefinition == colliderDefinitions.enemy then
                 if self.isBoosting == true  then
                     if collidedObject.onHit then
                         collidedObject:onHit(self.boostDamage)
@@ -218,7 +218,7 @@ local player = class{
     onHit = function(self, damage)
         self.health = self.health - damage
         self.temperature = self.temperature + (self.contactDamageHeatMultiplier * damage)
-    end
+    end,
 
     cleanup = function(self)
         gamestate.current().world:remove(self.collider)
