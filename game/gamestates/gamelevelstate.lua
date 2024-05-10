@@ -1,4 +1,5 @@
 local player = require "game.objects.player.player"
+local wall = require "game.objects.wall"
 
 local gamelevelstate = gamestate.new()
 gamelevelstate.objects = {}
@@ -8,6 +9,17 @@ function gamelevelstate:enter()
     self.world = bump.newWorld()
 
     local newPlayer = player(0, 0)
+
+    local upperWall = wall(0, -20, gameWidth, 20)
+    local lowerWall = wall(0, gameHeight, gameWidth, 20)
+    local leftWall = wall(-20, 0, 20, gameHeight)
+    local rightWall = wall(gameWidth, 0, 20, gameHeight)
+
+    self:addObject(upperWall)
+    self:addObject(lowerWall)
+    self:addObject(leftWall)
+    self:addObject(rightWall)
+
     self:addObject(newPlayer)
 end
 
