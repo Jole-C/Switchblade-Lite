@@ -3,6 +3,7 @@
 local gameobject = class{
     position,
     name = "",
+    colliderdefinition = "",
     markedForDelete = false,
 
     init = function(self, x, y)

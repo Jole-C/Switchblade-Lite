@@ -1,0 +1,10 @@
+
+local colliderdefinitions = {
+    player = "player",
+    enemy = "enemy",
+    playerbullet = "playerbullet",
+    enemybullet = "enemybullet",
+    powerup = "powerup"
+}
+
+return colliderdefinitions

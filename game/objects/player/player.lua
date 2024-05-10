@@ -50,6 +50,7 @@ local player = class{
         self.sprite = love.graphics.newImage("/game/assets/sprites/player/player.png")
         self.sprite:setFilter("nearest")
 
+        self.colliderdefinition = colliderdefinitions.player
         gamestate.current().world:add(self, 0, 0, 10, 10)
     end,
 
