@@ -32,6 +32,9 @@ local chargerEnemy = class{
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
         self.position = self.position + movementDirection * self.speed * dt
 
+        self.position.x = math.clamp(self.position.x, 0, gameWidth)
+        self.position.y = math.clamp(self.position.y, 0, gameHeight)
+
         -- Handle collisions
         local world = gamestate.current().world
 
