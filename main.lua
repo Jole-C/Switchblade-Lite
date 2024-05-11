@@ -39,6 +39,9 @@ function SetupResources()
 
     local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/chargerenemy.png")
     resourceManager:addResource(chargerEnemy, "charger enemy sprite")
+
+    local droneEnemy = love.graphics.newImage("game/assets/sprites/enemy/droneenemy.png")
+    resourceManager:addResource(droneEnemy, "drone enemy sprite")
 end
 
 function love.load()
