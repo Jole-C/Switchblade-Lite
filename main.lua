@@ -4,7 +4,6 @@ vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 push = require "lib.push.push"
 bump = require "lib.bump.bump"
-lovekeys = require "lib.input.lovekeys"
 love.math.pi = 3.14159265
 
 require "game.misc.mathhelpers"
