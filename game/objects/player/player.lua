@@ -75,7 +75,7 @@ local player = class{
         -- Handle ship functionality, moving boosting and firing
         if self.isOverheating == false then
             -- Apply a forward thrust to the ship
-            if love.keyboard.isDown("w") then
+            if input:down("thrust") then
                 self.movementSpeed = self.movementSpeed + (self.accelerationSpeed * dt)
                 self.movementSpeed = math.clamp(self.movementSpeed, 0, self.maxSpeed)
 
@@ -85,7 +85,7 @@ local player = class{
             end
 
             -- Boost the ship
-            if love.keyboard.isDown("lshift") then
+            if input:down("boost") then
                 self.isBoosting = true
                 self.movementSpeed = self.movementSpeed + (self.boostingAccelerationSpeed * dt)
                 self.movementSpeed = math.clamp(self.movementSpeed, 0, self.maxBoostingSpeed)
@@ -98,16 +98,16 @@ local player = class{
             end
 
             -- Steer the ship
-            if love.keyboard.isDown("a") and self.isBoosting == false then
+            if input:down("steerLeft") and self.isBoosting == false then
                 self.angle = self.angle - (self.steeringSpeed * dt)
             end
 
-            if love.keyboard.isDown("d") and self.isBoosting == false then
+            if input:down("steerRight") and self.isBoosting == false then
                 self.angle = self.angle + (self.steeringSpeed * dt)
             end
 
             -- Fire gun
-            if self.canFire == true and love.keyboard.isDown("space") and self.ammo > 0 and self.isBoosting == false then
+            if self.canFire == true and input:down("shoot") and self.ammo > 0 and self.isBoosting == false then
                 local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage, 5, colliderDefinitions.player, 8, 8)
                 gamestate.current():addObject(newBullet)
     

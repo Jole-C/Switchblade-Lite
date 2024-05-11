@@ -4,7 +4,7 @@ function menustate:init()
 end
 
 function menustate:update()
-    if love.keyboard.isDown("space") then
+    if input:pressed("select") then
         gamestate.switch(gameLevel)
     end
 end

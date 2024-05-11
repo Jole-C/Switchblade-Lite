@@ -8,7 +8,7 @@ local gameoverHandler = class{
     end,
 
     update = function(self)
-        if love.keyboard.isDown("space") then
+        if input:pressed("select") then
             gamestate.switch(menu)
         end
     end,

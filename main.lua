@@ -4,6 +4,7 @@ vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 push = require "lib.push.push"
 bump = require "lib.bump.bump"
+baton = require "lib.input.baton"
 love.math.pi = 3.14159265
 
 require "game.misc.mathhelpers"
@@ -12,6 +13,20 @@ local resource = require "game.resourcemanager"
 local playerHandler = require "game.objects.player.playermanager"
 local gameDirector = require "game.gamemanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
+
+input = baton.new{
+    controls = {
+        thrust = {'key:w', 'key:up'},
+        steerLeft = {'key:a', 'key:left'},
+        steerRight = {'key:d', 'key:right'},
+        boost = {'key:lshift', 'key:rshift'},
+        shoot = {'key:space'},
+        menuUp = {'key:w', 'key:up'},
+        menuDown = {'key:d', 'key:down'},
+        select = {'key:return', 'key:space'},
+        pause = {'key:escape'},
+    }
+}
 
 menu = require "game.gamestates.menustate"
 gameLevel = require "game.gamestates.gamelevelstate"
@@ -60,6 +75,7 @@ function love.update(dt)
     gameRenderer:update(dt)
     playerManager:update(dt)
     timer.update(dt)
+    input:update()
 end
 
 function love.draw()
