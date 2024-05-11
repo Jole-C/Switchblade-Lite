@@ -101,7 +101,7 @@ local player = class{
             end
 
             -- After boosting stops, set up the timer for post boosting invulnerability
-            if self.isBoosting == true and not input:down("boost") then
+            if self.isBoosting == true and input:down("boost") == false then
                 self.isBoosting = false
 
                 self.isBoostingInvulnerable = true
