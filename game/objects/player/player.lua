@@ -24,6 +24,8 @@ local player = class{
     boostDamage = 5,
     boostEnemyHitHeatAccumulation = 25,
     contactDamageHeatMultiplier = 10,
+    boostingInvulnerableGracePeriod = 1,
+    invulnerableGracePeriod = 3,
 
     -- Firing parameters of the ship
     fireCooldown = 0.05,
@@ -43,6 +45,10 @@ local player = class{
     fireResetTimer,
     ammo = 0,
     canFire = true,
+    boostingGraceTimer,
+    invulnerableTimer,
+    isInvulnerable = false,
+    isBoostingInvulnerable = false,
     
     -- Ship components
     collider,
@@ -63,9 +69,6 @@ local player = class{
     end,
 
     update = function(self, dt)
-        -- Boosting is always assumed to be false
-        self.isBoosting = false
-
         -- Create a vector holding the direction the ship is expected to move in
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
         
@@ -95,6 +98,14 @@ local player = class{
                 steeringSpeed = self.steeringSpeedBoosting
 
                 self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate
+            end
+
+            -- After boosting stops, set up the timer for post boosting invulnerability
+            if self.isBoosting == true and not input:down("boost") then
+                self.isBoosting = false
+
+                self.isBoostingInvulnerable = true
+                self.boostingGraceTimer = timer.after(self.boostingInvulnerableGracePeriod, function() self:setBoostingVulnerable() end)
             end
 
             -- Steer the ship
@@ -193,7 +204,7 @@ local player = class{
                             collidedObject:onHit(self.boostDamage)
                             self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
-                            if collidedObject.health <= 0 then
+                            if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
                                 self.ammo = self.maxAmmo
                             end
                         end
@@ -214,16 +225,35 @@ local player = class{
         yOffset = yOffset/2
 
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
-        love.graphics.print(self.shipTemperature, 0, 0)
+        love.graphics.print("temperature: "..math.floor(self.shipTemperature).."hp: "..self.health, 0, 0)
+
+        if self.isBoostingInvulnerable then
+            love.graphics.print("is boosting invulnerable", 50, 50)
+        end
     end,
 
     setCanFire = function(self)
         self.canFire = true
     end,
 
+    setBoostingVulnerable = function(self)
+        self.isBoostingInvulnerable = false
+    end,
+
+    setVulnerable = function(self)
+        self.isInvulnerable = false
+    end,
+
     onHit = function(self, damage)
+        if self.isInvulnerable or self.isBoostingInvulnerable then
+            return
+        end
+
         self.health = self.health - damage
         self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
+
+        self.isInvulnerable = true
+        self.invulnerableTimer = timer.after(self.invulnerableGracePeriod, function() self:setVulnerable() end)
 
         if self.health <= 0 then
             self:destroy()
@@ -231,11 +261,17 @@ local player = class{
     end,
 
     cleanup = function(self)
-        if not gamestate.current().world then
-            return
+        if gamestate.current().world then
+            gamestate.current().world:remove(self.collider)
         end
-        
-        gamestate.current().world:remove(self.collider)
+
+        if self.boostingGraceTimer then
+            timer.cancel(self.boostingGraceTimer)
+        end
+
+        if self.invulnerableTimer then
+            timer.cancel(self.invulnerableTimer)
+        end
     end
 }
 
