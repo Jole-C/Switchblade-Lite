@@ -121,7 +121,6 @@ function love.draw()
     love.graphics.clear()
     love.graphics.setBlendMode("alpha")
     gameRenderer:draw()
-    love.graphics.print(collectgarbage('count'), 0, gameHeight - 20)
 
     -- Draw the shadows
     love.graphics.setCanvas(foregroundShadowCanvas)
