@@ -212,12 +212,6 @@ function push:finish(shader)
     self:applyShaders(_render.canvas, type(shader) == "table" and shader or { shader })
     love.graphics.pop()
 
-    --clear canvas
-    for i = 1, #self.canvases do
-      love.graphics.setCanvas(self.canvases[i].canvas)
-      love.graphics.clear()
-    end
-
     love.graphics.setCanvas()
     love.graphics.setShader()
   else

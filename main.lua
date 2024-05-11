@@ -2,7 +2,6 @@ gamestate = require "lib.hump.gamestate"
 class = require "lib.hump.class"
 vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
-push = require "lib.push.push"
 bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
 love.math.pi = 3.14159265
@@ -66,12 +65,11 @@ function love.load()
     gameWidth = 320
     gameHeight = 180
     windowWidth, windowHeight = love.window.getDesktopDimensions();
-    windowWidth = windowWidth * 0.7
-    windowHeight = windowHeight * 0.7
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
 
-    push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false, pixelperfect = true})
+    backgroundCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
+    foregroundCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
 end
 
 function love.update(dt)
@@ -82,8 +80,23 @@ function love.update(dt)
 end
 
 function love.draw()
-    push:start()
+    love.graphics.setCanvas(backgroundCanvas)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+    love.graphics.setColor(1, 1, 1)
+    
+    love.graphics.setCanvas(foregroundCanvas)
+    love.graphics.clear()
     gameRenderer:draw()
     love.graphics.print(collectgarbage('count'), 0, gameHeight - 20)
-    push:finish()
+
+    love.graphics.setCanvas()
+
+    local maxScaleX = love.graphics.getWidth() / backgroundCanvas:getWidth()
+    local maxScaleY = love.graphics.getHeight() / backgroundCanvas:getHeight()
+    local scale = math.min(maxScaleX, maxScaleY)
+
+    love.graphics.draw(backgroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, backgroundCanvas:getWidth() / 2, backgroundCanvas:getHeight() / 2)
+    love.graphics.draw(foregroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, foregroundCanvas:getWidth() / 2, foregroundCanvas:getHeight() / 2)
+    
 end
