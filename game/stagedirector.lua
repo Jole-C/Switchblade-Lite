@@ -7,7 +7,7 @@ local stageDirector = class{
         local player = playerManager.playerReference
 
         if playerManager:doesPlayerExist() == false then
-            gamestate.switch(menu)
+            gamestate.switch(gameover)
         end
     end
 }

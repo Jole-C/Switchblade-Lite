@@ -1,8 +1,11 @@
+local gameoverHandler = require "game.objects.gameoverhandler"
+
 local gameOverState = gamestate.new()
 gameOverState.objects = {}
 
 function gameOverState:enter()
-
+    local newGameoverHandler = gameoverHandler()
+    self:addObject(newGameoverHandler)
 end
 
 function gameOverState:update(dt)

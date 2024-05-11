@@ -15,6 +15,7 @@ colliderDefinitions = require "game.collision.colliderdefinitions"
 
 menu = require "game.gamestates.menustate"
 gameLevel = require "game.gamestates.gamelevelstate"
+gameover = require "game.gamestates.gameoverstate"
 
 function SetupResources()
     -- In game resources
