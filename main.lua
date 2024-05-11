@@ -70,6 +70,36 @@ function love.load()
 
     backgroundCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
     foregroundCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
+    foregroundShadowCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
+    
+    ps = love.graphics.newParticleSystem(resourceManager:getResource("drone enemy sprite"), 1632)
+    ps:setColors(0.0078125, 0, 1, 1, 0, 0.9296875, 1, 1, 0.359375, 0, 1, 1, 1, 0, 0.9609375, 1, 1, 1, 1, 1)
+    ps:setDirection(-1.5707963705063)
+    ps:setEmissionArea("uniform", gameWidth/2, gameHeight/2, 0, false)
+    ps:setEmissionRate(225.32614135742)
+    ps:setEmitterLifetime(-1)
+    ps:setInsertMode("top")
+    ps:setLinearAcceleration(158.52745056152, 671.95892333984, 7004.2802734375, 2611.5888671875)
+    ps:setLinearDamping(0, 0)
+    ps:setOffset(0, 0)
+    ps:setParticleLifetime(7.3186434747186e-005, 6.8977484703064)
+    ps:setRadialAcceleration(4082.21875, -799.76824951172)
+    ps:setRelativeRotation(false)
+    ps:setRotation(0, -0.1798534989357)
+    ps:setSizes(0.59753084182739)
+    ps:setSizeVariation(0.5)
+    ps:setSpeed(255.74447631836, 481.64227294922)
+    ps:setSpin(0, 0)
+    ps:setSpinVariation(0)
+    ps:setSpread(0.31415927410126)
+    ps:setTangentialAcceleration(0, 0)
+
+    ps:start()  
+
+    local dt = 0.1
+    for i = 0, 4, dt do
+        ps:update(dt)
+    end  
 end
 
 function love.update(dt)
@@ -77,26 +107,37 @@ function love.update(dt)
     playerManager:update(dt)
     timer.update(dt)
     input:update()
+    ps:update(dt)
 end
 
 function love.draw()
+    -- Draw the background
     love.graphics.setCanvas(backgroundCanvas)
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
-    love.graphics.setColor(1, 1, 1)
+    love.graphics.setBlendMode("alpha")
+    love.graphics.draw(ps, gameWidth/2, gameHeight/2)
     
+    -- Draw the foreground
     love.graphics.setCanvas(foregroundCanvas)
     love.graphics.clear()
+    love.graphics.setBlendMode("alpha")
     gameRenderer:draw()
     love.graphics.print(collectgarbage('count'), 0, gameHeight - 20)
 
-    love.graphics.setCanvas()
+    -- Draw the shadows
+    love.graphics.setCanvas(foregroundShadowCanvas)
+    love.graphics.clear()
+    love.graphics.setColor(0.1, 0.1, 0.1, 1)
+    love.graphics.draw(foregroundCanvas, 3, 3)
 
+    love.graphics.setCanvas()
+    love.graphics.setColor(1, 1, 1, 1)
+
+    -- Render the canvases
     local maxScaleX = love.graphics.getWidth() / backgroundCanvas:getWidth()
     local maxScaleY = love.graphics.getHeight() / backgroundCanvas:getHeight()
     local scale = math.min(maxScaleX, maxScaleY)
 
     love.graphics.draw(backgroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, backgroundCanvas:getWidth() / 2, backgroundCanvas:getHeight() / 2)
-    love.graphics.draw(foregroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, foregroundCanvas:getWidth() / 2, foregroundCanvas:getHeight() / 2)
-    
+    love.graphics.draw(foregroundShadowCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, foregroundShadowCanvas:getWidth() / 2, foregroundShadowCanvas:getHeight() / 2)
+    love.graphics.draw(foregroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, foregroundCanvas:getWidth() / 2, foregroundCanvas:getHeight() / 2) 
 end
