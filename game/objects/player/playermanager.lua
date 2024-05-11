@@ -5,7 +5,7 @@ local playerManager = class{
     playerPosition,
 
     init = function(self)
-
+        self.playerPosition = vector.new(0, 0)
     end,
 
     spawnPlayer = function(self, x, y)
@@ -27,7 +27,7 @@ local playerManager = class{
     update = function(self)
         if self.playerReference then
             self.playerPosition = self.playerReference.position
-            
+
             if self.playerReference.health <= 0 then
                 self.playerReference = nil
             end
