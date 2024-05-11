@@ -10,7 +10,7 @@ require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
 local playerHandler = require "game.objects.player.playermanager"
-local gameManager = require "game.gamemanager"
+local gameDirector = require "game.gamemanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
 menu = require "game.gamestates.menustate"
@@ -27,7 +27,7 @@ end
 
 function love.load()
     -- Create a new game manager
-    gameManager = gameManager()
+    gameManager = gameDirector()
 
     -- Create a new renderer
     gameRenderer = renderer()
