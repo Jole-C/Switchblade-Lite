@@ -11,6 +11,7 @@ local player = class{
     -- Movement parameters of the ship
     steeringSpeedMoving = 6,
     steeringSpeedStationary = 14,
+    steeringSpeedBoosting = 3,
     accelerationSpeed = 3,
     boostingAccelerationSpeed = 4,
     friction = 59.4,
@@ -34,7 +35,6 @@ local player = class{
     -- Ship variables
     health = 3,
     movementSpeed = 0,
-    steeringSpeed = 0,
     angle = 0,
     velocity,
     isBoosting = false,
@@ -70,7 +70,7 @@ local player = class{
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
         
         -- Set the steering speed to its default value
-        self.steeringSpeed = self.steeringSpeedStationary
+        local steeringSpeed = self.steeringSpeedStationary
 
         -- Handle ship functionality, moving boosting and firing
         if self.isOverheating == false then
@@ -81,7 +81,7 @@ local player = class{
 
                 self.velocity = self.velocity + movementDirection * (self.movementSpeed * dt)
 
-                self.steeringSpeed = self.steeringSpeedMoving
+                steeringSpeed = self.steeringSpeedMoving
             end
 
             -- Boost the ship
@@ -92,18 +92,18 @@ local player = class{
 
                 self.velocity = self.velocity + movementDirection * (self.movementSpeed * dt)
 
-                self.steeringSpeed = self.steeringSpeedMoving
+                steeringSpeed = self.steeringSpeedBoosting
 
                 self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate
             end
 
             -- Steer the ship
-            if input:down("steerLeft") and self.isBoosting == false then
-                self.angle = self.angle - (self.steeringSpeed * dt)
+            if input:down("steerLeft") then
+                self.angle = self.angle - (steeringSpeed * dt)
             end
 
-            if input:down("steerRight") and self.isBoosting == false then
-                self.angle = self.angle + (self.steeringSpeed * dt)
+            if input:down("steerRight") then
+                self.angle = self.angle + (steeringSpeed * dt)
             end
 
             -- Fire gun
