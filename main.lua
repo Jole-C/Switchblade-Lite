@@ -10,6 +10,7 @@ require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
 local playerHandler = require "game.objects.player.playermanager"
+local gameManager = require "game.gamemanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
 menu = require "game.gamestates.menustate"
@@ -25,9 +26,8 @@ function SetupResources()
 end
 
 function love.load()
-    -- Set up the gamestate
-    gamestate.registerEvents()
-    gamestate.switch(menu)
+    -- Create a new game manager
+    gameManager = gameManager()
 
     -- Create a new renderer
     gameRenderer = renderer()
@@ -38,6 +38,10 @@ function love.load()
 
     -- Create the player manager
     playerManager = playerHandler()
+    
+    -- Set up the gamestate
+    gamestate.registerEvents()
+    gamestate.switch(menu)
     
     --Set up push
     gameWidth = 320
