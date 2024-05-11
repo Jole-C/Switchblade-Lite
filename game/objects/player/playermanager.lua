@@ -2,6 +2,7 @@ local player = require "game.objects.player.player"
 
 local playerManager = class{
     playerReference,
+    playerPosition,
 
     init = function(self)
 
@@ -10,6 +11,7 @@ local playerManager = class{
     spawnPlayer = function(self, x, y)
         local newPlayer = player(x, y)
         self.playerReference = newPlayer
+
         return newPlayer
     end,
 
@@ -23,12 +25,12 @@ local playerManager = class{
     end,
 
     update = function(self)
-        if self.playerReference == nil then
-            return
-        end
-
-        if self.playerReference.health <= 0 then
-            self.playerReference = nil
+        if self.playerReference then
+            self.playerPosition = self.playerReference.position
+            
+            if self.playerReference.health <= 0 then
+                self.playerReference = nil
+            end
         end
     end
 }
