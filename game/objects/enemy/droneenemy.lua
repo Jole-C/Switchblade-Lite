@@ -60,6 +60,8 @@ local droneEnemy = class{
     end,
 
     cleanup = function(self)
+        enemy.cleanup(self)
+        
         if not gamestate.current().world then
             return
         end

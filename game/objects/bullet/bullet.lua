@@ -60,7 +60,9 @@ local bullet = class{
     end,
 
     cleanup = function(self)
-        timer.cancel(self.lifeTimer)
+        if self.lifeTimer then
+            timer.cancel(self.lifeTimer)
+        end
 
         if gamestate.current().world then
             gamestate.current().world:remove(self.collider)

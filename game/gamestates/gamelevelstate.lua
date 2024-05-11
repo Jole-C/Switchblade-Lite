@@ -8,9 +8,7 @@ gameLevelState.objects = {}
 gameLevelState.world = nil
 
 function gameLevelState:enter()
-    if not self.world then
-        self.world = bump.newWorld()
-    end
+    self.world = bump.newWorld()
 
     local upperWall = wall(0, -20, gameWidth, 20)
     local lowerWall = wall(0, gameHeight, gameWidth, 20)
@@ -48,6 +46,7 @@ function gameLevelState:update(dt)
 end
 
 function gameLevelState:draw()
+    love.graphics.print(#self.objects)
 end
 
 function gameLevelState:addObject(object)
@@ -59,14 +58,7 @@ function gameLevelState:removeObject(index)
 end
 
 function gameLevelState:leave()
-    for index,object in ipairs(self.objects) do
-        if object.markedForDelete == true then
-            self:removeObject(index)
-        else
-            object:destroy()
-            self:removeObject(index)
-        end
-    end
+    self.objects = {}
 end
 
 return gameLevelState

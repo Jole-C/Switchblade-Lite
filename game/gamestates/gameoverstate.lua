@@ -30,14 +30,7 @@ function gameOverState:removeObject(index)
 end
 
 function gameOverState:leave()
-    for index,object in ipairs(self.objects) do
-        if object.markedForDelete == true then
-            self:removeObject(index)
-        else
-            object:destroy()
-            self:removeObject(index)
-        end
-    end
+    self.objects = {}
 end
 
 return gameOverState

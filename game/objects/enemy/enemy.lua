@@ -37,6 +37,12 @@ local enemy = class{
 
     setVulnerable = function(self)
         self.isInvulnerable = false
+    end,
+
+    cleanup = function(self)
+        if self.invulnerableTimer then
+            timer.clear(self.invulnerableTimer)
+        end
     end
 }
 
