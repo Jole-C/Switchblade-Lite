@@ -21,8 +21,10 @@ function gameLevelState:enter()
     self:addObject(leftWall)
     self:addObject(rightWall)
 
-    local testEnemy = chargerEnemy(100, 100)
-    self:addObject(testEnemy)
+    for i = 1, 10 do
+        local testEnemy = chargerEnemy(100, 100)
+        self:addObject(testEnemy)
+    end
 
     local newPlayer = playerManager:spawnPlayer()
     self:addObject(newPlayer)
