@@ -73,14 +73,13 @@ local chargerEnemy = class{
         yOffset = yOffset/2
 
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
-        love.graphics.circle("fill", self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y, 2)
     end,
 
     cleanup = function(self)
         if not gamestate.current().world then
             return
         end
-        
+
         gamestate.current().world:remove(self.collider)
     end
 }
