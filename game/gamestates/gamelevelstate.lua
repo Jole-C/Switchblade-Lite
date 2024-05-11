@@ -1,5 +1,6 @@
 local wall = require "game.objects.wall"
 local chargerEnemy = require "game.objects.enemy.chargerenemy"
+local droneEnemy = require "game.objects.enemy.droneenemy"
 local director = require "game.stagedirector"
 
 local gameLevelState = gamestate.new()
@@ -25,6 +26,9 @@ function gameLevelState:enter()
         local testEnemy = chargerEnemy(100, 100)
         self:addObject(testEnemy)
     end
+
+    local newDroneEnemy = droneEnemy(100, 100)
+    self:addObject(newDroneEnemy)
 
     local newPlayer = playerManager:spawnPlayer()
     self:addObject(newPlayer)
