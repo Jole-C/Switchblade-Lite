@@ -1,6 +1,6 @@
 local gameobject = require "game.objects.gameobject"
 
-local director = class{
+local stageDirector = class{
     __includes = gameobject,
 
     update = function(self)
@@ -12,4 +12,4 @@ local director = class{
     end
 }
 
-return director
+return stageDirector
