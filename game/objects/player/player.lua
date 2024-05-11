@@ -231,6 +231,10 @@ local player = class{
     end,
 
     cleanup = function(self)
+        if not gamestate.current().world then
+            return
+        end
+        
         gamestate.current().world:remove(self.collider)
     end
 }
