@@ -2,11 +2,11 @@ local wall = require "game.objects.wall"
 local chargerEnemy = require "game.objects.enemy.chargerenemy"
 local director = require "game.stagedirector"
 
-local gamelevelstate = gamestate.new()
-gamelevelstate.objects = {}
-gamelevelstate.world = nil
+local gameLevelState = gamestate.new()
+gameLevelState.objects = {}
+gameLevelState.world = nil
 
-function gamelevelstate:enter()
+function gameLevelState:enter()
     if not self.world then
         self.world = bump.newWorld()
     end
@@ -31,7 +31,7 @@ function gamelevelstate:enter()
     self:addObject(stageDirector)
 end
 
-function gamelevelstate:update(dt)
+function gameLevelState:update(dt)
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)
@@ -41,18 +41,18 @@ function gamelevelstate:update(dt)
     end
 end
 
-function gamelevelstate:draw()
+function gameLevelState:draw()
 end
 
-function gamelevelstate:addObject(object)
+function gameLevelState:addObject(object)
     table.insert(self.objects, object)
 end
 
-function gamelevelstate:removeObject(index)
+function gameLevelState:removeObject(index)
     table.remove(self.objects, index)
 end
 
-function gamelevelstate:leave()
+function gameLevelState:leave()
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)
@@ -63,4 +63,4 @@ function gamelevelstate:leave()
     end
 end
 
-return gamelevelstate
+return gameLevelState
