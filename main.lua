@@ -30,8 +30,8 @@ input = baton.new{
 }
 
 menuState = require "game.gamestates.menustate"
-gameLevel = require "game.gamestates.gamelevelstate"
-gameover = require "game.gamestates.gameoverstate"
+gameLevelState = require "game.gamestates.gamelevelstate"
+gameoverState = require "game.gamestates.gameoverstate"
 
 function SetupResources()
     -- In game resources
@@ -120,6 +120,7 @@ function love.load()
     foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", gameWidth, gameHeight)
     foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
     interfaceCanvas = gameRenderer:addRenderCanvas("interfaceCanvas", gameWidth, gameHeight)
+    transitionCanvas = gameRenderer:addRenderCanvas("transitionCanvas", gameWidth, gameHeight)
     
     -- Temporary particle system
     local bgCol = gameManager.currentPalette.backgroundColour
@@ -199,12 +200,4 @@ function love.draw()
 
     -- Render the canvases
     gameRenderer:drawCanvases()
-
-    if currentGamestate.name then
-        love.graphics.setColor(1, 0, 0, 1)
-        love.graphics.print(currentGamestate.name)
-    else
-        love.graphics.setColor(1, 0, 0, 1)
-        love.graphics.print("no name")
-    end
 end
