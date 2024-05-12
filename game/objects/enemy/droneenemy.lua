@@ -63,11 +63,9 @@ local droneEnemy = class{
     cleanup = function(self)
         enemy.cleanup(self)
         
-        if not gamestate.current().world then
-            return
+        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
+            gamestate.current().world:remove(self.collider)
         end
-        
-        gamestate.current().world:remove(self.collider)
     end
 }
 

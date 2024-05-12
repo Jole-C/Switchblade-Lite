@@ -112,7 +112,7 @@ local player = class{
 
             -- Fire gun
             if self.canFire == true and input:down("shoot") and self.ammo > 0 and self.isBoosting == false then
-                local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage, 5, colliderDefinitions.player, 8, 8)
+                local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage, 2, colliderDefinitions.player, 8, 8)
                 gamestate.current():addObject(newBullet)
     
                 self.canFire = false
@@ -257,7 +257,7 @@ local player = class{
     end,
 
     cleanup = function(self)
-        if gamestate.current().world then
+        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
         end
 
