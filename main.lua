@@ -117,6 +117,7 @@ function love.load()
     love.graphics.setLineStyle("rough")
 
     backgroundCanvas = gameRenderer:addRenderCanvas("backgroundCanvas", gameWidth, gameHeight)
+    backgroundShadowCanvas = gameRenderer:addRenderCanvas("backgroundShadowCanvas", gameWidth, gameHeight)
     foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", gameWidth, gameHeight)
     foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
     interfaceCanvas = gameRenderer:addRenderCanvas("interfaceCanvas", gameWidth, gameHeight)
@@ -163,7 +164,7 @@ function love.update(dt)
     timer.update(dt)
     input:update()
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
-    ps:update(dt)
+    ps:update(dt/3)
 end
 
 function love.draw()
@@ -173,7 +174,14 @@ function love.draw()
     love.graphics.setCanvas(backgroundCanvas.canvas)
     love.graphics.setBlendMode("alpha")
     love.graphics.draw(ps, gameWidth/2, gameHeight/2)
-    
+
+    -- Draw the background shadow
+    love.graphics.setCanvas(backgroundShadowCanvas.canvas)
+    love.graphics.clear()
+    love.graphics.setColor(0.1, 0.1, 0.1, 0.25)
+    love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
+    love.graphics.setColor(1, 1, 1, 1)
+
     -- Draw the foreground
     love.graphics.setCanvas(foregroundCanvas.canvas)
     love.graphics.clear()
@@ -193,7 +201,7 @@ function love.draw()
     love.graphics.setCanvas(foregroundShadowCanvas.canvas)
     love.graphics.clear()
     love.graphics.setColor(0.1, 0.1, 0.1, 1)
-    love.graphics.draw(foregroundCanvas.canvas, 3, 3)
+    love.graphics.draw(foregroundCanvas.canvas, 2, 2)
 
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
