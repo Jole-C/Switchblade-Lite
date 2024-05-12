@@ -92,9 +92,13 @@ function love.load()
                     grabbedColours[3],
                     grabbedColours[4],
                     grabbedColours[5],
-                    grabbedColours[6]
+                    grabbedColours[6],
+                    grabbedColours[7],
+                    grabbedColours[8],
+                    grabbedColours[9],
+                    grabbedColours[10],
                 },
-                uiColour = grabbedColours[7],
+                uiColour = grabbedColours[11],
             }
         )
     end
@@ -118,8 +122,9 @@ function love.load()
     interfaceCanvas = gameRenderer:addRenderCanvas("interfaceCanvas", gameWidth, gameHeight)
     
     -- Temporary particle system
+    local bgCol = gameManager.currentPalette.backgroundColour
     ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
-    ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
+    ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4], bgCol[5], bgCol[6], bgCol[7], bgCol[8])
     ps:setDirection(-1.5707963705063)
     ps:setEmissionArea("uniform", gameWidth/2, gameHeight/2, 0, false)
     ps:setEmissionRate(225.32614135742)
@@ -133,7 +138,7 @@ function love.load()
     ps:setRelativeRotation(false)
     ps:setRotation(0, -0.1798534989357)
     ps:setSizes(0.59753084182739)
-    ps:setSizeVariation(0.5)
+    ps:setSizeVariation(1)
     ps:setSpeed(255.74447631836, 481.64227294922)
     ps:setSpin(0, 0)
     ps:setSpinVariation(0)
