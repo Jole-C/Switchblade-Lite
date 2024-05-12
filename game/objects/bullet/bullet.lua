@@ -64,7 +64,7 @@ local bullet = class{
             timer.cancel(self.lifeTimer)
         end
 
-        if gamestate.current().world then
+        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
         end
     end,
