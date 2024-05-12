@@ -1,4 +1,4 @@
-local menu = require "game.menu.menu"
+local gameoverMenu = require "game.menu.gameover.gameovermenu"
 
 local gameOverState = gamestate.new()
 
@@ -8,24 +8,7 @@ function gameOverState:init()
 end
 
 function gameOverState:enter()
-    self.menu = menu(
-        {
-            {
-                name = "restart",
-                position = vector.new(10, 10),
-                execute = function()
-                    gamestate.switch(gameLevel)
-                end
-            },
-            {
-                name = "quit",
-                position = vector.new(10, 20),
-                execute = function()
-                    gamestate.switch(menuState)
-                end
-            },
-        }
-    )
+    self.menu = gameoverMenu()
 
     interfaceCanvas.enabled = true
 end
