@@ -17,7 +17,10 @@ local wall = class{
     end,
 
     cleanup = function(self)
-        gamestate.current().world:remove(self.collider)
+        local world = gamestate.current().world
+        if world and world:hasItem(self.collider) then
+            world:remove(self.collider)
+        end
     end
 }
 

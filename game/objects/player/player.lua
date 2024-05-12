@@ -214,6 +214,10 @@ local player = class{
     end,
 
     draw = function(self)
+        if not self.sprite then
+            return
+        end
+
         local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = xOffset/2
         yOffset = yOffset/2
@@ -257,7 +261,8 @@ local player = class{
     end,
 
     cleanup = function(self)
-        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
+        local world = gamestate.current().world
+        if world and world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
         end
 

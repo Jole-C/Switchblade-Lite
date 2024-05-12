@@ -40,7 +40,7 @@ local droneEnemy = class{
         -- Update the collider
         local world = gamestate.current().world
 
-        if world then
+        if world and world:hasItem(self.collider) then
             local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
             colliderPositionX = self.position.x - colliderWidth/2
             colliderPositionY = self.position.y - colliderHeight/2
@@ -50,6 +50,10 @@ local droneEnemy = class{
     end,
 
     draw = function(self)
+        if not self.sprite then
+            return
+        end
+
         local playerPosition = playerManager.playerPosition
         local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = xOffset/2
@@ -63,7 +67,8 @@ local droneEnemy = class{
     cleanup = function(self)
         enemy.cleanup(self)
         
-        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
+        local world = gamestate.current().world
+        if world and world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
         end
     end

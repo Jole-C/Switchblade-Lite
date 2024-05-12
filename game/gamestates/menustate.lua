@@ -19,13 +19,19 @@ function menuState:leave()
 end
 
 function menuState:update()
-    self.menu:update()
+    if self.menu then
+        self.menu:update()
+    end
 end
 
 function menuState:draw()
     love.graphics.setCanvas(interfaceCanvas.canvas)
     love.graphics.clear()
-    self.menu:draw()
+
+    if self.menu then
+        self.menu:draw()
+    end
+
     love.graphics.setCanvas()
 end
 

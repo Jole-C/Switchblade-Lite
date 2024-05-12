@@ -8,7 +8,8 @@ local bombEnemy = class{
     cleanup = function(self)
         enemy.cleanup(self)
         
-        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
+        local world = gamestate.current().world
+        if world and world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
         end
     end

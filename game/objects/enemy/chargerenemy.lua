@@ -37,7 +37,7 @@ local chargerEnemy = class{
         -- Handle collisions
         local world = gamestate.current().world
 
-        if world then
+        if world and world:hasItem(self.collider) then
             -- Handle collision between the border
             self.wallBounceCheckPosition = self.position + movementDirection * self.checkDistance
             local cols, len = gamestate.current().world:queryPoint(self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y)
@@ -67,6 +67,10 @@ local chargerEnemy = class{
     end,
 
     draw = function(self)
+        if not self.sprite then
+            return
+        end
+
         local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = xOffset/2
         yOffset = yOffset/2
@@ -79,7 +83,8 @@ local chargerEnemy = class{
     cleanup = function(self)
         enemy.cleanup(self)
         
-        if gamestate.current().world and gamestate.current().world:hasItem(self.collider) then
+        local world = gamestate.current().world
+        if world and world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
         end
     end

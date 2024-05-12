@@ -6,7 +6,7 @@ local stageDirector = class{
     update = function(self)
         local player = playerManager.playerReference
 
-        if playerManager:doesPlayerExist() == false then
+        if playerManager and playerManager:doesPlayerExist() == false then
             gamestate.switch(gameoverState)
         end
     end

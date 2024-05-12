@@ -29,6 +29,10 @@ local spriteButton = class{
     end,
 
     draw = function(self)
+        if not self.sprite then
+            return
+        end
+
         local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = xOffset/2
         yOffset = yOffset/2
