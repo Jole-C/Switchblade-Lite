@@ -21,11 +21,11 @@ function gameLevelState:enter()
     self:addObject(rightWall)
 
     for i = 1, 10 do
-        local testEnemy = chargerEnemy(100, 100)
+        local testEnemy = chargerEnemy(gameWidth/2, gameHeight/2)
         self:addObject(testEnemy)
     end
 
-    local newDroneEnemy = droneEnemy(100, 100)
+    local newDroneEnemy = droneEnemy(gameWidth/2, gameHeight/2)
     self:addObject(newDroneEnemy)
 
     local newPlayer = playerManager:spawnPlayer(gameWidth/2, gameHeight/2)
@@ -36,6 +36,13 @@ function gameLevelState:enter()
 end
 
 function gameLevelState:update(dt)
+    if #self.objects <= 7 then
+        for i = 1, 10 do
+            local testEnemy = chargerEnemy(100, 100)
+            self:addObject(testEnemy)
+        end
+    end
+
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)
@@ -46,7 +53,7 @@ function gameLevelState:update(dt)
 end
 
 function gameLevelState:draw()
-    love.graphics.print(#self.objects)
+    love.graphics.print(#self.objects, 0, 0, 0, 10)
 end
 
 function gameLevelState:addObject(object)
