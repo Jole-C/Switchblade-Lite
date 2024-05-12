@@ -2,6 +2,7 @@ local renderCanvas = class{
     name = "",
     dimensions,
     canvas,
+    enabled = true,
 
     init = function(self, name, width, height)
         self.dimensions = vector.new(width, height)
@@ -49,15 +50,18 @@ local renderer = class{
     drawCanvases = function(self)
         for i = 1, #self.renderCanvases do
             local canvas = self.renderCanvases[i]
-            local renderCanvas = canvas.canvas
-            local width = canvas.dimensions.x
-            local height = canvas.dimensions.y
 
-            local maxScaleX = love.graphics.getWidth() / renderCanvas:getWidth()
-            local maxScaleY = love.graphics.getHeight() / renderCanvas:getHeight()
-            local scale = math.min(maxScaleX, maxScaleY)
-            
-            love.graphics.draw(renderCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, width / 2, height / 2)
+            if canvas.enabled == true then
+                local renderCanvas = canvas.canvas
+                local width = canvas.dimensions.x
+                local height = canvas.dimensions.y
+
+                local maxScaleX = love.graphics.getWidth() / renderCanvas:getWidth()
+                local maxScaleY = love.graphics.getHeight() / renderCanvas:getHeight()
+                local scale = math.min(maxScaleX, maxScaleY)
+                
+                love.graphics.draw(renderCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, width / 2, height / 2)
+            end
         end
     end,
 }

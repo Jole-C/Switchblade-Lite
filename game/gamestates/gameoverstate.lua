@@ -1,36 +1,49 @@
-local gameoverHandler = require "game.objects.gameoverhandler"
+local menu = require "game.menu.menu"
 
 local gameOverState = gamestate.new()
-gameOverState.objects = {}
+
+function gameOverState:init()
+    self.renderToForeground = true
+    self.name = "gameover"
+end
 
 function gameOverState:enter()
-    local newGameoverHandler = gameoverHandler()
-    self:addObject(newGameoverHandler)
-end
+    self.menu = menu(
+        {
+            {
+                name = "restart",
+                position = vector.new(10, 10),
+                execute = function()
+                    gamestate.switch(gameLevel)
+                end
+            },
+            {
+                name = "quit",
+                position = vector.new(10, 20),
+                execute = function()
+                    gamestate.switch(menuState)
+                end
+            },
+        }
+    )
 
-function gameOverState:update(dt)
-    for index,object in ipairs(self.objects) do
-        if object.markedForDelete == true then
-            self:removeObject(index)
-        else
-            object:update(dt)
-        end
-    end
-end
-
-function gameOverState:draw()
-end
-
-function gameOverState:addObject(object)
-    table.insert(self.objects, object)
-end
-
-function gameOverState:removeObject(index)
-    table.remove(self.objects, index)
+    interfaceCanvas.enabled = true
 end
 
 function gameOverState:leave()
-    self.objects = {}
+    interfaceCanvas.enabled = false
+    self.menu = {}
+end
+
+function gameOverState:update()
+    self.menu:update()
+end
+
+function gameOverState:draw()
+    love.graphics.setCanvas(interfaceCanvas.canvas)
+    love.graphics.clear()
+    self.menu:draw()
+    love.graphics.setCanvas()
 end
 
 return gameOverState

@@ -1,3 +1,4 @@
+-- Library requirements
 gamestate = require "lib.hump.gamestate"
 class = require "lib.hump.class"
 vector = require "lib.hump.vector"
@@ -6,6 +7,7 @@ bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
 love.math.pi = 3.14159265
 
+-- System requirements
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
@@ -21,13 +23,13 @@ input = baton.new{
         boost = {'key:lshift', 'key:rshift'},
         shoot = {'key:space'},
         menuUp = {'key:w', 'key:up'},
-        menuDown = {'key:d', 'key:down'},
+        menuDown = {'key:s', 'key:down'},
         select = {'key:return', 'key:space'},
         pause = {'key:escape'},
     }
 }
 
-menu = require "game.gamestates.menustate"
+menuState = require "game.gamestates.menustate"
 gameLevel = require "game.gamestates.gamelevelstate"
 gameover = require "game.gamestates.gameoverstate"
 
@@ -68,10 +70,6 @@ function love.load()
 
     -- Create the player manager
     playerManager = playerHandler()
-    
-    -- Set up the gamestate
-    gamestate.registerEvents()
-    gamestate.switch(menu)
 
     -- Set up palettes
     local paletteImage = love.image.newImageData("game/assets/sprites/palettes.png")
@@ -117,6 +115,7 @@ function love.load()
     backgroundCanvas = gameRenderer:addRenderCanvas("backgroundCanvas", gameWidth, gameHeight)
     foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", gameWidth, gameHeight)
     foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
+    interfaceCanvas = gameRenderer:addRenderCanvas("interfaceCanvas", gameWidth, gameHeight)
     
     -- Temporary particle system
     ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
@@ -147,6 +146,10 @@ function love.load()
     for i = 0, 4, dt do
         ps:update(dt)
     end  
+    
+    -- Set up the gamestate
+    gamestate.registerEvents()
+    gamestate.switch(menuState)
 end
 
 function love.update(dt)
@@ -158,6 +161,8 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.setColor(1, 1, 1, 1)
+
     -- Draw the background
     love.graphics.setCanvas(backgroundCanvas.canvas)
     love.graphics.setBlendMode("alpha")
@@ -170,10 +175,12 @@ function love.draw()
 
     local currentGamestate = gamestate.current()
 
-    if currentGamestate.objects then
+    if currentGamestate.objects and currentGamestate.renderToForeground then
         for key,object in ipairs(currentGamestate.objects) do
             object:draw()
         end
+    elseif currentGamestate.renderToForeground == false then
+        currentGamestate:draw()
     end
 
     -- Draw the shadows
@@ -187,4 +194,12 @@ function love.draw()
 
     -- Render the canvases
     gameRenderer:drawCanvases()
+
+    if currentGamestate.name then
+        love.graphics.setColor(1, 0, 0, 1)
+        love.graphics.print(currentGamestate.name)
+    else
+        love.graphics.setColor(1, 0, 0, 1)
+        love.graphics.print("no name")
+    end
 end

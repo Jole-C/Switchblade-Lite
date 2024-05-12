@@ -4,8 +4,13 @@ local droneEnemy = require "game.objects.enemy.droneenemy"
 local director = require "game.stagedirector"
 
 local gameLevelState = gamestate.new()
-gameLevelState.objects = {}
-gameLevelState.world = nil
+
+function gameLevelState:init()
+    self.objects = {}
+    self.world = nil
+    self.renderToForeground = true
+    self.name = "game level"
+end
 
 function gameLevelState:enter()
     self.world = bump.newWorld()
