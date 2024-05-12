@@ -178,7 +178,7 @@ function love.draw()
     -- Draw the background shadow
     love.graphics.setCanvas(backgroundShadowCanvas.canvas)
     love.graphics.clear()
-    love.graphics.setColor(0.1, 0.1, 0.1, 0.25)
+    love.graphics.setColor(0.1, 0.1, 0.1, 0.15)
     love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
     love.graphics.setColor(1, 1, 1, 1)
 
