@@ -68,9 +68,9 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
 
-    backgroundCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
-    foregroundCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
-    foregroundShadowCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
+    backgroundCanvas = gameRenderer:addRenderCanvas("backgroundCanvas", gameWidth, gameHeight)
+    foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", gameWidth, gameHeight)
+    foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
     
     ps = love.graphics.newParticleSystem(resourceManager:getResource("drone enemy sprite"), 1632)
     ps:setColors(0.0078125, 0, 1, 1, 0, 0.9296875, 1, 1, 0.359375, 0, 1, 1, 1, 0, 0.9609375, 1, 1, 1, 1, 1)
@@ -112,31 +112,32 @@ end
 
 function love.draw()
     -- Draw the background
-    love.graphics.setCanvas(backgroundCanvas)
+    love.graphics.setCanvas(backgroundCanvas.canvas)
     love.graphics.setBlendMode("alpha")
     love.graphics.draw(ps, gameWidth/2, gameHeight/2)
     
     -- Draw the foreground
-    love.graphics.setCanvas(foregroundCanvas)
+    love.graphics.setCanvas(foregroundCanvas.canvas)
     love.graphics.clear()
     love.graphics.setBlendMode("alpha")
-    gameRenderer:draw()
+
+    local currentGamestate = gamestate.current()
+
+    if currentGamestate.objects then
+        for key,object in ipairs(currentGamestate.objects) do
+            object:draw()
+        end
+    end
 
     -- Draw the shadows
-    love.graphics.setCanvas(foregroundShadowCanvas)
+    love.graphics.setCanvas(foregroundShadowCanvas.canvas)
     love.graphics.clear()
     love.graphics.setColor(0.1, 0.1, 0.1, 1)
-    love.graphics.draw(foregroundCanvas, 3, 3)
+    love.graphics.draw(foregroundCanvas.canvas, 3, 3)
 
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 
     -- Render the canvases
-    local maxScaleX = love.graphics.getWidth() / backgroundCanvas:getWidth()
-    local maxScaleY = love.graphics.getHeight() / backgroundCanvas:getHeight()
-    local scale = math.min(maxScaleX, maxScaleY)
-
-    love.graphics.draw(backgroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, backgroundCanvas:getWidth() / 2, backgroundCanvas:getHeight() / 2)
-    love.graphics.draw(foregroundShadowCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, foregroundShadowCanvas:getWidth() / 2, foregroundShadowCanvas:getHeight() / 2)
-    love.graphics.draw(foregroundCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, foregroundCanvas:getWidth() / 2, foregroundCanvas:getHeight() / 2) 
+    gameRenderer:drawCanvases()
 end
