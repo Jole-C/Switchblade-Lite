@@ -199,6 +199,7 @@ local player = class{
 
                             if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
                                 self.ammo = self.maxAmmo
+                                gameManager:swapPalette()
                             end
                         end
                     else

@@ -41,6 +41,9 @@ function SetupResources()
 
     local droneEnemy = love.graphics.newImage("game/assets/sprites/enemy/droneenemy.png")
     resourceManager:addResource(droneEnemy, "drone enemy sprite")
+
+    local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
+    resourceManager:addResource(particle, "particle sprite")
 end
 
 function love.load()
@@ -103,7 +106,7 @@ function love.load()
     foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
     
     -- Temporary particle system
-    ps = love.graphics.newParticleSystem(resourceManager:getResource("drone enemy sprite"), 1632)
+    ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
     ps:setDirection(-1.5707963705063)
     ps:setEmissionArea("uniform", gameWidth/2, gameHeight/2, 0, false)
@@ -134,10 +137,10 @@ function love.load()
 end
 
 function love.update(dt)
-    gameRenderer:update(dt)
     playerManager:update(dt)
     timer.update(dt)
     input:update()
+    ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
     ps:update(dt)
 end
 
