@@ -28,7 +28,7 @@ function gameLevelState:enter()
     local newDroneEnemy = droneEnemy(100, 100)
     self:addObject(newDroneEnemy)
 
-    local newPlayer = playerManager:spawnPlayer()
+    local newPlayer = playerManager:spawnPlayer(gameWidth/2, gameHeight/2)
     self:addObject(newPlayer)
 
     local stageDirector = director(0, 0)

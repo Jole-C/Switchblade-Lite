@@ -14,7 +14,7 @@ local player = class{
     steeringSpeedBoosting = 3,
     accelerationSpeed = 3,
     boostingAccelerationSpeed = 4,
-    friction = 59.4,
+    friction = 1,
     maxSpeed = 3,
     maxBoostingSpeed = 6,
     maxShipTemperature = 100,
@@ -36,7 +36,6 @@ local player = class{
 
     -- Ship variables
     health = 3,
-    movementSpeed = 0,
     angle = 0,
     velocity,
     isBoosting = false,
@@ -79,10 +78,7 @@ local player = class{
         if self.isOverheating == false then
             -- Apply a forward thrust to the ship
             if input:down("thrust") then
-                self.movementSpeed = self.movementSpeed + (self.accelerationSpeed * dt)
-                self.movementSpeed = math.clamp(self.movementSpeed, 0, self.maxSpeed)
-
-                self.velocity = self.velocity + movementDirection * (self.movementSpeed * dt)
+                self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
                 steeringSpeed = self.steeringSpeedMoving
             end
@@ -90,10 +86,7 @@ local player = class{
             -- Boost the ship
             if input:down("boost") then
                 self.isBoosting = true
-                self.movementSpeed = self.movementSpeed + (self.boostingAccelerationSpeed * dt)
-                self.movementSpeed = math.clamp(self.movementSpeed, 0, self.maxBoostingSpeed)
-
-                self.velocity = self.velocity + movementDirection * (self.movementSpeed * dt)
+                self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
                 steeringSpeed = self.steeringSpeedBoosting
 
@@ -162,8 +155,8 @@ local player = class{
         self.velocity = self.velocity:trimmed(trimmedSpeed)
         self.position = self.position + self.velocity
 
-        self.movementSpeed = self.movementSpeed * (self.friction * dt)
-        self.velocity = self.velocity * (self.friction * dt)
+        local frictionRatio = 1 / (1 + (dt * self.friction))
+        self.velocity = self.velocity * frictionRatio
 
         -- Wrap the ship's position
         if self.position.x < 0 then
