@@ -19,7 +19,6 @@ local chargerEnemy = class{
         self.angle = love.math.random(0, 6)
 
         self.sprite = resourceManager:getResource("charger enemy sprite")
-        self.sprite:setFilter("nearest")
         self.wallBounceCheckPosition = vector.new(0, 0)
         self.collider = collider(colliderDefinitions.enemy, self)
         gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)

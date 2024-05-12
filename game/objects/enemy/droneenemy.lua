@@ -22,7 +22,6 @@ local droneEnemy = class{
         gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)
 
         self.sprite = resourceManager:getResource("drone enemy sprite")
-        self.sprite:setFilter("nearest")
     end,
 
     update = function(self, dt)
