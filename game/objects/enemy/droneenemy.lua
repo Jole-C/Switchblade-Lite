@@ -56,7 +56,9 @@ local droneEnemy = class{
         xOffset = xOffset/2
         yOffset = yOffset/2
 
+        love.graphics.setColor(gameManager.currentPalette.enemyColour)
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
+        love.graphics.setColor(1, 1, 1, 1)
     end,
 
     cleanup = function(self)

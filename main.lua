@@ -60,8 +60,38 @@ function love.load()
     -- Set up the gamestate
     gamestate.registerEvents()
     gamestate.switch(menu)
+
+    -- Set up palettes
+    local paletteImage = love.image.newImageData("game/assets/sprites/palettes.png")
+
+    local width,height = paletteImage:getDimensions()
+
+    for y = 0, height - 1 do
+        local grabbedColours = {}
+
+        for x = 0, width - 1 do
+            local r, g, b, a = paletteImage:getPixel(x, y)
+            table.insert(grabbedColours, {r, g, b, a})
+        end
+        
+        gameManager:addPalette(
+            {
+                playerColour = grabbedColours[1],
+                enemyColour = grabbedColours[2],
+                backgroundColour = {
+                    grabbedColours[3],
+                    grabbedColours[4],
+                    grabbedColours[5],
+                    grabbedColours[6]
+                },
+                uiColour = grabbedColours[7],
+            }
+        )
+    end
     
-    --Set up push
+    gameManager:swapPalette()
+    
+    -- Set up the renderer
     gameWidth = 320
     gameHeight = 180
     windowWidth, windowHeight = love.window.getDesktopDimensions();
@@ -72,8 +102,9 @@ function love.load()
     foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", gameWidth, gameHeight)
     foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
     
+    -- Temporary particle system
     ps = love.graphics.newParticleSystem(resourceManager:getResource("drone enemy sprite"), 1632)
-    ps:setColors(0.0078125, 0, 1, 1, 0, 0.9296875, 1, 1, 0.359375, 0, 1, 1, 1, 0, 0.9609375, 1, 1, 1, 1, 1)
+    ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
     ps:setDirection(-1.5707963705063)
     ps:setEmissionArea("uniform", gameWidth/2, gameHeight/2, 0, false)
     ps:setEmissionRate(225.32614135742)

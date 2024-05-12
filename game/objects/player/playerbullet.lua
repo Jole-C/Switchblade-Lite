@@ -29,6 +29,12 @@ local playerBullet = class{
             ::continue::
         end
     end,
+
+    draw = function(self)
+        love.graphics.setColor(gameManager.currentPalette.playerColour)
+        love.graphics.circle("fill", self.position.x, self.position.y, 5)
+        love.graphics.setColor(1, 1, 1, 1)
+    end
 }
 
 return playerBullet

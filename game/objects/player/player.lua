@@ -216,9 +216,11 @@ local player = class{
         local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = xOffset/2
         yOffset = yOffset/2
-
+        
+        love.graphics.setColor(gameManager.currentPalette.playerColour)
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
         love.graphics.print("temperature: "..math.floor(self.shipTemperature).."hp: "..self.health, 0, 0)
+        love.graphics.setColor(1, 1, 1, 1)
 
         if self.isBoostingInvulnerable then
             love.graphics.print("is boosting invulnerable", 50, 50)
