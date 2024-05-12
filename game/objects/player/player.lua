@@ -220,7 +220,7 @@ local player = class{
         
         love.graphics.setColor(gameManager.currentPalette.playerColour)
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
-        love.graphics.print("temperature: "..math.floor(self.shipTemperature).."hp: "..self.health, 0, 0)
+        love.graphics.print("temperature: "..math.floor(self.shipTemperature).."hp: "..self.health.."ammo: "..self.ammo, 0, 0)
         love.graphics.setColor(1, 1, 1, 1)
 
         if self.isBoostingInvulnerable then

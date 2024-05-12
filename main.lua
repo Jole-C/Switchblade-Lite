@@ -42,8 +42,17 @@ function SetupResources()
     local droneEnemy = love.graphics.newImage("game/assets/sprites/enemy/droneenemy.png")
     resourceManager:addResource(droneEnemy, "drone enemy sprite")
 
+    -- Global resources
     local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
+
+    local fontDebug = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 8)
+    fontDebug:setFilter("nearest", "nearest", 0)
+    resourceManager:addResource(fontDebug, "font debug")
+
+    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 16)
+    font:setFilter("nearest", "nearest", 0)
+    resourceManager:addResource(fontDebug, "font main")
 end
 
 function love.load()
@@ -92,9 +101,13 @@ function love.load()
         )
     end
     
+    -- Swap to a random palette
     gameManager:swapPalette()
+
+    -- Set the font
+    love.graphics.setFont(resourceManager:getResource("font debug"))
     
-    -- Set up the renderer
+    -- Set up the rendering
     gameWidth = 320
     gameHeight = 180
     windowWidth, windowHeight = love.window.getDesktopDimensions();
