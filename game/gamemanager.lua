@@ -1,9 +1,18 @@
 local gameManager = class{
-    timeDilation = 1,
     palettes = {},
     currentPalette = {},
 
+    isTransitioning = false,
+
     init = function(self)
+
+    end,
+
+    update = function(self)
+
+    end,
+
+    draw = function(self)
 
     end,
 
@@ -16,8 +25,8 @@ local gameManager = class{
         self.currentPalette = self.palettes[paletteIndex]
     end,
 
-    setTimeDilation = function(self, percentage)
-        self.timeDilation = percentage
+    transitionGamestate = function(self, gamestate)
+        
     end
 }
 
