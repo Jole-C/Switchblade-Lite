@@ -11,6 +11,17 @@ local menu = class{
             return
         end
 
+        -- Update all buttons
+        for i = 1, #self.elements do
+            local element = self.elements[i]
+            
+            if element then
+                element.isSelected = i == self.selectionIndex
+                element:update()
+            end
+        end
+
+        -- Change the selected element
         if input:pressed("menuUp") then
             self.selectionIndex = self.selectionIndex - 1
         end
@@ -19,12 +30,14 @@ local menu = class{
             self.selectionIndex = self.selectionIndex + 1
         end
 
+        -- Wrap the selection to prevent overflow
         if self.selectionIndex < 1 then
             self.selectionIndex = #self.elements
         elseif self.selectionIndex > #self.elements then
             self.selectionIndex = 1
         end
 
+        -- Execute the selected button when pressed
         if input:pressed("select") then
             self.elements[self.selectionIndex]:execute()
         end
@@ -38,15 +51,11 @@ local menu = class{
         love.graphics.setFont(resourceManager:getResource("font main"))
         
         for i = 1, #self.elements do
-            local currentElement = self.elements[i]
-            local position = currentElement.position
+            local element = self.elements[i]
 
-            if i == self.selectionIndex then
-                love.graphics.print(currentElement.name, currentElement.position.x + 10, currentElement.position.y)
-            else
-                love.graphics.print(currentElement.name, currentElement.position.x, currentElement.position.y)
+            if element then
+                element:draw()
             end
-
         end
 
         love.graphics.setFont(resourceManager:getResource("font debug"))
