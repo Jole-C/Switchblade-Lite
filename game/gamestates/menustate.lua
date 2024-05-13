@@ -19,7 +19,7 @@ function menuState:leave()
     interfaceRenderer:clearElements()
 end
 
-function menuState:update()
+function menuState:update(dt)
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)

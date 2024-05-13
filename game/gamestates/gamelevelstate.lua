@@ -33,6 +33,10 @@ function gameLevelState:enter()
 end
 
 function gameLevelState:update(dt)
+    if input:pressed("pause") and gameManager.isPaused == false then
+        gameManager:togglePausing()
+    end
+
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)

@@ -159,14 +159,20 @@ function love.load()
     end  
     
     -- Set up the gamestate
-    gamestate.registerEvents()
     gamestate.switch(menuState)
 end
 
 function love.update(dt)
+    input:update()
+    gameManager:update(dt)
+
+    if gameManager.isPaused then
+        return
+    end
+    
+    gamestate.update(dt)
     playerManager:update(dt)
     timer.update(dt)
-    input:update()
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
     ps:update(dt/3)
 end
@@ -191,6 +197,8 @@ function love.draw()
     love.graphics.clear()
     love.graphics.setBlendMode("alpha")
 
+    gamestate.draw()
+
     local currentGamestate = gamestate.current()
 
     if currentGamestate.objects then
@@ -211,6 +219,7 @@ function love.draw()
     -- Draw the interface
     love.graphics.setCanvas(interfaceCanvas.canvas)
     love.graphics.clear()
+    gameManager:draw()
     interfaceRenderer:draw()
     love.graphics.setCanvas()
 

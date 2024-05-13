@@ -5,6 +5,7 @@ local menu = class{
 
     elements = {},
     selectionIndex = 1,
+    inputDelay = 0.5,
 
     init = function(self)
         for i = 1, #self.elements do
@@ -12,8 +13,10 @@ local menu = class{
         end
     end,
 
-    update = function(self)
-        if not self.elements then
+    update = function(self, dt)
+        self.inputDelay = self.inputDelay - 1 * dt
+
+        if not self.elements or self.inputDelay > 0 then
             return
         end
 
@@ -50,6 +53,16 @@ local menu = class{
     end,
 
     draw = function(self)
+    end,
+
+    cleanup = function(self)
+        for i = 1, #self.elements do
+            local element = self.elements[i]
+            
+            if element then
+                interfaceRenderer:removeHudElement(element)
+            end
+        end
     end
 }
 

@@ -19,7 +19,7 @@ function gameOverState:leave()
     interfaceRenderer:clearElements()
 end
 
-function gameOverState:update()
+function gameOverState:update(dt)
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)
