@@ -1,9 +1,15 @@
+local gameobject = require "game.objects.gameobject"
+
 local menu = class{
+    __includes = gameobject,
+
     elements = {},
     selectionIndex = 1,
 
-    init = function(self, elements)
-        self.elements = elements
+    init = function(self)
+        for i = 1, #self.elements do
+            interfaceRenderer:addHudElement(self.elements[i])
+        end
     end,
 
     update = function(self)
@@ -44,21 +50,6 @@ local menu = class{
     end,
 
     draw = function(self)
-        if not self.elements then
-            return
-        end
-        
-        love.graphics.setFont(resourceManager:getResource("font main"))
-        
-        for i = 1, #self.elements do
-            local element = self.elements[i]
-
-            if element then
-                element:draw()
-            end
-        end
-
-        love.graphics.setFont(resourceManager:getResource("font debug"))
     end
 }
 

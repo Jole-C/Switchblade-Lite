@@ -193,12 +193,10 @@ function love.draw()
 
     local currentGamestate = gamestate.current()
 
-    if currentGamestate.objects and currentGamestate.renderToForeground then
+    if currentGamestate.objects then
         for key,object in ipairs(currentGamestate.objects) do
             object:draw()
         end
-    elseif currentGamestate.renderToForeground == false then
-        currentGamestate:draw()
     end
 
     -- Draw the shadows

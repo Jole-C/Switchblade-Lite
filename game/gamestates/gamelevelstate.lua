@@ -8,11 +8,12 @@ local gameLevelState = gamestate.new()
 function gameLevelState:init()
     self.objects = {}
     self.world = nil
-    self.renderToForeground = true
     self.name = "game level"
 end
 
 function gameLevelState:enter()
+    interfaceRenderer:clearElements()
+
     self.world = bump.newWorld()
 
     local upperWall = wall(0, -20, gameWidth, 20)
@@ -71,6 +72,7 @@ end
 
 function gameLevelState:leave()
     self.objects = {}
+    interfaceRenderer:clearElements()
 end
 
 return gameLevelState

@@ -15,6 +15,8 @@ local gameoverMenu = class{
                 gamestate.switch(menuState)
             end),
         }
+
+        menu.init(self)
     end,
 }
 

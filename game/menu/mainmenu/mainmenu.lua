@@ -19,6 +19,8 @@ local mainMenu = class{
                 love.event.quit()
             end),
         }
+
+        menu.init(self)
     end,
 }
 

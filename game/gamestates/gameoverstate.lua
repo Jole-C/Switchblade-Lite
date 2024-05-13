@@ -3,36 +3,41 @@ local gameoverMenu = require "game.menu.gameover.gameovermenu"
 local gameOverState = gamestate.new()
 
 function gameOverState:init()
-    self.renderToForeground = true
-    self.name = "gameover"
+    self.name = "menu"
+    self.objects = {}
 end
 
 function gameOverState:enter()
-    self.menu = gameoverMenu()
+    interfaceRenderer:clearElements()
 
-    interfaceCanvas.enabled = true
+    local menu = gameoverMenu()
+    self:addObject(menu)
 end
 
 function gameOverState:leave()
-    interfaceCanvas.enabled = false
-    self.menu = {}
+    self.objects = {}
+    interfaceRenderer:clearElements()
 end
 
 function gameOverState:update()
-    if self.menu then
-        self.menu:update()
+    for index,object in ipairs(self.objects) do
+        if object.markedForDelete == true then
+            self:removeObject(index)
+        else
+            object:update(dt)
+        end
     end
 end
 
 function gameOverState:draw()
-    love.graphics.setCanvas(interfaceCanvas.canvas)
-    love.graphics.clear()
+end
 
-    if self.menu then
-        self.menu:draw()
-    end
+function gameOverState:addObject(object)
+    table.insert(self.objects, object)
+end
 
-    love.graphics.setCanvas()
+function gameOverState:removeObject(index)
+    table.remove(self.objects, index)
 end
 
 return gameOverState

@@ -6,7 +6,7 @@ local interfaceRenderer = class{
     end,
 
     addHudElement = function(self, element)
-        if not self.hudElements or #self.hudElements == 0 then
+        if not self.hudElements then
             return
         end
 
@@ -14,7 +14,7 @@ local interfaceRenderer = class{
     end,
 
     removeHudElement = function(self, elementToRemove)
-        if not self.hudElements or #self.hudElements == 0 then
+        if not self.hudElements then
             return
         end
 
@@ -29,7 +29,7 @@ local interfaceRenderer = class{
     end,
 
     clearElements = function(self)
-        hudElements = {}
+        self.hudElements = {}
     end,
 
     draw = function(self)
@@ -41,7 +41,7 @@ local interfaceRenderer = class{
             local element = self.hudElements[i]
 
             if element then
-                elemet:draw()
+                element:draw()
             end
         end
     end
