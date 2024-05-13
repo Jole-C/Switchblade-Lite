@@ -27,6 +27,10 @@ local playerBullet = class{
                     self:destroy()
                 end
     
+                if colliderDefinition == colliderDefinitions.wall then
+                    self:destroy()
+                end
+    
                 ::continue::
             end
         end
