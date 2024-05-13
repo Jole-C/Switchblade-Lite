@@ -1,4 +1,8 @@
+local hudElement = require "game.render.hudelement"
+
 local menuButton = class{
+    __includes = hudElement,
+    
     drawColour = {},
     selectedColour = {},
     isSelected = false,

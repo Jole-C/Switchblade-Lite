@@ -27,11 +27,11 @@ function gameLevelState:enter()
     self:addObject(rightWall)
 
     for i = 1, 10 do
-        local testEnemy = chargerEnemy(gameWidth/2, gameHeight/2)
+        local testEnemy = chargerEnemy(100, 100)
         self:addObject(testEnemy)
     end
 
-    local newDroneEnemy = droneEnemy(gameWidth/2, gameHeight/2)
+    local newDroneEnemy = droneEnemy(100, 100)
     self:addObject(newDroneEnemy)
 
     local newPlayer = playerManager:spawnPlayer(gameWidth/2, gameHeight/2)
