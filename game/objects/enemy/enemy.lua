@@ -3,15 +3,19 @@ local gameobject = require "game.objects.gameobject"
 local enemy = class{
     __includes = gameobject,
 
-    name = "enemy base",
+    contactDamage = 1,
+    spriteName = "",
+    
     health = 0,
+    invulnerableTimer,
     invulnerableTime = 0.5,
     isInvulnerable = false,
-    invulnerableTimer,
-    contactDamage = 1,
 
-    init = function(self, x, y)
+    sprite,
+
+    init = function(self, x, y, spriteName)
         gameobject.init(self, x, y)
+        self.sprite = resourceManager:getResource(spriteName)
     end,
 
     update = function(self, dt)

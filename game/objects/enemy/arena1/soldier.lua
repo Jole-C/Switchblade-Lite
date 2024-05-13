@@ -8,6 +8,7 @@ local soldier = class{
     maxSteeringForce = 30,
     angle = 0,
     health = 5,
+    spriteName = "drone enemy sprite",
 
     velocity,
 
@@ -15,13 +16,11 @@ local soldier = class{
     sprite,
 
     init = function(self, x, y)
-        enemy.init(self, x, y)
+        enemy.init(self, x, y, self.spriteName)
         self.velocity = vector.new(0, 0)
 
         self.collider = collider(colliderDefinitions.enemy, self)
         gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)
-
-        self.sprite = resourceManager:getResource("drone enemy sprite")
     end,
 
     update = function(self, dt)

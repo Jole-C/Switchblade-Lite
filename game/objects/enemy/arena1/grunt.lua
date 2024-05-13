@@ -9,16 +9,16 @@ local grunt = class{
     checkDistance = 5,
     angle,
     wallBounceCheckPosition,
+    spriteName = "charger enemy sprite",
 
     sprite,
     collider,
 
     init = function(self, x, y)
-        enemy.init(self, x, y)
+        enemy.init(self, x, y, self.spriteName)
 
         self.angle = love.math.random(0, 6)
 
-        self.sprite = resourceManager:getResource("charger enemy sprite")
         self.wallBounceCheckPosition = vector.new(0, 0)
         self.collider = collider(colliderDefinitions.enemy, self)
         gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)
