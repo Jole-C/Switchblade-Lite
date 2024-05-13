@@ -1,4 +1,4 @@
-# Project repo for Switchblade Lite. This project is MIT open source!
+# Project repo for Switchblade Lite.
 
 A small top down arcade project, revived from an unfinished GameMaker Studio 2 project. This readme will be updated when there's more to say.
 
