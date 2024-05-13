@@ -10,6 +10,7 @@ local stageDirector = class{
     maxSpawnTime = 3,
     spriteScaleFrequencyChange = 5,
     spriteScaleAmplitude = 1,
+    maxWarningAngleRandomiseCooldown = 0.25,
 
     aliveEnemies = {},
     levelDefinition = {},
@@ -24,7 +25,7 @@ local stageDirector = class{
     inWaveTransition = false,
     spriteScaleFrequency = 0,
     spriteScale = 1,
-    test = 0,
+    angleWarningRandomiseCooldown = 0,
 
 
     hud,
@@ -39,6 +40,7 @@ local stageDirector = class{
         self.enemyDefinitions = self.levelDefinition.enemyDefinitions
 
         self.spawnTime = self.maxSpawnTime
+        self.angleWarningRandomiseCooldown = self.maxWarningAngleRandomiseCooldown
 
         -- Set up the hud
         self.hud = stageTimeHud()
@@ -95,11 +97,23 @@ local stageDirector = class{
                 self.spawnTime = self.maxSpawnTime
                 self.inWaveTransition = true
             end
+            
+            -- Randomise the angle of the warning sprites
+            self.angleWarningRandomiseCooldown = self.angleWarningRandomiseCooldown - 1 * dt
 
+            if self.angleWarningRandomiseCooldown <= 0 then
+                for i = 1, #self.enemySpawnList do
+                    local nextSpawn = self.enemySpawnList[i]
+                    nextSpawn.angle = math.random(0, 2 * math.pi)
+                end
+
+                self.angleWarningRandomiseCooldown = self.maxWarningAngleRandomiseCooldown
+            end
+
+            -- Spawn the enemies in a wave
             self.spawnTime = self.spawnTime - 1 * dt
 
             if self.spawnTime <= 0 and self.inWaveTransition == true then
-                -- Spawn the enemies in a wave
                 for i = 1, #self.enemySpawnList do
                     local nextSpawn = self.enemySpawnList[i]
                     local newEnemy = nextSpawn.enemyClass(nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y)
@@ -124,11 +138,11 @@ local stageDirector = class{
             yOffset = yOffset/2
     
             love.graphics.setColor(1, 0, 0, 1)
-            love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, 0, self.spriteScale, self.spriteScale, xOffset, yOffset)
+            love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
             love.graphics.setColor(1, 1, 1, 1)
         end
 
-        love.graphics.print("current wave:" ..self.currentWaveIndex.."\n enemies to spawn: "..#self.enemySpawnList.."\n level file:"..self.test, 100, 100)
+        love.graphics.print("current wave:" ..self.currentWaveIndex.."\n enemies to spawn: "..#self.enemySpawnList, 50, 10)
     end,
 
     startWave = function(self)
@@ -145,7 +159,7 @@ local stageDirector = class{
 
             for i = 1, #enemyDefs do
                 local currentDef = enemyDefs[i]
-                self.test = currentDef.spawnCount
+                
                 for j = 1, currentDef.spawnCount do
                     local position = vector.new()
                     position.x = love.math.random(10, gameWidth - 10)
@@ -154,14 +168,17 @@ local stageDirector = class{
                     table.insert(self.enemySpawnList, {
                         enemyClass = self.enemyDefinitions[currentDef.enemyID],
                         spawnPosition = position,
-                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName
+                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName,
+                        angle = math.random(0, 2*math.pi)
                     })
                 end
             end
         elseif waveType == "predefined" then
-            local currentDef = enemyDefs[i]
+            local enemyDefs = wave.enemyDefs
+
             for i = 1, #enemyDefs do
                 local currentDef = enemyDefs[i]
+
                 for j = 1, currentDef.spawnCount do
                     local position = vector.new()
                     position.x = currentDef.x
@@ -170,7 +187,8 @@ local stageDirector = class{
                     table.insert(self.enemySpawnList, {
                         enemyClass = self.enemyDefinitions[currentDef.enemyID],
                         spawnPosition = position,
-                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName
+                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName,
+                        angle = math.random(0, 2*math.pi)
                     })
                 end
             end
