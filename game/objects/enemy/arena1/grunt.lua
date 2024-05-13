@@ -1,7 +1,7 @@
 local enemy = require "game.objects.enemy.enemy"
 local collider = require "game.collision.collider"
 
-local chargerEnemy = class{
+local grunt = class{
     __includes = enemy,
 
     health = 1,
@@ -90,4 +90,4 @@ local chargerEnemy = class{
     end
 }
 
-return chargerEnemy
+return grunt

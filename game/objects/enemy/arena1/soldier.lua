@@ -1,7 +1,7 @@
 local enemy = require "game.objects.enemy.enemy"
 local collider = require "game.collision.collider"
 
-local droneEnemy = class{
+local soldier = class{
     __includes = enemy,
 
     maxSpeed = 40,
@@ -74,4 +74,4 @@ local droneEnemy = class{
     end
 }
 
-return droneEnemy
+return soldier
