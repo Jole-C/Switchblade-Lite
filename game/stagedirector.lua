@@ -1,12 +1,21 @@
 local gameobject = require "game.objects.gameobject"
+local stageTimeHud = require "game.stagetime"
 
 local stageDirector = class{
     __includes = gameobject,
     timeMinutes = 3,
     timeSeconds = 0,
+    hud,
+
+    init = function(self)
+        self.hud = stageTimeHud()
+        interfaceRenderer:addHudElement(self.hud)
+    end,
 
     update = function(self, dt)
-        dt = dt or 0
+        -- Update the hud
+        self.hud.timeSeconds = self.timeSeconds
+        self.hud.timeMinutes = self.timeMinutes
 
         -- Handle gameover state switching
         local player = playerManager.playerReference
@@ -29,11 +38,6 @@ local stageDirector = class{
     end,
 
     draw = function(self)
-        local font = resourceManager:getResource("font main")
-        local timeString = string.format("%02.0f:%02.0f",self.timeMinutes,self.timeSeconds)
-        local textWidth = font:getWidth(timeString)
-        love.graphics.setFont(font)
-        love.graphics.print(timeString, gameWidth/2 - textWidth/2, 0)
     end
 }
 
