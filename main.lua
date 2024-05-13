@@ -98,11 +98,9 @@ function love.load()
                     grabbedColours[5],
                     grabbedColours[6],
                     grabbedColours[7],
-                    grabbedColours[8],
-                    grabbedColours[9],
-                    grabbedColours[10],
                 },
-                uiColour = grabbedColours[11],
+                uiColour = grabbedColours[8],
+                enemySpawnColour = grabbedColours[9]
             }
         )
     end
@@ -130,7 +128,8 @@ function love.load()
     -- Temporary particle system
     local bgCol = gameManager.currentPalette.backgroundColour
     ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
-    ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4], bgCol[5], bgCol[6], bgCol[7], bgCol[8])
+    --[[
+    ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(-1.5707963705063)
     ps:setEmissionArea("uniform", gameWidth/2, gameHeight/2, 0, false)
     ps:setEmissionRate(225.32614135742)
@@ -150,7 +149,29 @@ function love.load()
     ps:setSpinVariation(0)
     ps:setSpread(0.31415927410126)
     ps:setTangentialAcceleration(0, 0)
-
+]]
+-------
+    ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
+    ps:setDirection(0.045423280447721)
+    ps:setEmissionArea("uniform", 339.4328918457, 224.59356689453, 0, false)
+    ps:setEmissionRate(512)
+    ps:setEmitterLifetime(-1)
+    ps:setInsertMode("top")
+    ps:setLinearAcceleration(0, 0, 0, 0)
+    ps:setLinearDamping(0, 0)
+    ps:setOffset(50, 50)
+    ps:setParticleLifetime(1.7999999523163, 2.2000000476837)
+    ps:setRadialAcceleration(0, 0)
+    ps:setRelativeRotation(false)
+    ps:setRotation(0, 0)
+    ps:setSizes(0.095902815461159, 0.53716236352921)
+    ps:setSizeVariation(0.99361020326614)
+    ps:setSpeed(0.51036554574966, 0.51036554574966)
+    ps:setSpin(0, 0)
+    ps:setSpinVariation(0)
+    ps:setSpread(0.11967971920967)
+    ps:setTangentialAcceleration(379.81402587891, 405.12814331055)
+    
     ps:start()  
 
     local dt = 0.1
@@ -182,13 +203,14 @@ function love.draw()
 
     -- Draw the background
     love.graphics.setCanvas(backgroundCanvas.canvas)
+    love.graphics.setBackgroundColor(gameManager.currentPalette.backgroundColour[5])
     love.graphics.setBlendMode("alpha")
     love.graphics.draw(ps, gameWidth/2, gameHeight/2)
 
-    -- Draw the background shadow
+    -- Draw the background overlay
     love.graphics.setCanvas(backgroundShadowCanvas.canvas)
     love.graphics.clear()
-    love.graphics.setColor(0.1, 0.1, 0.1, 0.15)
+    love.graphics.setColor(0.1, 0.1, 0.1, 0)
     love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
     love.graphics.setColor(1, 1, 1, 1)
 
