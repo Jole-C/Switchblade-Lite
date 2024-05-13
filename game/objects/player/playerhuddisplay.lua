@@ -19,6 +19,7 @@ local playerHud = class{
 
         love.graphics.print(math.floor(self.playerReference.shipTemperature), 10, 10)
         love.graphics.print(self.playerReference.health, 10, 20)
+        love.graphics.print(self.playerReference.ammo, 10, 30)
     end
 }
 
