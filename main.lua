@@ -5,7 +5,7 @@ vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
-love.math.pi = 3.14159265
+math.pi = 3.14159265
 
 -- System requirements
 require "game.misc.mathhelpers"
