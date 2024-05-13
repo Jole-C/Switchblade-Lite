@@ -51,7 +51,7 @@ local chargerEnemy = class{
                 end
 
                 if colliderDefinition == colliderDefinitions.wall then
-                    self.angle = self.angle + love.math.random(love.math.pi - 2, love.math.pi + 2)
+                    self.angle = self.angle + love.math.random(math.pi - 2, math.pi + 2)
                 end
 
                 ::continue::
