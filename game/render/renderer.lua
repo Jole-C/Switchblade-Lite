@@ -51,7 +51,7 @@ local renderer = class{
         for i = 1, #self.renderCanvases do
             local canvas = self.renderCanvases[i]
 
-            if canvas and canvas.enabled == true then
+            if canvas then
                 local renderCanvas = canvas.canvas
                 local width = canvas.dimensions.x
                 local height = canvas.dimensions.y
