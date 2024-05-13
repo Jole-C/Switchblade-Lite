@@ -3,7 +3,7 @@ local soldier = require "game.objects.enemy.arena1.soldier"
 local utility = require "game.objects.enemy.arena1.grunt"
 local specialist = require "game.objects.enemy.arena1.grunt"
 
-local level = 
+local levelDefinition = 
 {
     enemyDefinitions =
     {
@@ -90,4 +90,4 @@ local level =
     }
 }
 
-return level
+return levelDefinition
