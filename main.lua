@@ -13,6 +13,7 @@ local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
 local playerHandler = require "game.objects.player.playermanager"
 local gameDirector = require "game.gamemanager"
+local interface = require "game.render.interfacerenderer"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
 input = baton.new{
@@ -63,6 +64,9 @@ function love.load()
 
     -- Create a new renderer
     gameRenderer = renderer()
+
+    -- Create a new interface renderer
+    interfaceRenderer = interface()
 
     -- Create the resource manager
     resourceManager = resource()
@@ -205,6 +209,12 @@ function love.draw()
 
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
+
+    -- Draw the interface
+    love.graphics.setCanvas(interfaceCanvas.canvas)
+    love.graphics.clear()
+    interfaceRenderer:draw()
+    love.graphics.setCanvas()
 
     -- Render the canvases
     gameRenderer:drawCanvases()
