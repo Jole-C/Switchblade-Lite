@@ -34,11 +34,12 @@ local player = class{
     bulletDamage = 3,
     maxAmmo = 30,
     shipKnockbackForce = 10,
+    fireOffset = 10,
 
     -- Ship variables
     health = 3,
     angle = 0,
-    velocity,
+    velocity = {},
     isBoosting = false,
     isOverheating = false,
     shipTemperature = 0,
@@ -58,6 +59,7 @@ local player = class{
     init = function(self, x, y)
         gameobject.init(self, x, y)
 
+        -- Initialise variables to their parameters, or create vectors
         self.velocity = vector.new(0, 0)
         self.health = self.maxHealth
         self.ammo = self.maxAmmo
@@ -65,6 +67,7 @@ local player = class{
         self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
         self.invulnerabilityCooldown = self.invulnerableGracePeriod
 
+        -- Set up components
         self.sprite = resourceManager:getResource("player sprite")
         self.sprite:setFilter("nearest")
 
@@ -127,7 +130,8 @@ local player = class{
             end
 
             if self.canFire == true and input:down("shoot") then
-                local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.player, 8, 8)
+                local firePosition = self.position + (movementDirection * self.fireOffset)
+                local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.player, 8, 8)
                 gamestate.current():addObject(newBullet)
 
                 self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
