@@ -21,7 +21,7 @@ local level =
                 {
                     enemyID = "grunt",
                     spawnCount = 3,
-                }
+                },
             }
         },
         {
@@ -31,7 +31,7 @@ local level =
                 {
                     enemyID = "grunt",
                     spawnCount = 5,
-                }
+                },
             }
         },
         {
@@ -44,14 +44,47 @@ local level =
                 }
             }
         },
+        
         {
             waveType = "random",
             enemyDefs =
             {
                 {
                     enemyID = "grunt",
-                    spawnCount = 9,
-                }
+                    spawnCount = 3,
+                },
+                {
+                    enemyID = "soldier",
+                    spawnCount = 1,
+                },
+            }
+        },
+        {
+            waveType = "random",
+            enemyDefs =
+            {
+                {
+                    enemyID = "grunt",
+                    spawnCount = 5,
+                },
+                {
+                    enemyID = "soldier",
+                    spawnCount = 2,
+                },
+            }
+        },
+        {
+            waveType = "random",
+            enemyDefs =
+            {
+                {
+                    enemyID = "grunt",
+                    spawnCount = 5,
+                },
+                {
+                    enemyID = "soldier",
+                    spawnCount = 3,
+                },
             }
         },
     }
