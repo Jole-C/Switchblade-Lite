@@ -1,6 +1,7 @@
 local gameobject = require "game.objects.gameobject"
 local playerBullet = require "game.objects.player.playerbullet"
 local collider = require "game.collision.collider"
+local playerHud = require "game.objects.player.playerhuddisplay"
 
 local player = class{
     __includes = gameobject,
@@ -52,6 +53,7 @@ local player = class{
     -- Ship components
     collider,
     sprite,
+    hud,
 
     init = function(self, x, y)
         gameobject.init(self, x, y)
@@ -65,9 +67,15 @@ local player = class{
 
         self.collider = collider(colliderDefinitions.player, self)
         gamestate.current().world:add(self.collider, 0, 0, 10, 10)
+
+        self.hud = playerHud()
+        interfaceRenderer:addHudElement(self.hud)
     end,
 
     update = function(self, dt)
+        -- Update the hud
+        self.hud:update()
+        
         -- Create a vector holding the direction the ship is expected to move in
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
         
