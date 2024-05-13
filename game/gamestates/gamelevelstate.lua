@@ -1,7 +1,6 @@
 local wall = require "game.objects.wall"
-local chargerEnemy = require "game.objects.enemy.chargerenemy"
-local droneEnemy = require "game.objects.enemy.droneenemy"
 local director = require "game.stagedirector"
+local level = require "game.levels.level1"
 
 local gameLevelState = gamestate.new()
 
@@ -26,29 +25,14 @@ function gameLevelState:enter()
     self:addObject(leftWall)
     self:addObject(rightWall)
 
-    for i = 1, 10 do
-        local testEnemy = chargerEnemy(100, 100)
-        self:addObject(testEnemy)
-    end
-
-    local newDroneEnemy = droneEnemy(100, 100)
-    self:addObject(newDroneEnemy)
-
     local newPlayer = playerManager:spawnPlayer(gameWidth/2, gameHeight/2)
     self:addObject(newPlayer)
 
-    local stageDirector = director(0, 0)
+    local stageDirector = director(level, 0, 0)
     self:addObject(stageDirector)
 end
 
 function gameLevelState:update(dt)
-    if #self.objects <= 7 then
-        for i = 1, 10 do
-            local testEnemy = chargerEnemy(100, 100)
-            self:addObject(testEnemy)
-        end
-    end
-
     for index,object in ipairs(self.objects) do
         if object.markedForDelete == true then
             self:removeObject(index)
@@ -59,7 +43,7 @@ function gameLevelState:update(dt)
 end
 
 function gameLevelState:draw()
-    love.graphics.print(#self.objects, 0, 0, 0, 10)
+    love.graphics.print(#self.objects, 0, windowHeight - windowHeight/3.5, 0, 10)
 end
 
 function gameLevelState:addObject(object)
