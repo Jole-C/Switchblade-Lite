@@ -9,10 +9,9 @@ local bullet = class{
     angle = 0,
     damage = 0,
     lifetime = 2,
-    lifeTimer,
     collider,
 
-    init = function(self, x, y, speed, angle, damage, lifetime, colliderDefinition, width, height)
+    init = function(self, x, y, speed, angle, damage, colliderDefinition, width, height)
         gameobject.init(self, x, y)
 
         self.speed = speed
@@ -22,8 +21,6 @@ local bullet = class{
 
         self.collider = collider(colliderDefinition, self)
         gamestate.current().world:add(self.collider, x, y, width, height)
-
-        self.lifeTimer = timer.after(self.lifetime, function() self:destroy() end)
     end,
 
     update = function(self, dt)
@@ -60,10 +57,6 @@ local bullet = class{
     end,
 
     cleanup = function(self)
-        if self.lifeTimer then
-            timer.cancel(self.lifeTimer)
-        end
-
         local world = gamestate.current().world
         if world and world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
