@@ -137,7 +137,7 @@ local stageDirector = class{
             xOffset = xOffset/2
             yOffset = yOffset/2
     
-            love.graphics.setColor(1, 0, 0, 1)
+            love.graphics.setColor(gameManager.currentPalette.enemySpawnColour)
             love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
             love.graphics.setColor(1, 1, 1, 1)
         end
