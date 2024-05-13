@@ -29,7 +29,7 @@ local player = class{
     invulnerableGracePeriod = 3,
 
     -- Firing parameters of the ship
-    fireCooldown = 0.05,
+    maxFireCooldown = 0.05,
     bulletSpeed = 5,
     bulletDamage = 3,
     maxAmmo = 30,
@@ -42,13 +42,13 @@ local player = class{
     isBoosting = false,
     isOverheating = false,
     shipTemperature = 0,
-    fireResetTimer,
     ammo = 0,
-    canFire = true,
-    boostingGraceTimer,
-    invulnerableTimer,
-    isInvulnerable = false,
+    boostingInvulnerabilityCooldown = 0,
+    invulnerabilityCooldown = 0,
+    fireCooldown = 0,
     isBoostingInvulnerable = false,
+    isInvulnerable = false,
+    canFire = true,
     
     -- Ship components
     collider,
@@ -61,6 +61,9 @@ local player = class{
         self.velocity = vector.new(0, 0)
         self.health = self.maxHealth
         self.ammo = self.maxAmmo
+        self.fireCooldown = self.maxFireCooldown
+        self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
+        self.invulnerabilityCooldown = self.invulnerableGracePeriod
 
         self.sprite = resourceManager:getResource("player sprite")
         self.sprite:setFilter("nearest")
@@ -106,7 +109,7 @@ local player = class{
                 self.isBoosting = false
 
                 self.isBoostingInvulnerable = true
-                self.boostingGraceTimer = timer.after(self.boostingInvulnerableGracePeriod, function() self:setBoostingVulnerable() end)
+                self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
             end
 
             -- Steer the ship
@@ -119,16 +122,38 @@ local player = class{
             end
 
             -- Fire gun
-            if self.canFire == true and input:down("shoot") and self.ammo > 0 and self.isBoosting == false then
+            if self.isBoosting == true or self.ammo <= 0 then
+                self.canFire = false
+            end
+
+            if self.canFire == true and input:down("shoot") then
                 local newBullet = playerBullet(self.position.x, self.position.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.player, 8, 8)
                 gamestate.current():addObject(newBullet)
-    
-                self.canFire = false
-                self.fireResetTimer = timer.after(self.fireCooldown, function() self:setCanFire() end)
-                self.ammo = self.ammo - 1
 
                 self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
+                
+                self.canFire = false
+                self.fireCooldown = self.maxFireCooldown
+                self.ammo = self.ammo - 1
             end
+
+        end
+        
+        -- Handle game timers
+        self.fireCooldown = self.fireCooldown - 1 * dt
+        self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
+        self.boostingInvulnerabilityCooldown = self.boostingInvulnerabilityCooldown - 1 * dt
+
+        if self.invulnerabilityCooldown <= 0 then
+            self.isInvulnerable = false
+        end
+
+        if self.fireCooldown <= 0 then
+            self.canFire = true
+        end
+
+        if self.boostingInvulnerabilityCooldown <= 0 then
+            self.isBoostingInvulnerable = false
         end
 
         -- Handle overheating
@@ -235,18 +260,6 @@ local player = class{
         love.graphics.setColor(1, 1, 1, 1)
     end,
 
-    setCanFire = function(self)
-        self.canFire = true
-    end,
-
-    setBoostingVulnerable = function(self)
-        self.isBoostingInvulnerable = false
-    end,
-
-    setVulnerable = function(self)
-        self.isInvulnerable = false
-    end,
-
     onHit = function(self, damage)
         if self.isInvulnerable or self.isBoostingInvulnerable then
             return
@@ -256,7 +269,7 @@ local player = class{
         self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
 
         self.isInvulnerable = true
-        self.invulnerableTimer = timer.after(self.invulnerableGracePeriod, function() self:setVulnerable() end)
+        self.invulnerabilityCooldown = self.invulnerableGracePeriod
 
         if self.health <= 0 then
             self:destroy()
@@ -267,14 +280,6 @@ local player = class{
         local world = gamestate.current().world
         if world and world:hasItem(self.collider) then
             gamestate.current().world:remove(self.collider)
-        end
-
-        if self.boostingGraceTimer then
-            timer.cancel(self.boostingGraceTimer)
-        end
-
-        if self.invulnerableTimer then
-            timer.cancel(self.invulnerableTimer)
         end
     end
 }
