@@ -3,13 +3,33 @@ local gameobject = require "game.objects.gameobject"
 local menu = class{
     __includes = gameobject,
 
+    menus = {},
     elements = {},
     selectionIndex = 1,
     inputDelay = 0.5,
 
+    clearMenuSubElements = function(self)
+        for i = 1, #self.elements do
+            local element = self.elements[i]
+            
+            if element then
+                interfaceRenderer:removeHudElement(element)
+            end
+        end
+    end,
+
+    getMenuSubElements = function(self, menuName)
+        self:clearMenuSubElements()
+        self.elements = self.menus[menuName]
+    end,
+
     init = function(self)
         for i = 1, #self.elements do
-            interfaceRenderer:addHudElement(self.elements[i])
+            local element = self.elements[i]
+            
+            if element then
+                interfaceRenderer:addHudElement(element)
+            end
         end
     end,
 
@@ -55,14 +75,12 @@ local menu = class{
     draw = function(self)
     end,
 
+    switchMenu = function(self, menuName)
+
+    end,
+
     cleanup = function(self)
-        for i = 1, #self.elements do
-            local element = self.elements[i]
-            
-            if element then
-                interfaceRenderer:removeHudElement(element)
-            end
-        end
+        self:clearMenuSubElements()
     end
 }
 

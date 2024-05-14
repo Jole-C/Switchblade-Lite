@@ -5,17 +5,21 @@ local gameoverMenu = class{
     __includes = menu,
 
     init = function(self)
-        self.elements =
+        self.menus =
         {
-            textButton("restart", 10, 10, 15, 10, function()
-                gamestate.switch(gameLevelState)
-            end),
+            ["main"] =
+            {
+                textButton("restart", 10, 10, 15, 10, function()
+                    gamestate.switch(gameLevelState)
+                end),
 
-            textButton("quit", 10, 30, 15, 30, function()
-                gamestate.switch(menuState)
-            end),
+                textButton("quit", 10, 30, 15, 30, function()
+                    gamestate.switch(menuState)
+                end),
+            }
         }
 
+        self:getMenuSubElements("main")
         menu.init(self)
     end,
 }
