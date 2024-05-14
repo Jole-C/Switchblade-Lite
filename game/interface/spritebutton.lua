@@ -1,7 +1,7 @@
-local textButton = require "game.interface.textbutton"
+local textButton = require "game.interface.menubutton"
 
 local spriteButton = class{
-    __includes = textButton,
+    __includes = menuButton,
 
     spriteName = "",
     sprite,
