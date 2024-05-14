@@ -2,6 +2,7 @@ local hudElement = require "game.interface.hudelement"
 
 local interactableHudElement = class{
     __includes = hudElement,
+    owner = {},
 
     update = function(self)
         self:updateHudElement()
@@ -20,6 +21,10 @@ local interactableHudElement = class{
     -- Used when enter is pressed on the button
     execute = function(self)
 
+    end,
+
+    reset = function(self)
+        
     end
 }
 
