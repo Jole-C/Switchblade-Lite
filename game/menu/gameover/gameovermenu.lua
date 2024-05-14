@@ -8,13 +8,17 @@ local gameoverMenu = class{
         self.menus =
         {
             ["main"] = {
-                textButton("retry", "font main", 10, 10, 15, 10, function(self)
-                    gamestate.switch(gameLevelState)
-                end),
+                displayMenuName = false,
+                elements =
+                    {
+                    textButton("retry", "font main", 10, 10, 15, 10, function(self)
+                        gamestate.switch(gameLevelState)
+                    end),
 
-                textButton("quit to menu", "font main", 10, 30, 15, 30, function()
-                    gamestate.switch(menuState)
-                end),
+                    textButton("quit to menu", "font main", 10, 30, 15, 30, function()
+                        gamestate.switch(menuState)
+                    end),
+                }
             }
         }
 
