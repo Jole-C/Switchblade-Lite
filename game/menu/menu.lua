@@ -8,29 +8,7 @@ local menu = class{
     selectionIndex = 1,
     inputDelay = 0.5,
 
-    clearMenuSubElements = function(self)
-        for i = 1, #self.elements do
-            local element = self.elements[i]
-            
-            if element then
-                interfaceRenderer:removeHudElement(element)
-            end
-        end
-    end,
-
-    getMenuSubElements = function(self, menuName)
-        self:clearMenuSubElements()
-        self.elements = self.menus[menuName]
-    end,
-
     init = function(self)
-        for i = 1, #self.elements do
-            local element = self.elements[i]
-            
-            if element then
-                interfaceRenderer:addHudElement(element)
-            end
-        end
     end,
 
     update = function(self, dt)
@@ -44,7 +22,7 @@ local menu = class{
         for i = 1, #self.elements do
             local element = self.elements[i]
             
-            if element then
+            if element and element.update then
                 element.isSelected = i == self.selectionIndex
                 element:update()
             end
@@ -60,23 +38,67 @@ local menu = class{
         end
 
         -- Wrap the selection to prevent overflow
+        self:wrapSelectionIndex()
+
+        -- If the element cannot be highlighted, skip it
+        local selectedElement = self.elements[self.selectionIndex]
+
+        if self.elements[self.selectionIndex].execute == nil then
+            self.selectionIndex = self.selectionIndex + 1
+            return
+        end
+
+        -- Execute the selected button when pressed
+        if input:pressed("select") then
+            selectedElement:execute()
+        end
+    end,
+
+    wrapSelectionIndex = function(self)
         if self.selectionIndex < 1 then
             self.selectionIndex = #self.elements
         elseif self.selectionIndex > #self.elements then
             self.selectionIndex = 1
         end
+    end,
 
-        -- Execute the selected button when pressed
-        if input:pressed("select") then
-            self.elements[self.selectionIndex]:execute()
+    clearMenuSubElements = function(self)
+        for i = 1, #self.elements do
+            local element = self.elements[i]
+            
+            if element then
+                interfaceRenderer:removeHudElement(element)
+
+                -- Make sure to reset the hud element back to its default state
+                if element.reset then
+                    element:reset()
+                end
+            end
+        end
+
+        self.elements = {}
+    end,
+
+    updateInterfaceRenderer = function(self)
+        for i = 1, #self.elements do
+            local element = self.elements[i]
+            
+            if element then
+                element.owner = self
+                interfaceRenderer:addHudElement(element)
+            end
         end
     end,
 
-    draw = function(self)
+    getMenuSubElements = function(self, menuName)
+        self:clearMenuSubElements()
+        self.elements = self.menus[menuName]
+        self:updateInterfaceRenderer()
     end,
 
     switchMenu = function(self, menuName)
-
+        self.selectionIndex = 1
+        self:getMenuSubElements(menuName)
     end,
 
     cleanup = function(self)
