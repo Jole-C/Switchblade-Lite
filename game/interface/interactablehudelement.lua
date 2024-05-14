@@ -1,4 +1,4 @@
-local hudElement = require "game.render.hudelement"
+local hudElement = require "game.interface.hudelement"
 
 local interactableHudElement = class{
     __includes = hudElement,

@@ -11,9 +11,9 @@ math.pi = 3.14159265
 require "game.misc.mathhelpers"
 local renderer = require "game.render.renderer"
 local resource = require "game.resourcemanager"
-local playerHandler = require "game.objects.player.playermanager"
+local interface = require "game.interface.interfacerenderer"
 local gameDirector = require "game.gamemanager"
-local interface = require "game.render.interfacerenderer"
+local playerHandler = require "game.objects.player.playermanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
 input = baton.new{

@@ -1,5 +1,5 @@
 local pauseMenu = require "game.menu.pause.pausemenu"
-local rect = require "game.menu.rect"
+local rect = require "game.interface.rect"
 
 local pauseManager = class{
     menu = {},

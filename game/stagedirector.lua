@@ -1,5 +1,5 @@
 local gameobject = require "game.objects.gameobject"
-local stageTimeHud = require "game.stagetime"
+local stageTimeHud = require "game.stagetimedisplay"
 
 local stageDirector = class{
     __includes = gameobject,

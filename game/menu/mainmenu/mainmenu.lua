@@ -1,5 +1,5 @@
 local menu = require "game.menu.menu"
-local textButton = require "game.menu.textbutton"
+local textButton = require "game.interface.textbutton"
 
 local mainMenu = class{
     __includes = menu,

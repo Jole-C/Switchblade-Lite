@@ -1,4 +1,4 @@
-local menuButton = require "game.menu.menubutton"
+local menuButton = require "game.interface.menubutton"
 
 local textButton = class{
     __includes = menuButton,
