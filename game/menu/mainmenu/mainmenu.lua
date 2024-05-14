@@ -1,6 +1,7 @@
 local menu = require "game.menu.menu"
 local textButton = require "game.interface.textbutton"
 local text = require "game.interface.text"
+local toggleButton = require "game.interface.togglebutton"
 
 local mainMenu = class{
     __includes = menu,
@@ -9,29 +10,33 @@ local mainMenu = class{
         self.menus =
         {
             ["main"] = {
-                textButton("start", 10, 10, 15, 10, function()
+                textButton("start", "font main", 10, 10, 15, 10, function(self)
                     gamestate.switch(gameLevelState)
                 end),
 
-                textButton("options", 10, 20, 15, 20, function(self)
+                textButton("options", "font main", 10, 20, 15, 20, function(self)
                     if self.owner then
                         self.owner:switchMenu("options")
                     end
                 end),
 
-                textButton("quit", 10, 30, 15, 30, function()
+                textButton("quit", "font main", 10, 30, 15, 30, function()
                     love.event.quit()
                 end),
             },
 
             ["options"] = {
-                text("visual", 10, 10, false, "font main"),
+                text("visual", "font main", false, 10, 10),
 
-                text("audio", 10, 20, false, "font main"),
+                toggleButton("boop a doop", "font main", 10, 20, 15, 20),
+                
+                text("audio", "font main", false, 10, 30),
 
-                text("controls", 10, 30, false, "font main"),
+                toggleButton("boop a doop", "font main", 10, 40, 15, 40),
 
-                textButton("back", 10, 40, 15, 40, function(self)
+                text("controls", "font main", false, 10, 50),
+
+                textButton("back", "font main", 10, 60, 15, 60, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                     end

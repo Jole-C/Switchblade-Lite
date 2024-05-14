@@ -5,19 +5,22 @@ local pauseMenu = class{
     __includes = menu,
 
     init = function(self)
-        self.elements =
+        self.menus =
         {
-            textButton("resume", 10, 10, 15, 10, function()
-                gameManager:togglePausing()
-            end),
+            ["main"] =
+            {
+                textButton("resume", "font main", 10, 10, 15, 10, function(self)
+                    gameManager:togglePausing()
+                end),
 
-            textButton("quit", 10, 30, 15, 30, function()
-                gamestate.switch(menuState)
-                gameManager:togglePausing()
-            end),
+                textButton("quit", "font main", 10, 20, 15, 20, function(self)
+                    gamestate.switch(menuState)
+                    gameManager:togglePausing()
+                end),
+            }
         }
 
-        menu.init(self)
+        self:switchMenu("main")
     end,
 }
 
