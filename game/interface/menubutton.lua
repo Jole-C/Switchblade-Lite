@@ -3,9 +3,6 @@ local interactiveHudElement = require "game.interface.interactablehudelement"
 local menuButton = class{
     __includes = interactiveHudElement,
     
-    drawColour = {},
-    selectedColour = {},
-    isSelected = false,
     position,
     selectedPosition,
     restPosition,
