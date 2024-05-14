@@ -6,9 +6,16 @@ local menuButton = class{
     drawColour = {},
     selectedColour = {},
     isSelected = false,
+    position,
+    selectedPosition,
+    restPosition,
     
     draw = function(self)
 
+    end,
+
+    reset = function(self)
+        self.position = self.restPosition
     end
 }
 

@@ -4,9 +4,6 @@ local textButton = class{
     __includes = menuButton,
 
     text = "",
-    position,
-    selectedPosition,
-    restPosition,
     lerpSpeed = 0.2,
 
     init = function(self, text, restX, restY, selectedX, selectedY, execute)
