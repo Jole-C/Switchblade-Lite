@@ -29,7 +29,8 @@ local menuButton = class{
     end,
 
     reset = function(self)
-        self.position = self.restPosition
+        self.position.x = self.restPosition.x
+        self.position.y = self.restPosition.y
     end
 }
 
