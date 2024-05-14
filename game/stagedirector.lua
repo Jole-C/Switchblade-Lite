@@ -141,8 +141,6 @@ local stageDirector = class{
             love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
             love.graphics.setColor(1, 1, 1, 1)
         end
-
-        love.graphics.print("current wave:" ..self.currentWaveIndex.."\n enemies to spawn: "..#self.enemySpawnList, 50, 10)
     end,
 
     startWave = function(self)
