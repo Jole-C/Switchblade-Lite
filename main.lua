@@ -56,6 +56,13 @@ function SetupResources()
     local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 16)
     font:setFilter("nearest", "nearest", 0)
     resourceManager:addResource(fontDebug, "font main")
+
+    -- Interface resources
+    local selectedBox = love.graphics.newImage("game/assets/sprites/interface/selectedbox.png")
+    resourceManager:addResource(selectedBox, "selected box")
+
+    local unselectedBox = love.graphics.newImage("game/assets/sprites/interface/unselectedbox.png")
+    resourceManager:addResource(unselectedBox, "unselected box")
 end
 
 function love.load()
