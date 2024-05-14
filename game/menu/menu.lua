@@ -92,7 +92,7 @@ local menu = class{
 
     getMenuSubElements = function(self, menuName)
         self:clearMenuSubElements()
-        self.elements = self.menus[menuName]
+        self.elements = self.menus[menuName].elements
         self:updateInterfaceRenderer()
     end,
 
