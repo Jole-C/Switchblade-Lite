@@ -29,22 +29,24 @@ local menu = class{
         end
 
         -- Change the selected element
+        local direction = 1
         if input:pressed("menuUp") then
             self.selectionIndex = self.selectionIndex - 1
+            direction = -1
         end
 
         if input:pressed("menuDown") then
             self.selectionIndex = self.selectionIndex + 1
+            direction = 1
         end
 
         -- Wrap the selection to prevent overflow
         self:wrapSelectionIndex()
 
         -- If the element cannot be highlighted, skip it
-        local selectedElement = self.elements[self.selectionIndex]
+        local selectedElement = self:checkForSelectableElement(direction)
 
-        if self.elements[self.selectionIndex].execute == nil then
-            self.selectionIndex = self.selectionIndex + 1
+        if selectedElement == nil then
             return
         end
 
@@ -103,6 +105,17 @@ local menu = class{
 
     cleanup = function(self)
         self:clearMenuSubElements()
+    end,
+
+    checkForSelectableElement = function(self, direction)
+        local selectedElement = self.elements[self.selectionIndex]
+
+        if selectedElement.execute == nil then
+            self.selectionIndex = self.selectionIndex + (1 * direction)
+            return
+        else
+            return selectedElement
+        end
     end
 }
 
