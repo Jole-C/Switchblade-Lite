@@ -2,9 +2,13 @@ local textButton = require "game.interface.menubutton"
 
 local spriteButton = class{
     __includes = menuButton,
-
-    spriteName = "",
+    
     sprite,
+
+    init = function(self, spriteName, restX, restY, selectedX, selectedY, execute)
+        menuButton.init(self, restX, restY, selectedX, selectedY, execute)
+        self.sprite = resourceManager:getResource(spriteName)
+    end,
 
     draw = function(self)
         if not self.sprite then

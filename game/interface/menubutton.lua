@@ -9,12 +9,12 @@ local menuButton = class{
     position,
     selectedPosition,
     restPosition,
+    lerpSpeed = 0.2,
 
-    init = function(self, text, restX, restY, selectedX, selectedY, execute)
+    init = function(self, restX, restY, selectedX, selectedY, execute)
         self.position = vector.new(restX, restY)
         self.selectedPosition = vector.new(selectedX, selectedY)
         self.restPosition = vector.new(restX, restY)
-        self.text = text
         self.execute = execute
     end,
 

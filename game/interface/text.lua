@@ -7,7 +7,7 @@ local textElement = class{
     centerText = false,
     font,
 
-    init = function(self, text, x, y, centerText, fontName)
+    init = function(self, text, fontName, centerText, x, y)
         self.text = text
         self.position = vector.new(x, y)
         self.centerText = centerText
