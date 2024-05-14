@@ -19,8 +19,7 @@ local gameoverMenu = class{
             }
         }
 
-        self:getMenuSubElements("main")
-        menu.init(self)
+        self:switchMenu("main")
     end,
 }
 

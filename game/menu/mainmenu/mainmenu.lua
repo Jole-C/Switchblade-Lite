@@ -13,8 +13,10 @@ local mainMenu = class{
                     gamestate.switch(gameLevelState)
                 end),
 
-                textButton("options", 10, 20, 15, 20, function()
-                
+                textButton("options", 10, 20, 15, 20, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("options")
+                    end
                 end),
 
                 textButton("quit", 10, 30, 15, 30, function()
@@ -23,20 +25,21 @@ local mainMenu = class{
             },
 
             ["options"] = {
-                text("visual ---------------------", 10, 10, false),
+                text("visual", 10, 10, false, "font main"),
 
-                text("audio ---------------------", 10, 10, false),
+                text("audio", 10, 20, false, "font main"),
 
-                text("controls ---------------------", 10, 10, false),
+                text("controls", 10, 30, false, "font main"),
 
-                textButton("back", 10, 30, 15, 30, function()
-                    love.event.quit()
+                textButton("back", 10, 40, 15, 40, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("main")
+                    end
                 end),
             },
         }
 
-        self:getMenuSubElements("main")
-        menu.init(self)
+        self:switchMenu("main")
     end,
 }
 
