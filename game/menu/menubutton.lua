@@ -1,21 +1,13 @@
-local hudElement = require "game.render.hudelement"
+local interactiveHudElement = require "game.render.interactablehudelement"
 
 local menuButton = class{
-    __includes = hudElement,
+    __includes = interactiveHudElement,
     
     drawColour = {},
     selectedColour = {},
     isSelected = false,
-
-    update = function(self)
-
-    end,
     
     draw = function(self)
-
-    end,
-
-    execute = function(self)
 
     end
 }

@@ -17,7 +17,7 @@ local textButton = class{
         self.execute = execute
     end,
 
-    update = function(self)
+    updateHudElement = function(self)
         if self.isSelected then
             self.position.x = math.lerp(self.position.x, self.selectedPosition.x, self.lerpSpeed)
             self.position.y = math.lerp(self.position.y, self.selectedPosition.y, self.lerpSpeed)
