@@ -24,7 +24,7 @@ local toggleButton = class{
     end,
 
     draw = function(self)
-        love.graphics.setColor(gameManager.currentPalette.uiColour)
+        love.graphics.setColor(self.drawColour)
         love.graphics.setFont(self.font)
 
         -- Draw the button text
@@ -44,6 +44,8 @@ local toggleButton = class{
         local textHeight = self.font:getHeight(self.text)
 
         love.graphics.draw(sprite, self.spritePosition.x, self.spritePosition.y - yOffset + textHeight/2)
+
+        love.graphics.setColor(1, 1, 1, 1)
     end
 }
 

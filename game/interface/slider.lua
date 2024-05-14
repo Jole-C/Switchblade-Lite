@@ -34,7 +34,7 @@ local slider = class{
     end,
 
     draw = function(self)
-        love.graphics.setColor(gameManager.currentPalette.uiColour)
+        love.graphics.setColor(self.drawColour)
         love.graphics.setFont(self.font)
 
         -- Print the text for the slider
@@ -50,6 +50,8 @@ local slider = class{
 
         love.graphics.line(lineX, lineY, lineX + self.lineLength, lineY)
         love.graphics.circle("fill", lineX + (self.value/self.maxValue) * self.lineLength, lineY, 5)
+
+        love.graphics.setColor(1, 1, 1, 1)
     end
 }
 

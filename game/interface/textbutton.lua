@@ -12,9 +12,11 @@ local textButton = class{
     end,
 
     draw = function(self)
-        love.graphics.setColor(gameManager.currentPalette.uiColour)
+        love.graphics.setColor(self.drawColour)
         love.graphics.setFont(self.font)
         love.graphics.print(self.text, self.position.x, self.position.y)
+
+        love.graphics.setColor(1, 1, 1, 1)
     end
 }
 

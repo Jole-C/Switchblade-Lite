@@ -109,14 +109,15 @@ function love.load()
                     grabbedColours[7],
                 },
                 uiColour = grabbedColours[8],
-                enemySpawnColour = grabbedColours[9]
+                enemySpawnColour = grabbedColours[9],
+                uiSelectedColour = grabbedColours[10],
             }
         )
     end
     
     -- Swap to a random palette
     gameManager:swapPalette()
-    
+
     -- Set up the rendering
     gameWidth = 320
     gameHeight = 180

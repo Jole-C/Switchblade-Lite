@@ -19,8 +19,10 @@ local spriteButton = class{
         xOffset = xOffset/2
         yOffset = yOffset/2
         
-        love.graphics.setColor(gameManager.currentPalette.uiColour)
+        love.graphics.setColor(self.drawColour)
         love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+
+        love.graphics.setColor(1, 1, 1, 1)
     end
 }
 

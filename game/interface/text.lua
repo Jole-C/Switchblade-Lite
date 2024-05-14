@@ -19,6 +19,7 @@ local textElement = class{
         local textY = 0
 
         love.graphics.setFont(self.font)
+        love.graphics.setColor(gameManager.currentPalette.uiColour)
 
         if self.centerText == true then
             textX = self.position.x + self.font:getWidth(self.text)/2
@@ -29,6 +30,8 @@ local textElement = class{
         end
 
         love.graphics.print(self.text, textX, textY)
+
+        love.graphics.setColor(1, 1, 1, 1)
     end,
 }
 

@@ -7,6 +7,12 @@ local interactableHudElement = class{
     owner = {},
 
     update = function(self)
+        if self.isSelected then
+            self.drawColour = gameManager.currentPalette.uiSelectedColour
+        else
+            self.drawColour = gameManager.currentPalette.uiColour
+        end
+        
         self:updateHudElement()
 
         if self.isSelected == true then
