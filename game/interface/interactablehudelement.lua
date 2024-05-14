@@ -2,11 +2,16 @@ local hudElement = require "game.interface.hudelement"
 
 local interactableHudElement = class{
     __includes = hudElement,
+    
+    isSelected = false,
     owner = {},
 
     update = function(self)
         self:updateHudElement()
-        self:checkForInteractions()
+
+        if self.isSelected == true then
+            self:checkForInteractions()
+        end
     end,
 
     updateHudElement = function(self)
