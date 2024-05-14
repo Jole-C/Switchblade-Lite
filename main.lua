@@ -25,6 +25,8 @@ input = baton.new{
         shoot = {'key:space'},
         menuUp = {'key:w', 'key:up'},
         menuDown = {'key:s', 'key:down'},
+        menuLeft = {'key:a', 'key:left'},
+        menuRight = {'key:d', 'key:right'},
         select = {'key:return', 'key:space'},
         pause = {'key:escape'},
     }
@@ -49,17 +51,13 @@ function SetupResources()
     local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
 
-    local fontDebug = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 8)
-    fontDebug:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(fontDebug, "font debug")
+    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 8)
+    font:setFilter("nearest", "nearest", 0)
+    resourceManager:addResource(font, "font main")
 
     local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 16)
     font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(fontDebug, "font main")
-
-    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 30)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(fontDebug, "font large")
+    resourceManager:addResource(font, "font large")
 
     -- Interface resources
     local selectedBox = love.graphics.newImage("game/assets/sprites/interface/selectedbox.png")
@@ -118,9 +116,6 @@ function love.load()
     
     -- Swap to a random palette
     gameManager:swapPalette()
-
-    -- Set the font
-    love.graphics.setFont(resourceManager:getResource("font debug"))
     
     -- Set up the rendering
     gameWidth = 320
