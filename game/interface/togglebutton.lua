@@ -24,11 +24,13 @@ local toggleButton = class{
     end,
 
     draw = function(self)
-        -- Draw the button text
         love.graphics.setColor(gameManager.currentPalette.uiColour)
         love.graphics.setFont(self.font)
+
+        -- Draw the button text
         love.graphics.print(self.text, self.position.x, self.position.y)
 
+        -- Set the sprite to the default
         local sprite = self.unselectedSprite
         
         -- Use the selected sprite if applicable
