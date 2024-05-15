@@ -8,6 +8,7 @@ local player = class{
     
     -- Generic parameters of the ship
     maxHealth = 3,
+    spriteName = "player default",
 
     -- Movement parameters of the ship
     steeringSpeedMoving = 6,
@@ -68,7 +69,7 @@ local player = class{
         self.invulnerabilityCooldown = self.invulnerableGracePeriod
 
         -- Set up components
-        self.sprite = resourceManager:getResource("player sprite")
+        self.sprite = resourceManager:getResource(self.spriteName)
         self.sprite:setFilter("nearest")
 
         self.collider = collider(colliderDefinitions.player, self)
@@ -78,17 +79,16 @@ local player = class{
         interfaceRenderer:addHudElement(self.hud)
     end,
 
-    update = function(self, dt)
-        -- Update the hud
-        self.hud:update()
-        
-        -- Create a vector holding the direction the ship is expected to move in
-        local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
-        
+    updateHud = function(self)
+        if self.hud then
+            self.hud:update()
+        end
+    end,
+
+    updateShipMovement = function(self, dt, movementDirection)
         -- Set the steering speed to its default value
         local steeringSpeed = self.steeringSpeedStationary
 
-        -- Handle ship functionality, moving boosting and firing
         if self.isOverheating == false then
             -- Apply a forward thrust to the ship
             if input:down("thrust") then
@@ -123,27 +123,29 @@ local player = class{
             if input:down("steerRight") then
                 self.angle = self.angle + (steeringSpeed * dt)
             end
-
-            -- Fire gun
-            if self.isBoosting == true or self.ammo <= 0 then
-                self.canFire = false
-            end
-
-            if self.canFire == true and input:down("shoot") then
-                local firePosition = self.position + (movementDirection * self.fireOffset)
-                local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.player, 8, 8)
-                gamestate.current():addObject(newBullet)
-
-                self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
-                
-                self.canFire = false
-                self.fireCooldown = self.maxFireCooldown
-                self.ammo = self.ammo - 1
-            end
-
         end
-        
-        -- Handle game timers
+    end,
+
+    updateShipShooting = function(self, dt, movementDirection)
+        -- Fire gun
+        if self.isBoosting == true or self.ammo <= 0 then
+            self.canFire = false
+        end
+
+        if self.canFire == true and input:down("shoot") then
+            local firePosition = self.position + (movementDirection * self.fireOffset)
+            local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.player, 8, 8)
+            gamestate.current():addObject(newBullet)
+
+            self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
+            
+            self.canFire = false
+            self.fireCooldown = self.maxFireCooldown
+            self.ammo = self.ammo - 1
+        end
+    end,
+
+    updatePlayerTimers = function(self, dt)
         self.fireCooldown = self.fireCooldown - 1 * dt
         self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
         self.boostingInvulnerabilityCooldown = self.boostingInvulnerabilityCooldown - 1 * dt
@@ -159,8 +161,9 @@ local player = class{
         if self.boostingInvulnerabilityCooldown <= 0 then
             self.isBoostingInvulnerable = false
         end
+    end,
 
-        -- Handle overheating
+    updateOverheating = function(self, dt)
         if self.shipTemperature >= self.maxShipTemperature then
             self.isOverheating = true
         end
@@ -181,8 +184,9 @@ local player = class{
         end
 
         self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
+    end,
 
-        -- Apply the velocity to the ship and then apply friction
+    updatePosition = function(self)
         local trimmedSpeed = self.maxSpeed
 
         if self.isBoosting then
@@ -191,25 +195,9 @@ local player = class{
 
         self.velocity = self.velocity:trimmed(trimmedSpeed)
         self.position = self.position + self.velocity
+    end,
 
-        local frictionRatio = 1 / (1 + (dt * self.friction))
-        self.velocity = self.velocity * frictionRatio
-
-        -- Wrap the ship's position
-        if self.position.x < 0 then
-            self.position.x = gameWidth
-        end
-        if self.position.x > gameWidth then
-            self.position.x = 0
-        end
-        if self.position.y < 0 then
-            self.position.y = gameHeight
-        end
-        if self.position.y > gameHeight then
-            self.position.y = 0
-        end
-
-        -- Check collision
+    checkCollision = function(self)
         local world = gamestate.current().world
 
         if world and world:hasItem(self.collider) then
@@ -248,6 +236,54 @@ local player = class{
                 ::continue::
             end
         end
+    end,
+
+    applyFriction = function(self, dt)
+        local frictionRatio = 1 / (1 + (dt * self.friction))
+        self.velocity = self.velocity * frictionRatio
+    end,
+
+    wrapShipPosition = function(self)
+        if self.position.x < 0 then
+            self.position.x = gameWidth
+        end
+        if self.position.x > gameWidth then
+            self.position.x = 0
+        end
+        if self.position.y < 0 then
+            self.position.y = gameHeight
+        end
+        if self.position.y > gameHeight then
+            self.position.y = 0
+        end
+    end,
+
+    update = function(self, dt)
+        -- Update the hud
+        self:updateHud()
+        
+        -- Create a vector holding the direction the ship is expected to move in
+        local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+
+        -- Handle ship functionality, moving boosting and firing
+        self:updateShipMovement(dt, movementDirection)
+        self:updateShipShooting(dt, movementDirection)
+        
+        -- Handle game timers
+        self:updatePlayerTimers(dt)
+
+        -- Handle overheating
+        self:updateOverheating(dt)
+
+        -- Apply the velocity to the ship and then apply friction
+        self:updatePosition()
+        self:applyFriction(dt)
+
+        -- Wrap the ship's position
+        self:wrapShipPosition()
+
+        -- Check collision
+        self:checkCollision()
     end,
 
     draw = function(self)
