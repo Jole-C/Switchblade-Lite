@@ -1,22 +1,24 @@
 local playerBase = require "game.objects.player.playerbase"
+local playerLaser = require "game.objects.player.playerlaser"
 
-local playerDefault = class{
+local playerLight = class{
     __includes = playerBase,
     
     -- Generic parameters of the ship
     maxHealth = 3,
+    spriteName = "player light",
 
     -- Movement parameters of the ship
-    steeringSpeedMoving = 6,
-    steeringSpeedStationary = 14,
-    steeringSpeedBoosting = 3,
-    accelerationSpeed = 3,
-    boostingAccelerationSpeed = 4,
-    friction = 1,
+    steeringSpeedMoving = 8,
+    steeringSpeedStationary = 16,
+    steeringSpeedBoosting = 4,
+    accelerationSpeed = 4,
+    boostingAccelerationSpeed =84,
+    friction = 0.8,
     maxSpeed = 3,
     maxBoostingSpeed = 6,
     maxShipTemperature = 100,
-    shipHeatAccumulationRate = 1,
+    shipHeatAccumulationRate = 0.5,
     shipCoolingRate = 40,
     shipOverheatCoolingRate = 20,
     boostDamage = 5,
@@ -26,12 +28,111 @@ local playerDefault = class{
     invulnerableGracePeriod = 3,
 
     -- Firing parameters of the ship
-    maxFireCooldown = 0.05,
+    maxFireCooldown = 0.1,
     bulletSpeed = 5,
     bulletDamage = 3,
-    maxAmmo = 30,
-    shipKnockbackForce = 10,
+    maxAmmo = 70,
+    shipKnockbackForce = 50,
     fireOffset = 10,
+    ammoAccumulationRate = 3,
+    laserBounces = 3,
+
+    updateShipMovement = function(self, dt, movementDirection)
+        -- Set the steering speed to its default value
+        local steeringSpeed = self.steeringSpeedStationary
+
+        if self.isOverheating == false then
+            -- Apply a forward thrust to the ship
+            if input:down("thrust") then
+                self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
+
+                steeringSpeed = self.steeringSpeedMoving
+            end
+
+            -- Boost the ship
+            if input:down("boost") then
+                self.isBoosting = true
+                self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
+
+                steeringSpeed = self.steeringSpeedBoosting
+
+                self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate
+
+                self.ammo = self.ammo + self.ammoAccumulationRate * dt
+                self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+            end
+
+            -- After boosting stops, set up the timer for post boosting invulnerability
+            if self.isBoosting == true and input:down("boost") == false then
+                self.isBoosting = false
+
+                self.isBoostingInvulnerable = true
+                self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
+            end
+
+            -- Steer the ship
+            if input:down("steerLeft") then
+                self.angle = self.angle - (steeringSpeed * dt)
+            end
+
+            if input:down("steerRight") then
+                self.angle = self.angle + (steeringSpeed * dt)
+            end
+        end
+    end,
+
+    updateShipShooting = function(self, dt, movementDirection)
+        -- Fire gun
+        if self.isBoosting == true or self.ammo <= 0 then
+            self.canFire = false
+        end
+
+        if self.canFire == true and input:down("shoot") then
+            local firePosition = self.position + (movementDirection * self.fireOffset)
+            local newBullet = playerLaser(firePosition.x, firePosition.y, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, self.laserBounces, playerLaser)
+            gamestate.current():addObject(newBullet)
+
+            self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
+            
+            self.canFire = false
+            self.fireCooldown = self.maxFireCooldown
+
+            self.ammo = self.ammo - 1
+        end
+    end,
+
+    checkCollision = function(self)
+        local world = gamestate.current().world
+
+        if world and world:hasItem(self.collider) then
+            local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
+            colliderPositionX = self.position.x - colliderWidth/2
+            colliderPositionY = self.position.y - colliderHeight/2
+    
+            local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
+            world:update(self.collider, colliderPositionX, colliderPositionY)
+    
+            for i = 1, len do
+                local collidedObject = cols[i].other.owner
+                local colliderDefinition = cols[i].other.colliderDefinition
+    
+                if not collidedObject or not colliderDefinition then
+                    goto continue
+                end
+    
+                if colliderDefinition == colliderDefinitions.enemy then
+                    if collidedObject.onHit then
+                        collidedObject:onHit(self.boostDamage)
+                        self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
+
+                        self:onHit(collidedObject.contactDamage)
+                    end
+                end
+    
+                ::continue::
+            end
+        end
+    end,
 
     update = function(self, dt)
         -- Update the hud
@@ -62,4 +163,4 @@ local playerDefault = class{
     end,
 }
 
-return playerDefault
+return playerLight

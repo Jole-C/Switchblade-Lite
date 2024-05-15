@@ -47,6 +47,9 @@ function SetupResources()
     local playerSpriteLight = love.graphics.newImage("game/assets/sprites/player/player3.png")
     resourceManager:addResource(playerSpriteLight, "player light")
 
+    local playerLaserSprite = love.graphics.newImage("game/assets/sprites/player/playerlaser.png")
+    resourceManager:addResource(playerLaserSprite, "player laser sprite")
+
     local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/chargerenemy.png")
     resourceManager:addResource(chargerEnemy, "charger enemy sprite")
 
