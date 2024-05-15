@@ -1,4 +1,4 @@
-local player = require "game.objects.player.player"
+local player = require "game.objects.player.playerdefault"
 
 local playerManager = class{
     playerReference,
