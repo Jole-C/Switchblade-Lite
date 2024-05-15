@@ -80,7 +80,7 @@ local playerDefault = class{
             local firePosition = self.position + ((movementDirection * -1) * self.fireOffset)
 
             for i = 1, self.bulletsToFire do
-                local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, (self.angle + math.pi) + math.rad(love.math.random(-self.maxBulletAngle, self.maxBulletAngle)), self.bulletDamage, colliderDefinitions.player, 8, 8)
+                local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, (self.angle + math.pi) + math.rad(love.math.random(-self.maxBulletAngle, self.maxBulletAngle)), self.bulletDamage, colliderDefinitions.playerbullet, 8, 8)
                 gamestate.current():addObject(newBullet)
             end
 
