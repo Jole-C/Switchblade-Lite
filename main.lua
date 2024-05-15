@@ -39,7 +39,13 @@ gameoverState = require "game.gamestates.gameoverstate"
 function SetupResources()
     -- In game resources
     local playerSprite = love.graphics.newImage("game/assets/sprites/player/player.png")
-    resourceManager:addResource(playerSprite, "player sprite")
+    resourceManager:addResource(playerSprite, "player default")
+
+    local playerSpriteHeavy = love.graphics.newImage("game/assets/sprites/player/player2.png")
+    resourceManager:addResource(playerSpriteHeavy, "player heavy")
+
+    local playerSpriteLight = love.graphics.newImage("game/assets/sprites/player/player3.png")
+    resourceManager:addResource(playerSpriteLight, "player light")
 
     local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/chargerenemy.png")
     resourceManager:addResource(chargerEnemy, "charger enemy sprite")
