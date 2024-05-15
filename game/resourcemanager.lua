@@ -3,7 +3,10 @@ local resourceManager = class{
 
     addResource = function(self, resource, identifier)
         self.resources[identifier] = resource
-        resource:setFilter("nearest", "nearest")
+        
+        if resource.setFilter then
+            resource:setFilter("nearest", "nearest")
+        end
     end,
 
     removeResource = function(self, identifier)
