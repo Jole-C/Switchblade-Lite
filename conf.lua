@@ -1,14 +1,12 @@
-gw = 320 
-gh = 180 
-sx = 1
-sy = 1
+gameWidth = 320
+gameHeight = 180
 
 function love.conf(t)
     t.identity = nil                   -- The name of the save directory (string)
     t.version = "11.5"                -- The LÖVE version this game was made for (string)
     t.console = false                  -- Attach a console (boolean, Windows only)
  
-    t.window.title = "" -- The window title (string)
+    t.window.title = "Switchblade" -- The window title (string)
     t.window.icon = nil                -- Filepath to an image to use as the window's icon (string)
     t.window.width = 320 * 4 -- The window width (number)
     t.window.height = 180 * 4 -- The window height (number)
