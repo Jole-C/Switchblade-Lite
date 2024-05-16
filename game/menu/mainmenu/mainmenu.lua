@@ -3,11 +3,45 @@ local textButton = require "game.interface.textbutton"
 local text = require "game.interface.text"
 local toggleButton = require "game.interface.togglebutton"
 local slider = require "game.interface.slider"
+local background = require "game.menu.mainmenu.menubackground"
+local backgroundCircle = require "game.menu.mainmenu.backgroundcircle"
+local backgroundMeshColour = 0.1
 
 local mainMenu = class{
     __includes = menu,
 
+    -- Variables holding the background object and the background circle objects
+    menuBackground = {},
+    menuBackgroundCircles = {},
+    circleSpawnCooldown = 0,
+    maxCircleSpawnCooldown = 1,
+
+    -- Vertices for the background mesh
+    backgroundVertices = {
+        {0, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {130, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {95, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {0, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1}
+    },
+
+    targetVertexPositions = {},
+
+    goalVertexPositions = {
+        {0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {130 + gameWidth, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {95 + gameWidth, gameHeight, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {0, gameHeight, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1}
+    },
+
+    startingVertexPositions = {
+        {0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {130, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {95, gameHeight, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {0, gameHeight}
+    },
+
     init = function(self)
+        -- Initialise menu elements
         self.menus =
         {
             ["main"] = 
@@ -17,12 +51,15 @@ local mainMenu = class{
                 elements =
                 {
                     textButton("start", "font ui", 10, 10, 15, 10, function(self)
-                        self.owner:switchMenu("gamemodeselect")
+                        if self.owner then
+                            self.owner:switchMenu("gamemodeselect")
+                        end
                     end),
     
                     textButton("options", "font ui", 10, 25, 15, 25, function(self)
                         if self.owner then
                             self.owner:switchMenu("options")
+                            self.owner:setBackgroundSlideAmount(1)
                         end
                     end),
     
@@ -55,6 +92,7 @@ local mainMenu = class{
                     textButton("back", "font ui", 10, 135, 15, 135, function(self)
                         if self.owner then
                             self.owner:switchMenu("main")
+                            self.owner:setBackgroundSlideAmount(0)
                         end
                     end),
                 }
@@ -66,15 +104,19 @@ local mainMenu = class{
                 
                 elements =
                 {
-                    textButton("level select", "font ui", 10, 10, 15, 10, function(self)
-                        self.owner:switchMenu("levelselect")
+                    textButton("arena", "font ui", 10, 10, 15, 10, function(self)
+                        if self.owner then
+                            self.owner:switchMenu("levelselect")
+                        end
                     end),
     
                     textButton("endless", "font ui", 10, 25, 15, 25, function()
                     end),
     
                     textButton("back", "font ui", 10, 50, 15, 50, function(self)
-                        self.owner:switchMenu("main")
+                        if self.owner then
+                            self.owner:switchMenu("main")
+                        end
                     end)
                 }
             },
@@ -101,14 +143,118 @@ local mainMenu = class{
                     end),
     
                     textButton("back", "font ui", 10, 65, 15, 65, function(self)
-                        self.owner:switchMenu("gamemodeselect")
+                        if self.owner then
+                            self.owner:switchMenu("gamemodeselect")
+                        end
                     end)
                 }
             },
         }
 
+        -- Initialise background rendering
+        self.menuBackground = background()
+
+        -- Set the menu background slide amount to the default amount
+        self:setBackgroundSlideAmount(0)
+
+        -- Switch to the main menu
         self:switchMenu("main")
     end,
+
+    update = function(self, dt)
+        menu.update(self, dt)
+
+        -- Update and add circles
+        self.circleSpawnCooldown = self.circleSpawnCooldown - 1 * dt
+
+        if self.circleSpawnCooldown <= 0 then
+            self.circleSpawnCooldown = self.maxCircleSpawnCooldown
+            local newCircle = backgroundCircle(self)
+
+            table.insert(self.menuBackgroundCircles, newCircle)
+        end
+
+        for i = 1, #self.menuBackgroundCircles do
+            local circle = self.menuBackgroundCircles[i]
+            
+            if circle then
+                circle:update(dt)
+               
+                if circle.markedForDelete then
+                    table.remove(self.menuBackgroundCircles, i)
+                end
+            end
+        end
+
+        -- If the background sprite is successfully set, lerp the background vertex positions to the target positions, set by the slide function
+        if self.menuBackground.sprite then
+            local mesh = self.menuBackground.sprite
+            local vertexCount = mesh:getVertexCount()
+
+            for i = 1, vertexCount do
+                local vertexX, vertexY = self.backgroundVertices[i]
+
+                self.backgroundVertices[i][1] = math.lerp(self.backgroundVertices[i][1], self.targetVertexPositions[i][1], 0.2)
+                self.backgroundVertices[i][2] = math.lerp(self.backgroundVertices[i][2], self.targetVertexPositions[i][2], 0.2)
+            end
+
+            mesh:setVertices(self.backgroundVertices)
+        end
+    end,
+
+    setBackgroundSlideAmount = function(self, percentage)
+        -- Set the target vertex positions to a percentage between the starting position (left) and goal position (far right)
+        for i = 1, #self.backgroundVertices do
+            self.targetVertexPositions[i] = {
+                math.lerp(self.startingVertexPositions[i][1], self.goalVertexPositions[i][1], percentage),
+                math.lerp(self.startingVertexPositions[i][2], self.goalVertexPositions[i][2], percentage),
+                0,
+                0,
+                backgroundMeshColour,
+                backgroundMeshColour,
+                backgroundMeshColour,
+                1,
+            }
+        end
+    end,
+
+    draw = function(self)
+        love.graphics.setCanvas({menuBackgroundCanvas.canvas, stencil = true})
+        love.graphics.setDefaultFilter("nearest", "nearest")
+        love.graphics.clear()
+
+        if self.menuBackground then
+            -- Use the menu background as a stencil
+            love.graphics.stencil(function()
+                self.menuBackground:draw()
+            end, "replace", 1, false)
+
+            love.graphics.setStencilTest("greater", 0)
+
+            -- Draw the menu background
+            love.graphics.setColor(backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1)
+            love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+
+            for i = 1, #self.menuBackgroundCircles do
+                local currentCircle = self.menuBackgroundCircles[i]
+
+                love.graphics.setColor(currentCircle.colour, currentCircle.colour, currentCircle.colour, 1)
+                love.graphics.circle("fill", 0, 0, currentCircle.size)
+            end
+
+            love.graphics.setColor(1, 1, 1, 1)
+
+            love.graphics.print(#self.menuBackgroundCircles, 0, 0)
+        end
+
+        -- Reset the canvas and stencil
+        love.graphics.setCanvas()
+        love.graphics.setStencilTest()
+    end,
+
+    cleanup = function(self)
+        self.menuBackgroundCircles = {}
+    end
 }
 
 return mainMenu

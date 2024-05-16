@@ -79,12 +79,12 @@ function SetupResources()
     resourceManager:addResource(menuBackground, "menu background sprite")
 
     local mesh = love.graphics.newMesh(4, "fan")
-    local meshColour = 0.1
+
     mesh:setVertices({
-        {0, 0, 0, 0, meshColour, meshColour, meshColour, 1},
-        {150, 0, 0, 0, meshColour, meshColour, meshColour, 1},
-        {100, gameHeight, 0, 0, meshColour, meshColour, meshColour, 1},
-        {0, gameHeight, 0, 0, meshColour, meshColour, meshColour, 1}
+        {0, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {130, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {95, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+        {0, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1}
     })
 
     resourceManager:addResource(mesh, "menu background mesh")
@@ -99,6 +99,9 @@ function love.load()
 
     -- Create a new interface renderer
     interfaceRenderer = interface()
+
+    -- Set the background mesh colour
+    backgroundMeshColour = 0.1
 
     -- Create the resource manager
     resourceManager = resource()
@@ -150,6 +153,7 @@ function love.load()
     backgroundShadowCanvas = gameRenderer:addRenderCanvas("backgroundShadowCanvas", gameWidth, gameHeight)
     foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", gameWidth, gameHeight)
     foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", gameWidth, gameHeight)
+    menuBackgroundCanvas = gameRenderer:addRenderCanvas("menuBackgroundCanvas", gameWidth, gameHeight)
     interfaceCanvas = gameRenderer:addRenderCanvas("interfaceCanvas", gameWidth, gameHeight)
     transitionCanvas = gameRenderer:addRenderCanvas("transitionCanvas", gameWidth, gameHeight)
     

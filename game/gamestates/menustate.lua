@@ -15,6 +15,11 @@ function menuState:enter()
 end
 
 function menuState:leave()
+    for i = 1, #self.objects do
+        local object = self.objects[i]
+        object:destroy()
+    end
+
     self.objects = {}
     interfaceRenderer:clearElements()
 end
