@@ -18,6 +18,7 @@ local gameobject = class{
     end,
 
     destroy = function(self)
+        print("object deleted")
         self.markedForDelete = true
         self:cleanup()    
     end,
