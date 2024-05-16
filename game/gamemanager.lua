@@ -1,15 +1,28 @@
 local pauseManager = require "game.pausemanager"
+local playerDefault = require "game.objects.player.playerships.playerdefault"
+local playerLight = require "game.objects.player.playerships.playerlight"
+local playerHeavy = require "game.objects.player.playerships.playerheavy"
+local playerDefinition = require "game.objects.player.playerdefinition"
 
 local gameManager = class{
     palettes = {},
     currentPalette = {},
+
+    playerDefinitions = {},
+    currentPlayerDefinition = {},
 
     isTransitioning = false,
     isPaused = false,
     pauseManager,
 
     init = function(self)
+        self.playerDefinitions = {
+            ["default definition"] = playerDefinition("default", playerDefault, ""),
+            ["light definition"] = playerDefinition("light", playerLight, ""),
+            ["heavy definition"] = playerDefinition("heavy", playerHeavy, "")
+        }
 
+        self.currentPlayerDefinition = self.playerDefinitions["default definition"]
     end,
 
     update = function(self, dt)
@@ -28,6 +41,16 @@ local gameManager = class{
     end,
 
     draw = function(self)
+    end,
+
+    changePlayerDefinition = function(self, definitionName)
+        local chosenDefinition = self.playerDefinitions[definitionName]
+
+        if chosenDefinition == nil then
+            chosenDefinition = self.playerDefinitions["default definition"]
+        end
+
+        self.currentPlayerDefinition = chosenDefinition
     end,
 
     togglePausing = function(self)
