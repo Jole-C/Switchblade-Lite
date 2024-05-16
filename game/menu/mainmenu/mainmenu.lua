@@ -4,7 +4,6 @@ local text = require "game.interface.text"
 local toggleButton = require "game.interface.togglebutton"
 local slider = require "game.interface.slider"
 local background = require "game.menu.mainmenu.menubackground"
-local backgroundCircle = require "game.menu.mainmenu.backgroundcircle"
 local backgroundMeshColour = 0.1
 
 local mainMenu = class{
@@ -41,6 +40,8 @@ local mainMenu = class{
     },
 
     init = function(self)
+        self.menuBackgroundCircles = {}
+        
         -- Initialise menu elements
         self.menus =
         {
@@ -153,6 +154,11 @@ local mainMenu = class{
 
         -- Initialise background rendering
         self.menuBackground = background()
+        menuBackgroundCanvas.enabled = true
+
+        print("menu created")
+        print(self.menuBackgroundCircles)
+        print(self.menus)
 
         -- Set the menu background slide amount to the default amount
         self:setBackgroundSlideAmount(0)
@@ -169,19 +175,23 @@ local mainMenu = class{
 
         if self.circleSpawnCooldown <= 0 then
             self.circleSpawnCooldown = self.maxCircleSpawnCooldown
-            local newCircle = backgroundCircle(self)
-
-            table.insert(self.menuBackgroundCircles, newCircle)
+            table.insert(self.menuBackgroundCircles, {
+                size = 10,
+                colour = 0.1,
+                maxSize = gameWidth * 1.3,
+            })
         end
 
         for i = 1, #self.menuBackgroundCircles do
             local circle = self.menuBackgroundCircles[i]
             
             if circle then
-                circle:update(dt)
-               
-                if circle.markedForDelete then
+                circle.size = circle.size + 40 * dt
+                circle.colour = circle.colour + 0.01 * dt
+                
+                if circle.size > circle.maxSize then
                     table.remove(self.menuBackgroundCircles, i)
+                    break
                 end
             end
         end
@@ -243,8 +253,6 @@ local mainMenu = class{
             end
 
             love.graphics.setColor(1, 1, 1, 1)
-
-            love.graphics.print(#self.menuBackgroundCircles, 0, 0)
         end
 
         -- Reset the canvas and stencil
@@ -253,7 +261,11 @@ local mainMenu = class{
     end,
 
     cleanup = function(self)
-        self.menuBackgroundCircles = {}
+        self.menus = {}
+        print("menu destroyed")
+        print(self.menuBackgroundCircles)
+        print(self.menus)
+        menuBackgroundCanvas.enabled = false
     end
 }
 

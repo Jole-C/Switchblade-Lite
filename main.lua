@@ -16,6 +16,10 @@ local gameDirector = require "game.gamemanager"
 local playerHandler = require "game.objects.player.playermanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
+menuState = require "game.gamestates.menustate"
+gameLevelState = require "game.gamestates.gamelevelstate"
+gameoverState = require "game.gamestates.gameoverstate"
+
 input = baton.new{
     controls = {
         thrust = {'key:w', 'key:up'},
@@ -31,10 +35,6 @@ input = baton.new{
         pause = {'key:escape'},
     }
 }
-
-menuState = require "game.gamestates.menustate"
-gameLevelState = require "game.gamestates.gamelevelstate"
-gameoverState = require "game.gamestates.gameoverstate"
 
 function SetupResources()
     -- In game resources
@@ -74,9 +74,6 @@ function SetupResources()
 
     local unselectedBox = love.graphics.newImage("game/assets/sprites/interface/unselectedbox.png")
     resourceManager:addResource(unselectedBox, "unselected box")
-
-    local menuBackground = love.graphics.newImage("game/assets/sprites/interface/menubackground.png")
-    resourceManager:addResource(menuBackground, "menu background sprite")
 
     local mesh = love.graphics.newMesh(4, "fan")
 
@@ -160,7 +157,7 @@ function love.load()
     -- Temporary particle system
     local bgCol = gameManager.currentPalette.backgroundColour
     ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
-    --[[
+    
     ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(-1.5707963705063)
     ps:setEmissionArea("uniform", gameWidth/2, gameHeight/2, 0, false)
@@ -181,9 +178,9 @@ function love.load()
     ps:setSpinVariation(0)
     ps:setSpread(0.31415927410126)
     ps:setTangentialAcceleration(0, 0)
-]]
+
 -------
-    ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
+    --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(0.045423280447721)
     ps:setEmissionArea("uniform", 339.4328918457, 224.59356689453, 0, false)
     ps:setEmissionRate(512)
@@ -202,7 +199,7 @@ function love.load()
     ps:setSpin(0, 0)
     ps:setSpinVariation(0)
     ps:setSpread(0.11967971920967)
-    ps:setTangentialAcceleration(379.81402587891, 405.12814331055)
+    ps:setTangentialAcceleration(379.81402587891, 405.12814331055)]]--
     
     ps:start()  
 
@@ -227,7 +224,7 @@ function love.update(dt)
     playerManager:update(dt)
     timer.update(dt)
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
-    ps:update(dt/3)
+    ps:update(dt/7)
 end
 
 function love.draw()
