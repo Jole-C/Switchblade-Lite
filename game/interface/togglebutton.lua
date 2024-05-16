@@ -12,7 +12,7 @@ local toggleButton = class{
 
     init = function(self, text, font, restX, restY, selectedX, selectedY, execute)
         menuButton.init(self, restX, restY, selectedX, selectedY, execute)
-        self.spritePosition = vector.new(restX + 100, restY)
+        self.spritePosition = vector.new(restX + 130, restY)
         self.font = resourceManager:getResource(font)
         self.text = text
         self.selectedSprite = resourceManager:getResource("selected box")

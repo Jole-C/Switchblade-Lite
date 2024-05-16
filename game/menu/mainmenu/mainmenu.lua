@@ -16,17 +16,17 @@ local mainMenu = class{
                 
                 elements =
                 {
-                    textButton("start", "font main", 10, 10, 15, 10, function(self)
-                        gamestate.switch(gameLevelState)
+                    textButton("start", "font ui", 10, 10, 15, 10, function(self)
+                        self.owner:switchMenu("gamemodeselect")
                     end),
     
-                    textButton("options", "font main", 10, 20, 15, 20, function(self)
+                    textButton("options", "font ui", 10, 25, 15, 25, function(self)
                         if self.owner then
                             self.owner:switchMenu("options")
                         end
                     end),
     
-                    textButton("quit", "font main", 10, 30, 15, 30, function()
+                    textButton("quit", "font ui", 10, 50, 15, 50, function()
                         love.event.quit()
                     end)
                 }
@@ -38,25 +38,71 @@ local mainMenu = class{
 
                 elements =
                 {
-                    text("visual", "font main", false, 10, 10),
+                    text("visual", "font ui", false, 10, 10),
 
-                    toggleButton("toggle bg.", "font main", 10, 25, 20, 25),
+                    toggleButton("toggle bg.", "font ui", 10, 25, 20, 25),
 
-                    slider("bg. fading", "font main", 25, 0, 100, 10, 40),
+                    slider("bg. fading", "font ui", 25, 0, 100, 10, 40),
 
-                    slider("bg. speed", "font main", 25, 0, 100, 10, 55),
+                    slider("bg. speed", "font ui", 25, 0, 100, 10, 55),
 
-                    text("audio", "font main", false, 10, 80),
+                    text("audio", "font ui", false, 10, 80),
 
-                    slider("music vol.", "font main", 25, 0, 100, 10, 95),
+                    slider("music vol.", "font ui", 25, 0, 100, 10, 95),
 
-                    slider("sfx vol.", "font main", 25, 0, 100, 10, 110),
+                    slider("sfx vol.", "font ui", 25, 0, 100, 10, 110),
 
-                    textButton("back", "font main", 10, 130, 15, 130, function(self)
+                    textButton("back", "font ui", 10, 135, 15, 135, function(self)
                         if self.owner then
                             self.owner:switchMenu("main")
                         end
                     end),
+                }
+            },
+
+            ["gamemodeselect"] =
+            {
+                displayMenuName = false,
+                
+                elements =
+                {
+                    textButton("level select", "font ui", 10, 10, 15, 10, function(self)
+                        self.owner:switchMenu("levelselect")
+                    end),
+    
+                    textButton("endless", "font ui", 10, 25, 15, 25, function()
+                    end),
+    
+                    textButton("back", "font ui", 10, 50, 15, 50, function(self)
+                        self.owner:switchMenu("main")
+                    end)
+                }
+            },
+
+            ["levelselect"] =
+            {
+                displayMenuName = false,
+                
+                elements =
+                {
+                    textButton("level 1", "font ui", 10, 10, 15, 10, function()
+                        gameManager:changePlayerDefinition("default definition")
+                        gamestate.switch(gameLevelState)
+                    end),
+    
+                    textButton("level 2", "font ui", 10, 25, 15, 25, function()
+                        gameManager:changePlayerDefinition("light definition")
+                        gamestate.switch(gameLevelState)
+                    end),
+    
+                    textButton("level 3", "font ui", 10, 40, 15, 40, function()
+                        gameManager:changePlayerDefinition("heavy definition")
+                        gamestate.switch(gameLevelState)
+                    end),
+    
+                    textButton("back", "font ui", 10, 65, 15, 65, function(self)
+                        self.owner:switchMenu("gamemodeselect")
+                    end)
                 }
             },
         }

@@ -56,6 +56,9 @@ local menu = class{
         end
     end,
 
+    draw = function(self)
+    end,
+
     wrapSelectionIndex = function(self)
         if self.selectionIndex < 1 then
             self.selectionIndex = #self.elements

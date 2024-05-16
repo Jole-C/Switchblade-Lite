@@ -12,11 +12,11 @@ local pauseMenu = class{
                 displayMenuName = false,
                 elements =
                     {
-                    textButton("resume", "font main", 10, 10, 15, 10, function(self)
+                    textButton("resume", "font ui", 10, 10, 15, 10, function(self)
                         gameManager:togglePausing()
                     end),
 
-                    textButton("quit", "font main", 10, 20, 15, 20, function(self)
+                    textButton("quit", "font ui", 10, 25, 15, 25, function(self)
                         gamestate.switch(menuState)
                         gameManager:togglePausing()
                     end),
