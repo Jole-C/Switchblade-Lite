@@ -1,5 +1,3 @@
-local player = require "game.objects.player.playerdefault"
-
 local playerManager = class{
     playerReference,
     playerPosition,
@@ -9,7 +7,7 @@ local playerManager = class{
     end,
 
     spawnPlayer = function(self, x, y)
-        local newPlayer = player(x, y)
+        local newPlayer = gameManager.currentPlayerDefinition.shipClass(x, y)
         self.playerReference = newPlayer
 
         return newPlayer

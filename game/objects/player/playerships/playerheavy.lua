@@ -1,5 +1,5 @@
-local playerBase = require "game.objects.player.playerbase"
-local playerBullet = require "game.objects.player.playerbullet"
+local playerBase = require "game.objects.player.playerships.playerbase"
+local playerBullet = require "game.objects.player.playerbullets.playerbullet"
 
 local playerDefault = class{
     __includes = playerBase,

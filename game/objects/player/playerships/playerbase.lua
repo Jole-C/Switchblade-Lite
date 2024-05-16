@@ -1,5 +1,5 @@
 local gameobject = require "game.objects.gameobject"
-local playerBullet = require "game.objects.player.playerbullet"
+local playerBullet = require "game.objects.player.playerbullets.playerbullet"
 local collider = require "game.collision.collider"
 local playerHud = require "game.objects.player.playerhuddisplay"
 
