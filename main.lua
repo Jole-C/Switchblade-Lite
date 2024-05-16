@@ -64,9 +64,9 @@ function SetupResources()
     font:setFilter("nearest", "nearest", 0)
     resourceManager:addResource(font, "font main")
 
-    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 16)
+    local font = love.graphics.newFont("game/assets/fonts/kenneyfuture.ttf", 16)
     font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font large")
+    resourceManager:addResource(font, "font ui")
 
     -- Interface resources
     local selectedBox = love.graphics.newImage("game/assets/sprites/interface/selectedbox.png")
@@ -74,6 +74,20 @@ function SetupResources()
 
     local unselectedBox = love.graphics.newImage("game/assets/sprites/interface/unselectedbox.png")
     resourceManager:addResource(unselectedBox, "unselected box")
+
+    local menuBackground = love.graphics.newImage("game/assets/sprites/interface/menubackground.png")
+    resourceManager:addResource(menuBackground, "menu background sprite")
+
+    local mesh = love.graphics.newMesh(4, "fan")
+    local meshColour = 0.1
+    mesh:setVertices({
+        {0, 0, 0, 0, meshColour, meshColour, meshColour, 1},
+        {150, 0, 0, 0, meshColour, meshColour, meshColour, 1},
+        {100, gameHeight, 0, 0, meshColour, meshColour, meshColour, 1},
+        {0, gameHeight, 0, 0, meshColour, meshColour, meshColour, 1}
+    })
+
+    resourceManager:addResource(mesh, "menu background mesh")
 end
 
 function love.load()
@@ -128,8 +142,6 @@ function love.load()
     gameManager:swapPalette()
 
     -- Set up the rendering
-    gameWidth = 320
-    gameHeight = 180
     windowWidth, windowHeight = love.window.getDesktopDimensions();
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
