@@ -30,6 +30,9 @@ function menuState:update(dt)
 end
 
 function menuState:draw()
+    for index,object in ipairs(self.objects) do
+        object:draw(dt)
+    end
 end
 
 function menuState:addObject(object)
