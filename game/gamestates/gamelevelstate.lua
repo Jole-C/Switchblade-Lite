@@ -69,6 +69,7 @@ end
 function gameLevelState:leave()
     self.objects = {}
     self.expiredObjects = {}
+    self.world = nil
     interfaceRenderer:clearElements()
 end
 

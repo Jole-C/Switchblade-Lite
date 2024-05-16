@@ -32,7 +32,7 @@ local stageDirector = class{
 
     init = function(self, levelDefinition, x, y)
         gameobject.init(self, x, y)
-        
+
         -- Unpack the level table
         self.levelDefinition = levelDefinition
         self.waveDefinitions = self.levelDefinition.level
@@ -91,8 +91,8 @@ local stageDirector = class{
             -- If no enemies are alive, switch to the next wave
             if aliveEnemyCount <= 0 and self.inWaveTransition == false then
                 self.aliveEnemies = {}
-                self.currentWaveIndex = self.currentWaveIndex + 1
                 self.enemySpawnList = {}
+                self.currentWaveIndex = self.currentWaveIndex + 1
                 self:startWave()
                 self.spawnTime = self.maxSpawnTime
                 self.inWaveTransition = true
@@ -122,24 +122,25 @@ local stageDirector = class{
                 end
 
                 self.inWaveTransition = false
-                self.enemySpawnList = {}
             end
         end
     end,
 
     draw = function(self)
         -- Draw the warning sprites
-        for i = 1, #self.enemySpawnList do
-            local nextSpawn = self.enemySpawnList[i]
+        if self.inWaveTransition == true then
+            for i = 1, #self.enemySpawnList do
+                local nextSpawn = self.enemySpawnList[i]
 
-            local sprite = resourceManager:getResource(nextSpawn.spriteName)
-            local xOffset, yOffset = sprite:getDimensions()
-            xOffset = xOffset/2
-            yOffset = yOffset/2
-    
-            love.graphics.setColor(gameManager.currentPalette.enemySpawnColour)
-            love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
-            love.graphics.setColor(1, 1, 1, 1)
+                local sprite = resourceManager:getResource(nextSpawn.spriteName)
+                local xOffset, yOffset = sprite:getDimensions()
+                xOffset = xOffset/2
+                yOffset = yOffset/2
+        
+                love.graphics.setColor(gameManager.currentPalette.enemySpawnColour)
+                love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
+                love.graphics.setColor(1, 1, 1, 1)
+            end
         end
     end,
 
@@ -157,6 +158,7 @@ local stageDirector = class{
 
             for i = 1, #enemyDefs do
                 local currentDef = enemyDefs[i]
+                print(currentDef.spawnCount)
                 
                 for j = 1, currentDef.spawnCount do
                     local position = vector.new()

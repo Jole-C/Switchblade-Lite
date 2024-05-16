@@ -156,10 +156,6 @@ local mainMenu = class{
         self.menuBackground = background()
         menuBackgroundCanvas.enabled = true
 
-        print("menu created")
-        print(self.menuBackgroundCircles)
-        print(self.menus)
-
         -- Set the menu background slide amount to the default amount
         self:setBackgroundSlideAmount(0)
 
@@ -262,9 +258,6 @@ local mainMenu = class{
 
     cleanup = function(self)
         self.menus = {}
-        print("menu destroyed")
-        print(self.menuBackgroundCircles)
-        print(self.menus)
         menuBackgroundCanvas.enabled = false
     end
 }
