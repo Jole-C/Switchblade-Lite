@@ -11,9 +11,12 @@ local mainMenu = class{
 
     -- Variables holding the background object and the background circle objects
     menuBackground = {},
-    menuBackgroundCircles = {},
     circleSpawnCooldown = 0,
     maxCircleSpawnCooldown = 1,
+    shader,
+    shaderCanvas,
+    shaderTime = 0,
+    shaderDirection = 1,
 
     -- Vertices for the background mesh
     backgroundVertices = {
@@ -40,9 +43,6 @@ local mainMenu = class{
     },
 
     init = function(self)
-        -- Not sure why this needs to be done but it does...
-        self.menuBackgroundCircles = {}
-        
         -- Initialise menu elements
         self.menus =
         {
@@ -159,6 +159,42 @@ local mainMenu = class{
         self.menuBackground = background()
         menuBackgroundCanvas.enabled = true
 
+        self.shader = love.graphics.newShader[[
+            extern number angle;
+            extern number warpScale;
+            extern number warpTiling;
+            extern number tiling;
+            extern vec2 position;
+            extern vec2 resolution;
+
+            vec4 effect(vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
+            {
+                const float PI = 3.14159;
+                
+                vec2 uv = (screenCoords - position) / resolution;
+                
+                vec2 pos = vec2(0, 0);
+                pos.x = mix(uv.x, uv.y, angle);
+                pos.y = mix(uv.y, 1.0 - uv.x, angle);
+                pos.x += sin(pos.y * warpTiling * PI * 2.0) * warpScale;
+                pos.x *= tiling;
+                
+                float c = mix(uv.x, uv.y, angle) * tiling;
+                c = mod(c, 1.0);
+                c = step(c, 0.5);
+
+                vec3 col1 = vec3(0.1, 0.1, 0.1);
+                vec3 col2 = vec3(0.15, 0.15, 0.15);
+                
+                float val = floor(fract(pos.x) + 0.5);
+                vec4 fragColour = vec4(mix(col1, col2, val), 1);
+
+                return fragColour;
+            }
+        ]]
+
+        self.shaderCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
+
         -- Set the menu background slide amount to the default amount
         self:setBackgroundSlideAmount(0)
 
@@ -169,30 +205,29 @@ local mainMenu = class{
     update = function(self, dt)
         menu.update(self, dt)
 
-        -- Update and add circles
-        self.circleSpawnCooldown = self.circleSpawnCooldown - 1 * dt
+        -- Update the shader parameters
+        if self.shader then
+            self.shaderTime = self.shaderTime + (self.shaderDirection * 0.05) * dt
 
-        if self.circleSpawnCooldown <= 0 then
-            self.circleSpawnCooldown = self.maxCircleSpawnCooldown
-            table.insert(self.menuBackgroundCircles, {
-                size = 10,
-                colour = 0.1,
-                maxSize = gameWidth * 1.3,
-            })
-        end
-
-        for i = 1, #self.menuBackgroundCircles do
-            local circle = self.menuBackgroundCircles[i]
-            
-            if circle then
-                circle.size = circle.size + 40 * dt
-                circle.colour = circle.colour + 0.01 * dt
-                
-                if circle.size > circle.maxSize then
-                    table.remove(self.menuBackgroundCircles, i)
-                    break
-                end
+            if self.shaderTime >= 0.3 then
+                self.shaderDirection = -1
             end
+
+            if self.shaderTime <= -0.3 then
+                self.shaderDirection = 1
+            end
+
+            local angle = 0.4;
+            local warpScale = 0.1 + math.clamp(math.sin(self.shaderTime), -1.0, 1.0);
+            local warpTiling = 0.3 + math.clamp(math.sin((self.shaderTime) + 1.0), -0.7, 0.7);
+            local tiling = 3.0;
+
+            self.shader:send("angle", angle)
+            self.shader:send("warpScale", warpScale)
+            self.shader:send("warpTiling", warpTiling)
+            self.shader:send("tiling", tiling)
+            self.shader:send("resolution", {gameWidth, gameHeight})
+            self.shader:send("position", {0, 0})
         end
 
         -- If the background sprite is successfully set, lerp the background vertex positions to the target positions, set by the slide function
@@ -228,6 +263,8 @@ local mainMenu = class{
     end,
 
     draw = function(self)
+        -- Draw the shader
+
         love.graphics.setCanvas({menuBackgroundCanvas.canvas, stencil = true})
         love.graphics.setDefaultFilter("nearest", "nearest")
         love.graphics.clear()
@@ -239,19 +276,10 @@ local mainMenu = class{
             end, "replace", 1, false)
 
             love.graphics.setStencilTest("greater", 0)
-
-            -- Draw the menu background
-            love.graphics.setColor(backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1)
+            
+            love.graphics.setShader(self.shader)
             love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
-
-            for i = 1, #self.menuBackgroundCircles do
-                local currentCircle = self.menuBackgroundCircles[i]
-
-                love.graphics.setColor(currentCircle.colour, currentCircle.colour, currentCircle.colour, 1)
-                love.graphics.circle("fill", 0, 0, currentCircle.size)
-            end
-
-            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.setShader()
         end
 
         -- Reset the canvas and stencil
