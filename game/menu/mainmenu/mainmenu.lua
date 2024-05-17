@@ -40,6 +40,7 @@ local mainMenu = class{
     },
 
     init = function(self)
+        -- Not sure why this needs to be done but it does...
         self.menuBackgroundCircles = {}
         
         -- Initialise menu elements
@@ -78,23 +79,25 @@ local mainMenu = class{
                 {
                     text("visual", "font ui", false, 10, 10),
 
-                    toggleButton("toggle bg.", "font ui", 10, 25, 20, 25),
+                    toggleButton("toggle bg.", "font ui", 10, 25, 20, 25, gameManager.options.enableBackground, {table = gameManager.options, value = "enableBackground"}),
 
-                    slider("bg. fading", "font ui", 25, 0, 100, 10, 40),
+                    slider("bg. fading", "font ui", gameManager.options.fadingPercentage, 0, 100, 10, 40, {table = gameManager.options, value = "fadingPercentage"}),
 
-                    slider("bg. speed", "font ui", 25, 0, 100, 10, 55),
+                    slider("bg. speed", "font ui", gameManager.options.speedPercentage, 0, 100, 10, 55, {table = gameManager.options, value = "speedPercentage"}),
 
                     text("audio", "font ui", false, 10, 80),
 
-                    slider("music vol.", "font ui", 25, 0, 100, 10, 95),
+                    slider("music vol.", "font ui", gameManager.options.musicVolPercentage, 0, 100, 10, 95, {table = gameManager.options, value = "musicVolPercentage"}),
 
-                    slider("sfx vol.", "font ui", 25, 0, 100, 10, 110),
+                    slider("sfx vol.", "font ui", gameManager.options.sfxVolPercentage, 0, 100, 10, 110, {table = gameManager.options, value = "sfxVolPercentage"}),
 
                     textButton("back", "font ui", 10, 135, 15, 135, function(self)
                         if self.owner then
                             self.owner:switchMenu("main")
                             self.owner:setBackgroundSlideAmount(0)
                         end
+                        
+                        gameManager:saveOptions()
                     end),
                 }
             },
@@ -257,7 +260,6 @@ local mainMenu = class{
     end,
 
     cleanup = function(self)
-        self.menus = {}
         menuBackgroundCanvas.enabled = false
     end
 }
