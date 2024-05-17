@@ -224,7 +224,9 @@ function love.update(dt)
     playerManager:update(dt)
     timer.update(dt)
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
-    ps:update(dt/7)
+    
+    
+    ps:update(dt/7 * gameManager.options.speedPercentage/100)
 end
 
 function love.draw()
@@ -234,12 +236,19 @@ function love.draw()
     love.graphics.setCanvas(backgroundCanvas.canvas)
     love.graphics.setBackgroundColor(gameManager.currentPalette.backgroundColour[5])
     love.graphics.setBlendMode("alpha")
-    love.graphics.draw(ps, gameWidth/2, gameHeight/2)
+
+    if gameManager.options.enableBackground == 1 then
+        love.graphics.draw(ps, gameWidth/2, gameHeight/2)
+    else
+        love.graphics.clear()
+    end
 
     -- Draw the background overlay
     love.graphics.setCanvas(backgroundShadowCanvas.canvas)
     love.graphics.clear()
-    love.graphics.setColor(0.1, 0.1, 0.1, 0)
+
+    local alpha = gameManager.options.fadingPercentage / 100
+    love.graphics.setColor(0.1, 0.1, 0.1, alpha)
     love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
     love.graphics.setColor(1, 1, 1, 1)
 
