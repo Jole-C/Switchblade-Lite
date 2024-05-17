@@ -17,6 +17,7 @@ local mainMenu = class{
     shaderCanvas,
     shaderTime = 0,
     shaderDirection = 1,
+    shaderAngle = 0.25,
 
     -- Vertices for the background mesh
     backgroundVertices = {
@@ -207,20 +208,12 @@ local mainMenu = class{
 
         -- Update the shader parameters
         if self.shader then
-            self.shaderTime = self.shaderTime + (self.shaderDirection * 0.05) * dt
+            self.shaderTime = self.shaderTime + 0.1 * dt
 
-            if self.shaderTime >= 0.3 then
-                self.shaderDirection = -1
-            end
-
-            if self.shaderTime <= -0.3 then
-                self.shaderDirection = 1
-            end
-
-            local angle = 0.4;
-            local warpScale = 0.1 + math.clamp(math.sin(self.shaderTime), -1.0, 1.0);
-            local warpTiling = 0.3 + math.clamp(math.sin((self.shaderTime) + 1.0), -0.7, 0.7);
-            local tiling = 3.0;
+            local angle = 0.4
+            local warpScale = 0.1 + math.sin(self.shaderTime) * 0.3
+            local warpTiling = 0.3 + math.sin(self.shaderTime) * 0.5
+            local tiling = 3.0
 
             self.shader:send("angle", angle)
             self.shader:send("warpScale", warpScale)
