@@ -11,11 +11,30 @@ local gameManager = class{
     playerDefinitions = {},
     currentPlayerDefinition = {},
 
+    options = {
+        enableBackground = 1,
+        fadingPercentage = 50,
+        speedPercentage = 50,
+        musicVolPercentage = 70,
+        sfxVolPercentage = 100
+    },
+    unlocks = {
+        level1beaten = false,
+        level2beaten = false,
+        level3beaten = false,
+        shipUnlocks = {
+
+        },
+    },
+
     isTransitioning = false,
     isPaused = false,
     pauseManager,
 
+    optionsFile = "options.txt",
+
     init = function(self)
+        -- Set up the player definitions
         self.playerDefinitions = {
             ["default definition"] = playerDefinition("default", playerDefault, ""),
             ["light definition"] = playerDefinition("light", playerLight, ""),
@@ -23,6 +42,41 @@ local gameManager = class{
         }
 
         self.currentPlayerDefinition = self.playerDefinitions["default definition"]
+
+        -- Set up the options
+        love.filesystem.setIdentity("switchblade")
+        local info = love.filesystem.getInfo(self.optionsFile)
+
+        if info then
+            print("file exists")
+
+            local loadedOptions = {}
+
+            for line in love.filesystem.lines(self.optionsFile) do
+                table.insert(loadedOptions, tonumber(line))
+                print(line)
+            end
+            
+            self.options = {
+                enableBackground = loadedOptions[1],
+                fadingPercentage = loadedOptions[2],
+                speedPercentage = loadedOptions[3],
+                musicVolPercentage = loadedOptions[4],
+                sfxVolPercentage = loadedOptions[5]
+            }
+        else
+            local file = love.filesystem.newFile(self.optionsFile)
+            local bool, err = file:open("w")
+            print(err)
+
+            file:write(self.options.enableBackground.."\n")
+            file:write(self.options.fadingPercentage.."\n")
+            file:write(self.options.speedPercentage.."\n")
+            file:write(self.options.musicVolPercentage.."\n")
+            file:write(self.options.sfxVolPercentage.."\n")
+
+            file:close()
+        end
     end,
 
     update = function(self, dt)
@@ -68,6 +122,20 @@ local gameManager = class{
 
     transitionGamestate = function(self, gamestate)
         
+    end,
+
+    saveOptions = function(self)
+        local file = love.filesystem.newFile(self.optionsFile)
+        local bool, err = file:open("w")
+        print(err)
+
+        file:write(self.options.enableBackground.."\n")
+        file:write(self.options.fadingPercentage.."\n")
+        file:write(self.options.speedPercentage.."\n")
+        file:write(self.options.musicVolPercentage.."\n")
+        file:write(self.options.sfxVolPercentage.."\n")
+
+        file:close()
     end
 }
 
