@@ -10,14 +10,16 @@ local slider = class{
     text = "",
     font,
     lineLength = 75,
+    referenceToSet,
 
-    init = function(self, text, font, value, minValue, maxValue, x, y)
+    init = function(self, text, font, value, minValue, maxValue, x, y, referenceToSet)
         self.position = vector.new(x, y)
         self.value = value
         self.minValue = minValue
         self.maxValue = maxValue
         self.text = text
         self.font = resourceManager:getResource(font)
+        self.referenceToSet = referenceToSet
     end,
 
     -- Used for things like sliders with left and right input
@@ -30,6 +32,13 @@ local slider = class{
 
         if input:down("menuRight") and self.value < self.maxValue then
             self.value = self.value + 1
+        end
+
+        local table = self.referenceToSet.table
+        local value = self.referenceToSet.value
+
+        if table and value then
+            table[value] = self.value
         end
     end,
 

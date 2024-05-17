@@ -9,18 +9,28 @@ local toggleButton = class{
     spritePosition,
     font,
     bool = false,
+    referenceToSet,
 
-    init = function(self, text, font, restX, restY, selectedX, selectedY, execute)
+    init = function(self, text, font, restX, restY, selectedX, selectedY, defaultValue, referenceToSet)
         menuButton.init(self, restX, restY, selectedX, selectedY, execute)
         self.spritePosition = vector.new(restX + 130, restY)
         self.font = resourceManager:getResource(font)
         self.text = text
         self.selectedSprite = resourceManager:getResource("selected box")
         self.unselectedSprite = resourceManager:getResource("unselected box")
+        self.bool = defaultValue == 1
+        self.referenceToSet = referenceToSet
     end,
 
     execute = function(self)
         self.bool = not self.bool
+
+        local table = self.referenceToSet.table
+        local value = self.referenceToSet.value
+
+        if table and value then
+            table[value] = self.bool and 1 or 0
+        end
     end,
 
     draw = function(self)
