@@ -3,45 +3,28 @@ local textButton = require "game.interface.textbutton"
 local text = require "game.interface.text"
 local toggleButton = require "game.interface.togglebutton"
 local slider = require "game.interface.slider"
-local background = require "game.menu.mainmenu.menubackground"
-local backgroundMeshColour = 0.1
 
 local mainMenu = class{
     __includes = menu,
 
-    -- Variables holding the background object and the background circle objects
-    menuBackground = {},
-    circleSpawnCooldown = 0,
-    maxCircleSpawnCooldown = 1,
-    shader,
+    -- Variables holding the background object and shader values
+    menuBackgroundSprite,
+
+    menuBoxShader,
+    menuBackgroundShader,
     shaderCanvas,
     shaderTime = 0,
     shaderDirection = 1,
     shaderAngle = 0.25,
 
-    -- Vertices for the background mesh
-    backgroundVertices = {
-        {0, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {130, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {95, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {0, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1}
-    },
+    backgroundScrollY = 0,
+    backgroundScrollSpeed = 10,
 
-    targetVertexPositions = {},
-
-    goalVertexPositions = {
-        {0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {130 + gameWidth, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {95 + gameWidth, gameHeight, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {0, gameHeight, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1}
-    },
-
-    startingVertexPositions = {
-        {0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {130, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {95, gameHeight, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {0, gameHeight}
-    },
+    -- Offset for the menu background
+    menuBoxOffset = 0,
+    maxMenuBoxOffset = gameWidth,
+    minMenuBoxOffset = 0,
+    targetMenuBoxOffset = 0,
 
     init = function(self)
         -- Initialise menu elements
@@ -62,7 +45,7 @@ local mainMenu = class{
                     textButton("options", "font ui", 10, 25, 15, 25, function(self)
                         if self.owner then
                             self.owner:switchMenu("options")
-                            self.owner:setBackgroundSlideAmount(1)
+                            self.owner:setBackgroundSlideAmount(0.6)
                         end
                     end),
     
@@ -112,6 +95,7 @@ local mainMenu = class{
                     textButton("arena", "font ui", 10, 10, 15, 10, function(self)
                         if self.owner then
                             self.owner:switchMenu("levelselect")
+                            self.owner:setBackgroundSlideAmount(0.5)
                         end
                     end),
     
@@ -150,6 +134,7 @@ local mainMenu = class{
                     textButton("back", "font ui", 10, 65, 15, 65, function(self)
                         if self.owner then
                             self.owner:switchMenu("gamemodeselect")
+                            self.owner:setBackgroundSlideAmount(0)
                         end
                     end)
                 }
@@ -157,10 +142,11 @@ local mainMenu = class{
         }
 
         -- Initialise background rendering
-        self.menuBackground = background()
+        self.menuBackgroundSprite = resourceManager:getResource("menu background mesh")
         menuBackgroundCanvas.enabled = true
 
-        self.shader = love.graphics.newShader[[
+        -- Initialise the box shader
+        self.menuBoxShader = love.graphics.newShader[[
             extern number angle;
             extern number warpScale;
             extern number warpTiling;
@@ -179,13 +165,9 @@ local mainMenu = class{
                 pos.y = mix(uv.y, 1.0 - uv.x, angle);
                 pos.x += sin(pos.y * warpTiling * PI * 2.0) * warpScale;
                 pos.x *= tiling;
-                
-                float c = mix(uv.x, uv.y, angle) * tiling;
-                c = mod(c, 1.0);
-                c = step(c, 0.5);
 
                 vec3 col1 = vec3(0.1, 0.1, 0.1);
-                vec3 col2 = vec3(0.15, 0.15, 0.15);
+                vec3 col2 = vec3(0.13, 0.13, 0.13);
                 
                 float val = floor(fract(pos.x) + 0.5);
                 vec4 fragColour = vec4(mix(col1, col2, val), 1);
@@ -194,10 +176,31 @@ local mainMenu = class{
             }
         ]]
 
-        self.shaderCanvas = love.graphics.newCanvas(gameWidth, gameHeight)
+        -- Initialise the background shader
+        self.menuBackgroundShader = love.graphics.newShader([[
+            extern vec2 resolution;
+            extern float time;
+            vec4 effect(vec4 colour, Image texture, vec2 texCoord, vec2 screenCoord)
+            {
+                vec2 center = vec2(resolution.x, resolution.y) / 2.0;
+                vec2 pos = screenCoord / center;
+                
+                float radius = length(pos);
+                float angle = atan(pos.y, pos.x);
+                
+                vec2 uv = vec2(radius, angle);
+                vec3 col = 0.5 + 0.5*cos(time+uv.xyx+vec3(0,2,4));
+                
+                float intensity = dot(col.xyz, vec3(0.3, 0.3, 0.3));
+                float levels = 30.0;
+                float quantized = floor(intensity * levels) / levels;
+                
+                col = col * quantized * 3.0;
+                
+                // Output to screen
+                return vec4(col,1.0);
+            }]])
 
-        -- Set the menu background slide amount to the default amount
-        self:setBackgroundSlideAmount(0)
 
         -- Switch to the main menu
         self:switchMenu("main")
@@ -207,72 +210,76 @@ local mainMenu = class{
         menu.update(self, dt)
 
         -- Update the shader parameters
-        if self.shader then
-            self.shaderTime = self.shaderTime + 0.1 * dt
+        if self.menuBoxShader and self.menuBackgroundShader then
+            local shaderSpeed = gameManager.options.speedPercentage / 100
+            self.shaderTime = self.shaderTime + (0.1 * shaderSpeed) * dt
 
             local angle = 0.4
             local warpScale = 0.1 + math.sin(self.shaderTime) * 0.3
             local warpTiling = 0.3 + math.sin(self.shaderTime) * 0.5
             local tiling = 3.0
 
-            self.shader:send("angle", angle)
-            self.shader:send("warpScale", warpScale)
-            self.shader:send("warpTiling", warpTiling)
-            self.shader:send("tiling", tiling)
-            self.shader:send("resolution", {gameWidth, gameHeight})
-            self.shader:send("position", {0, 0})
-        end
+            local resolution = {gameWidth, gameHeight}
 
-        -- If the background sprite is successfully set, lerp the background vertex positions to the target positions, set by the slide function
-        if self.menuBackground.sprite then
-            local mesh = self.menuBackground.sprite
-            local vertexCount = mesh:getVertexCount()
+            self.menuBoxShader:send("angle", angle)
+            self.menuBoxShader:send("warpScale", warpScale)
+            self.menuBoxShader:send("warpTiling", warpTiling)
+            self.menuBoxShader:send("tiling", tiling)
+            self.menuBoxShader:send("resolution", resolution)
+            self.menuBoxShader:send("position", {0, 0})
+            
+            self.menuBackgroundShader:send("resolution", resolution)
+            self.menuBackgroundShader:send("time", self.shaderTime)
 
-            for i = 1, vertexCount do
-                local vertexX, vertexY = self.backgroundVertices[i]
+            self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
 
-                self.backgroundVertices[i][1] = math.lerp(self.backgroundVertices[i][1], self.targetVertexPositions[i][1], 0.2)
-                self.backgroundVertices[i][2] = math.lerp(self.backgroundVertices[i][2], self.targetVertexPositions[i][2], 0.2)
+            if self.backgroundScrollY > gameHeight - 20 then
+                self.backgroundScrollY = 0
             end
-
-            mesh:setVertices(self.backgroundVertices)
         end
+
+        self.menuBoxOffset = math.lerp(self.menuBoxOffset, self.targetMenuBoxOffset, 0.2)
     end,
 
     setBackgroundSlideAmount = function(self, percentage)
-        -- Set the target vertex positions to a percentage between the starting position (left) and goal position (far right)
-        for i = 1, #self.backgroundVertices do
-            self.targetVertexPositions[i] = {
-                math.lerp(self.startingVertexPositions[i][1], self.goalVertexPositions[i][1], percentage),
-                math.lerp(self.startingVertexPositions[i][2], self.goalVertexPositions[i][2], percentage),
-                0,
-                0,
-                backgroundMeshColour,
-                backgroundMeshColour,
-                backgroundMeshColour,
-                1,
-            }
-        end
+        self.targetMenuBoxOffset = math.lerp(self.minMenuBoxOffset, self.maxMenuBoxOffset, percentage)
     end,
 
     draw = function(self)
-        -- Draw the shader
-
         love.graphics.setCanvas({menuBackgroundCanvas.canvas, stencil = true})
         love.graphics.setDefaultFilter("nearest", "nearest")
         love.graphics.clear()
 
-        if self.menuBackground then
+        if self.menuBackgroundSprite then
+            local enableBackground = gameManager.options.enableBackground
+
+            if enableBackground == 1 then
+                love.graphics.setShader(self.menuBackgroundShader)
+                love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+                love.graphics.setShader()
+            end
+
+            self:drawOverlay()
+
             -- Use the menu background as a stencil
             love.graphics.stencil(function()
-                self.menuBackground:draw()
+                love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY))
+                love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - gameHeight + 20))
             end, "replace", 1, false)
 
             love.graphics.setStencilTest("greater", 0)
-            
-            love.graphics.setShader(self.shader)
-            love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
-            love.graphics.setShader()
+
+            if enableBackground == 1 then
+                love.graphics.setShader(self.menuBoxShader)
+                love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+                love.graphics.setShader()
+            else
+                love.graphics.setColor(0.1, 0.1, 0.1, 1)
+                love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+                love.graphics.setColor(1, 1, 1, 1)
+            end
+
+            self:drawOverlay()
         end
 
         -- Reset the canvas and stencil
@@ -280,8 +287,21 @@ local mainMenu = class{
         love.graphics.setStencilTest()
     end,
 
+    drawOverlay = function(self)
+        -- Draw an overlay for the background fade
+        local alpha = gameManager.options.fadingPercentage / 100
+        love.graphics.setColor(0.1, 0.1, 0.1, alpha)
+        love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
+        love.graphics.setColor(1, 1, 1, 1)
+    end,
+
     cleanup = function(self)
         menuBackgroundCanvas.enabled = false
+
+        self.menuBoxShader:release()
+        self.menuBackgroundShader:release()
+        self.menuBoxShader = nil
+        self.menuBackgroundShader = nil
     end
 }
 
