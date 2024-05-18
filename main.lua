@@ -75,15 +75,39 @@ function SetupResources()
     local unselectedBox = love.graphics.newImage("game/assets/sprites/interface/unselectedbox.png")
     resourceManager:addResource(unselectedBox, "unselected box")
 
-    local mesh = love.graphics.newMesh(4, "fan")
+    -- Set up the mesh with given parameters
+    local numberOfVertices = 9
+    local baseVertexX = 100
+    local mesh = love.graphics.newMesh(2 + numberOfVertices + 1, "fan")
 
-    mesh:setVertices({
-        {0, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {130, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {95, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-        {0, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1}
-    })
+    -- Create a table to hold the vertices, and insert the top left vertex
+    local vertices = {
+        {-gameWidth, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+    }
+    
+    -- Generate the zigzag vertex pattern
+    local generateInnerVertex = false
 
+    for i = 0, numberOfVertices do
+        generateInnerVertex = not generateInnerVertex
+
+        local vertexXoffset = 0
+        
+        if generateInnerVertex == false then
+            vertexXoffset = 20
+        end
+
+        local vertexX = baseVertexX + vertexXoffset
+        local vertexY = (gameHeight / numberOfVertices) * i
+        
+        table.insert(vertices, {vertexX, vertexY, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1})
+    end
+
+    -- Insert a vertex at the bottom left position
+    table.insert(vertices, {-gameWidth, gameHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1})
+
+    -- Set the vertices and register the resource with the resource manager
+    mesh:setVertices(vertices)
     resourceManager:addResource(mesh, "menu background mesh")
 end
 
