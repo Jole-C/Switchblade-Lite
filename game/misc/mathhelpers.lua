@@ -7,3 +7,7 @@ end
 function math.lerp(val, pos, perc)
     return (1 - perc) * val + perc * pos
 end
+
+function math.round(val)
+    return math.floor(val + 0.5)
+end
