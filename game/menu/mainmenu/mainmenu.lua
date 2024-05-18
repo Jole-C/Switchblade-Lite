@@ -3,6 +3,7 @@ local textButton = require "game.interface.textbutton"
 local text = require "game.interface.text"
 local toggleButton = require "game.interface.togglebutton"
 local slider = require "game.interface.slider"
+local sprite = require "game.interface.sprite"
 
 local mainMenu = class{
     __includes = menu,
@@ -23,13 +24,29 @@ local mainMenu = class{
     -- Offset for the menu background
     menuBoxOffset = 0,
     maxMenuBoxOffset = gameWidth,
-    minMenuBoxOffset = 0,
+    minMenuBoxOffset = -150,
     targetMenuBoxOffset = 0,
 
     init = function(self)
         -- Initialise menu elements
         self.menus =
         {
+            ["start"] =
+            {
+                displayMenuName = false,
+                elements =
+                {
+                    sprite("logo sprite", gameWidth/2, gameHeight/2 - 8, 0, 1, 1, 0, 0, true, gameManager.currentPalette.playerColour),
+
+                    textButton("press space", "font ui", 10, gameHeight - 20, 10, gameHeight - 20, function(self)
+                        if self.owner then
+                            self.owner:switchMenu("main")
+                            self.owner:setBackgroundSlideAmount(0.32)
+                        end
+                    end, true)
+                }
+            },
+
             ["main"] = 
             {
                 displayMenuName = false,
@@ -39,13 +56,14 @@ local mainMenu = class{
                     textButton("start", "font ui", 10, 10, 15, 10, function(self)
                         if self.owner then
                             self.owner:switchMenu("gamemodeselect")
+                            self.owner:setBackgroundSlideAmount(0.35)
                         end
                     end),
     
                     textButton("options", "font ui", 10, 25, 15, 25, function(self)
                         if self.owner then
                             self.owner:switchMenu("options")
-                            self.owner:setBackgroundSlideAmount(0.6)
+                            self.owner:setBackgroundSlideAmount(0.7)
                         end
                     end),
     
@@ -78,7 +96,7 @@ local mainMenu = class{
                     textButton("back", "font ui", 10, 135, 15, 135, function(self)
                         if self.owner then
                             self.owner:switchMenu("main")
-                            self.owner:setBackgroundSlideAmount(0)
+                            self.owner:setBackgroundSlideAmount(0.32)
                         end
                         
                         gameManager:saveOptions()
@@ -105,6 +123,7 @@ local mainMenu = class{
                     textButton("back", "font ui", 10, 50, 15, 50, function(self)
                         if self.owner then
                             self.owner:switchMenu("main")
+                            self.owner:setBackgroundSlideAmount(0.32)
                         end
                     end)
                 }
@@ -134,7 +153,7 @@ local mainMenu = class{
                     textButton("back", "font ui", 10, 65, 15, 65, function(self)
                         if self.owner then
                             self.owner:switchMenu("gamemodeselect")
-                            self.owner:setBackgroundSlideAmount(0)
+                            self.owner:setBackgroundSlideAmount(0.35)
                         end
                     end)
                 }
@@ -176,11 +195,14 @@ local mainMenu = class{
             }
         ]]
 
+        self.menuBoxOffset = self.minMenuBoxOffset
+
         -- Initialise the background shader
         self.menuBackgroundShader = love.graphics.newShader([[
             extern vec2 resolution;
             extern float time;
-            vec4 effect(vec4 colour, Image texture, vec2 texCoord, vec2 screenCoord)
+            extern vec3 colour;
+            vec4 effect(vec4 screenColour, Image texture, vec2 texCoord, vec2 screenCoord)
             {
                 vec2 center = vec2(resolution.x, resolution.y) / 2.0;
                 vec2 pos = screenCoord / center;
@@ -189,21 +211,23 @@ local mainMenu = class{
                 float angle = atan(pos.y, pos.x);
                 
                 vec2 uv = vec2(radius, angle);
-                vec3 col = 0.5 + 0.5*cos(time+uv.xyx+vec3(0,2,4));
+                vec3 col = 0.5 + 0.5*cos(time+uv.xyy+vec3(0,2,4));
                 
                 float intensity = dot(col.xyz, vec3(0.3, 0.3, 0.3));
-                float levels = 30.0;
+                float levels = 32.0;
                 float quantized = floor(intensity * levels) / levels;
                 
-                col = col * quantized * 3.0;
+                col = col * quantized * 5.0;
                 
-                // Output to screen
-                return vec4(col,1.0);
+                float gray = dot(col, vec3(0.3, 0.3, 0.3)) * 1.5;
+                
+                return vec4(colour * gray, 1.0);
             }]])
 
 
         -- Switch to the main menu
-        self:switchMenu("main")
+        self:switchMenu("start")
+        self:setBackgroundSlideAmount(0)
     end,
 
     update = function(self, dt)
@@ -230,6 +254,9 @@ local mainMenu = class{
             
             self.menuBackgroundShader:send("resolution", resolution)
             self.menuBackgroundShader:send("time", self.shaderTime)
+
+            local bgColour = gameManager.currentPalette.backgroundColour[1]
+            self.menuBackgroundShader:send("colour", {bgColour[1], bgColour[2], bgColour[3]})
 
             self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
 
