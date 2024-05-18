@@ -75,6 +75,9 @@ function SetupResources()
     local unselectedBox = love.graphics.newImage("game/assets/sprites/interface/unselectedbox.png")
     resourceManager:addResource(unselectedBox, "unselected box")
 
+    local logo = love.graphics.newImage("game/assets/sprites/interface/logo.png")
+    resourceManager:addResource(logo, "logo sprite")
+
     -- Set up the mesh with given parameters
     local numberOfVertices = 9
     local baseVertexX = 100
@@ -309,4 +312,6 @@ function love.draw()
 
     -- Render the canvases
     gameRenderer:drawCanvases()
+
+    love.graphics.print(love.timer.getFPS( ))
 end
