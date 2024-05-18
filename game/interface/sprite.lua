@@ -11,7 +11,7 @@ local spriteHudElement = class{
     overrideDrawColour,
 
     init = function(self, sprite, x, y, angle, scaleX, scaleY, offsetX, offsetY, centerSprite, overrideDrawColour)
-        self.sprite = sprite
+        self.sprite = resourceManager:getResource(sprite)
         self.position = vector.new(x, y)
         self.angle = angle
         self.scale = vector.new(scaleX, scaleY)
@@ -29,7 +29,7 @@ local spriteHudElement = class{
         local yOffset = self.offset.y
 
         if self.centerSprite == true then
-            local xOffset, yOffset = self.sprite:getDimensions()
+            xOffset, yOffset = self.sprite:getDimensions()
             xOffset = xOffset/2
             yOffset = yOffset/2
         end
