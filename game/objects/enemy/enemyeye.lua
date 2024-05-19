@@ -23,9 +23,8 @@ local enemyEye = class{
     end,
 
     draw = function(self)
-        love.graphics.setColor(gameManager.currentPalette.enemyColour)
-        love.graphics.circle("fill", self.eyePosition.x, self.eyePosition.y, self.eyeRadius)
         love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.circle("fill", self.eyePosition.x, self.eyePosition.y, self.eyeRadius)
     end
 }
 
