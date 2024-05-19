@@ -57,6 +57,7 @@ local charger = class{
             self.eye.eyeBasePosition.y = self.position.y + math.sin(self.angle - self.tail.tailAngleWave/4) * 5
             self.eye:update()
         end
+        
         -- Handle collisions
         local world = gamestate.current().world
 
@@ -94,7 +95,12 @@ local charger = class{
             return
         end
 
-        -- Draw the object sprite
+        -- Draw the eye
+        if self.eye then
+            self.eye:draw()
+        end
+
+        -- Draw the sprite
         local xOffset, yOffset = self.sprite:getDimensions()
         xOffset = 5
         yOffset = yOffset/2
@@ -106,11 +112,6 @@ local charger = class{
         -- Draw the tail
         if self.tail then
             self.tail:draw()
-        end
-
-        -- Draw the eye
-        if self.eye then
-            self.eye:draw()
         end
     end,
 
