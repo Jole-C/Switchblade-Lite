@@ -7,8 +7,8 @@ local stageDirector = class{
     maxMinutes = 3,
     maxSeconds = 0,
     timeBetweenWaves = 3,
-    maxSpawnTime = 3,
-    spriteScaleFrequencyChange = 5,
+    maxSpawnTime = 2,
+    spriteScaleFrequencyChange = 8,
     spriteScaleAmplitude = 1,
     maxWarningAngleRandomiseCooldown = 0.25,
 
@@ -237,7 +237,7 @@ local stageDirector = class{
                     
                     for i = 1, enemiesPerLine do
                         local vectorBetweenPoints = (point2 - point1):normalized()
-                        local enemyPosition = point1 + (vectorBetweenPoints * (i * pointSpacing))
+                        local enemyPosition = point1 + (vectorBetweenPoints * ((i * pointSpacing) - pointSpacing/2))
 
                         table.insert(self.enemySpawnList, {
                             enemyClass = self.enemyDefinitions[enemyDef.enemyID],
