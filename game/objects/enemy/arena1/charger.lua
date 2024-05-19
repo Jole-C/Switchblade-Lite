@@ -10,6 +10,12 @@ local charger = class{
     angle,
     wallBounceCheckPosition,
     spriteName = "charger sprite",
+    tailSprite,
+    tailSpriteOffset = -5,
+    tailAngleWave = 0,
+    tailAngleWaveAmount = 0,
+    tailAngleWaveFrequency = 15,
+    tailAngleWaveAmplitude = 1,
 
     sprite,
     collider,
@@ -22,6 +28,8 @@ local charger = class{
         self.wallBounceCheckPosition = vector.new(0, 0)
         self.collider = collider(colliderDefinitions.enemy, self)
         gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)
+
+        self.tailSprite = resourceManager:getResource("charger tail sprite")
     end,
 
     update = function(self, dt)
@@ -33,6 +41,10 @@ local charger = class{
 
         self.position.x = math.clamp(self.position.x, 0, gameWidth)
         self.position.y = math.clamp(self.position.y, 0, gameHeight)
+
+        -- Make the tail wave
+        self.tailAngleWaveAmount = self.tailAngleWaveAmount + self.tailAngleWaveFrequency * dt
+        self.tailAngleWave = math.sin(self.tailAngleWaveAmount) * self.tailAngleWaveAmplitude
 
         -- Handle collisions
         local world = gamestate.current().world
@@ -67,17 +79,32 @@ local charger = class{
     end,
 
     draw = function(self)
-        if not self.sprite then
+        if not self.sprite or not self.tailSprite then
             return
         end
 
+        -- Draw the object sprite
         local xOffset, yOffset = self.sprite:getDimensions()
-        xOffset = xOffset/2
+        xOffset = 0
         yOffset = yOffset/2
 
         love.graphics.setColor(gameManager.currentPalette.enemyColour)
-        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
+        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tailAngleWave/4, 1, 1, xOffset, yOffset)
         love.graphics.setColor(1, 1, 1, 1)
+
+        -- Draw the tail sprite
+        local xOffset, yOffset = self.tailSprite:getDimensions()
+        yOffset = yOffset/2
+
+        local spriteAngle = self.angle + math.pi
+        local tailPositionX = self.position.x + math.cos(spriteAngle) * self.tailSpriteOffset
+        local tailPositionY = self.position.y + math.sin(spriteAngle) * self.tailSpriteOffset
+
+        love.graphics.setColor(gameManager.currentPalette.enemyColour)
+        love.graphics.draw(self.tailSprite, tailPositionX, tailPositionY, self.angle + self.tailAngleWave, 1, 1, xOffset, yOffset)
+        love.graphics.setColor(1, 1, 1, 1)
+
+        -- Draw the tail sprite
     end,
 
     cleanup = function(self)
