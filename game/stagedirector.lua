@@ -151,45 +151,120 @@ local stageDirector = class{
 
         -- Unpack the current wave
         local wave = self.waveDefinitions[self.currentWaveIndex]
-        local waveType = wave.waveType
+        local spawnDefinitions = wave.spawnDefinitions
 
-        if waveType == "random" then
-            local enemyDefs = wave.enemyDefs
+        if spawnDefinitions == nil then
+            return
+        end
 
-            for i = 1, #enemyDefs do
-                local currentDef = enemyDefs[i]
-                print(currentDef.spawnCount)
-                
-                for j = 1, currentDef.spawnCount do
-                    local position = vector.new()
-                    position.x = love.math.random(10, gameWidth - 10)
-                    position.y = love.math.random(10, gameHeight - 10)
+        -- For each spawn definition
+        for i = 1, #spawnDefinitions do
+            local currentDefinition = spawnDefinitions[i]
+
+            -- Grab the values from the current definition
+            -- and set up a table for the generated shape, if applicable
+            local waveType = currentDefinition.waveType
+            local enemyDef = currentDefinition.enemyDef
+            local generatedShape = {}
+
+            -- Calculate the vertices
+            if currentDefinition.shapeDef.numberOfPoints and currentDefinition.shapeDef.radius then
+                local numberOfPoints = currentDefinition.shapeDef.numberOfPoints
+                local radius = currentDefinition.shapeDef.radius
+                local origin = currentDefinition.shapeDef.origin
+                local angle = 2 * math.pi / numberOfPoints
+                local offset = math.pi / 2
+                local radius = radius
+
+                for i = 1, numberOfPoints do
+                    local pointX = origin.x + math.cos(i * angle - offset) * radius
+                    local pointY = origin.y + math.sin(i * angle - offset) * radius
+
+                    table.insert(generatedShape, {x = pointX, y = pointY})
+                end
+            else
+                generatedShape = currentDefinition.shapeDef
+            end
+
+            if waveType == "randomWithinShape" then
+                assert(#generatedShape > 1, "Number of points in shape must be greater than 1.")
+
+                for i = 1, enemyDef.spawnCount do
+                    local pointX = math.random(0, gameWidth)
+                    local pointY = math.random(0, gameHeight)
+    
+                    -- Inefficient, must change later
+                    while PointWithinShape(generatedShape, pointX, pointY) == false do
+                        pointX = math.random(0, gameWidth)
+                        pointY = math.random(0, gameHeight)
+                    end
 
                     table.insert(self.enemySpawnList, {
-                        enemyClass = self.enemyDefinitions[currentDef.enemyID],
-                        spawnPosition = position,
-                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName,
+                        enemyClass = self.enemyDefinitions[enemyDef.enemyID],
+                        spawnPosition = vector.new(pointX, pointY),
+                        spriteName = self.enemyDefinitions[enemyDef.enemyID].spriteName,
                         angle = math.random(0, 2*math.pi)
                     })
                 end
-            end
-        elseif waveType == "predefined" then
-            local enemyDefs = wave.enemyDefs
+            elseif waveType == "alongShapePerimeter" then
+                local enemiesPerLine = math.ceil(enemyDef.spawnCount/#generatedShape)
 
-            for i = 1, #enemyDefs do
-                local currentDef = enemyDefs[i]
+                if #generatedShape == 2 then
+                    enemiesPerLine = enemyDef.spawnCount
+                end
+                
+                assert(#generatedShape > 1, "Number of points in shape must be greater than 1.")
 
-                for j = 1, currentDef.spawnCount do
-                    local position = vector.new()
-                    position.x = currentDef.x
-                    position.y = currentDef.y
+                for i = 1, #generatedShape do
+                    local point1 = vector.new(generatedShape[i].x, generatedShape[i].y)
+                    local point2
 
-                    table.insert(self.enemySpawnList, {
-                        enemyClass = self.enemyDefinitions[currentDef.enemyID],
-                        spawnPosition = position,
-                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName,
-                        angle = math.random(0, 2*math.pi)
-                    })
+                    if #generatedShape > 2 then
+                        if i == #generatedShape then
+                            point2 = vector.new(generatedShape[1].x, generatedShape[1].y)
+                        else
+                            point2 = vector.new(generatedShape[i + 1].x, generatedShape[i + 1].y)
+                        end
+                    else
+                        if i == #generatedShape then
+                            return
+                        end
+
+                        point2 = vector.new(generatedShape[2].x, generatedShape[2].y)
+                    end
+
+                    local pointSpacing = (point2 - point1):len()/enemiesPerLine
+                    
+                    for i = 1, enemiesPerLine do
+                        local vectorBetweenPoints = (point2 - point1):normalized()
+                        local enemyPosition = point1 + (vectorBetweenPoints * (i * pointSpacing))
+
+                        table.insert(self.enemySpawnList, {
+                            enemyClass = self.enemyDefinitions[enemyDef.enemyID],
+                            spawnPosition = enemyPosition,
+                            spriteName = self.enemyDefinitions[enemyDef.enemyID].spriteName,
+                            angle = math.random(0, 2*math.pi)
+                        })
+                    end
+                end
+            elseif waveType == "predefined" then
+                local enemyDefs = wave.enemyDefs
+
+                for i = 1, #enemyDefs do
+                    local currentDef = enemyDefs[i]
+
+                    for j = 1, currentDef.spawnCount do
+                        local position = vector.new()
+                        position.x = currentDef.x
+                        position.y = currentDef.y
+
+                        table.insert(self.enemySpawnList, {
+                            enemyClass = self.enemyDefinitions[currentDef.enemyID],
+                            spawnPosition = position,
+                            spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName,
+                            angle = math.random(0, 2*math.pi)
+                        })
+                    end
                 end
             end
         end
