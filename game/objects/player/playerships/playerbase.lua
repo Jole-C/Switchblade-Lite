@@ -296,7 +296,7 @@ local player = class{
         yOffset = yOffset/2
         
         love.graphics.setColor(gameManager.currentPalette.playerColour)
-        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
+        love.graphics.draw(self.sprite, math.round(self.position.x), math.round(self.position.y), self.angle, 1, 1, xOffset, yOffset)
         love.graphics.setColor(1, 1, 1, 1)
     end,
 
