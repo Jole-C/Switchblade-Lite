@@ -1,14 +1,14 @@
-local grunt = require "game.objects.enemy.arena1.grunt"
-local soldier = require "game.objects.enemy.arena1.soldier"
-local utility = require "game.objects.enemy.arena1.grunt"
-local specialist = require "game.objects.enemy.arena1.grunt"
+local charger = require "game.objects.enemy.arena1.charger"
+local drone = require "game.objects.enemy.arena1.drone"
+local utility = require "game.objects.enemy.arena1.charger"
+local specialist = require "game.objects.enemy.arena1.charger"
 
 local levelDefinition = 
 {
     enemyDefinitions =
     {
-        ["grunt"] = grunt,
-        ["soldier"] = soldier,
+        ["charger"] = charger,
+        ["drone"] = drone,
         ["utility"] = utility,
         ["specialist"] = specialist,
     }, 
@@ -27,20 +27,18 @@ local levelDefinition =
                     -- The enemy to spawn within this wave
                     enemyDef =
                     {
-                        enemyID = "grunt",
-                        spawnCount = 3,
+                        enemyID = "charger",
+                        spawnCount = 4,
                     },
 
                     -- The definition for the shape to use
-                    -- A definition can be either the below values to easily construct a shape, 
-                    -- or specific points to use
+                    -- Can either use values to dynamically construct a shape, or predefined coordinates
                     shapeDef =
                     {
-                        numberOfPoints = 3,
-                        radius = 64,
-                        origin = {x = gameWidth/2, y = gameHeight/2}
+                        {x = gameWidth/2 - 80, y = gameHeight/2},
+                        {x = gameWidth/2 + 80, y = gameHeight/2}
                     }
-                },
+                }
             }
         },
         {
@@ -51,7 +49,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "grunt",
+                        enemyID = "charger",
                         spawnCount = 6,
                     },
 
@@ -61,96 +59,43 @@ local levelDefinition =
                         radius = 64,
                         origin = {x = gameWidth/2, y = gameHeight/2}
                     }
-                },
-                
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
                 {
                     waveType = "alongShapePerimeter",
 
                     enemyDef =
                     {
-                        enemyID = "grunt",
-                        spawnCount = 3,
+                        enemyID = "charger",
+                        spawnCount = 6,
                     },
 
                     shapeDef =
                     {
-                        {x = gameWidth/2 - 80, y = gameHeight/2},
-                        {x = gameWidth/2 + 80, y = gameHeight/2}
+                        numberOfPoints = 6,
+                        radius = 64,
+                        origin = {x = gameWidth/2, y = gameHeight/2}
                     }
                 },
-            }
-        },
-        {
-            waveType = "random",
-            enemyDefs =
-            {
                 {
-                    enemyID = "grunt",
-                    spawnCount = 3,
-                },
-            }
-        },
-        {
-            waveType = "random",
-            enemyDefs =
-            {
-                {
-                    enemyID = "grunt",
-                    spawnCount = 5,
-                },
-            }
-        },
-        {
-            waveType = "random",
-            enemyDefs =
-            {
-                {
-                    enemyID = "grunt",
-                    spawnCount = 7,
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 4,
+                    },
+
+                    shapeDef =
+                    {
+                        {x = gameWidth/2 - 120, y = gameHeight/2},
+                        {x = gameWidth/2 + 120, y = gameHeight/2}
+                    }
                 }
-            }
-        },
-        
-        {
-            waveType = "random",
-            enemyDefs =
-            {
-                {
-                    enemyID = "grunt",
-                    spawnCount = 3,
-                },
-                {
-                    enemyID = "soldier",
-                    spawnCount = 1,
-                },
-            }
-        },
-        {
-            waveType = "random",
-            enemyDefs =
-            {
-                {
-                    enemyID = "grunt",
-                    spawnCount = 5,
-                },
-                {
-                    enemyID = "soldier",
-                    spawnCount = 2,
-                },
-            }
-        },
-        {
-            waveType = "random",
-            enemyDefs =
-            {
-                {
-                    enemyID = "grunt",
-                    spawnCount = 5,
-                },
-                {
-                    enemyID = "soldier",
-                    spawnCount = 3,
-                },
             }
         },
     }
