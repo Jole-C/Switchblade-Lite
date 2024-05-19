@@ -50,11 +50,14 @@ function SetupResources()
     local playerLaserSprite = love.graphics.newImage("game/assets/sprites/player/playerlaser.png")
     resourceManager:addResource(playerLaserSprite, "player laser sprite")
 
-    local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/chargerenemy.png")
-    resourceManager:addResource(chargerEnemy, "charger enemy sprite")
+    local chargerEnemy = love.graphics.newImage("game/assets/sprites/enemy/charger.png")
+    resourceManager:addResource(chargerEnemy, "charger sprite")
 
-    local droneEnemy = love.graphics.newImage("game/assets/sprites/enemy/droneenemy.png")
-    resourceManager:addResource(droneEnemy, "drone enemy sprite")
+    local chargerTail = love.graphics.newImage("game/assets/sprites/enemy/chargertail.png")
+    resourceManager:addResource(chargerTail, "charger tail sprite")
+
+    local droneEnemy = love.graphics.newImage("game/assets/sprites/enemy/drone.png")
+    resourceManager:addResource(droneEnemy, "drone sprite")
 
     -- Global resources
     local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
