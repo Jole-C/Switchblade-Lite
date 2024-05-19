@@ -5,7 +5,7 @@ local grunt = class{
     __includes = enemy,
 
     health = 1,
-    speed = 60,
+    speed = 40,
     checkDistance = 5,
     angle,
     wallBounceCheckPosition,
@@ -51,7 +51,7 @@ local grunt = class{
                 end
 
                 if colliderDefinition == colliderDefinitions.wall then
-                    self.angle = self.angle + love.math.random(math.pi - 2, math.pi + 2)
+                    self.angle = self.angle + math.pi
                 end
 
                 ::continue::
