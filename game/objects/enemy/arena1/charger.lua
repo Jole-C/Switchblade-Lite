@@ -1,5 +1,7 @@
 local enemy = require "game.objects.enemy.enemy"
 local collider = require "game.collision.collider"
+local tail = require "game.objects.enemy.enemytail"
+local eye = require "game.objects.enemy.enemyeye"
 
 local charger = class{
     __includes = enemy,
@@ -10,15 +12,11 @@ local charger = class{
     angle,
     wallBounceCheckPosition,
     spriteName = "charger sprite",
-    tailSprite,
-    tailSpriteOffset = -5,
-    tailAngleWave = 0,
-    tailAngleWaveAmount = 0,
-    tailAngleWaveFrequency = 15,
-    tailAngleWaveAmplitude = 1,
 
     sprite,
     collider,
+    tail,
+    eye,
 
     init = function(self, x, y)
         enemy.init(self, x, y, self.spriteName)
@@ -28,8 +26,10 @@ local charger = class{
         self.wallBounceCheckPosition = vector.new(0, 0)
         self.collider = collider(colliderDefinitions.enemy, self)
         gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)
+        self.eyeOffset = vector.new(0, 0)
 
-        self.tailSprite = resourceManager:getResource("charger tail sprite")
+        self.tail = tail("charger tail sprite", 15, 1)
+        self.eye = eye(2, 2)
     end,
 
     update = function(self, dt)
@@ -42,10 +42,21 @@ local charger = class{
         self.position.x = math.clamp(self.position.x, 0, gameWidth)
         self.position.y = math.clamp(self.position.y, 0, gameHeight)
 
-        -- Make the tail wave
-        self.tailAngleWaveAmount = self.tailAngleWaveAmount + self.tailAngleWaveFrequency * dt
-        self.tailAngleWave = math.sin(self.tailAngleWaveAmount) * self.tailAngleWaveAmplitude
+        -- Update the tail
+        if self.tail then
+            self.tail.tailSpritePosition.x = self.position.x + math.cos(self.angle + math.pi) * 2
+            self.tail.tailSpritePosition.y = self.position.y + math.sin(self.angle + math.pi) * 2
+            self.tail.baseTailAngle = self.angle
 
+            self.tail:update(dt)
+        end
+
+        -- Update the eye
+        if self.eye then
+            self.eye.eyeBasePosition.x = self.position.x + math.cos(self.angle - self.tail.tailAngleWave/4) * 5
+            self.eye.eyeBasePosition.y = self.position.y + math.sin(self.angle - self.tail.tailAngleWave/4) * 5
+            self.eye:update()
+        end
         -- Handle collisions
         local world = gamestate.current().world
 
@@ -79,32 +90,28 @@ local charger = class{
     end,
 
     draw = function(self)
-        if not self.sprite or not self.tailSprite then
+        if not self.sprite or not self.tail then
             return
         end
 
         -- Draw the object sprite
         local xOffset, yOffset = self.sprite:getDimensions()
-        xOffset = 0
+        xOffset = 5
         yOffset = yOffset/2
 
         love.graphics.setColor(gameManager.currentPalette.enemyColour)
-        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tailAngleWave/4, 1, 1, xOffset, yOffset)
+        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
         love.graphics.setColor(1, 1, 1, 1)
 
-        -- Draw the tail sprite
-        local xOffset, yOffset = self.tailSprite:getDimensions()
-        yOffset = yOffset/2
+        -- Draw the tail
+        if self.tail then
+            self.tail:draw()
+        end
 
-        local spriteAngle = self.angle + math.pi
-        local tailPositionX = self.position.x + math.cos(spriteAngle) * self.tailSpriteOffset
-        local tailPositionY = self.position.y + math.sin(spriteAngle) * self.tailSpriteOffset
-
-        love.graphics.setColor(gameManager.currentPalette.enemyColour)
-        love.graphics.draw(self.tailSprite, tailPositionX, tailPositionY, self.angle + self.tailAngleWave, 1, 1, xOffset, yOffset)
-        love.graphics.setColor(1, 1, 1, 1)
-
-        -- Draw the tail sprite
+        -- Draw the eye
+        if self.eye then
+            self.eye:draw()
+        end
     end,
 
     cleanup = function(self)
