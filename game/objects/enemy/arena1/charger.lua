@@ -1,7 +1,7 @@
 local enemy = require "game.objects.enemy.enemy"
 local collider = require "game.collision.collider"
 
-local grunt = class{
+local charger = class{
     __includes = enemy,
 
     health = 1,
@@ -9,7 +9,7 @@ local grunt = class{
     checkDistance = 5,
     angle,
     wallBounceCheckPosition,
-    spriteName = "charger enemy sprite",
+    spriteName = "charger sprite",
 
     sprite,
     collider,
@@ -90,4 +90,4 @@ local grunt = class{
     end
 }
 
-return grunt
+return charger

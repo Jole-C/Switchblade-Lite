@@ -1,14 +1,14 @@
 local enemy = require "game.objects.enemy.enemy"
 local collider = require "game.collision.collider"
 
-local soldier = class{
+local drone = class{
     __includes = enemy,
 
     maxSpeed = 40,
     maxSteeringForce = 30,
     angle = 0,
     health = 5,
-    spriteName = "drone enemy sprite",
+    spriteName = "drone sprite",
 
     velocity,
 
@@ -73,4 +73,4 @@ local soldier = class{
     end
 }
 
-return soldier
+return drone
