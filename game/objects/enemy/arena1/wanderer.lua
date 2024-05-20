@@ -107,6 +107,15 @@ local wanderer = class{
         if self.tail then
             self.tail:draw()
         end
+    end,
+
+    cleanup = function(self)
+        enemy.cleanup(self)
+        
+        local world = gamestate.current().world
+        if world and world:hasItem(self.collider) then
+            gamestate.current().world:remove(self.collider)
+        end
     end
 }
 
