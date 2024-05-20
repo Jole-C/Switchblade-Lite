@@ -1,5 +1,6 @@
 local wall = require "game.objects.wall"
-local director = require "game.stagedirector"
+local director = require "game.objects.stagedirector"
+local enemymanager = require "game.objects.enemymanager"
 local level = require "game.levels.level1"
 
 local gameLevelState = gamestate.new()
@@ -8,6 +9,7 @@ function gameLevelState:init()
     self.objects = {}
     self.expiredObjects = {}
     self.world = nil
+    self.enemymanager = nil
     self.name = "game level"
 end
 
@@ -31,6 +33,8 @@ function gameLevelState:enter()
 
     local stageDirector = director(level, 0, 0)
     self:addObject(stageDirector)
+
+    self.enemyManager = enemymanager()
 end
 
 function gameLevelState:update(dt)
@@ -52,6 +56,10 @@ function gameLevelState:update(dt)
     end
 
     self.expiredObjects = {}
+
+    if self.enemyManager then
+        self.enemyManager:update()
+    end
 end
 
 function gameLevelState:draw()
@@ -70,6 +78,8 @@ function gameLevelState:leave()
     self.objects = {}
     self.expiredObjects = {}
     self.world = nil
+    self.enemyManager:destroy()
+    self.enemyManager = nil
     interfaceRenderer:clearElements()
 end
 
