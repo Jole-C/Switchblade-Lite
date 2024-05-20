@@ -44,8 +44,8 @@ local charger = class{
 
         -- Update the tail
         if self.tail then
-            self.tail.tailSpritePosition.x = self.position.x + math.cos(self.angle + math.pi) * 2
-            self.tail.tailSpritePosition.y = self.position.y + math.sin(self.angle + math.pi) * 2
+            self.tail.tailSpritePosition.x = self.position.x + math.cos(self.angle + math.pi) * -2
+            self.tail.tailSpritePosition.y = self.position.y + math.sin(self.angle + math.pi) * -2
             self.tail.baseTailAngle = self.angle
 
             self.tail:update(dt)
