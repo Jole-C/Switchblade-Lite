@@ -11,8 +11,8 @@ local stageDirector = class{
     spriteScaleFrequencyChange = 8,
     spriteScaleAmplitude = 1,
     maxWarningAngleRandomiseCooldown = 0.25,
+    minimumEnemyCount = 3,
 
-    aliveEnemies = {},
     levelDefinition = {},
     waveDefinitions = {},
     enemyDefinitions = {},
@@ -77,20 +77,12 @@ local stageDirector = class{
         self.spriteScaleFrequency = self.spriteScaleFrequency + self.spriteScaleFrequencyChange * dt
 
         -- Handle enemy spawns and wave changing
-        if self.currentWaveIndex <= self.maxWave then
-            local aliveEnemyCount = 0
+        local currentGamestate = gamestate.current()
 
-            for i = 1, #self.aliveEnemies do
-                local enemy = self.aliveEnemies[i]
-
-                if enemy ~= nil and enemy.markedForDelete == false then
-                    aliveEnemyCount = aliveEnemyCount + 1
-                end
-            end
-
+        if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
             -- If no enemies are alive, switch to the next wave
-            if aliveEnemyCount <= 0 and self.inWaveTransition == false then
-                self.aliveEnemies = {}
+            
+            if #currentGamestate.enemyManager.enemies < self.minimumEnemyCount and self.inWaveTransition == false then
                 self.enemySpawnList = {}
                 self.currentWaveIndex = self.currentWaveIndex + 1
                 self:startWave()
@@ -117,7 +109,6 @@ local stageDirector = class{
                 for i = 1, #self.enemySpawnList do
                     local nextSpawn = self.enemySpawnList[i]
                     local newEnemy = nextSpawn.enemyClass(nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y)
-                    table.insert(self.aliveEnemies, newEnemy)
                     gamestate.current():addObject(newEnemy)
                 end
 

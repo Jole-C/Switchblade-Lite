@@ -16,6 +16,12 @@ local enemy = class{
     init = function(self, x, y, spriteName)
         gameobject.init(self, x, y)
         self.sprite = resourceManager:getResource(spriteName)
+
+        local currentGamestate = gamestate.current()
+        
+        if currentGamestate.enemyManager then
+            currentGamestate.enemyManager:registerEnemy(self)
+        end
     end,
 
     update = function(self, dt)
@@ -46,6 +52,12 @@ local enemy = class{
     cleanup = function(self)
         if self.invulnerableTimer then
             timer.clear(self.invulnerableTimer)
+        end
+
+        local currentGamestate = gamestate.current()
+
+        if currentGamestate.enemyManager then
+            currentGamestate.enemyManager:unregisterEnemy(self)
         end
     end
 }
