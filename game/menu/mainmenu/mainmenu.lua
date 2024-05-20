@@ -272,11 +272,6 @@ local mainMenu = class{
 
     cleanup = function(self)
         menuBackgroundCanvas.enabled = false
-
-        self.menuBoxShader:release()
-        self.menuBackgroundShader:release()
-        self.menuBoxShader = nil
-        self.menuBackgroundShader = nil
     end
 }
 
