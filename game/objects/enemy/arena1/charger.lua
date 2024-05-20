@@ -7,7 +7,7 @@ local charger = class{
     __includes = enemy,
 
     health = 1,
-    speed = 40,
+    speed = 80,
     checkDistance = 5,
     angle,
     wallBounceCheckPosition,
