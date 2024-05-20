@@ -13,7 +13,7 @@ local enemyEye = class{
     end,
 
     update = function(self)
-        if not playerManager.playerReference.position then
+        if not playerManager.playerReference then
             return
         end
 
