@@ -59,6 +59,12 @@ function SetupResources()
     local droneEnemy = love.graphics.newImage("game/assets/sprites/enemy/drone.png")
     resourceManager:addResource(droneEnemy, "drone sprite")
 
+    local wandererEnemy = love.graphics.newImage("game/assets/sprites/enemy/wanderer.png")
+    resourceManager:addResource(wandererEnemy, "wanderer enemy sprite")
+
+    local wandererTail = love.graphics.newImage("game/assets/sprites/enemy/wanderertail.png")
+    resourceManager:addResource(wandererTail, "wanderer tail sprite")
+
     -- Global resources
     local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
