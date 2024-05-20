@@ -11,6 +11,32 @@ end
 function math.round(val)
     return math.floor(val + 0.5)
 end
+
+function math.normalizeAngle(angle)
+	if angle > math.pi then
+		return angle - 2 * math.pi
+	elseif angle < math.pi then
+		return angle + 2 * math.pi
+	end
+end
+
+function math.lerpAngle(val, tar, perc)
+	val = math.normalizeAngle(val)
+	tar = math.normalizeAngle(tar)
+
+	local difference = tar - val
+
+	if difference > math.pi then
+		difference = difference - 2 * math.pi
+	elseif difference < math.pi then
+		difference = difference + 2 * math.pi
+	end
+
+	local interpolatedAngle = val + difference * perc
+
+	return math.normalizeAngle(interpolatedAngle)
+end
+------------------------------------------
 function PointWithinShape(shape, tx, ty)
 	if #shape == 0 then 
 		return false
