@@ -1,4 +1,4 @@
-local gameObject = "game.objects.gameobject"
+local gameObject = require "game.objects.gameobject"
 
 local enemyManager = class{
     __includes = gameObject,
