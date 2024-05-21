@@ -137,6 +137,11 @@ local playerLight = class{
     update = function(self, dt)
         -- Update the hud
         self:updateHud()
+
+        local currentGamestate = gamestate.current()
+        if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
+            return
+        end
         
         -- Create a vector holding the direction the ship is expected to move in
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
