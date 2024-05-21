@@ -17,17 +17,16 @@ function gameLevelState:enter()
 
     self.world = bump.newWorld()
 
-    local upperWall = wall(0, -20, gameWidth, 20, vector.new(0, 1))
     self.arena = arena()
 
-    self:addObject(upperWall)
     local newPlayer = playerManager:spawnPlayer(arenaPosition.x, arenaPosition.y)
     self:addObject(newPlayer)
 
     local stageDirector = director(level, 0, 0)
     self:addObject(stageDirector)
 
-    self.enemyManager = enemymanager()
+    self.enemyManager = enemyManager()
+    self:addObject(self.enemyManager)
 end
 
 function gameLevelState:update(dt)
@@ -49,10 +48,6 @@ function gameLevelState:update(dt)
     end
 
     self.expiredObjects = {}
-
-    if self.enemyManager then
-        self.enemyManager:update()
-    end
 end
 
 function gameLevelState:draw()
@@ -71,7 +66,6 @@ function gameLevelState:leave()
     self.objects = {}
     self.expiredObjects = {}
     self.world = nil
-    self.enemyManager:destroy()
     self.enemyManager = nil
     interfaceRenderer:clearElements()
 end
