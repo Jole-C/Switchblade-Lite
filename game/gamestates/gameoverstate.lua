@@ -8,6 +8,8 @@ function gameOverState:init()
 end
 
 function gameOverState:enter()
+    camera:setWorld(0, 0, screenWidth, screenHeight)
+    camera:setPosition(screenWidth/2, screenHeight/2)
     interfaceRenderer:clearElements()
 
     local menu = gameoverMenu()
@@ -15,7 +17,16 @@ function gameOverState:enter()
 end
 
 function gameOverState:leave()
+    for i = 1, #self.objects do
+        local object = self.objects[i]
+
+        if object.markedForDelete == false then
+            object:destroy()
+        end
+    end
+    
     self.objects = {}
+
     interfaceRenderer:clearElements()
 end
 

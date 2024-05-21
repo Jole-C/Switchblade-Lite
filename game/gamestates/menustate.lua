@@ -7,6 +7,10 @@ function menuState:init()
 end
 
 function menuState:enter()
+    collectgarbage("collect")
+    
+    camera:setWorld(0, 0, screenWidth, screenHeight)
+    camera:setPosition(screenWidth/2, screenHeight/2)
     interfaceRenderer:clearElements()
     self.menu = mainMenu()
 end

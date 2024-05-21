@@ -14,6 +14,7 @@ function gameLevelState:init()
 end
 
 function gameLevelState:enter()
+    camera:setWorld(worldX, worldY, worldWidth * 2, worldHeight * 2)
     interfaceRenderer:clearElements()
 
     self.world = bump.newWorld()
