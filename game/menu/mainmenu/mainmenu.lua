@@ -23,7 +23,7 @@ local mainMenu = class{
 
     -- Offset for the menu background
     menuBoxOffset = 0,
-    maxMenuBoxOffset = gameWidth,
+    maxMenuBoxOffset = screenWidth,
     minMenuBoxOffset = -150,
     targetMenuBoxOffset = 0,
 
@@ -36,9 +36,9 @@ local mainMenu = class{
                 displayMenuName = false,
                 elements =
                 {
-                    sprite("logo sprite", gameWidth/2, gameHeight/2 - 8, 0, 1, 1, 0, 0, true, gameManager.currentPalette.playerColour),
+                    sprite("logo sprite", screenWidth/2, screenHeight/2 - 8, 0, 1, 1, 0, 0, true, gameManager.currentPalette.playerColour),
 
-                    textButton("press space", "font ui", 10, gameHeight - 20, 10, gameHeight - 20, function(self)
+                    textButton("press space", "font ui", 10, screenHeight - 20, 10, screenHeight - 20, function(self)
                         if self.owner then
                             self.owner:switchMenu("main")
                             self.owner:setBackgroundSlideAmount(0.32)
@@ -191,7 +191,7 @@ local mainMenu = class{
             local warpTiling = 0.3 + math.sin(self.shaderTime) * 0.5
             local tiling = 3.0
 
-            local resolution = {gameWidth, gameHeight}
+            local resolution = {screenWidth, screenHeight}
 
             self.menuBoxShader:send("angle", angle)
             self.menuBoxShader:send("warpScale", warpScale)
@@ -208,7 +208,7 @@ local mainMenu = class{
 
             self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
 
-            if self.backgroundScrollY > gameHeight - 20 then
+            if self.backgroundScrollY > screenHeight - 20 then
                 self.backgroundScrollY = 0
             end
         end
@@ -230,7 +230,7 @@ local mainMenu = class{
 
             if enableBackground == 1 then
                 love.graphics.setShader(self.menuBackgroundShader)
-                love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+                love.graphics.rectangle("fill", 0, 0, screenWidth, screenHeight)
                 love.graphics.setShader()
             end
 
@@ -239,18 +239,18 @@ local mainMenu = class{
             -- Use the menu background as a stencil
             love.graphics.stencil(function()
                 love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY))
-                love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - gameHeight + 20))
+                love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - screenHeight + 20))
             end, "replace", 1, false)
 
             love.graphics.setStencilTest("greater", 0)
 
             if enableBackground == 1 then
                 love.graphics.setShader(self.menuBoxShader)
-                love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+                love.graphics.rectangle("fill", 0, 0, screenWidth, screenHeight)
                 love.graphics.setShader()
             else
                 love.graphics.setColor(0.1, 0.1, 0.1, 1)
-                love.graphics.rectangle("fill", 0, 0, gameWidth, gameHeight)
+                love.graphics.rectangle("fill", 0, 0, screenWidth, screenHeight)
                 love.graphics.setColor(1, 1, 1, 1)
             end
 
@@ -266,7 +266,7 @@ local mainMenu = class{
         -- Draw an overlay for the background fade
         local alpha = gameManager.options.fadingPercentage / 100
         love.graphics.setColor(0.1, 0.1, 0.1, alpha)
-        love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
+        love.graphics.rectangle("fill", -100, -100, screenWidth + 100, screenHeight + 100)
         love.graphics.setColor(1, 1, 1, 1)
     end,
 

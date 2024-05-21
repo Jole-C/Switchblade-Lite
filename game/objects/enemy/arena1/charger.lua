@@ -8,7 +8,7 @@ local charger = class{
 
     health = 1,
     speed = 80,
-    checkDistance = 5,
+    checkDistance = 2,
     angle,
     wallBounceCheckPosition,
     spriteName = "charger sprite",
@@ -35,12 +35,23 @@ local charger = class{
     update = function(self, dt)
         enemy.update(self, dt)
 
+        local currentGamestate = gamestate.current()
+        local arena = currentGamestate.arena
+
+        if not arena then
+            return
+        end
+
         -- Move the enemy
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
-        self.position = self.position + movementDirection * self.speed * dt
+        self.position = currentGamestate.arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
 
-        self.position.x = math.clamp(self.position.x, 0, gameWidth)
-        self.position.y = math.clamp(self.position.y, 0, gameHeight)
+        -- Reverse the enemy's position if it reaches the border
+        self.wallBounceCheckPosition = self.position + movementDirection * self.checkDistance
+
+        if currentGamestate.arena:getDistanceToArena(self.wallBounceCheckPosition) > arenaRadius then
+            self.angle = self.angle + math.pi
+        end
 
         -- Update the tail
         if self.tail then
@@ -58,30 +69,10 @@ local charger = class{
             self.eye:update()
         end
         
-        -- Handle collisions
-        local world = gamestate.current().world
+        -- Move enemy collider
+        local world = currentGamestate.world
 
         if world and world:hasItem(self.collider) then
-            -- Handle collision between the border
-            self.wallBounceCheckPosition = self.position + movementDirection * self.checkDistance
-            local cols, len = gamestate.current().world:queryPoint(self.wallBounceCheckPosition.x, self.wallBounceCheckPosition.y)
-
-            for i = 1, len do
-                local collidedObject = cols[i].owner
-                local colliderDefinition = cols[i].colliderDefinition
-
-                if not collidedObject or not colliderDefinition then
-                    goto continue
-                end
-
-                if colliderDefinition == colliderDefinitions.wall then
-                    self.angle = self.angle + math.pi
-                end
-
-                ::continue::
-            end
-
-            -- Handle enemy collision
             local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
             colliderPositionX = self.position.x - colliderWidth/2
             colliderPositionY = self.position.y - colliderHeight/2

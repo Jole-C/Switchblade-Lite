@@ -1,3 +1,4 @@
+local wanderer = require "game.objects.enemy.arena1.wanderer"
 local charger = require "game.objects.enemy.arena1.charger"
 local drone = require "game.objects.enemy.arena1.drone"
 local utility = require "game.objects.enemy.arena1.charger"
@@ -7,6 +8,7 @@ local levelDefinition =
 {
     enemyDefinitions =
     {
+        ["wanderer"] = wanderer,
         ["charger"] = charger,
         ["drone"] = drone,
         ["utility"] = utility,
@@ -27,7 +29,7 @@ local levelDefinition =
                     -- The enemy to spawn within this wave
                     enemyDef =
                     {
-                        enemyID = "charger",
+                        enemyID = "wanderer",
                         spawnCount = 4,
                     },
 
@@ -35,8 +37,8 @@ local levelDefinition =
                     -- Can either use values to dynamically construct a shape, or predefined coordinates
                     shapeDef =
                     {
-                        {x = gameWidth/2 - 80, y = gameHeight/2},
-                        {x = gameWidth/2 + 80, y = gameHeight/2}
+                        {x = arenaPosition.x - 80, y = arenaPosition.y},
+                        {x = arenaPosition.x + 80, y = arenaPosition.y}
                     }
                 }
             }
@@ -49,7 +51,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
+                        enemyID = "wanderer",
                         spawnCount = 6,
                     },
 
@@ -57,7 +59,7 @@ local levelDefinition =
                     {
                         numberOfPoints = 4,
                         radius = 64,
-                        origin = {x = gameWidth/2, y = gameHeight/2}
+                        origin = {x = arenaPosition.x, y = arenaPosition.y}
                     }
                 }
             }
@@ -70,7 +72,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
+                        enemyID = "wanderer",
                         spawnCount = 6,
                     },
 
@@ -78,7 +80,7 @@ local levelDefinition =
                     {
                         numberOfPoints = 6,
                         radius = 64,
-                        origin = {x = gameWidth/2, y = gameHeight/2}
+                        origin = {x = arenaPosition.x, y = arenaPosition.y}
                     }
                 },
                 {
@@ -87,13 +89,65 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        {x = arenaPosition.x - 120, y = arenaPosition.y},
+                        {x = arenaPosition.x + 120, y = arenaPosition.y}
+                    }
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
                         spawnCount = 4,
                     },
 
                     shapeDef =
                     {
-                        {x = gameWidth/2 - 120, y = gameHeight/2},
-                        {x = gameWidth/2 + 120, y = gameHeight/2}
+                        numberOfPoints = 10,
+                        radius = 40,
+                        origin = {x = arenaPosition.x, y = arenaPosition.y}
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 10,
+                        radius = 80,
+                        origin = {x = arenaPosition.x, y = arenaPosition.y}
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        {x = arenaPosition.x - 120, y = arenaPosition.y},
+                        {x = arenaPosition.x + 120, y = arenaPosition.y}
                     }
                 }
             }

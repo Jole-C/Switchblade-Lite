@@ -6,7 +6,7 @@ local pauseManager = class{
     background,
 
     init = function(self)
-        self.background = rect(-100, -100, gameWidth + 100, gameHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
+        self.background = rect(-100, -100, screenWidth + 100, screenHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
         interfaceRenderer:addHudElement(self.background)
 
         self.menu = pauseMenu()

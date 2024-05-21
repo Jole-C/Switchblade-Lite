@@ -37,15 +37,17 @@ local wanderer = class{
     end,
 
     update = function(self, dt)
+        enemy.update(self, dt)
+        
         -- Move the enemy and lerp its angle to the target angle
         self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.01)
 
         local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
-        self.position = self.position + movementDirection * self.speed * dt
-        
+
         -- Clamp the enemy's position to the world border
-        self.position.x = math.clamp(self.position.x, 0, gameWidth)
-        self.position.y = math.clamp(self.position.y, 0, gameHeight)
+        if gamestate.current().arena then
+            self.position = gamestate.current().arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
+        end
 
         -- Randomise the enemy's angle
         self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
