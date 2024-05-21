@@ -5,7 +5,18 @@ vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
+gamera = require "lib.camera.gamera"
 math.pi = 3.14159265
+
+-- Set up the arena
+screenWidth = 320
+screenHeight = 180
+worldX = -600
+worldY = -600
+worldWidth = 600
+worldHeight = 600
+arenaPosition = vector.new((worldWidth + worldX)/2, (worldHeight + worldY)/2)
+arenaRadius = 200
 
 -- System requirements
 require "game.misc.mathhelpers"
