@@ -1,6 +1,4 @@
-local wall = require "game.objects.wall"
 local director = require "game.objects.stagedirector"
-local enemymanager = require "game.objects.enemymanager"
 local level = require "game.levels.level1"
 
 local gameLevelState = gamestate.new()
@@ -20,16 +18,10 @@ function gameLevelState:enter()
     self.world = bump.newWorld()
 
     local upperWall = wall(0, -20, gameWidth, 20, vector.new(0, 1))
-    local lowerWall = wall(0, gameHeight, gameWidth, 20, vector.new(0, -1))
-    local leftWall = wall(-20, 0, 20, gameHeight, vector.new(1, 0))
-    local rightWall = wall(gameWidth, 0, 20, gameHeight, vector.new(-1, 0))
+    self.arena = arena()
 
     self:addObject(upperWall)
-    self:addObject(lowerWall)
-    self:addObject(leftWall)
-    self:addObject(rightWall)
-
-    local newPlayer = playerManager:spawnPlayer(gameWidth/2, gameHeight/2)
+    local newPlayer = playerManager:spawnPlayer(arenaPosition.x, arenaPosition.y)
     self:addObject(newPlayer)
 
     local stageDirector = director(level, 0, 0)
