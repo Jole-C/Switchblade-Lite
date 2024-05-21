@@ -407,11 +407,11 @@ function love.draw()
     love.graphics.clear()
     gameManager:draw()
     interfaceRenderer:draw()
+    love.graphics.setFont(resourceManager:getResource("font main"))
+    love.graphics.printf(love.timer.getFPS( ).."\nx:"..arenaPosition.x.." y:"..arenaPosition.y, screenWidth - 50, 10, 1000, "left")
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 
     -- Render the canvases
     gameRenderer:drawCanvases()
-
-    love.graphics.print(love.timer.getFPS( ).."\nx:"..arenaPosition.x.." y:"..arenaPosition.y)
 end
