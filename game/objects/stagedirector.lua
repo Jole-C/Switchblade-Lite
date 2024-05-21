@@ -181,8 +181,8 @@ local stageDirector = class{
                 assert(#generatedShape > 1, "Number of points in shape must be greater than 1.")
 
                 for i = 1, enemyDef.spawnCount do
-                    local pointX = math.random(0, gameWidth)
-                    local pointY = math.random(0, gameHeight)
+                    local pointX = math.random(0, screenWidth)
+                    local pointY = math.random(0, screenHeight)
     
                     -- Inefficient, must change later
                     while PointWithinShape(generatedShape, pointX, pointY) == false do

@@ -13,7 +13,7 @@ local playerLaser = class{
         self.circlePosition = vector.new(0, 0)
         self.angle = angle
         self.damage = damage
-        self.length = gameWidth * 2
+        self.length = screenWidth * 2
         self.sprite = resourceManager:getResource("player laser sprite")
 
         self.bouncesLeft = bouncesLeft
