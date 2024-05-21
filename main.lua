@@ -90,6 +90,10 @@ function SetupResources()
     font:setFilter("nearest", "nearest", 0)
     resourceManager:addResource(font, "font ui")
 
+    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 64)
+    font:setFilter("nearest", "nearest", 0)
+    resourceManager:addResource(font, "font alert")
+
     -- Interface resources
     local selectedBox = love.graphics.newImage("game/assets/sprites/interface/selectedbox.png")
     resourceManager:addResource(selectedBox, "selected box")
