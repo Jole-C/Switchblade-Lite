@@ -28,6 +28,7 @@ local player = class{
     contactDamageHeatMultiplier = 10,
     boostingInvulnerableGracePeriod = 1,
     invulnerableGracePeriod = 3,
+    bounceDampening = 0.5,
 
     -- Firing parameters of the ship
     maxFireCooldown = 0.05,
@@ -187,6 +188,12 @@ local player = class{
     end,
 
     updatePosition = function(self)
+        local arena = gamestate.current().arena
+
+        if not arena then
+            return
+        end
+
         local trimmedSpeed = self.maxSpeed
 
         if self.isBoosting then
@@ -194,7 +201,15 @@ local player = class{
         end
 
         self.velocity = self.velocity:trimmed(trimmedSpeed)
+        
+        if arena:getDistanceToArena(self.position) == arenaRadius then
+            self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
+        end
+
         self.position = self.position + self.velocity
+        self.position = gamestate.current().arena:getClampedPosition(self.position)
+
+        camera:setPosition(self.position.x, self.position.y)
     end,
 
     checkCollision = function(self)
@@ -244,18 +259,7 @@ local player = class{
     end,
 
     wrapShipPosition = function(self)
-        if self.position.x < 0 then
-            self.position.x = gameWidth
-        end
-        if self.position.x > gameWidth then
-            self.position.x = 0
-        end
-        if self.position.y < 0 then
-            self.position.y = gameHeight
-        end
-        if self.position.y > gameHeight then
-            self.position.y = 0
-        end
+        
     end,
 
     update = function(self, dt)
@@ -296,7 +300,7 @@ local player = class{
         yOffset = yOffset/2
         
         love.graphics.setColor(gameManager.currentPalette.playerColour)
-        love.graphics.draw(self.sprite, math.round(self.position.x), math.round(self.position.y), self.angle, 1, 1, xOffset, yOffset)
+        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
         love.graphics.setColor(1, 1, 1, 1)
     end,
 
