@@ -1,5 +1,5 @@
 local director = require "game.objects.stagedirector"
-local enemyManager = require "game.objects.enemymanager"
+local enemyManager = require "game.objects.enemy.enemymanager"
 local level = require "game.levels.level1"
 local arena = require "game.objects.arena"
 
