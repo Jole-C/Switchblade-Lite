@@ -48,6 +48,7 @@ local stageDirector = class{
         self.maxWave = #self.levelDefinition.level
         self.enemyDefinitions = self.levelDefinition.enemyDefinitions
 
+        -- Initialise variables
         self.spawnTime = self.maxSpawnTime
         self.angleWarningRandomiseCooldown = self.maxWarningAngleRandomiseCooldown
         self.currentIntroCount = self.introCounts
@@ -69,6 +70,7 @@ local stageDirector = class{
         if self.inIntro == true then
             self.introLerpCooldown = self.introLerpCooldown - 1 * dt
 
+            -- If the cooldown is less than 0 and the alert is across the screen, reset it
             if self.introLerpCooldown <= 0 and self.alertElement.position.x > screenWidth then
                 self.introLerpCooldown = self.secondsBetweenIntroLerps
 
@@ -77,6 +79,7 @@ local stageDirector = class{
                 self.alertElement.text = self.currentIntroCount
                 self.alertElement.position.x = -200
 
+                -- If all resets have happened, start the run
                 if self.currentIntroCount <= 0 then
                     local arena = gamestate.current().arena
 
@@ -88,6 +91,7 @@ local stageDirector = class{
                 end
             end
 
+            -- Lerp the element position to the right side of the screen
             self.alertElement.position.x = math.lerp(self.alertElement.position.x, screenWidth + 200, self.introLerpSpeed)
 
             return
