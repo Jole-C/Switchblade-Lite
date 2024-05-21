@@ -23,7 +23,7 @@ local textElement = class{
 
         if self.centerText == true then
             textX = self.position.x + self.font:getWidth(self.text)/2
-            textY = self.position.y + self.font:getWidth(self.text)/2
+            textY = self.position.y + self.font:getHeight(self.text)/2
         else
             textX = self.position.x
             textY = self.position.y
