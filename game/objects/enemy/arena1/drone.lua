@@ -31,6 +31,8 @@ local drone = class{
     end,
 
     update = function(self, dt)
+        enemy.update(self, dt)
+        
         -- Move the enemy using seek steering behaviour
         local playerPosition = playerManager.playerPosition
 
@@ -38,7 +40,10 @@ local drone = class{
         local steeringVelocity = (targetVelocity - self.velocity):trimmed(self.maxSteeringForce) * dt
         self.velocity = (self.velocity + steeringVelocity):trimmed(self.maxSpeed)
 
-        self.position = self.position + self.velocity
+        -- Clamp the enemy's position
+        if gamestate.current().arena then
+            self.position = gamestate.current().arena:getClampedPosition(self.position + self.velocity)
+        end
 
         -- Update the angle of the enemy
         self.angle = self.position:angleTo(playerPosition)
