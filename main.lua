@@ -345,10 +345,10 @@ function love.draw()
     love.graphics.setColor(1, 1, 1, 1)
 
     -- Draw the background
-    love.graphics.setCanvas(backgroundCanvas.canvas)
+    love.graphics.setCanvas({backgroundCanvas.canvas, stencil = true})
     love.graphics.setBackgroundColor(gameManager.currentPalette.backgroundColour[5])
     love.graphics.setBlendMode("alpha")
-
+    
     if gameManager.options.enableBackground == 1 then
         love.graphics.draw(ps)
     else
