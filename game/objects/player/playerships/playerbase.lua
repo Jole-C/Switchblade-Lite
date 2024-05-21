@@ -209,7 +209,10 @@ local player = class{
         self.position = self.position + self.velocity
         self.position = gamestate.current().arena:getClampedPosition(self.position)
 
-        camera:setPosition(self.position.x, self.position.y)
+        local averageX = (arenaPosition.x + self.position.x) / 2
+        local averageY = (arenaPosition.y + self.position.y) / 2
+        
+        camera:setPosition(averageX, averageY)
     end,
 
     checkCollision = function(self)
