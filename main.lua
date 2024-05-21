@@ -213,6 +213,10 @@ function love.load()
     resourceManager = resource()
     SetupResources()
 
+    -- Create the camera
+    camera = gamera.new(0, 0, screenWidth, screenHeight)
+    camera:setWindow(0, 0, screenWidth, screenHeight)
+
     -- Create the player manager
     playerManager = playerHandler()
 
@@ -346,10 +350,35 @@ function love.draw()
     love.graphics.setBlendMode("alpha")
 
     if gameManager.options.enableBackground == 1 then
-        love.graphics.draw(ps, gameWidth/2, gameHeight/2)
+        love.graphics.draw(ps)
     else
         love.graphics.clear()
     end
+
+    love.graphics.setStencilTest()
+    love.graphics.setCanvas()
+    love.graphics.setColor(1, 1, 1, 1)
+
+    camera:draw(function()
+        -- Draw the foreground
+        love.graphics.setCanvas({foregroundCanvas.canvas, stencil = true})
+        love.graphics.clear()
+        love.graphics.setBlendMode("alpha")
+
+        local currentGamestate = gamestate.current()
+        
+        gamestate.current():draw()
+
+        if currentGamestate.objects then
+            for key,object in ipairs(currentGamestate.objects) do
+                object:draw()
+            end
+        end
+        love.graphics.setCanvas()
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.setStencilTest()
+
+    end)
 
     -- Draw the background overlay
     love.graphics.setCanvas(backgroundShadowCanvas.canvas)
@@ -357,30 +386,15 @@ function love.draw()
 
     local alpha = gameManager.options.fadingPercentage / 100
     love.graphics.setColor(0.1, 0.1, 0.1, alpha)
-    love.graphics.rectangle("fill", -100, -100, gameWidth + 100, gameHeight + 100)
+    love.graphics.rectangle("fill", -100, -100, screenWidth + 100, screenHeight + 100)
+    love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
-
-    -- Draw the foreground
-    love.graphics.setCanvas(foregroundCanvas.canvas)
-    love.graphics.clear()
-    love.graphics.setBlendMode("alpha")
-
-    gamestate.draw()
-
-    local currentGamestate = gamestate.current()
-
-    if currentGamestate.objects then
-        for key,object in ipairs(currentGamestate.objects) do
-            object:draw()
-        end
-    end
 
     -- Draw the shadows
     love.graphics.setCanvas(foregroundShadowCanvas.canvas)
     love.graphics.clear()
     love.graphics.setColor(0.1, 0.1, 0.1, 1)
     love.graphics.draw(foregroundCanvas.canvas, 2, 2)
-
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 
@@ -390,9 +404,10 @@ function love.draw()
     gameManager:draw()
     interfaceRenderer:draw()
     love.graphics.setCanvas()
+    love.graphics.setColor(1, 1, 1, 1)
 
     -- Render the canvases
     gameRenderer:drawCanvases()
 
-    love.graphics.print(love.timer.getFPS( ))
+    love.graphics.print(love.timer.getFPS( ).."\nx:"..arenaPosition.x.." y:"..arenaPosition.y)
 end
