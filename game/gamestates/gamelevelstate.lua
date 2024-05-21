@@ -1,5 +1,7 @@
 local director = require "game.objects.stagedirector"
+local enemyManager = require "game.objects.enemymanager"
 local level = require "game.levels.level1"
+local arena = require "game.objects.arena"
 
 local gameLevelState = gamestate.new()
 
@@ -8,6 +10,7 @@ function gameLevelState:init()
     self.expiredObjects = {}
     self.world = nil
     self.enemymanager = nil
+    self.arena = nil
     self.name = "game level"
 end
 
@@ -18,6 +21,7 @@ function gameLevelState:enter()
     self.world = bump.newWorld()
 
     self.arena = arena()
+    self:addObject(self.arena)
 
     local newPlayer = playerManager:spawnPlayer(arenaPosition.x, arenaPosition.y)
     self:addObject(newPlayer)
@@ -51,7 +55,6 @@ function gameLevelState:update(dt)
 end
 
 function gameLevelState:draw()
-    love.graphics.print(#self.objects, 0, windowHeight - windowHeight/3.5, 0, 10)
 end
 
 function gameLevelState:addObject(object)
@@ -63,10 +66,21 @@ function gameLevelState:removeObject(index)
 end
 
 function gameLevelState:leave()
+    for i = 1, #self.objects do
+        local object = self.objects[i]
+
+        if object.markedForDelete == false then
+            object:destroy()
+        end
+    end
+
     self.objects = {}
     self.expiredObjects = {}
+    
     self.world = nil
     self.enemyManager = nil
+    self.arena = nil
+
     interfaceRenderer:clearElements()
 end
 
