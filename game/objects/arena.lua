@@ -12,6 +12,7 @@ local arena = class{
     numberOfCircles = 10,
 
     arenaScale = 0,
+    doIntro = false,
 
     init = function(self)
         self.maxArenaScale = arenaRadius
@@ -23,7 +24,9 @@ local arena = class{
         self.circleSize = math.sin(self.circleWarpTime) * self.circleWarpAmplitude
 
         -- Scale the arena on intro
-        self.arenaScale = math.lerp(self.arenaScale, 1, 0.01)
+        if self.doIntro then
+            self.arenaScale = math.lerp(self.arenaScale, 1, 0.01)
+        end
     end,
 
     draw = function(self)
@@ -54,6 +57,10 @@ local arena = class{
         love.graphics.setLineWidth(1)
 
         love.graphics.setStencilTest("equal", 1)
+    end,
+
+    enableIntro = function(self)
+        self.doIntro = true
     end,
 
     getClampedPosition = function(self, position)

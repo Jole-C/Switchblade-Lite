@@ -1,5 +1,6 @@
 local gameobject = require "game.objects.gameobject"
 local stageTimeHud = require "game.stagetimedisplay"
+local text = require "game.interface.text"
 
 local stageDirector = class{
     __includes = gameobject,
@@ -12,6 +13,10 @@ local stageDirector = class{
     spriteScaleAmplitude = 1,
     maxWarningAngleRandomiseCooldown = 0.25,
     minimumEnemyCount = 3,
+
+    introCounts = 3,
+    introLerpSpeed = 0.1,
+    secondsBetweenIntroLerps = 0.25,
 
     levelDefinition = {},
     waveDefinitions = {},
@@ -27,8 +32,12 @@ local stageDirector = class{
     spriteScale = 1,
     angleWarningRandomiseCooldown = 0,
 
+    introLerpCooldown = 0,
+    currentIntroCount = 0,
+    inIntro = true,
 
     hud,
+    alertElement,
 
     init = function(self, levelDefinition, x, y)
         gameobject.init(self, x, y)
@@ -41,16 +50,48 @@ local stageDirector = class{
 
         self.spawnTime = self.maxSpawnTime
         self.angleWarningRandomiseCooldown = self.maxWarningAngleRandomiseCooldown
+        self.currentIntroCount = self.introCounts
+        self.introLerpCooldown = self.secondsBetweenIntroLerps
 
         -- Set up the hud
         self.hud = stageTimeHud()
         interfaceRenderer:addHudElement(self.hud)
+        self.alertElement = text(self.currentIntroCount, "font alert", true, -200, 0)
+        interfaceRenderer:addHudElement(self.alertElement)
     end,
 
     update = function(self, dt)
         -- Update the hud
         self.hud.timeSeconds = self.timeSeconds
         self.hud.timeMinutes = self.timeMinutes
+
+        -- Quit early if the intro is in progress
+        if self.inIntro == true then
+            self.introLerpCooldown = self.introLerpCooldown - 1 * dt
+
+            if self.introLerpCooldown <= 0 and self.alertElement.position.x > screenWidth then
+                self.introLerpCooldown = self.secondsBetweenIntroLerps
+
+                self.currentIntroCount = self.currentIntroCount - 1
+
+                self.alertElement.text = self.currentIntroCount
+                self.alertElement.position.x = -200
+
+                if self.currentIntroCount <= 0 then
+                    local arena = gamestate.current().arena
+
+                    if arena then
+                        arena:enableIntro()
+                    end
+
+                    self.inIntro = false
+                end
+            end
+
+            self.alertElement.position.x = math.lerp(self.alertElement.position.x, screenWidth + 200, self.introLerpSpeed)
+
+            return
+        end
 
         -- Handle gameover state switching
         local player = playerManager.playerReference
@@ -260,6 +301,10 @@ local stageDirector = class{
             end
         end
     end,
+
+    cleanup = function(self)
+        self.alertElement = nil
+    end
 }
 
 return stageDirector
