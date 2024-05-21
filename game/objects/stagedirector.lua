@@ -186,8 +186,8 @@ local stageDirector = class{
     
                     -- Inefficient, must change later
                     while PointWithinShape(generatedShape, pointX, pointY) == false do
-                        pointX = math.random(0, gameWidth)
-                        pointY = math.random(0, gameHeight)
+                        pointX = math.random(arenaPosition.x - arenaRadius, arenaPosition.x + arenaRadius)
+                        pointY = math.random(arenaPosition.y - arenaRadius, arenaPosition.y + arenaRadius)
                     end
 
                     table.insert(self.enemySpawnList, {
