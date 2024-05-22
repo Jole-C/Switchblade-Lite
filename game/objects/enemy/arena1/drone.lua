@@ -25,8 +25,6 @@ function drone:new(x, y)
 end
 
 function drone:update(dt)
-    gameObject.update(self, dt)
-    
     -- Move the enemy using seek steering behaviour
     local playerPosition = playerManager.playerPosition
 
@@ -71,8 +69,6 @@ function drone:update(dt)
 end
 
 function drone:draw()
-    gameObject.draw(self)
-
     if not self.sprite then
         return
     end
