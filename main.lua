@@ -15,8 +15,6 @@ worldX = -600
 worldY = -600
 worldWidth = 600
 worldHeight = 600
-arenaPosition = vector.new((worldWidth + worldX)/2, (worldHeight + worldY)/2)
-arenaRadius = 100
 
 -- System requirements
 require "game.misc.mathhelpers"
@@ -408,7 +406,6 @@ function love.draw()
     gameManager:draw()
     interfaceRenderer:draw()
     love.graphics.setFont(resourceManager:getResource("font main"))
-    love.graphics.printf(love.timer.getFPS( ).."\nx:"..arenaPosition.x.." y:"..arenaPosition.y, screenWidth - 50, 10, 1000, "left")
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 
