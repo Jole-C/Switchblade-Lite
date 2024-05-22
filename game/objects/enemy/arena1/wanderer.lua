@@ -76,8 +76,7 @@ end
 
 function wanderer:draw()
     if not self.sprite or not self.tail then
-        assert(self.sprite ~= nil, "sprite nil")
-        assert(self.tail ~= nil, "tail nil")
+        return
     end
 
     -- Draw the eye
