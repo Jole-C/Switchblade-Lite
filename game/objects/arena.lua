@@ -167,7 +167,7 @@ local arenaController = class{
         end
 
         return false
-    end
+    end,
 
     addArenaSegment = function(self, segment)
         return table.insert(self.arenaSegments, segment)
