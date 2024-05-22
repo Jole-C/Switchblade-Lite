@@ -23,7 +23,9 @@ end
 function renderer:removeRenderCanvas(canvasName)
     local index = nil
 
-    for i, canvas in ipairs(self.renderCanvases) do
+    for i = 1, #self.renderCanvases do
+        local canvas = self.renderCanvases[i]
+        
         if canvas.name == canvasName then
             index = i
             break
@@ -36,7 +38,9 @@ function renderer:removeRenderCanvas(canvasName)
 end
 
 function renderer:getRenderCanvas(canvasName)
-    for _, canvas in ipairs(self.renderCanvases) do
+    for i = 1, #self.renderCanvases do
+        local canvas = self.renderCanvases[i]
+        
         if canvas.name == canvasName then
             return canvas
         end
@@ -46,7 +50,9 @@ function renderer:getRenderCanvas(canvasName)
 end
 
 function renderer:drawCanvases()
-    for _, canvas in ipairs(self.renderCanvases) do
+    for i = 1, #self.renderCanvases do
+        local canvas = self.renderCanvases[i]
+
         if canvas and canvas.enabled then
             local renderCanvas = canvas.canvas
             local width = canvas.dimensions.x
