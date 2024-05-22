@@ -43,6 +43,8 @@ local levelDefinition =
         },
     },
 
+    playerStartSegment = "mainCircle",
+
     level =
     {
         -- A wave of enemies
@@ -66,8 +68,12 @@ local levelDefinition =
                     -- Can either use values to dynamically construct a shape, or predefined coordinates
                     shapeDef =
                     {
-                        {x = arenaPosition.x - 80, y = arenaPosition.y},
-                        {x = arenaPosition.x + 80, y = arenaPosition.y}
+                        origin = "mainCircle",
+                        points =
+                        {
+                            {x = -80, y = 0},
+                            {x = 80, y = 0}
+                        }
                     }
                 }
             }
@@ -88,7 +94,7 @@ local levelDefinition =
                     {
                         numberOfPoints = 4,
                         radius = 64,
-                        origin = {x = arenaPosition.x, y = arenaPosition.y}
+                        origin = "mainCircle"
                     }
                 }
             }
@@ -109,7 +115,7 @@ local levelDefinition =
                     {
                         numberOfPoints = 6,
                         radius = 64,
-                        origin = {x = arenaPosition.x, y = arenaPosition.y}
+                        origin = "mainCircle"
                     }
                 },
                 {
@@ -123,8 +129,11 @@ local levelDefinition =
 
                     shapeDef =
                     {
-                        {x = arenaPosition.x - 120, y = arenaPosition.y},
-                        {x = arenaPosition.x + 120, y = arenaPosition.y}
+                        origin = "mainCircle",
+                        points = {
+                            {x = -120, y = 0},
+                            {x = 120, y = 0}
+                        }
                     }
                 }
             }
@@ -145,7 +154,7 @@ local levelDefinition =
                     {
                         numberOfPoints = 10,
                         radius = 40,
-                        origin = {x = arenaPosition.x, y = arenaPosition.y}
+                        origin = "mainCircle"
                     }
                 },
                 {
@@ -161,7 +170,7 @@ local levelDefinition =
                     {
                         numberOfPoints = 10,
                         radius = 80,
-                        origin = {x = arenaPosition.x, y = arenaPosition.y}
+                        origin = "mainCircle"
                     }
                 },
                 {
@@ -175,8 +184,11 @@ local levelDefinition =
 
                     shapeDef =
                     {
-                        {x = arenaPosition.x - 120, y = arenaPosition.y},
-                        {x = arenaPosition.x + 120, y = arenaPosition.y}
+                        origin = "mainCircle",
+                        points = {
+                            {x = 120, y = 0},
+                            {x = 120, y = 0}
+                        }
                     }
                 }
             }

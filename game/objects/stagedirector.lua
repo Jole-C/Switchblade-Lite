@@ -23,6 +23,7 @@ local stageDirector = class{
     enemyDefinitions = {},
     enemySpawnList = {},
     arenaSegments = {},
+    playerStartSegment = {},
     currentWaveIndex = 0,
     spawnTime,
     maxWave = 0,
@@ -48,6 +49,7 @@ local stageDirector = class{
         self.waveDefinitions = self.levelDefinition.level
         self.maxWave = #self.levelDefinition.level
         self.enemyDefinitions = self.levelDefinition.enemyDefinitions
+        self.playerStartSegment = self.levelDefinition.arenaSegmentDefinitions[self.levelDefinition.playerStartSegment]
 
         for name, segment in pairs(self.levelDefinition.arenaSegmentDefinitions) do
             if segment then
@@ -217,29 +219,37 @@ local stageDirector = class{
             -- and set up a table for the generated shape, if applicable
             local waveType = currentDefinition.waveType
             local enemyDef = currentDefinition.enemyDef
-            local generatedShape = {}
+            local generatedShape = {
+                points = {},
+                origin = {},
+            }
 
             -- Calculate the vertices
             if currentDefinition.shapeDef.numberOfPoints and currentDefinition.shapeDef.radius then
                 local numberOfPoints = currentDefinition.shapeDef.numberOfPoints
                 local radius = currentDefinition.shapeDef.radius
-                local origin = currentDefinition.shapeDef.origin
+                local origin = self.arenaSegments[currentDefinition.shapeDef.origin].position
                 local angle = 2 * math.pi / numberOfPoints
                 local offset = math.pi / 2
-                local radius = radius
 
                 for i = 1, numberOfPoints do
                     local pointX = origin.x + math.cos(i * angle - offset) * radius
                     local pointY = origin.y + math.sin(i * angle - offset) * radius
 
-                    table.insert(generatedShape, {x = pointX, y = pointY})
+                    table.insert(generatedShape.points, {x = pointX, y = pointY})
                 end
+
+                generatedShape.origin = currentDefinition.shapeDef.origin
             else
-                generatedShape = currentDefinition.shapeDef
+                generatedShape.points = currentDefinition.shapeDef.points
+                generatedShape.origin = currentDefinition.shapeDef.origin
             end
 
+            local arenaPosition = self.arenaSegments[generatedShape.origin].position
+            local arenaRadius = self.arenaSegments[generatedShape.origin].radius
+
             if waveType == "randomWithinShape" then
-                assert(#generatedShape > 1, "Number of points in shape must be greater than 1.")
+                assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
 
                 for i = 1, enemyDef.spawnCount do
                     local pointX = math.random(0, screenWidth)
@@ -259,30 +269,30 @@ local stageDirector = class{
                     })
                 end
             elseif waveType == "alongShapePerimeter" then
-                local enemiesPerLine = math.ceil(enemyDef.spawnCount/#generatedShape)
+                local enemiesPerLine = math.ceil(enemyDef.spawnCount/#generatedShape.points)
 
-                if #generatedShape == 2 then
+                if #generatedShape.points == 2 then
                     enemiesPerLine = enemyDef.spawnCount
                 end
                 
-                assert(#generatedShape > 1, "Number of points in shape must be greater than 1.")
+                assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
 
-                for i = 1, #generatedShape do
-                    local point1 = vector.new(generatedShape[i].x, generatedShape[i].y)
-                    local point2
+                for i = 1, #generatedShape.points do
+                    local point1 = vector.new(generatedShape.points[i].x, generatedShape.points[i].y)
+                    local point2 = nil
 
-                    if #generatedShape > 2 then
-                        if i == #generatedShape then
-                            point2 = vector.new(generatedShape[1].x, generatedShape[1].y)
+                    if #generatedShape.points > 2 then
+                        if i == #generatedShape.points then
+                            point2 = vector.new(generatedShape.points[1].x, generatedShape.points[1].y)
                         else
-                            point2 = vector.new(generatedShape[i + 1].x, generatedShape[i + 1].y)
+                            point2 = vector.new(generatedShape.points[i + 1].x, generatedShape.points[i + 1].y)
                         end
                     else
-                        if i == #generatedShape then
+                        if i == #generatedShape.points then
                             return
                         end
 
-                        point2 = vector.new(generatedShape[2].x, generatedShape[2].y)
+                        point2 = vector.new(generatedShape.points[2].x, generatedShape.points[2].y)
                     end
 
                     local pointSpacing = (point2 - point1):len()/enemiesPerLine
