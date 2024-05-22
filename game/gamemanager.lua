@@ -3,139 +3,68 @@ local playerDefault = require "game.objects.player.playerships.playerdefault"
 local playerLight = require "game.objects.player.playerships.playerlight"
 local playerHeavy = require "game.objects.player.playerships.playerheavy"
 local playerDefinition = require "game.objects.player.playerdefinition"
+local gameManager = class({name = "Game Manager"})
 
-local gameManager = class{
-    palettes = {},
-    currentPalette = {},
+function gameManager:new()
+    self.palettes = {}
+    self.currentPalette = {}
 
-    playerDefinitions = {},
-    currentPlayerDefinition = {},
+    self.isTransitioning = false
+    self.isPaused = false
+    self.pauseManager = nil
 
-    options = {
+    self.freezeFrames = 0
+    self.gameFrozen = false
+
+    -- Set up the player definitions
+    self.playerDefinitions = {
+        ["default definition"] = playerDefinition("default", playerDefault, ""),
+        ["light definition"] = playerDefinition("light", playerLight, ""),
+        ["heavy definition"] = playerDefinition("heavy", playerHeavy, "")
+    }
+
+    self.currentPlayerDefinition = self.playerDefinitions["default definition"]
+
+    -- Set up the options
+    self.optionsFile = "options.txt"
+    
+    self.options = {
         enableBackground = 1,
         fadingPercentage = 50,
         speedPercentage = 50,
         musicVolPercentage = 70,
         sfxVolPercentage = 100
-    },
-    unlocks = {
+    }
+    self.unlocks = {
         level1beaten = false,
         level2beaten = false,
         level3beaten = false,
         shipUnlocks = {
 
-        },
-    },
-
-    isTransitioning = false,
-    isPaused = false,
-    pauseManager,
-
-    freezeFrames = 0,
-    gameFrozen = false,
-
-    optionsFile = "options.txt",
-
-    init = function(self)
-        -- Set up the player definitions
-        self.playerDefinitions = {
-            ["default definition"] = playerDefinition("default", playerDefault, ""),
-            ["light definition"] = playerDefinition("light", playerLight, ""),
-            ["heavy definition"] = playerDefinition("heavy", playerHeavy, "")
         }
+    }
 
-        self.currentPlayerDefinition = self.playerDefinitions["default definition"]
+    love.filesystem.setIdentity("switchblade")
+    local info = love.filesystem.getInfo(self.optionsFile)
 
-        -- Set up the options
-        love.filesystem.setIdentity("switchblade")
-        local info = love.filesystem.getInfo(self.optionsFile)
+    if info then
+        print("file exists")
 
-        if info then
-            print("file exists")
+        local loadedOptions = {}
 
-            local loadedOptions = {}
-
-            for line in love.filesystem.lines(self.optionsFile) do
-                table.insert(loadedOptions, tonumber(line))
-                print(line)
-            end
-            
-            self.options = {
-                enableBackground = loadedOptions[1],
-                fadingPercentage = loadedOptions[2],
-                speedPercentage = loadedOptions[3],
-                musicVolPercentage = loadedOptions[4],
-                sfxVolPercentage = loadedOptions[5]
-            }
-        else
-            local file = love.filesystem.newFile(self.optionsFile)
-            local bool, err = file:open("w")
-            print(err)
-
-            file:write(self.options.enableBackground.."\n")
-            file:write(self.options.fadingPercentage.."\n")
-            file:write(self.options.speedPercentage.."\n")
-            file:write(self.options.musicVolPercentage.."\n")
-            file:write(self.options.sfxVolPercentage.."\n")
-
-            file:close()
-        end
-    end,
-
-    update = function(self, dt)
-        if self.isPaused == true and self.pauseManager == nil then
-            self.pauseManager = pauseManager()
+        for line in love.filesystem.lines(self.optionsFile) do
+            table.insert(loadedOptions, tonumber(line))
+            print(line)
         end
         
-        if self.isPaused == false and self.pauseManager ~= nil then
-            self.pauseManager:destroy()
-            self.pauseManager = nil
-        end
-
-        if self.pauseManager then
-            self.pauseManager:update(dt)
-        end
-
-        self.freezeFrames = self.freezeFrames - 1 * dt
-
-        self.gameFrozen = self.freezeFrames > 0
-    end,
-
-    draw = function(self)
-    end,
-
-    changePlayerDefinition = function(self, definitionName)
-        local chosenDefinition = self.playerDefinitions[definitionName]
-
-        if chosenDefinition == nil then
-            chosenDefinition = self.playerDefinitions["default definition"]
-        end
-
-        self.currentPlayerDefinition = chosenDefinition
-    end,
-
-    setFreezeFrames = function(self, freezeFrames)
-        self.freezeFrames = freezeFrames/50
-    end,
-
-    togglePausing = function(self)
-        self.isPaused = not self.isPaused
-    end,
-
-    addPalette = function(self, palette)
-        table.insert(self.palettes, palette)
-    end,
-
-    swapPalette = function(self)
-        local paletteIndex = love.math.random(1, #self.palettes)
-        self.currentPalette = self.palettes[paletteIndex]
-    end,
-
-    transitionGamestate = function(self, gamestate)
-        
-    end,
-
-    saveOptions = function(self)
+        self.options = {
+            enableBackground = loadedOptions[1],
+            fadingPercentage = loadedOptions[2],
+            speedPercentage = loadedOptions[3],
+            musicVolPercentage = loadedOptions[4],
+            sfxVolPercentage = loadedOptions[5]
+        }
+    else
         local file = love.filesystem.newFile(self.optionsFile)
         local bool, err = file:open("w")
         print(err)
@@ -148,6 +77,70 @@ local gameManager = class{
 
         file:close()
     end
-}
+end
+
+function gameManager:update(dt)
+    if self.isPaused == true and self.pauseManager == nil then
+        self.pauseManager = pauseManager()
+    end
+    
+    if self.isPaused == false and self.pauseManager ~= nil then
+        self.pauseManager:destroy()
+        self.pauseManager = nil
+    end
+
+    if self.pauseManager then
+        self.pauseManager:update(dt)
+    end
+
+    self.freezeFrames = self.freezeFrames - 1 * dt
+
+    self.gameFrozen = self.freezeFrames > 0
+end
+
+function gameManager:changePlayerDefinition(definitionName)
+    local chosenDefinition = self.playerDefinitions[definitionName]
+
+    if chosenDefinition == nil then
+        chosenDefinition = self.playerDefinitions["default definition"]
+    end
+
+    self.currentPlayerDefinition = chosenDefinition
+end
+
+function gameManager:setFreezeFrames(freezeFrames)
+    self.freezeFrames = freezeFrames / 50
+end
+
+function gameManager:togglePausing()
+    self.isPaused = not self.isPaused
+end
+
+function gameManager:addPalette(palette)
+    table.insert(self.palettes, palette)
+end
+
+function gameManager:swapPalette()
+    local paletteIndex = love.math.random(1, #self.palettes)
+    self.currentPalette = self.palettes[paletteIndex]
+end
+
+function gameManager:saveOptions()
+    local file = love.filesystem.newFile(self.optionsFile)
+    local bool, err = file:open("w")
+    print(err)
+
+    file:write(self.options.enableBackground.."\n")
+    file:write(self.options.fadingPercentage.."\n")
+    file:write(self.options.speedPercentage.."\n")
+    file:write(self.options.musicVolPercentage.."\n")
+    file:write(self.options.sfxVolPercentage.."\n")
+
+    file:close()
+end
+
+function gameManager:draw()
+
+end
 
 return gameManager

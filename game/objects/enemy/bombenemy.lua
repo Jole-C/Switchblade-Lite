@@ -1,4 +1,4 @@
-local enemy = require "game.objects.enemy.enemy"
+--[[local enemy = require "game.objects.enemy.enemy"
 
 local bombEnemy = class{
     __includes = enemy,
@@ -14,3 +14,4 @@ local bombEnemy = class{
         end
     end
 }
+]]

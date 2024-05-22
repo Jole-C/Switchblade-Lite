@@ -1,9 +1,13 @@
 -- Library requirements
+
+-- OLD
 gamestate = require "lib.hump.gamestate"
-class = require "lib.hump.class"
 vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 bump = require "lib.bump.bump"
+
+-- NEW
+require "lib.batteries":export()
 baton = require "lib.input.baton"
 gamera = require "lib.camera.gamera"
 math.pi = 3.14159265
@@ -71,7 +75,7 @@ function SetupResources()
     resourceManager:addResource(droneEnemy, "drone sprite")
 
     local wandererEnemy = love.graphics.newImage("game/assets/sprites/enemy/wanderer.png")
-    resourceManager:addResource(wandererEnemy, "wanderer enemy sprite")
+    resourceManager:addResource(wandererEnemy, "wanderer sprite")
 
     local wandererTail = love.graphics.newImage("game/assets/sprites/enemy/wanderertail.png")
     resourceManager:addResource(wandererTail, "wanderer tail sprite")

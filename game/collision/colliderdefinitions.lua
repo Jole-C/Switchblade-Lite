@@ -1,4 +1,3 @@
-
 local colliderDefinitions = {
     player = "player",
     enemy = "enemy",

@@ -1,4 +1,4 @@
-local gameobject = require "game.objects.gameobject"
+--[[local gameobject = require "game.objects.gameobject"
 local collider = require "game.collision.collider"
 
 local wall = class{
@@ -26,4 +26,4 @@ local wall = class{
     end
 }
 
-return wall
+return wall]]

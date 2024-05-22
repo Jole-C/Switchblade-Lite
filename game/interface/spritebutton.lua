@@ -1,29 +1,27 @@
-local textButton = require "game.interface.menubutton"
+local menuButton = require "game.interface.menubutton"
+local spriteButton = class({name = "Sprite Button", extends = menuButton})
 
-local spriteButton = class{
-    __includes = menuButton,
+function spriteButton:new(spriteName, restX, restY, selectedX, selectedY, execute)
+    self:super(restX, restY, selectedX, selectedY, execute)
+
+    self.sprite = resourceManager:getResource(spriteName)
+end
+
+function spriteButton:draw()
+    menuButton.draw(self)
     
-    sprite,
-
-    init = function(self, spriteName, restX, restY, selectedX, selectedY, execute)
-        menuButton.init(self, restX, restY, selectedX, selectedY, execute)
-        self.sprite = resourceManager:getResource(spriteName)
-    end,
-
-    draw = function(self)
-        if not self.sprite then
-            return
-        end
-
-        local xOffset, yOffset = self.sprite:getDimensions()
-        xOffset = xOffset/2
-        yOffset = yOffset/2
-        
-        love.graphics.setColor(self.drawColour)
-        love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
-
-        love.graphics.setColor(1, 1, 1, 1)
+    if not self.sprite then
+        return
     end
-}
+
+    local xOffset, yOffset = self.sprite:getDimensions()
+    xOffset = xOffset/2
+    yOffset = yOffset/2
+    
+    love.graphics.setColor(self.drawColour)
+    love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+
+    love.graphics.setColor(1, 1, 1, 1)
+end
 
 return spriteButton

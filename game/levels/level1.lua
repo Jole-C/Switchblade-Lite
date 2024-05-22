@@ -8,9 +8,9 @@ local levelDefinition =
 {
     enemyDefinitions =
     {
-        ["wanderer"] = wanderer,
-        ["charger"] = charger,
-        ["drone"] = drone,
+        ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer sprite"},
+        ["charger"] = {enemyClass = charger, spriteName = "charger sprite"},
+        ["drone"] = {enemyClass = drone, spriteName = "drone sprite"},
         ["utility"] = utility,
         ["specialist"] = specialist,
     },

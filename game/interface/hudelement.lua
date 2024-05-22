@@ -1,18 +1,15 @@
-local hudElement = class{
+local hudElement = class({name = "Base Hud Element"})
 
-    drawColour = {1, 1, 1, 1},
+function hudElement:new()
+    self.drawColour = {1, 1, 1, 1}
+end
 
-    init = function(self)
+function hudElement:update(dt)
+    
+end
 
-    end,
+function hudElement:draw()
 
-    update = function(self)
-        
-    end,
-
-    draw = function(self)
-
-    end
-}
+end
 
 return hudElement

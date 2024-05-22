@@ -1,26 +1,29 @@
 local hudElement = require "game.interface.hudelement"
+local playerHud = class({name = "Player Hud", extends = hudElement})
 
-local playerHud = class{
-    __includes = hudElement,
+function playerHud:new()
+    self:super()
+
+    self.playerReference = nil
+end
+
+function playerHud:update()
+    hudElement.update(self)
+
+    self.playerReference = playerManager.playerReference
+end
+
+function playerHud:draw()
+    hudElement.draw(self)
     
-    playerReference,
-
-    init = function(self)
-    end,
-
-    update = function(self)
-        self.playerReference = playerManager.playerReference
-    end,
-
-    draw = function(self)
-        if self.playerReference == nil then
-            return
-        end
-        love.graphics.setFont(resourceManager:getResource("font main"))
-        love.graphics.print(math.floor(self.playerReference.shipTemperature), 10, 10)
-        love.graphics.print(self.playerReference.health, 10, 20)
-        love.graphics.print(math.abs(math.ceil(self.playerReference.ammo)), 10, 30)
+    if self.playerReference == nil then
+        return
     end
-}
+
+    love.graphics.setFont(resourceManager:getResource("font main"))
+    love.graphics.print(math.floor(self.playerReference.shipTemperature), 10, 10)
+    love.graphics.print(self.playerReference.health, 10, 20)
+    love.graphics.print(math.abs(math.ceil(self.playerReference.ammo)), 10, 30)
+end
 
 return playerHud

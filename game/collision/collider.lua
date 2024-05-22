@@ -1,11 +1,8 @@
-local collider = class{
-    colliderDefinition = "",
-    owner,
+local collider = class({name = "Collider"})
 
-    init = function(self, colliderDefinition, owner)
-        self.colliderDefinition = colliderDefinition
-        self.owner = owner
-    end
-}
+function collider:new(colliderDefinition, owner)
+    self.colliderDefinition = colliderDefinition
+    self.owner = owner
+end
 
 return collider
