@@ -28,7 +28,8 @@ local bullet = class{
         self:updateBullet(dt)
 
         -- Update the collider position and check it for collisions
-        local world = gamestate.current().world
+        local currentGamestate = gamestate.current()
+        local world = currentGamestate.world
 
         if world and world:hasItem(self.collider) then
             local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -39,6 +40,13 @@ local bullet = class{
 
             if world:hasItem(self.collider) then
                 world:update(self.collider, colliderPositionX, colliderPositionY)
+            end
+        end
+
+        -- Destroy the bullet if it's not in the arena
+        if currentGamestate.arena then
+            if currentGamestate.arena:isPositionWithinArena(self.position) == false then
+                self:destroy()
             end
         end
     end,
