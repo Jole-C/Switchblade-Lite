@@ -31,6 +31,9 @@ local gameManager = class{
     isPaused = false,
     pauseManager,
 
+    freezeFrames = 0,
+    gameFrozen = false,
+
     optionsFile = "options.txt",
 
     init = function(self)
@@ -92,6 +95,10 @@ local gameManager = class{
         if self.pauseManager then
             self.pauseManager:update(dt)
         end
+
+        self.freezeFrames = self.freezeFrames - 1 * dt
+
+        self.gameFrozen = self.freezeFrames > 0
     end,
 
     draw = function(self)
@@ -105,6 +112,10 @@ local gameManager = class{
         end
 
         self.currentPlayerDefinition = chosenDefinition
+    end,
+
+    setFreezeFrames = function(self, freezeFrames)
+        self.freezeFrames = freezeFrames/50
     end,
 
     togglePausing = function(self)

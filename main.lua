@@ -16,7 +16,7 @@ worldY = -600
 worldWidth = 600
 worldHeight = 600
 arenaPosition = vector.new((worldWidth + worldX)/2, (worldHeight + worldY)/2)
-arenaRadius = 200
+arenaRadius = 100
 
 -- System requirements
 require "game.misc.mathhelpers"
@@ -333,7 +333,7 @@ function love.update(dt)
     input:update()
     gameManager:update(dt)
 
-    if gameManager.isPaused then
+    if gameManager.isPaused or gameManager.gameFrozen then
         return
     end
     

@@ -43,6 +43,10 @@ local enemy = class{
 
         self.isInvulnerable = true
         self.invulnerableTimer = timer.after(self.invulnerableTime, function() self:setVulnerable() end)
+
+        if gameManager then
+            gameManager:setFreezeFrames(3)
+        end
     end,
 
     setVulnerable = function(self)
