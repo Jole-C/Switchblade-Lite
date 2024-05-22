@@ -13,7 +13,36 @@ local levelDefinition =
         ["drone"] = drone,
         ["utility"] = utility,
         ["specialist"] = specialist,
-    }, 
+    },
+    
+    arenaSegmentDefinitions =
+    {
+        ["mainCircle"] = {
+            position = {
+                x = 0, 
+                y = 0
+            },
+
+            radius = 100
+        },
+        ["leftCircle"] = {
+            position = {
+                x = -100, 
+                y = 0
+            },
+
+            radius = 80
+        },
+        ["rightCircle"] = {
+            position = {
+                x = 100, 
+                y = 0
+            },
+
+            radius = 80
+        },
+    },
+
     level =
     {
         -- A wave of enemies

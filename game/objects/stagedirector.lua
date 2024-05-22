@@ -22,6 +22,7 @@ local stageDirector = class{
     waveDefinitions = {},
     enemyDefinitions = {},
     enemySpawnList = {},
+    arenaSegments = {},
     currentWaveIndex = 0,
     spawnTime,
     maxWave = 0,
@@ -47,6 +48,21 @@ local stageDirector = class{
         self.waveDefinitions = self.levelDefinition.level
         self.maxWave = #self.levelDefinition.level
         self.enemyDefinitions = self.levelDefinition.enemyDefinitions
+
+        for name, segment in pairs(self.levelDefinition.arenaSegmentDefinitions) do
+            if segment then
+                self.arenaSegments[name] = {
+                    position = vector.new(segment.position.x, segment.position.y),
+                    radius = segment.radius
+                }
+
+                local currentGamestate = gamestate.current()
+                
+                if currentGamestate.arena and self.arenaSegments[name] then
+                    currentGamestate.arena:addArenaSegment(self.arenaSegments[name])
+                end
+            end
+        end
 
         -- Initialise variables
         self.spawnTime = self.maxSpawnTime
@@ -308,6 +324,7 @@ local stageDirector = class{
 
     cleanup = function(self)
         self.alertElement = nil
+        self.arenaSegments = nil
     end
 }
 
