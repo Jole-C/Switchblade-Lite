@@ -49,8 +49,8 @@ local charger = class{
         -- Reverse the enemy's position if it reaches the border
         self.wallBounceCheckPosition = self.position + movementDirection * self.checkDistance
 
-        if currentGamestate.arena:getDistanceToArena(self.wallBounceCheckPosition) > arenaRadius then
-            self.angle = self.angle + math.pi
+        if currentGamestate.arena:isPositionWithinArena(self.wallBounceCheckPosition) == false then
+            self.angle = self.angle + math.pi / 2
         end
 
         -- Update the tail
