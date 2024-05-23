@@ -1,22 +1,20 @@
+local gamestate = require "game.gamestates.gamestate"
 local gameoverMenu = require "game.menu.gameover.gameovermenu"
 
-local gameOverState = gamestate.new()
-
-function gameOverState:init()
-    self.name = "menu"
-    self.objects = {}
-end
+local gameOverState = class({name = "Gameover State", extends = gamestate})
 
 function gameOverState:enter()
     camera:setWorld(0, 0, screenWidth, screenHeight)
     camera:setPosition(screenWidth/2, screenHeight/2)
     interfaceRenderer:clearElements()
 
+    self.objects = {}
+    
     local menu = gameoverMenu()
     self:addObject(menu)
 end
 
-function gameOverState:leave()
+function gameOverState:exit()
     for i = 1, #self.objects do
         local object = self.objects[i]
 

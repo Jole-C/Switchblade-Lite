@@ -1,10 +1,7 @@
+local gamestate = require "game.gamestates.gamestate"
 local mainMenu = require "game.menu.mainmenu.mainmenu"
 
-local menuState = gamestate.new()
-
-function menuState:init()
-    self.name = "menu"
-end
+local menuState = class({name = "Menu State", extends = gamestate})
 
 function menuState:enter()
     collectgarbage("collect")
@@ -12,10 +9,11 @@ function menuState:enter()
     camera:setWorld(0, 0, screenWidth, screenHeight)
     camera:setPosition(screenWidth/2, screenHeight/2)
     interfaceRenderer:clearElements()
+    
     self.menu = mainMenu()
 end
 
-function menuState:leave()
+function menuState:exit()
     self.menu:destroy()
     self.menu = nil
     interfaceRenderer:clearElements()

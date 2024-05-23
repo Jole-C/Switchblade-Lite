@@ -18,7 +18,7 @@ function drone:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    gamestate.current().world:add(self.collider, self.position.x, self.position.y, 8, 8)
+    gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 8, 8)
 
     self.tail = tail("charger tail sprite", 15, 1)
     self.eye = eye(3, 2)
@@ -33,8 +33,8 @@ function drone:update(dt)
     self.velocity = (self.velocity + steeringVelocity):trim_length_inplace(self.maxSpeed)
 
     -- Clamp the enemy's position
-    if gamestate.current().arena then
-        self.position = gamestate.current().arena:getClampedPosition(self.position + self.velocity)
+    if gameStateMachine:current_state().arena then
+        self.position = gameStateMachine:current_state().arena:getClampedPosition(self.position + self.velocity)
     end
 
     -- Update the angle of the enemy
@@ -57,7 +57,7 @@ function drone:update(dt)
     end
 
     -- Update the collider
-    local world = gamestate.current().world
+    local world = gameStateMachine:current_state().world
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -94,9 +94,9 @@ function drone:draw()
 end
 
 function drone:cleanup()
-    local world = gamestate.current().world
+    local world = gameStateMachine:current_state().world
     if world and world:hasItem(self.collider) then
-        gamestate.current().world:remove(self.collider)
+        gameStateMachine:current_state().world:remove(self.collider)
     end
 end
 

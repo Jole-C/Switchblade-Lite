@@ -24,7 +24,7 @@ function playerLaser:update(dt)
         self:destroy()
     end
 
-    local world = gamestate.current().world
+    local world = gameStateMachine:current_state().world
 
     if world then
         local x1 = self.position.x
@@ -60,7 +60,7 @@ function playerLaser:update(dt)
                     local reflectedAngle = math.atan2(reflectedVector.y, reflectedVector.x)
                     local newPlayerLaser = self.subLaserclass(x, y, reflectedAngle + math.pi, self.damage, self.colliderDefinition, self.bouncesLeft - 1, self.subLaserClass)
                     newPlayerLaser.lifetime = self.lifetime
-                    gamestate.current():addObject(newPlayerLaser)
+                    gameStateMachine:current_state():addObject(newPlayerLaser)
                 end
             end
 

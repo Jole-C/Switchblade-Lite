@@ -46,7 +46,7 @@ function stageDirector:new(levelDefinition)
                 radius = segment.radius
             }
 
-            local currentGamestate = gamestate.current()
+            local currentGamestate = gameStateMachine:current_state()
             
             if currentGamestate.arena and self.arenaSegments[name] then
                 currentGamestate.arena:addArenaSegment(self.arenaSegments[name])
@@ -87,7 +87,7 @@ function stageDirector:update(dt)
 
             -- If all resets have happened, start the run
             if self.currentIntroCount <= 0 then
-                local arena = gamestate.current().arena
+                local arena = gameStateMachine:current_state().arena
 
                 if arena then
                     arena:enableIntro()
@@ -107,7 +107,7 @@ function stageDirector:update(dt)
     local player = playerManager.playerReference
 
     if playerManager and playerManager:doesPlayerExist() == false then
-        gamestate.switch(gameoverState)
+        gameStateMachine:set_state("gameOverState")
     end
 
     -- Handle level timer
@@ -128,7 +128,7 @@ function stageDirector:update(dt)
     self.spriteScaleFrequency = self.spriteScaleFrequency + self.spriteScaleFrequencyChange * dt
 
     -- Handle enemy spawns and wave changing
-    local currentGamestate = gamestate.current()
+    local currentGamestate = gameStateMachine:current_state()
 
     if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
         -- If no enemies are alive, switch to the next wave
@@ -160,7 +160,7 @@ function stageDirector:update(dt)
             for i = 1, #self.enemySpawnList do
                 local nextSpawn = self.enemySpawnList[i]
                 local newEnemy = nextSpawn.enemyClass(nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y)
-                gamestate.current():addObject(newEnemy)
+                gameStateMachine:current_state():addObject(newEnemy)
             end
 
             self.inWaveTransition = false

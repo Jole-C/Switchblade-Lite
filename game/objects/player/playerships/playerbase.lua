@@ -56,7 +56,7 @@ function player:new(x, y)
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    gamestate.current().world:add(self.collider, 0, 0, 10, 10)
+    gameStateMachine:current_state().world:add(self.collider, 0, 0, 10, 10)
 
     self.sprite = resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
@@ -121,7 +121,7 @@ function player:updateShipShooting(dt, movementDirection)
     if self.canFire == true and input:down("shoot") then
         local firePosition = self.position + (movementDirection * self.fireOffset)
         local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, 8, 8)
-        gamestate.current():addObject(newBullet)
+        gameStateMachine:current_state():addObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
         
@@ -173,7 +173,7 @@ function player:updateOverheating(dt)
 end
 
 function player:updatePosition()
-    local arena = gamestate.current().arena
+    local arena = gameStateMachine:current_state().arena
 
     if not arena then
         return
@@ -198,7 +198,7 @@ function player:updatePosition()
 end
 
 function player:checkCollision()
-    local world = gamestate.current().world
+    local world = gameStateMachine:current_state().world
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -310,9 +310,9 @@ function player:onHit(damage)
 end
 
 function player:cleanup()
-    local world = gamestate.current().world
+    local world = gameStateMachine:current_state().world
     if world and world:hasItem(self.collider) then
-        gamestate.current().world:remove(self.collider)
+        gameStateMachine:current_state().world:remove(self.collider)
     end
 end
 

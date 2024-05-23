@@ -1,23 +1,17 @@
+local gamestate = require "game.gamestates.gamestate"
 local stageDirector = require "game.objects.stagedirector"
 local enemyManager = require "game.objects.enemy.enemymanager"
 local level = require "game.levels.level1"
 local arena = require "game.objects.arena"
 
-local gameLevelState = gamestate.new()
-
-function gameLevelState:init()
-    self.objects = {}
-    self.world = nil
-    self.enemymanager = nil
-    self.stageDirector = nil
-    self.arena = nil
-    self.name = "game level"
-end
+local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
 function gameLevelState:enter()
     camera:setWorld(worldX, worldY, worldWidth * 2, worldHeight * 2)
     interfaceRenderer:clearElements()
 
+    self.objects = {}
+    
     self.world = bump.newWorld()
 
     self.arena = arena()

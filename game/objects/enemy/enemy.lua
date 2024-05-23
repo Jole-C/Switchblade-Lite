@@ -17,7 +17,7 @@ function enemy:new(x, y, spriteName)
     self.sprite = resourceManager:getResource(spriteName)
     
     -- Register the enemy
-    local currentGamestate = gamestate.current()
+    local currentGamestate = gameStateMachine:current_state()
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:registerEnemy(self)
     end
@@ -57,7 +57,7 @@ function enemy:cleanup()
         timer.clear(self.invulnerableTimer)
     end
 
-    local currentGamestate = gamestate.current()
+    local currentGamestate = gameStateMachine:current_state()
 
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:unregisterEnemy(self)

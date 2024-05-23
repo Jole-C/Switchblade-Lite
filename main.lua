@@ -28,11 +28,6 @@ local gameDirector = require "game.gamemanager"
 local playerHandler = require "game.objects.player.playermanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
 
--- Get the gamestates
-menuState = require "game.gamestates.menustate"
-gameLevelState = require "game.gamestates.gamelevelstate"
-gameoverState = require "game.gamestates.gameoverstate"
-
 -- Set up the input
 input = baton.new{
     controls = {
@@ -326,8 +321,8 @@ function love.load()
         ps:update(dt)
     end  
     
-    -- Set up the gamestate
-    gamestate.switch(menuState)
+    -- Set up the gamestate machine
+    gameStateMachine = require "game.gamestates.gamestatemachine"
 end
 
 function love.update(dt)
@@ -337,8 +332,11 @@ function love.update(dt)
     if gameManager.isPaused or gameManager.gameFrozen then
         return
     end
+
+    if gameStateMachine then
+        gameStateMachine:update(dt)
+    end
     
-    gamestate.update(dt)
     playerManager:update(dt)
     timer.update(dt)
 
@@ -370,10 +368,12 @@ function love.draw()
         love.graphics.clear()
         love.graphics.setBlendMode("alpha")
 
-        local currentGamestate = gamestate.current()
+        if gameStateMachine then
+            gameStateMachine:draw(dt)
+        end
         
-        gamestate.current():draw()
-
+        local currentGamestate = gameStateMachine:current_state()
+        
         if currentGamestate.objects then
             for key,object in ipairs(currentGamestate.objects) do
                 object:draw()

@@ -12,11 +12,11 @@ function gameoverMenu:new()
             elements =
                 {
                 textButton("retry", "font ui", 10, 10, 15, 10, function(self)
-                    gamestate.switch(gameLevelState)
+                    gameStateMachine:set_state("gameLevelState")
                 end),
 
                 textButton("quit to menu", "font ui", 10, 25, 15, 25, function()
-                    gamestate.switch(menuState)
+                    gameStateMachine:set_state("menuState")
                 end),
             }
         }

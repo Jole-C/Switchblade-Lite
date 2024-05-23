@@ -145,17 +145,17 @@ function mainMenu:new()
             {
                 textButton("level 1", "font ui", 10, 10, 15, 10, function()
                     gameManager:changePlayerDefinition("default definition")
-                    gamestate.switch(gameLevelState)
+                    gameStateMachine:set_state("gameLevelState")
                 end),
 
                 textButton("level 2", "font ui", 10, 25, 15, 25, function()
                     gameManager:changePlayerDefinition("light definition")
-                    gamestate.switch(gameLevelState)
+                    gameStateMachine:set_state("gameLevelState")
                 end),
 
                 textButton("level 3", "font ui", 10, 40, 15, 40, function()
                     gameManager:changePlayerDefinition("heavy definition")
-                    gamestate.switch(gameLevelState)
+                    gameStateMachine:set_state("gameLevelState")
                 end),
 
                 textButton("back", "font ui", 10, 65, 15, 65, function(self)

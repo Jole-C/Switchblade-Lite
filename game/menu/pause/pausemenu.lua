@@ -26,7 +26,7 @@ function pauseMenu:new()
                 end),
 
                 textButton("quit", "font ui", 10, 65, 15, 65, function()
-                    gamestate.switch(menuState)
+                    gameStateMachine:set_state("menuState")
                     gameManager:togglePausing()
                 end),
             }
@@ -39,7 +39,7 @@ function pauseMenu:new()
                 text("are you sure?", "font ui", false, 10, 10),
 
                 textButton("yes", "font ui", 10, 25, 15, 25, function()
-                    gamestate.switch(gameLevelState)
+                    gameStateMachine:set_state("gameLevelState")
                     gameManager:togglePausing()
                 end),
 

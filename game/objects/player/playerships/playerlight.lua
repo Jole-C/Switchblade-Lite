@@ -92,7 +92,7 @@ function playerLight:updateShipShooting(dt, movementDirection)
     if self.canFire == true and input:down("shoot") then
         local firePosition = self.position + (movementDirection * self.fireOffset)
         local newBullet = playerLaser(firePosition.x, firePosition.y, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, self.laserBounces, playerLaser)
-        gamestate.current():addObject(newBullet)
+        gameStateMachine:current_state():addObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
         
@@ -104,7 +104,7 @@ function playerLight:updateShipShooting(dt, movementDirection)
 end
 
 function playerLight:checkCollision()
-    local world = gamestate.current().world
+    local world = gameStateMachine:current_state().world
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -140,7 +140,7 @@ function playerLight:update(dt)
     -- Update the hud
     self:updateHud()
 
-    local currentGamestate = gamestate.current()
+    local currentGamestate = gameStateMachine:current_state()
     if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
         return
     end
