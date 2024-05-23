@@ -63,6 +63,14 @@ function vec2:trim_length_inplace(max_length)
     return self
 end
 
+--angle between
+function vec2:angle_between(other)
+	if other then
+		return math.atan2(other.y - self.y, other.x - self.x)
+	end
+	return math.atan2(self.y, self.x)
+end
+
 --unpack for multi-args
 function vec2:unpack()
 	return self.x, self.y
