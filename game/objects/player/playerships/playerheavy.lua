@@ -126,7 +126,7 @@ function playerHeavy:checkCollision()
             end
 
             if colliderDefinition == colliderDefinitions.enemy then
-                if self.velocity:len() > self.speedForContactDamage then
+                if self.velocity:length() > self.speedForContactDamage then
                     if collidedObject.onHit then
                         collidedObject:onHit(self.boostDamage)
 
@@ -158,7 +158,7 @@ function playerHeavy:update(dt)
     end
 
     -- Create a vector holding the direction the ship is expected to move in
-    local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)

@@ -8,7 +8,7 @@ function toggleButton:new(text, font, restX, restY, selectedX, selectedY, defaul
     self.font = resourceManager:getResource(font)
     self.selectedSprite = resourceManager:getResource("selected box")
     self.unselectedSprite = resourceManager:getResource("unselected box")
-    self.spritePosition = vector.new(restX + 130, restY)
+    self.spritePosition = vec2(restX + 130, restY)
     self.bool = defaultValue == 1
     self.referenceToSet = referenceToSet
 end
@@ -25,8 +25,6 @@ function toggleButton:execute()
 end
 
 function toggleButton:draw()
-    menuButton.draw(self)
-    
     love.graphics.setColor(self.drawColour)
     love.graphics.setFont(self.font)
 

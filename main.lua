@@ -2,7 +2,6 @@
 
 -- OLD
 gamestate = require "lib.hump.gamestate"
-vector = require "lib.hump.vector"
 timer = require "lib.hump.timer"
 bump = require "lib.bump.bump"
 

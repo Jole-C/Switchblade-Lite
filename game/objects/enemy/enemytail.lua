@@ -4,7 +4,7 @@ function enemyTail:new(spriteName, waveFrequency, waveAmplitude)
     self.tailAngleWaveFrequency = waveFrequency
     self.tailAngleWaveAmplitude = waveAmplitude
 
-    self.tailSpritePosition = vector.new(0, 0)
+    self.tailSpritePosition = vec2(0, 0)
     self.tailAngleWave = 0
     self.tailAngleWaveAmount = 0
     self.tailAngleWaveFrequency = 0

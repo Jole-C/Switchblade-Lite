@@ -97,7 +97,7 @@ function arenaController:getClampedPosition(position)
         if segment then
             local positionToSegment = (segment.position - position)
 
-            if positionToSegment:len() < segment.radius then
+            if positionToSegment:length() < segment.radius then
                 return position
             end
         end
@@ -113,15 +113,15 @@ function arenaController:getClampedPosition(position)
 
         if segment then
             local positionToSegment = (position - segment.position)
-            local normalized = positionToSegment:normalized()
+            local normalise = positionToSegment:normalise()
 
-            normalized = normalized * segment.radius
+            normalise = normalise * segment.radius
 
-            local edgePosition = segment.position + normalized
+            local edgePosition = segment.position + normalise
             local edgeToPosition = (position - edgePosition)
 
-            if edgeToPosition:len() < minDistance then
-                minDistance = edgeToPosition:len()
+            if edgeToPosition:length() < minDistance then
+                minDistance = edgeToPosition:length()
                 closestCircle = segment
                 closestEdgePosition = edgePosition
             end
@@ -132,7 +132,7 @@ function arenaController:getClampedPosition(position)
         return closestEdgePosition
     end
 
-    return position:trimmed(arenaRadius)
+    return position:min_inplace(arenaRadius)
 end
 
 function arenaController:getDistanceToArena(position)
@@ -142,7 +142,7 @@ function arenaController:getDistanceToArena(position)
         if segment then
             local positionToSegment = (segment.position - position)
 
-            return positionToSegment:len()
+            return positionToSegment:length()
         end
     end
 end
@@ -154,7 +154,7 @@ function arenaController:isPositionWithinArena(position)
         if segment then
             local positionToSegment = (segment.position - position)
 
-            if positionToSegment:len() < segment.radius then
+            if positionToSegment:length() < segment.radius then
                 return true
             end
         end

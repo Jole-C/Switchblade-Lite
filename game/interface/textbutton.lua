@@ -12,8 +12,6 @@ function textButton:new(text, font, restX, restY, selectedX, selectedY, execute,
 end
 
 function textButton:draw()
-    menuButton.draw(self)
-    
     love.graphics.setColor(self.drawColour)
     love.graphics.setFont(self.font)
 

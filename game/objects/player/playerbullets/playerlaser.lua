@@ -5,8 +5,8 @@ function playerLaser:new(x, y, angle, damage, colliderDefinition, bouncesLeft, s
     self.damage = damage
     self.length = screenWidth * 2
 
-    self.position = vector.new(x, y)
-    self.circlePosition = vector.new(0, 0)
+    self.position = vec2(x, y)
+    self.circlePosition = vec2(0, 0)
     self.angle = angle
 
     self.sprite = resourceManager:getResource("player laser sprite")
@@ -54,7 +54,7 @@ function playerLaser:update(dt)
                 end
             elseif colliderDefinition == colliderDefinitions.wall and self.bouncesLeft > 0 then
                 if collidedObject.normal then
-                    local angleVector = vector.new(math.cos(self.angle), math.sin(self.angle))
+                    local angleVector = vec2(math.cos(self.angle), math.sin(self.angle))
                     local dot = collidedObject.normal * angleVector
                     local reflectedVector = angleVector:mirrorOn(collidedObject.normal)
                     local reflectedAngle = math.atan2(reflectedVector.y, reflectedVector.x)

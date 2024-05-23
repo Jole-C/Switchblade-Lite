@@ -1,7 +1,7 @@
 local gameObject = class({name = "Game Object"})
 
 function gameObject:new(x, y)
-    self.position = vector.new(x, y)
+    self.position = vec2(x, y)
     self.markedForDelete = false
 end
 

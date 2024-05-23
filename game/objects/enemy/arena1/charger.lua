@@ -14,8 +14,8 @@ function charger:new(x, y)
 
     -- Variables
     self.angle = love.math.random(0, 6)
-    self.wallBounceCheckPosition = vector.new(0, 0)
-    self.eyeOffset = vector.new(0, 0)
+    self.wallBounceCheckPosition = vec2(0, 0)
+    self.eyeOffset = vec2(0, 0)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -34,7 +34,7 @@ function charger:update(dt)
     end
 
     -- Move the enemy
-    local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
     self.position = currentGamestate.arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
 
     -- Reverse the enemy's position if it reaches the border

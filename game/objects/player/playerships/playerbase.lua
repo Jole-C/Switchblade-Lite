@@ -42,7 +42,7 @@ function player:new(x, y)
     -- Ship variables
     self.health = self.maxHealth
     self.angle = 0
-    self.velocity = vector.new(0, 0)
+    self.velocity = vec2(0, 0)
     self.isBoosting = false
     self.isOverheating = false
     self.shipTemperature = 0
@@ -185,7 +185,7 @@ function player:updatePosition()
         trimmedSpeed = self.maxBoostingSpeed
     end
 
-    self.velocity = self.velocity:trimmed(trimmedSpeed)
+    self.velocity = self.velocity:trim_length_inplace(trimmedSpeed)
     
     if arena:isPositionWithinArena(self.position + self.velocity) == false then
         self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
@@ -256,7 +256,7 @@ function player:update(dt)
     self:updateHud()
     
     -- Create a vector holding the direction the ship is expected to move in
-    local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)

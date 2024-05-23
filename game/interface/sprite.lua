@@ -5,17 +5,15 @@ function spriteHudElement:new(sprite, x, y, angle, scaleX, scaleY, offsetX, offs
     self:super()
     
     self.sprite = resourceManager:getResource(sprite)
-    self.position = vector.new(x, y)
+    self.position = vec2(x, y)
     self.angle = angle
-    self.scale = vector.new(scaleX, scaleY)
-    self.offset = vector.new(offsetX, offsetY)
+    self.scale = vec2(scaleX, scaleY)
+    self.offset = vec2(offsetX, offsetY)
     self.centerSprite = centerSprite
     self.overrideDrawColour = overrideDrawColour
 end
 
 function spriteHudElement:draw()
-    hudElement.draw(self)
-    
     if not self.sprite then
         return
     end

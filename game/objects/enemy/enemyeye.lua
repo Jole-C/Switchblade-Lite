@@ -3,8 +3,8 @@ local enemyEye = class({name = "EnemyEye"})
 function enemyEye:new(eyeDistance, eyeRadius)
     self.eyeDistance = eyeDistance
     self.eyeRadius = eyeRadius
-    self.eyeBasePosition = vector.new(0, 0)
-    self.eyePosition = vector.new(0, 0)
+    self.eyeBasePosition = vec2(0, 0)
+    self.eyePosition = vec2(0, 0)
 end
 
 function enemyEye:update()
@@ -12,7 +12,7 @@ function enemyEye:update()
         return
     end
 
-    local eyeAngle = self.eyeBasePosition:angleTo(playerManager.playerReference.position)
+    local eyeAngle = self.eyeBasePosition:angle_difference(playerManager.playerReference.position)
     self.eyePosition.x = self.eyeBasePosition.x + math.cos(eyeAngle) * self.eyeDistance
     self.eyePosition.y = self.eyeBasePosition.y + math.sin(eyeAngle) * self.eyeDistance
 end

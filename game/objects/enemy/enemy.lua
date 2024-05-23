@@ -24,8 +24,6 @@ function enemy:new(x, y, spriteName)
 end
 
 function enemy:update(dt)
-    gameObject.update(self, dt)
-
     if self.invulnerableTimer then
         self.invulnerableTimer:update()
     end

@@ -1,7 +1,7 @@
 local playerManager = class({name = "Player Manager"})
 
 function playerManager:new()
-    self.playerPosition = vector.new(0, 0)
+    self.playerPosition = vec2(0, 0)
     self.playerReference = nil
 end
 

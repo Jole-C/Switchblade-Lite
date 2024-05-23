@@ -4,7 +4,7 @@ local slider = class({name = "Menu Slider", extends = interactiveHudElement})
 function slider:new(text, font, value, minValue, maxValue, x, y, referenceToSet)
     self:super()
     
-    self.position = vector.new(x, y)
+    self.position = vec2(x, y)
     self.value = value
     self.minValue = minValue
     self.maxValue = maxValue
@@ -34,8 +34,6 @@ function slider:checkForInteractions()
 end
 
 function slider:draw()
-    interactiveHudElement.draw(self)
-
     love.graphics.setColor(self.drawColour)
     love.graphics.setFont(self.font)
 

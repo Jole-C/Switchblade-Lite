@@ -14,7 +14,7 @@ function drone:new(x, y)
 
     -- Variables
     self.angle = 0
-    self.velocity = vector.new(0, 0)
+    self.velocity = vec2(0, 0)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -28,9 +28,9 @@ function drone:update(dt)
     -- Move the enemy using seek steering behaviour
     local playerPosition = playerManager.playerPosition
 
-    local targetVelocity = (playerPosition - self.position):normalized() * self.maxSpeed * dt
-    local steeringVelocity = (targetVelocity - self.velocity):trimmed(self.maxSteeringForce) * dt
-    self.velocity = (self.velocity + steeringVelocity):trimmed(self.maxSpeed)
+    local targetVelocity = (playerPosition - self.position):normalise_inplace() * self.maxSpeed * dt
+    local steeringVelocity = (targetVelocity - self.velocity):trim_length_inplace(self.maxSteeringForce) * dt
+    self.velocity = (self.velocity + steeringVelocity):trim_length_inplace(self.maxSpeed)
 
     -- Clamp the enemy's position
     if gamestate.current().arena then

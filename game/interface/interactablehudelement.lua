@@ -9,7 +9,6 @@ function interactableHudElement:new()
 end
 
 function interactableHudElement:update(dt)
-    hudElement.update(self, dt)
 
     if self.isSelected then
         self.drawColour = gameManager.currentPalette.uiSelectedColour
@@ -25,7 +24,6 @@ function interactableHudElement:update(dt)
 end
 
 function interactableHudElement:draw()
-    hudElement.update(self)
 end
 
 function interactableHudElement:updateHudElement()

@@ -15,7 +15,7 @@ function wanderer:new(x, y)
     -- Variables
     self.targetAngle = love.math.random(0, math.pi * 2)
     self.angleChangeCooldown = self.secondsBetweenAngleChange
-    self.eyeOffset = vector.new(0, 0)
+    self.eyeOffset = vec2(0, 0)
     self.angle = 0
 
     -- Components
@@ -30,7 +30,7 @@ function wanderer:update(dt)
     -- Move the enemy and lerp its angle to the target angle
     self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.01)
 
-    local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
     -- Clamp the enemy's position to the world border
     if gamestate.current().arena then

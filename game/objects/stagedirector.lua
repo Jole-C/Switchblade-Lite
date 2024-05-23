@@ -42,7 +42,7 @@ function stageDirector:new(levelDefinition)
     for name, segment in pairs(self.levelDefinition.arenaSegmentDefinitions) do
         if segment then
             self.arenaSegments[name] = {
-                position = vector.new(segment.position.x, segment.position.y),
+                position = vec2(segment.position.x, segment.position.y),
                 radius = segment.radius
             }
 
@@ -251,7 +251,7 @@ function stageDirector:startWave()
 
                 table.insert(self.enemySpawnList, {
                     enemyClass = self.enemyDefinitions[enemyDef.enemyID].enemyClass,
-                    spawnPosition = vector.new(pointX, pointY),
+                    spawnPosition = vec2(pointX, pointY),
                     spriteName = self.enemyDefinitions[enemyDef.enemyID].spriteName,
                     angle = math.random(0, 2*math.pi)
                 })
@@ -266,27 +266,27 @@ function stageDirector:startWave()
             assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
 
             for i = 1, #generatedShape.points do
-                local point1 = vector.new(generatedShape.points[i].x, generatedShape.points[i].y)
+                local point1 = vec2(generatedShape.points[i].x, generatedShape.points[i].y)
                 local point2 = nil
 
                 if #generatedShape.points > 2 then
                     if i == #generatedShape.points then
-                        point2 = vector.new(generatedShape.points[1].x, generatedShape.points[1].y)
+                        point2 = vec2(generatedShape.points[1].x, generatedShape.points[1].y)
                     else
-                        point2 = vector.new(generatedShape.points[i + 1].x, generatedShape.points[i + 1].y)
+                        point2 = vec2(generatedShape.points[i + 1].x, generatedShape.points[i + 1].y)
                     end
                 else
                     if i == #generatedShape.points then
                         return
                     end
 
-                    point2 = vector.new(generatedShape.points[2].x, generatedShape.points[2].y)
+                    point2 = vec2(generatedShape.points[2].x, generatedShape.points[2].y)
                 end
 
-                local pointSpacing = (point2 - point1):len()/enemiesPerLine
+                local pointSpacing = (point2 - point1):length()/enemiesPerLine
                 
                 for i = 1, enemiesPerLine do
-                    local vectorBetweenPoints = (point2 - point1):normalized()
+                    local vectorBetweenPoints = (point2 - point1):normalise()
                     local enemyPosition = point1 + (vectorBetweenPoints * ((i * pointSpacing) - pointSpacing/2))
 
                     table.insert(self.enemySpawnList, {
@@ -304,7 +304,7 @@ function stageDirector:startWave()
                 local currentDef = enemyDefs[i]
 
                 for j = 1, currentDef.spawnCount do
-                    local position = vector.new()
+                    local position = vec2()
                     position.x = currentDef.x
                     position.y = currentDef.y
 

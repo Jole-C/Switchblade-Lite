@@ -4,9 +4,9 @@ local menuButton = class({name = "Menu Button", extends = interactiveHudElement}
 function menuButton:new(restX, restY, selectedX, selectedY, execute)
     self:super()
     
-    self.position = vector.new(restX, restY)
-    self.selectedPosition = vector.new(selectedX, selectedY)
-    self.restPosition = vector.new(restX, restY)
+    self.position = vec2(restX, restY)
+    self.selectedPosition = vec2(selectedX, selectedY)
+    self.restPosition = vec2(restX, restY)
     self.execute = execute
     self.lerpSpeed = 0.2
 end

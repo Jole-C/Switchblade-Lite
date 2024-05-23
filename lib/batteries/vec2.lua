@@ -54,6 +54,15 @@ function vec2:zero()
 	return vec2(0)
 end
 
+--trim in place
+function vec2:trim_length_inplace(max_length)
+    local length = self:length()
+    if length > max_length then
+        self:scalar_mul_inplace(max_length / length)
+    end
+    return self
+end
+
 --unpack for multi-args
 function vec2:unpack()
 	return self.x, self.y

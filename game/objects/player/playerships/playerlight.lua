@@ -146,7 +146,7 @@ function playerLight:update(dt)
     end
     
     -- Create a vector holding the direction the ship is expected to move in
-    local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)

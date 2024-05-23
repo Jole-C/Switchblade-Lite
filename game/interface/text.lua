@@ -5,7 +5,7 @@ function textElement:new(text, fontName, centerText, x, y)
     self:super()
 
     self.text = text
-    self.position = vector.new(x, y)
+    self.position = vec2(x, y)
     self.centerText = centerText
     self.font = resourceManager:getResource(fontName)
 end

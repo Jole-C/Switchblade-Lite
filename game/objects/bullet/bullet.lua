@@ -15,8 +15,6 @@ function bullet:new(x, y, speed, angle, damage, colliderDefinition, width, heigh
 end
 
 function bullet:update(dt)
-    gameObject.update(self, dt)
-
     -- Update the bullet logic, position etc
     self:updateBullet(dt)
 
@@ -54,8 +52,6 @@ function bullet:checkCollision(x, y)
 end
 
 function bullet:draw()
-    gameObject.draw(self)
-    
     love.graphics.circle("fill", self.position.x, self.position.y, 5)
 end
 

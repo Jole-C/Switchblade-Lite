@@ -1,7 +1,7 @@
 local renderCanvas = class({name = "Render Canvas"})
 
 function renderCanvas:new(name, width, height)
-    self.dimensions = vector.new(width, height)
+    self.dimensions = vec2(width, height)
     self.name = name
     self.enabled = true
 

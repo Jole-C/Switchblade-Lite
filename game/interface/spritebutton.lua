@@ -8,8 +8,6 @@ function spriteButton:new(spriteName, restX, restY, selectedX, selectedY, execut
 end
 
 function spriteButton:draw()
-    menuButton.draw(self)
-    
     if not self.sprite then
         return
     end
