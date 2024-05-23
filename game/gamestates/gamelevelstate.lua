@@ -7,7 +7,6 @@ local gameLevelState = gamestate.new()
 
 function gameLevelState:init()
     self.objects = {}
-    self.expiredObjects = {}
     self.world = nil
     self.enemymanager = nil
     self.stageDirector = nil
@@ -39,20 +38,17 @@ function gameLevelState:update(dt)
         gameManager:togglePausing()
     end
 
-    for index,object in ipairs(self.objects) do
-        if object.markedForDelete == true then
-            table.insert(self.expiredObjects, object)
-            object.gamestateIndex = index
-        else
-            object:update(dt)
+    for i = #self.objects, 1, -1 do
+        local object = self.objects[i]
+
+        if object then
+            if object.markedForDelete == true then
+                table.remove(self.objects, i)
+            else
+                object:update(dt)
+            end
         end
     end
-
-    for i = 1, #self.expiredObjects do
-        self:removeObject(self.expiredObjects[i].gamestateIndex)
-    end
-
-    self.expiredObjects = {}
 end
 
 function gameLevelState:draw()
