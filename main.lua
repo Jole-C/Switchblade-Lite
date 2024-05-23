@@ -1,8 +1,6 @@
 -- Library requirements
 
 -- OLD
-gamestate = require "lib.hump.gamestate"
-timer = require "lib.hump.timer"
 bump = require "lib.bump.bump"
 
 -- NEW
@@ -338,7 +336,6 @@ function love.update(dt)
     end
     
     playerManager:update(dt)
-    timer.update(dt)
 
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
     ps:update(dt/7 * gameManager.options.speedPercentage/100)
