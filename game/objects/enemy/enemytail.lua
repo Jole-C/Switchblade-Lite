@@ -1,10 +1,10 @@
 local enemyTail = class({name = "Enemy Tail"})
 
-function enemyTail:new(spriteName, waveFrequency, waveAmplitude)
+function enemyTail:new(spriteName, spriteX, spriteY, waveFrequency, waveAmplitude)
     self.tailAngleWaveFrequency = waveFrequency
     self.tailAngleWaveAmplitude = waveAmplitude
 
-    self.tailSpritePosition = vec2(0, 0)
+    self.tailSpritePosition = vec2(spriteX or 0, spriteY or 0)
     self.tailAngleWave = 0
     self.tailAngleWaveAmount = 0
     self.tailAngleWaveFrequency = 0

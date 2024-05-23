@@ -1,10 +1,10 @@
 local enemyEye = class({name = "EnemyEye"})
 
-function enemyEye:new(eyeDistance, eyeRadius)
+function enemyEye:new(baseX, baseY, eyeDistance, eyeRadius)
     self.eyeDistance = eyeDistance
     self.eyeRadius = eyeRadius
-    self.eyeBasePosition = vec2(0, 0)
-    self.eyePosition = vec2(0, 0)
+    self.eyeBasePosition = vec2(baseX or 0, baseY or 0)
+    self.eyePosition = vec2(baseX or 0, baseY or 0)
 end
 
 function enemyEye:update()

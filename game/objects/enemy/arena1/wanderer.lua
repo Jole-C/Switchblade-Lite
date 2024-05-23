@@ -22,8 +22,8 @@ function wanderer:new(x, y)
     self.collider = collider(colliderDefinitions.enemy, self)
     gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 8, 8)
 
-    self.tail = tail("wanderer tail sprite", 15, 1)
-    self.eye = eye(2, 2)
+    self.tail = tail("wanderer tail sprite", x, y, 15, 1)
+    self.eye = eye(x, y, 2, 2)
 end
 
 function wanderer:update(dt)

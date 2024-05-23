@@ -19,15 +19,15 @@ function charger:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 8, 8)
+    gameStateMachine:current_state().world:add(self.collider, x, y, 8, 8)
 
-    self.tail = tail("charger tail sprite", 15, 1)
-    self.eye = eye(2, 2)
+    self.tail = tail("charger tail sprite", self.position.x, self.position.y, 15, 1)
+    self.eye = eye(x, y, 2, 2)
 end
 
 function charger:update(dt)
     enemy.update(self, dt)
-    
+
     local currentGamestate = gameStateMachine:current_state()
     local arena = currentGamestate.arena
 
