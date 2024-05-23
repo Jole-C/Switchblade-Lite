@@ -1,4 +1,4 @@
-local gameobject = require "game.objects.gameobject"
+--[[local gameobject = require "game.objects.gameobject"
 local collider = require "game.collision.collider"
 
 local wall = class{
@@ -12,18 +12,18 @@ local wall = class{
     init = function(self, x, y, w, h, normal)
         gameobject.init(self, x, y)
 
-        self.dimensions = vector.new(w, h)
+        self.dimensions = vec2(w, h)
         self.collider = collider(colliderDefinitions.wall, self)
         self.normal = normal
-        gamestate.current().world:add(self.collider, self.position.x, self.position.y, self.dimensions.x, self.dimensions.y)
+        gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, self.dimensions.x, self.dimensions.y)
     end,
 
     cleanup = function(self)
-        local world = gamestate.current().world
+        local world = gameStateMachine:current_state().world
         if world and world:hasItem(self.collider) then
             world:remove(self.collider)
         end
     end
 }
 
-return wall
+return wall]]

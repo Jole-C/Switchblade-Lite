@@ -1,70 +1,72 @@
 local playerBase = require "game.objects.player.playerships.playerbase"
+local playerDefault = class({name = "Player Default", extends = playerBase})
 
-local playerDefault = class{
-    __includes = playerBase,
-    
+function playerDefault:new(x, y)
     -- Generic parameters of the ship
-    maxHealth = 3,
+    self.maxHealth = 3
+    self.spriteName = "player default"
 
     -- Movement parameters of the ship
-    steeringSpeedMoving = 6,
-    steeringSpeedStationary = 14,
-    steeringSpeedBoosting = 3,
-    accelerationSpeed = 3,
-    boostingAccelerationSpeed = 4,
-    friction = 1,
-    maxSpeed = 3,
-    maxBoostingSpeed = 6,
-    maxShipTemperature = 100,
-    shipHeatAccumulationRate = 1,
-    shipCoolingRate = 40,
-    shipOverheatCoolingRate = 20,
-    boostDamage = 5,
-    boostEnemyHitHeatAccumulation = 7,
-    contactDamageHeatMultiplier = 10,
-    boostingInvulnerableGracePeriod = 1,
-    invulnerableGracePeriod = 3,
+    self.steeringSpeedMoving = 6
+    self.steeringSpeedStationary = 14
+    self.steeringSpeedBoosting = 3
+    self.accelerationSpeed = 3
+    self.boostingAccelerationSpeed = 4
+    self.friction = 1
+    self.maxSpeed = 3
+    self.maxBoostingSpeed = 6
+    self.maxShipTemperature = 100
+    self.shipHeatAccumulationRate = 1
+    self.shipCoolingRate = 40
+    self.shipOverheatCoolingRate = 20
+    self.boostDamage = 5
+    self.boostEnemyHitHeatAccumulation = 7
+    self.contactDamageHeatMultiplier = 10
+    self.boostingInvulnerableGracePeriod = 1
+    self.invulnerableGracePeriod = 3
 
     -- Firing parameters of the ship
-    maxFireCooldown = 0.05,
-    bulletSpeed = 5,
-    bulletDamage = 3,
-    maxAmmo = 30,
-    shipKnockbackForce = 10,
-    fireOffset = 10,
+    self.maxFireCooldown = 0.05
+    self.bulletSpeed = 5
+    self.bulletDamage = 3
+    self.maxAmmo = 30
+    self.shipKnockbackForce = 10
+    self.fireOffset = 10
 
-    update = function(self, dt)
-        -- Update the hud
-        self:updateHud()
+    self:super(x, y)
+end
 
-        local currentGamestate = gamestate.current()
-        if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
-            return
-        end
-        
-        -- Create a vector holding the direction the ship is expected to move in
-        local movementDirection = vector.new(math.cos(self.angle), math.sin(self.angle))
+function playerDefault:update(dt)
+    -- Update the hud
+    self:updateHud()
 
-        -- Handle ship functionality, moving boosting and firing
-        self:updateShipMovement(dt, movementDirection)
-        self:updateShipShooting(dt, movementDirection)
-        
-        -- Handle game timers
-        self:updatePlayerTimers(dt)
+    local currentGamestate = gameStateMachine:current_state()
+    if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
+        return
+    end
+    
+    -- Create a vector holding the direction the ship is expected to move in
+    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
-        -- Handle overheating
-        self:updateOverheating(dt)
+    -- Handle ship functionality, moving boosting and firing
+    self:updateShipMovement(dt, movementDirection)
+    self:updateShipShooting(dt, movementDirection)
+    
+    -- Handle game timers
+    self:updatePlayerTimers(dt)
 
-        -- Apply the velocity to the ship and then apply friction
-        self:updatePosition()
-        self:applyFriction(dt)
+    -- Handle overheating
+    self:updateOverheating(dt)
 
-        -- Wrap the ship's position
-        self:wrapShipPosition()
+    -- Apply the velocity to the ship and then apply friction
+    self:updatePosition()
+    self:applyFriction(dt)
 
-        -- Check collision
-        self:checkCollision()
-    end,
-}
+    -- Wrap the ship's position
+    self:wrapShipPosition()
+
+    -- Check collision
+    self:checkCollision()
+end
 
 return playerDefault

@@ -1,69 +1,69 @@
-local gameobject = require "game.objects.gameobject"
+local gameObject = require "game.objects.gameobject"
+local enemy = class({name = "Enemy", extends = gameObject})
 
-local enemy = class{
-    __includes = gameobject,
+function enemy:new(x, y, spriteName)
+    self:super(x, y)
 
-    contactDamage = 1,
-    spriteName = "",
+    -- Parameters
+    self.contactDamage = 1
+    self.health = 0
+    self.maxInvulnerableTime = 0.5
+
+    -- Variables
+    self.isInvulnerable = false
+    self.invulnerableTime = self.maxInvulnerableTime
+
+    -- Components
+    self.sprite = resourceManager:getResource(spriteName)
     
-    health = 0,
-    invulnerableTimer,
-    invulnerableTime = 0.5,
-    isInvulnerable = false,
-
-    sprite,
-
-    init = function(self, x, y, spriteName)
-        gameobject.init(self, x, y)
-        self.sprite = resourceManager:getResource(spriteName)
-
-        local currentGamestate = gamestate.current()
-        
-        if currentGamestate.enemyManager then
-            currentGamestate.enemyManager:registerEnemy(self)
-        end
-    end,
-
-    update = function(self, dt)
-        if self.invulnerableTimer then
-            self.invulnerableTimer:update()
-        end
-    end,
-
-    onHit = function(self, damage)
-        if self.isInvulnerable == true then
-            return
-        end
-
-        self.health = self.health - damage
-
-        if self.health <= 0 then
-            self:destroy()
-        end
-
-        self.isInvulnerable = true
-        self.invulnerableTimer = timer.after(self.invulnerableTime, function() self:setVulnerable() end)
-
-        if gameManager then
-            gameManager:setFreezeFrames(3)
-        end
-    end,
-
-    setVulnerable = function(self)
-        self.isInvulnerable = false
-    end,
-
-    cleanup = function(self)
-        if self.invulnerableTimer then
-            timer.clear(self.invulnerableTimer)
-        end
-
-        local currentGamestate = gamestate.current()
-
-        if currentGamestate.enemyManager then
-            currentGamestate.enemyManager:unregisterEnemy(self)
-        end
+    -- Register the enemy
+    local currentGamestate = gameStateMachine:current_state()
+    if currentGamestate.enemyManager then
+        currentGamestate.enemyManager:registerEnemy(self)
     end
-}
+end
+
+function enemy:update(dt)
+    self.invulnerableTime = self.invulnerableTime - 1 * dt
+
+    if self.invulnerableTime <= 0 then
+        self.isInvulnerable = false
+    end
+end
+
+function enemy:onHit(damage)
+    if self.isInvulnerable == true then
+        return
+    end
+
+    self.health = self.health - damage
+
+    if self.health <= 0 then
+        self:destroy()
+    end
+
+    self.isInvulnerable = true
+    self.invulnerableTime = self.maxInvulnerableTime
+
+    if gameManager then
+        gameManager:setFreezeFrames(3)
+    end
+end
+
+function enemy:setVulnerable()
+    self.isInvulnerable = false
+end
+
+function enemy:cleanup()
+    if self.invulnerableTimer then
+        timer.clear(self.invulnerableTimer)
+    end
+
+    local currentGamestate = gameStateMachine:current_state()
+
+    if currentGamestate.enemyManager then
+        currentGamestate.enemyManager:unregisterEnemy(self)
+    end
+end
 
 return enemy

@@ -1,12 +1,8 @@
 -- Library requirements
-gamestate = require "lib.hump.gamestate"
-class = require "lib.hump.class"
-vector = require "lib.hump.vector"
-timer = require "lib.hump.timer"
+require "lib.batteries":export()
 bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
 gamera = require "lib.camera.gamera"
-math.pi = 3.14159265
 
 -- Set up the arena
 screenWidth = 320
@@ -24,11 +20,6 @@ local interface = require "game.interface.interfacerenderer"
 local gameDirector = require "game.gamemanager"
 local playerHandler = require "game.objects.player.playermanager"
 colliderDefinitions = require "game.collision.colliderdefinitions"
-
--- Get the gamestates
-menuState = require "game.gamestates.menustate"
-gameLevelState = require "game.gamestates.gamelevelstate"
-gameoverState = require "game.gamestates.gameoverstate"
 
 -- Set up the input
 input = baton.new{
@@ -71,7 +62,7 @@ function SetupResources()
     resourceManager:addResource(droneEnemy, "drone sprite")
 
     local wandererEnemy = love.graphics.newImage("game/assets/sprites/enemy/wanderer.png")
-    resourceManager:addResource(wandererEnemy, "wanderer enemy sprite")
+    resourceManager:addResource(wandererEnemy, "wanderer sprite")
 
     local wandererTail = love.graphics.newImage("game/assets/sprites/enemy/wanderertail.png")
     resourceManager:addResource(wandererTail, "wanderer tail sprite")
@@ -323,8 +314,8 @@ function love.load()
         ps:update(dt)
     end  
     
-    -- Set up the gamestate
-    gamestate.switch(menuState)
+    -- Set up the gamestate machine
+    gameStateMachine = require "game.gamestates.gamestatemachine"
 end
 
 function love.update(dt)
@@ -334,10 +325,12 @@ function love.update(dt)
     if gameManager.isPaused or gameManager.gameFrozen then
         return
     end
+
+    if gameStateMachine then
+        gameStateMachine:update(dt)
+    end
     
-    gamestate.update(dt)
     playerManager:update(dt)
-    timer.update(dt)
 
     ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
     ps:update(dt/7 * gameManager.options.speedPercentage/100)
@@ -367,10 +360,12 @@ function love.draw()
         love.graphics.clear()
         love.graphics.setBlendMode("alpha")
 
-        local currentGamestate = gamestate.current()
+        if gameStateMachine then
+            gameStateMachine:draw(dt)
+        end
         
-        gamestate.current():draw()
-
+        local currentGamestate = gameStateMachine:current_state()
+        
         if currentGamestate.objects then
             for key,object in ipairs(currentGamestate.objects) do
                 object:draw()

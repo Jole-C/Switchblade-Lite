@@ -1,30 +1,25 @@
+local gameObject = class({name = "Game Object"})
 
+function gameObject:new(x, y)
+    self.position = vec2(x, y)
+    self.markedForDelete = false
+end
 
-local gameobject = class{
-    position,
-    name = "",
-    markedForDelete = false,
+function gameObject:update(dt)
 
-    init = function(self, x, y)
-        self.position = vector.new(x, y)
-    end,
+end
 
-    update = function(self, dt)
+function gameObject:draw()
 
-    end,
+end
 
-    draw = function(self)
+function gameObject:destroy()
+    self:cleanup()
+    self.markedForDelete = true
+end
 
-    end,
+function gameObject:cleanup()
 
-    destroy = function(self)
-        self:cleanup()
-        self.markedForDelete = true
-    end,
+end
 
-    cleanup = function(self)
-
-    end
-}
-
-return gameobject
+return gameObject

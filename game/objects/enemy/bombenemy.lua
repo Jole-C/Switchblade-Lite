@@ -1,4 +1,4 @@
-local enemy = require "game.objects.enemy.enemy"
+--[[local enemy = require "game.objects.enemy.enemy"
 
 local bombEnemy = class{
     __includes = enemy,
@@ -8,9 +8,10 @@ local bombEnemy = class{
     cleanup = function(self)
         enemy.cleanup(self)
         
-        local world = gamestate.current().world
+        local world = gameStateMachine:current_state().world
         if world and world:hasItem(self.collider) then
-            gamestate.current().world:remove(self.collider)
+            gameStateMachine:current_state().world:remove(self.collider)
         end
     end
 }
+]]

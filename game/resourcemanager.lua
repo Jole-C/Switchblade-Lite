@@ -1,25 +1,27 @@
-local resourceManager = class{
-    resources = {},
+local resourceManager = class({name = "Resource Manager"})
 
-    addResource = function(self, resource, identifier)
-        self.resources[identifier] = resource
-        
-        if resource.setFilter then
-            resource:setFilter("nearest", "nearest")
-        end
-    end,
+function resourceManager:new()
+    self.resources = {}
+end
 
-    removeResource = function(self, identifier)
-        self.resources[identifier] = nil
-    end,
-
-    getResource = function(self, identifier)
-        return self.resources[identifier]
-    end,
-
-    updateResource = function(self, newResource, identifier)
-        self.resources[identifier] = newResource
+function resourceManager:addResource(resource, identifier)
+    self.resources[identifier] = resource
+    
+    if resource.setFilter then
+        resource:setFilter("nearest", "nearest")
     end
-}
+end
+
+function resourceManager:removeResource(identifier)
+    self.resources[identifier] = nil
+end
+
+function resourceManager:getResource(identifier)
+    return self.resources[identifier]
+end
+
+function resourceManager:updateResource(newResource, identifier)
+    self.resources[identifier] = newResource
+end
 
 return resourceManager

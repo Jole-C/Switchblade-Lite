@@ -1,24 +1,17 @@
+local gamestate = require "game.gamestates.gamestate"
 local stageDirector = require "game.objects.stagedirector"
 local enemyManager = require "game.objects.enemy.enemymanager"
 local level = require "game.levels.level1"
 local arena = require "game.objects.arena"
 
-local gameLevelState = gamestate.new()
-
-function gameLevelState:init()
-    self.objects = {}
-    self.expiredObjects = {}
-    self.world = nil
-    self.enemymanager = nil
-    self.stageDirector = nil
-    self.arena = nil
-    self.name = "game level"
-end
+local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
 function gameLevelState:enter()
     camera:setWorld(worldX, worldY, worldWidth * 2, worldHeight * 2)
     interfaceRenderer:clearElements()
 
+    self.objects = {}
+    
     self.world = bump.newWorld()
 
     self.arena = arena()
@@ -39,20 +32,17 @@ function gameLevelState:update(dt)
         gameManager:togglePausing()
     end
 
-    for index,object in ipairs(self.objects) do
-        if object.markedForDelete == true then
-            table.insert(self.expiredObjects, object)
-            object.gamestateIndex = index
-        else
-            object:update(dt)
+    for i = #self.objects, 1, -1 do
+        local object = self.objects[i]
+
+        if object then
+            if object.markedForDelete == true then
+                table.remove(self.objects, i)
+            else
+                object:update(dt)
+            end
         end
     end
-
-    for i = 1, #self.expiredObjects do
-        self:removeObject(self.expiredObjects[i].gamestateIndex)
-    end
-
-    self.expiredObjects = {}
 end
 
 function gameLevelState:draw()

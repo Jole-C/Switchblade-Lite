@@ -1,25 +1,21 @@
 local pauseMenu = require "game.menu.pause.pausemenu"
 local rect = require "game.interface.rect"
+local pauseManager = class({name = "Pause Manager"})
 
-local pauseManager = class{
-    menu = {},
-    background,
+function pauseManager:new()
+    self.background = rect(-100, -100, screenWidth + 100, screenHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
+    interfaceRenderer:addHudElement(self.background)
 
-    init = function(self)
-        self.background = rect(-100, -100, screenWidth + 100, screenHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
-        interfaceRenderer:addHudElement(self.background)
+    self.menu = pauseMenu()
+end
 
-        self.menu = pauseMenu()
-    end,
+function pauseManager:update(dt)
+    self.menu:update(dt)
+end
 
-    update = function(self, dt)
-        self.menu:update(dt)
-    end,
-
-    destroy = function(self)
-        interfaceRenderer:removeHudElement(self.background)
-        self.menu:destroy()
-    end
-}
+function pauseManager:destroy()
+    interfaceRenderer:removeHudElement(self.background)
+    self.menu:destroy()
+end
 
 return pauseManager

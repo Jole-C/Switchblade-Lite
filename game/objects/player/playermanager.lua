@@ -1,36 +1,36 @@
-local playerManager = class{
-    playerReference,
-    playerPosition,
+local playerManager = class({name = "Player Manager"})
 
-    init = function(self)
-        self.playerPosition = vector.new(0, 0)
-    end,
+function playerManager:new()
+    self.playerPosition = vec2(0, 0)
+    self.playerReference = nil
+end
 
-    spawnPlayer = function(self, x, y)
-        local newPlayer = gameManager.currentPlayerDefinition.shipClass(x, y)
-        self.playerReference = newPlayer
+function playerManager:spawnPlayer(x, y)
+    local newPlayer = gameManager.currentPlayerDefinition.shipClass(x, y)
+    self.playerReference = newPlayer
 
-        return newPlayer
-    end,
+    return newPlayer
+end
 
-    destroyPlayer = function(self, x, y)
+function playerManager:destroyPlayer(x, y)
+    if self.playerReference then
         self.playerReference:destroy()
         self.playerReference = nil
-    end,
+    end
+end
 
-    doesPlayerExist = function(self)
-        return self.playerReference ~= nil
-    end,
+function playerManager:doesPlayerExist()
+    return self.playerReference ~= nil
+end
 
-    update = function(self)
-        if self.playerReference then
-            self.playerPosition = self.playerReference.position
+function playerManager:update()
+    if self.playerReference then
+        self.playerPosition = self.playerReference.position
 
-            if self.playerReference.health <= 0 then
-                self.playerReference = nil
-            end
+        if self.playerReference.health <= 0 then
+            self.playerReference = nil
         end
     end
-}
+end
 
 return playerManager

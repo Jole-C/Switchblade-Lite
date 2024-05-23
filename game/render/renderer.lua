@@ -1,69 +1,70 @@
-local renderCanvas = class{
-    name = "",
-    dimensions,
-    canvas,
-    enabled = true,
+local renderCanvas = class({name = "Render Canvas"})
 
-    init = function(self, name, width, height)
-        self.dimensions = vector.new(width, height)
-        self.name = name
+function renderCanvas:new(name, width, height)
+    self.dimensions = vec2(width, height)
+    self.name = name
+    self.enabled = true
 
-        self.canvas = love.graphics.newCanvas(self.dimensions.x, self.dimensions.y)
+    self.canvas = love.graphics.newCanvas(self.dimensions.x, self.dimensions.y)
+end
+
+local renderer = class({name = "Renderer"})
+
+function renderer:new()
+    self.renderCanvases = {}
+end
+
+function renderer:addRenderCanvas(canvasName, width, height)
+    local newCanvas = renderCanvas(canvasName, width, height)
+    table.insert(self.renderCanvases, newCanvas)
+    return newCanvas
+end
+
+function renderer:removeRenderCanvas(canvasName)
+    local index = nil
+
+    for i = 1, #self.renderCanvases do
+        local canvas = self.renderCanvases[i]
+        
+        if canvas.name == canvasName then
+            index = i
+            break
+        end
     end
-}
 
-local renderer = class{
-    renderCanvases = {},
+    assert(index, "Canvas does not exist")
 
-    addRenderCanvas = function(self, canvasName, width, height)
-        local newCanvas = renderCanvas(canvasName, width, height)
-        table.insert(self.renderCanvases, newCanvas)
+    table.remove(self.renderCanvases, index)
+end
 
-        return newCanvas
-    end,
-
-    removeRenderCanvas = function(self, canvasName)
-        local element = self.renderCanvases[canvasName]
-        assert(element ~= nil, "Canvas does not exist")
-
-        table.remove(self.renderCanvases, canvasName)
-    end,
-
-    getRenderCanvas = function(self, canvasName)
-        local canvas = nil
-
-        for i = 1, #self.renderCanvases do
-            if self.renderCanvases[i].name == canvasName then
-                return canvas
-            end
+function renderer:getRenderCanvas(canvasName)
+    for i = 1, #self.renderCanvases do
+        local canvas = self.renderCanvases[i]
+        
+        if canvas.name == canvasName then
+            return canvas
         end
+    end
 
-        assert(canvas ~= nil, "Canvas does not exist")
+    assert(false, "Canvas does not exist")
+end
 
-        return canvas
-    end,
-    
-    update = function(self)
+function renderer:drawCanvases()
+    for i = 1, #self.renderCanvases do
+        local canvas = self.renderCanvases[i]
 
-    end,
+        if canvas and canvas.enabled then
+            local renderCanvas = canvas.canvas
+            local width = canvas.dimensions.x
+            local height = canvas.dimensions.y
 
-    drawCanvases = function(self)
-        for i = 1, #self.renderCanvases do
-            local canvas = self.renderCanvases[i]
+            local maxScaleX = love.graphics.getWidth() / renderCanvas:getWidth()
+            local maxScaleY = love.graphics.getHeight() / renderCanvas:getHeight()
+            local scale = math.min(maxScaleX, maxScaleY)
 
-            if canvas and canvas.enabled then
-                local renderCanvas = canvas.canvas
-                local width = canvas.dimensions.x
-                local height = canvas.dimensions.y
-
-                local maxScaleX = love.graphics.getWidth() / renderCanvas:getWidth()
-                local maxScaleY = love.graphics.getHeight() / renderCanvas:getHeight()
-                local scale = math.min(maxScaleX, maxScaleY)
-                
-                love.graphics.draw(renderCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, width / 2, height / 2)
-            end
+            love.graphics.draw(renderCanvas, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2, 0, scale, scale, width / 2, height / 2)
         end
-    end,
-}
+    end
+end
 
 return renderer

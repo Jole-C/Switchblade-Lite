@@ -1,50 +1,48 @@
-local interfaceRenderer = class{
-    hudElements = {},
+local interfaceRenderer = class({name = "Interface Renderer"})
 
-    init = function(self)
+function interfaceRenderer:new()
+    self.hudElements = {}
+end
 
-    end,
+function interfaceRenderer:addHudElement(element)
+    if not self.hudElements then
+        return
+    end
 
-    addHudElement = function(self, element)
-        if not self.hudElements then
+    table.insert(self.hudElements, element)
+end
+
+function interfaceRenderer:removeHudElement(elementToRemove)
+    if not self.hudElements then
+        return
+    end
+
+    for i = 1, #self.hudElements do
+        local element = self.hudElements[i]
+
+        if element and element == elementToRemove then
+            table.remove(self.hudElements, i)
             return
-        end
-
-        table.insert(self.hudElements, element)
-    end,
-
-    removeHudElement = function(self, elementToRemove)
-        if not self.hudElements then
-            return
-        end
-
-        for i = 1, #self.hudElements do
-            local element = self.hudElements[i]
-
-            if element and element == elementToRemove then
-                table.remove(self.hudElements, i)
-                return
-            end
-        end
-    end,
-
-    clearElements = function(self)
-        self.hudElements = {}
-    end,
-
-    draw = function(self)
-        if not self.hudElements or #self.hudElements == 0 then
-            return
-        end
-
-        for i = 1, #self.hudElements do
-            local element = self.hudElements[i]
-
-            if element then
-                element:draw()
-            end
         end
     end
-}
+end
+
+function interfaceRenderer:clearElements()
+    self.hudElements = {}
+end
+
+function interfaceRenderer:draw()
+    if not self.hudElements or #self.hudElements == 0 then
+        return
+    end
+
+    for i = 1, #self.hudElements do
+        local element = self.hudElements[i]
+
+        if element and element.draw then
+            element:draw()
+        end
+    end
+end
 
 return interfaceRenderer

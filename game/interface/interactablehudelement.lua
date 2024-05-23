@@ -1,42 +1,47 @@
 local hudElement = require "game.interface.hudelement"
+local interactableHudElement = class({name = "Interactable Hud Element", extends = hudElement})
 
-local interactableHudElement = class{
-    __includes = hudElement,
-    
-    isSelected = false,
-    owner = {},
+function interactableHudElement:new()
+    self:super()
 
-    update = function(self)
-        if self.isSelected then
-            self.drawColour = gameManager.currentPalette.uiSelectedColour
-        else
-            self.drawColour = gameManager.currentPalette.uiColour
-        end
-        
-        self:updateHudElement()
+    self.isSelected = false
+    self.owner = {}
+end
 
-        if self.isSelected == true then
-            self:checkForInteractions()
-        end
-    end,
+function interactableHudElement:update(dt)
 
-    updateHudElement = function(self)
-
-    end,
-
-    -- Used for things like sliders with left and right input
-    checkForInteractions = function(self)
-
-    end,
-
-    -- Used when enter is pressed on the button
-    execute = function(self)
-
-    end,
-
-    reset = function(self)
-        
+    if self.isSelected then
+        self.drawColour = gameManager.currentPalette.uiSelectedColour
+    else
+        self.drawColour = gameManager.currentPalette.uiColour
     end
-}
+    
+    self:updateHudElement()
+
+    if self.isSelected == true then
+        self:checkForInteractions()
+    end
+end
+
+function interactableHudElement:draw()
+end
+
+function interactableHudElement:updateHudElement()
+
+end
+
+-- Used for things like sliders with left and right input
+function interactableHudElement:checkForInteractions()
+
+end
+
+-- Used when enter is pressed on the button
+function interactableHudElement:execute()
+
+end
+
+function interactableHudElement:reset()
+
+end
 
 return interactableHudElement
