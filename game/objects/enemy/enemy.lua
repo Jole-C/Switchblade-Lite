@@ -7,13 +7,13 @@ function enemy:new(x, y, spriteName)
     -- Parameters
     self.contactDamage = 1
     self.health = 0
-    self.invulnerableTime = 0.5
+    self.maxInvulnerableTime = 0.5
 
     -- Variables
     self.isInvulnerable = false
+    self.invulnerableTime = self.maxInvulnerableTime
 
     -- Components
-    self.invulnerableTimer = nil
     self.sprite = resourceManager:getResource(spriteName)
     
     -- Register the enemy
@@ -24,8 +24,10 @@ function enemy:new(x, y, spriteName)
 end
 
 function enemy:update(dt)
-    if self.invulnerableTimer then
-        self.invulnerableTimer:update()
+    self.invulnerableTime = self.invulnerableTime - 1 * dt
+
+    if self.invulnerableTime <= 0 then
+        self.isInvulnerable = false
     end
 end
 
@@ -41,7 +43,7 @@ function enemy:onHit(damage)
     end
 
     self.isInvulnerable = true
-    self.invulnerableTimer = timer.after(self.invulnerableTime, function() self:setVulnerable() end)
+    self.invulnerableTime = self.maxInvulnerableTime
 
     if gameManager then
         gameManager:setFreezeFrames(3)

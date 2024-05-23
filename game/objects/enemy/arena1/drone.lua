@@ -25,6 +25,8 @@ function drone:new(x, y)
 end
 
 function drone:update(dt)
+    enemy.update(self, dt)
+    
     -- Move the enemy using seek steering behaviour
     local playerPosition = playerManager.playerPosition
 

@@ -1,13 +1,8 @@
 -- Library requirements
-
--- OLD
-bump = require "lib.bump.bump"
-
--- NEW
 require "lib.batteries":export()
+bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
 gamera = require "lib.camera.gamera"
-math.pi = 3.14159265
 
 -- Set up the arena
 screenWidth = 320

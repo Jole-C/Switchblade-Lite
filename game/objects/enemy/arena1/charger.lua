@@ -26,6 +26,8 @@ function charger:new(x, y)
 end
 
 function charger:update(dt)
+    enemy.update(self, dt)
+    
     local currentGamestate = gameStateMachine:current_state()
     local arena = currentGamestate.arena
 

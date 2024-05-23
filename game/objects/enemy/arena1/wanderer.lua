@@ -27,6 +27,8 @@ function wanderer:new(x, y)
 end
 
 function wanderer:update(dt)
+    enemy.update(self, dt)
+    
     -- Move the enemy and lerp its angle to the target angle
     self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.01)
 
