@@ -171,8 +171,8 @@ function love.load()
     game:start()
 
     -- Temporary particle system
-    local bgCol = gameManager.currentPalette.backgroundColour
-    ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
+    local bgCol = game.gameManager.currentPalette.backgroundColour
+    ps = love.graphics.newParticleSystem(game.resourceManager:getResource("particle sprite"), 1632)
     
     --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(-1.5707963705063)

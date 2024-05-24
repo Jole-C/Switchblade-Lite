@@ -81,7 +81,7 @@ function game:update(dt)
     self.gameStateMachine:update(dt)
     self.playerManager:update(dt)
 
-    ps:setColors(self.gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
+    ps:setColors(self.gameManager.currentPalette.backgroundColour[1], self.gameManager.currentPalette.backgroundColour[2], self.gameManager.currentPalette.backgroundColour[3], self.gameManager.currentPalette.backgroundColour[4])
     ps:update(dt/7 * self.gameManager.options.speedPercentage/100)
 end
 
@@ -98,7 +98,7 @@ function game:drawBackground()
 
     -- Draw the background
     love.graphics.setCanvas({self.canvases.backgroundCanvas.canvas, stencil = true})
-    love.graphics.setBackgroundColor(gameManager.currentPalette.backgroundColour[5])
+    love.graphics.setBackgroundColor(self.gameManager.currentPalette.backgroundColour[5])
     love.graphics.setBlendMode("alpha")
     
     if self.gameManager.options.enableBackground == 1 then
@@ -114,7 +114,7 @@ function game:drawBackground()
     love.graphics.setCanvas(self.canvases.backgroundShadowCanvas.canvas)
     love.graphics.clear()
 
-    local alpha = gameManager.options.fadingPercentage / 100
+    local alpha = self.gameManager.options.fadingPercentage / 100
     love.graphics.setColor(0.1, 0.1, 0.1, alpha)
     love.graphics.rectangle("fill", -100, -100, self.arenaValues.screenWidth + 100, self.arenaValues.screenHeight + 100)
     love.graphics.setCanvas()

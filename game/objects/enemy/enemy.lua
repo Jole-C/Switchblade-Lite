@@ -14,10 +14,10 @@ function enemy:new(x, y, spriteName)
     self.invulnerableTime = self.maxInvulnerableTime
 
     -- Components
-    self.sprite = resourceManager:getResource(spriteName)
+    self.sprite = game.resourceManager:getResource(spriteName)
     
     -- Register the enemy
-    local currentGamestate = gameStateMachine:current_state()
+    local currentGamestate = game.gameStateMachine:current_state()
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:registerEnemy(self)
     end
@@ -45,8 +45,8 @@ function enemy:onHit(damage)
     self.isInvulnerable = true
     self.invulnerableTime = self.maxInvulnerableTime
 
-    if gameManager then
-        gameManager:setFreezeFrames(3)
+    if game.gameManager then
+        game.gameManager:setFreezeFrames(3)
     end
 end
 
@@ -59,7 +59,7 @@ function enemy:cleanup()
         timer.clear(self.invulnerableTimer)
     end
 
-    local currentGamestate = gameStateMachine:current_state()
+    local currentGamestate = game.gameStateMachine:current_state()
 
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:unregisterEnemy(self)

@@ -4,7 +4,7 @@ local spriteHudElement = class({name = "Sprite", extends = hudElement})
 function spriteHudElement:new(sprite, x, y, angle, scaleX, scaleY, offsetX, offsetY, centerSprite, overrideDrawColour)
     self:super()
     
-    self.sprite = resourceManager:getResource(sprite)
+    self.sprite = game.resourceManager:getResource(sprite)
     self.position = vec2(x, y)
     self.angle = angle
     self.scale = vec2(scaleX, scaleY)
@@ -27,7 +27,7 @@ function spriteHudElement:draw()
         yOffset = yOffset/2
     end
     
-    local drawColour = gameManager.currentPalette.uiColour
+    local drawColour = game.gameManager.currentPalette.uiColour
 
     if self.overrideDrawColour then
         drawColour = self.overrideDrawColour

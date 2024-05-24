@@ -46,7 +46,7 @@ function stageDirector:new(levelDefinition)
                 radius = segment.radius
             }
 
-            local currentGamestate = gameStateMachine:current_state()
+            local currentGamestate = game.gameStateMachine:current_state()
             
             if currentGamestate.arena and self.arenaSegments[name] then
                 currentGamestate.arena:addArenaSegment(self.arenaSegments[name])
@@ -62,9 +62,9 @@ function stageDirector:new(levelDefinition)
 
     -- Set up the hud
     self.hud = stageTimeHud()
-    interfaceRenderer:addHudElement(self.hud)
+    game.interfaceRenderer:addHudElement(self.hud)
     self.alertElement = text(self.currentIntroCount, "font alert", true, -200, 0)
-    interfaceRenderer:addHudElement(self.alertElement)
+    game.interfaceRenderer:addHudElement(self.alertElement)
 end
 
 function stageDirector:update(dt)
@@ -87,7 +87,7 @@ function stageDirector:update(dt)
 
             -- If all resets have happened, start the run
             if self.currentIntroCount <= 0 then
-                local arena = gameStateMachine:current_state().arena
+                local arena = game.gameStateMachine:current_state().arena
 
                 if arena then
                     arena:enableIntro()
@@ -104,10 +104,10 @@ function stageDirector:update(dt)
     end
 
     -- Handle gameover state switching
-    local player = playerManager.playerReference
+    local player = game.playerManager.playerReference
 
-    if playerManager and playerManager:doesPlayerExist() == false then
-        gameStateMachine:set_state("gameOverState")
+    if game.playerManager and game.playerManager:doesPlayerExist() == false then
+        game.gameStateMachine:set_state("gameOverState")
     end
 
     -- Handle level timer
@@ -128,7 +128,7 @@ function stageDirector:update(dt)
     self.spriteScaleFrequency = self.spriteScaleFrequency + self.spriteScaleFrequencyChange * dt
 
     -- Handle enemy spawns and wave changing
-    local currentGamestate = gameStateMachine:current_state()
+    local currentGamestate = game.gameStateMachine:current_state()
 
     if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
         -- If no enemies are alive, switch to the next wave
@@ -160,7 +160,7 @@ function stageDirector:update(dt)
             for i = 1, #self.enemySpawnList do
                 local nextSpawn = self.enemySpawnList[i]
                 local newEnemy = nextSpawn.enemyClass(nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y)
-                gameStateMachine:current_state():addObject(newEnemy)
+                game.gameStateMachine:current_state():addObject(newEnemy)
             end
 
             self.inWaveTransition = false
@@ -174,12 +174,12 @@ function stageDirector:draw()
         for i = 1, #self.enemySpawnList do
             local nextSpawn = self.enemySpawnList[i]
 
-            local sprite = resourceManager:getResource(nextSpawn.spriteName)
+            local sprite = game.resourceManager:getResource(nextSpawn.spriteName)
             local xOffset, yOffset = sprite:getDimensions()
             xOffset = xOffset/2
             yOffset = yOffset/2
     
-            love.graphics.setColor(gameManager.currentPalette.enemySpawnColour)
+            love.graphics.setColor(game.gameManager.currentPalette.enemySpawnColour)
             love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
             love.graphics.setColor(1, 1, 1, 1)
         end

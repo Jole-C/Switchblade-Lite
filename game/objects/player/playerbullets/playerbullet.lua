@@ -2,7 +2,7 @@ local bullet = require "game.objects.bullet.bullet"
 local playerBullet = class({name = "Player Bullet", extends = bullet})
 
 function playerBullet:checkCollision(xx, yy)
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
     
     if world and world:hasItem(self.collider) then
         local x, y, cols, len = world:check(self.collider, xx, yy)
@@ -33,7 +33,7 @@ function playerBullet:checkCollision(xx, yy)
 end
 
 function playerBullet:draw()
-    love.graphics.setColor(gameManager.currentPalette.playerColour)
+    love.graphics.setColor(game.gameManager.currentPalette.playerColour)
     love.graphics.circle("fill", self.position.x, self.position.y, 5)
     love.graphics.setColor(1, 1, 1, 1)
 end

@@ -9,7 +9,7 @@ function slider:new(text, font, value, minValue, maxValue, x, y, referenceToSet)
     self.minValue = minValue
     self.maxValue = maxValue
     self.text = text
-    self.font = resourceManager:getResource(font)
+    self.font = game.resourceManager:getResource(font)
     self.lineLength = 75
     self.referenceToSet = referenceToSet
 end
@@ -17,11 +17,11 @@ end
 function slider:checkForInteractions()
     self.value = math.clamp(self.value, self.minValue, self.maxValue)
 
-    if input:down("menuLeft") and self.value > self.minValue then
+    if game.input:down("menuLeft") and self.value > self.minValue then
         self.value = self.value - 1
     end
 
-    if input:down("menuRight") and self.value < self.maxValue then
+    if game.input:down("menuRight") and self.value < self.maxValue then
         self.value = self.value + 1
     end
 

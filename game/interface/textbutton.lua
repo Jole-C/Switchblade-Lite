@@ -6,7 +6,7 @@ function textButton:new(text, font, restX, restY, selectedX, selectedY, execute,
 
     centerText = centerText or false
 
-    self.font = resourceManager:getResource(font)
+    self.font = game.resourceManager:getResource(font)
     self.text = text
     self.centerText = centerText
 end

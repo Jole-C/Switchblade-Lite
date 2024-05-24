@@ -4,7 +4,7 @@ local pauseManager = class({name = "Pause Manager"})
 
 function pauseManager:new()
     self.background = rect(-100, -100, screenWidth + 100, screenHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
-    interfaceRenderer:addHudElement(self.background)
+    game.interfaceRenderer:addHudElement(self.background)
 
     self.menu = pauseMenu()
 end
@@ -14,7 +14,7 @@ function pauseManager:update(dt)
 end
 
 function pauseManager:destroy()
-    interfaceRenderer:removeHudElement(self.background)
+    game.interfaceRenderer:removeHudElement(self.background)
     self.menu:destroy()
 end
 

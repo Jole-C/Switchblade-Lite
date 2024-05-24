@@ -6,9 +6,9 @@ local menuState = class({name = "Menu State", extends = gamestate})
 function menuState:enter()
     collectgarbage("collect")
     
-    camera:setWorld(0, 0, screenWidth, screenHeight)
-    camera:setPosition(screenWidth/2, screenHeight/2)
-    interfaceRenderer:clearElements()
+    game.camera:setWorld(0, 0, screenWidth, screenHeight)
+    game.camera:setPosition(screenWidth/2, screenHeight/2)
+    game.interfaceRenderer:clearElements()
     
     self.menu = mainMenu()
 end
@@ -16,7 +16,7 @@ end
 function menuState:exit()
     self.menu:destroy()
     self.menu = nil
-    interfaceRenderer:clearElements()
+    game.interfaceRenderer:clearElements()
 end
 
 function menuState:update(dt)

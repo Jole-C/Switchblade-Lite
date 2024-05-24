@@ -9,7 +9,7 @@ function playerLaser:new(x, y, angle, damage, colliderDefinition, bouncesLeft, s
     self.circlePosition = vec2(0, 0)
     self.angle = angle
 
-    self.sprite = resourceManager:getResource("player laser sprite")
+    self.sprite = game.resourceManager:getResource("player laser sprite")
 
     self.bouncesLeft = bouncesLeft
     if self.bouncesLeft > 0 then
@@ -24,7 +24,7 @@ function playerLaser:update(dt)
         self:destroy()
     end
 
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
 
     if world then
         local x1 = self.position.x
@@ -60,7 +60,7 @@ function playerLaser:update(dt)
                     local reflectedAngle = math.atan2(reflectedVector.y, reflectedVector.x)
                     local newPlayerLaser = self.subLaserclass(x, y, reflectedAngle + math.pi, self.damage, self.colliderDefinition, self.bouncesLeft - 1, self.subLaserClass)
                     newPlayerLaser.lifetime = self.lifetime
-                    gameStateMachine:current_state():addObject(newPlayerLaser)
+                    game.gameStateMachine:current_state():addObject(newPlayerLaser)
                 end
             end
 
@@ -78,7 +78,7 @@ function playerLaser:draw()
     xOffset = xOffset/2
     yOffset = yOffset/2
     
-    love.graphics.setColor(gameManager.currentPalette.playerColour)
+    love.graphics.setColor(game.gameManager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, self.length, 1, 0, yOffset)
 
     if self.bouncesLeft > 0 then

@@ -11,7 +11,7 @@ function enemyTail:new(spriteName, spriteX, spriteY, waveFrequency, waveAmplitud
     self.tailAngleWaveAmplitude = 0
     self.baseTailAngle = 0
 
-    self.sprite = resourceManager:getResource(spriteName)
+    self.sprite = game.resourceManager:getResource(spriteName)
 end
 
 function enemyTail:update(dt)
@@ -27,7 +27,7 @@ function enemyTail:draw()
     local xOffset, yOffset = self.sprite:getDimensions()
     yOffset = yOffset/2
 
-    love.graphics.setColor(gameManager.currentPalette.enemyColour)
+    love.graphics.setColor(game.gameManager.currentPalette.enemyColour)
     love.graphics.draw(self.sprite,  self.tailSpritePosition.x, self.tailSpritePosition.y, self.baseTailAngle + self.tailAngleWave, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
 end

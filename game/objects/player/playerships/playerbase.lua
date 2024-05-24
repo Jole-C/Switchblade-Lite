@@ -56,13 +56,13 @@ function player:new(x, y)
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    gameStateMachine:current_state().world:add(self.collider, 0, 0, 10, 10)
+    game.gameStateMachine:current_state().world:add(self.collider, 0, 0, 10, 10)
 
-    self.sprite = resourceManager:getResource(self.spriteName)
+    self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
 
     self.hud = playerHud()
-    interfaceRenderer:addHudElement(self.hud)
+    game.interfaceRenderer:addHudElement(self.hud)
 end
 
 function player:updateHud()
@@ -77,14 +77,14 @@ function player:updateShipMovement(dt, movementDirection)
 
     if self.isOverheating == false then
         -- Apply a forward thrust to the ship
-        if input:down("thrust") then
+        if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
             steeringSpeed = self.steeringSpeedMoving
         end
 
         -- Boost the ship
-        if input:down("boost") then
+        if game.input:down("boost") then
             self.isBoosting = true
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
@@ -94,7 +94,7 @@ function player:updateShipMovement(dt, movementDirection)
         end
 
         -- After boosting stops, set up the timer for post boosting invulnerability
-        if self.isBoosting == true and input:down("boost") == false then
+        if self.isBoosting == true and game.input:down("boost") == false then
             self.isBoosting = false
 
             self.isBoostingInvulnerable = true
@@ -102,11 +102,11 @@ function player:updateShipMovement(dt, movementDirection)
         end
 
         -- Steer the ship
-        if input:down("steerLeft") then
+        if game.input:down("steerLeft") then
             self.angle = self.angle - (steeringSpeed * dt)
         end
 
-        if input:down("steerRight") then
+        if game.input:down("steerRight") then
             self.angle = self.angle + (steeringSpeed * dt)
         end
     end
@@ -118,10 +118,10 @@ function player:updateShipShooting(dt, movementDirection)
         self.canFire = false
     end
 
-    if self.canFire == true and input:down("shoot") then
+    if self.canFire == true and game.input:down("shoot") then
         local firePosition = self.position + (movementDirection * self.fireOffset)
         local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, 8, 8)
-        gameStateMachine:current_state():addObject(newBullet)
+        game.gameStateMachine:current_state():addObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
         
@@ -173,7 +173,7 @@ function player:updateOverheating(dt)
 end
 
 function player:updatePosition()
-    local arena = gameStateMachine:current_state().arena
+    local arena = game.gameStateMachine:current_state().arena
 
     if not arena then
         return
@@ -194,11 +194,11 @@ function player:updatePosition()
     self.position = self.position + self.velocity
     self.position = arena:getClampedPosition(self.position)
 
-    camera:setPosition(self.position.x, self.position.y)
+    game.camera:setPosition(self.position.x, self.position.y)
 end
 
 function player:checkCollision()
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -224,10 +224,10 @@ function player:checkCollision()
 
                         if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
                             self.ammo = self.maxAmmo
-                            gameManager:swapPalette()
+                            game.gameManager:swapPalette()
 
-                            if gameManager then
-                                gameManager:setFreezeFrames(6)
+                            if game.gameManager then
+                                game.gameManager:setFreezeFrames(6)
                             end
                         end
                     end
@@ -288,7 +288,7 @@ function player:draw()
     xOffset = xOffset/2
     yOffset = yOffset/2
     
-    love.graphics.setColor(gameManager.currentPalette.playerColour)
+    love.graphics.setColor(game.gameManager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
 end
@@ -310,9 +310,9 @@ function player:onHit(damage)
 end
 
 function player:cleanup()
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
     if world and world:hasItem(self.collider) then
-        gameStateMachine:current_state().world:remove(self.collider)
+        game.gameStateMachine:current_state().world:remove(self.collider)
     end
 end
 
