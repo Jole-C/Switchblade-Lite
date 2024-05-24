@@ -47,32 +47,25 @@ local levelDefinition =
 
     level =
     {
-        -- A wave of enemies
         {
-            -- The definitions for how to spawn enemies
             spawnDefinitions = 
             {
-                -- A spawn definition
                 {
-                    -- The type of wave this is
                     waveType = "alongShapePerimeter",
 
-                    -- The enemy to spawn within this wave
                     enemyDef =
                     {
                         enemyID = "wanderer",
                         spawnCount = 4,
                     },
 
-                    -- The definition for the shape to use
-                    -- Can either use values to dynamically construct a shape, or predefined coordinates
                     shapeDef =
                     {
                         origin = "mainCircle",
                         points =
                         {
-                            {x = -80, y = 0},
-                            {x = 80, y = 0}
+                            {x = -100, y = 0},
+                            {x = 100, y = 0}
                         }
                     }
                 }
@@ -87,12 +80,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 6,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 4,
+                        numberOfPoints = 5,
                         radius = 64,
                         origin = "mainCircle"
                     }
@@ -108,14 +101,14 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 6,
+                        spawnCount = 4,
                     },
 
                     shapeDef =
                     {
                         numberOfPoints = 6,
                         radius = 64,
-                        origin = "mainCircle"
+                        origin = "leftCircle"
                     }
                 },
                 {
@@ -123,17 +116,15 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
-                        spawnCount = 3,
+                        enemyID = "wanderer",
+                        spawnCount = 4,
                     },
 
                     shapeDef =
                     {
-                        origin = "mainCircle",
-                        points = {
-                            {x = -120, y = 0},
-                            {x = 120, y = 0}
-                        }
+                        numberOfPoints = 6,
+                        radius = 64,
+                        origin = "rightCircle"
                     }
                 }
             }
@@ -152,9 +143,9 @@ local levelDefinition =
 
                     shapeDef =
                     {
-                        numberOfPoints = 10,
+                        numberOfPoints = 6,
                         radius = 40,
-                        origin = "mainCircle"
+                        origin = "leftCircle"
                     }
                 },
                 {
@@ -162,15 +153,15 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
-                        spawnCount = 3,
+                        enemyID = "wanderer",
+                        spawnCount = 4,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 10,
-                        radius = 80,
-                        origin = "mainCircle"
+                        numberOfPoints = 6,
+                        radius = 40,
+                        origin = "rightCircle"
                     }
                 },
                 {
@@ -179,19 +170,94 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 3,
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 80,
+                        origin = "mainCircle"
+                    }
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 2,
                     },
 
                     shapeDef =
                     {
                         origin = "mainCircle",
                         points = {
-                            {x = 120, y = 0},
-                            {x = 120, y = 0}
+                            {x = -100, y = 0},
+                            {x = 100, y = 0}
                         }
                     }
                 }
-            }
+            },
+            minimumEnemiesForNextWave = 0,
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "randomWithinShape",
+    
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 6,
+                    },
+    
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 30,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "randomWithinShape",
+    
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 6,
+                    },
+    
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 30,
+                        origin = "rightCircle"
+                    }
+                }
+            },
         },
     }
 }
