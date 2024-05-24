@@ -1,4 +1,4 @@
-local menuButton = require "game.interface.menuButton"
+local menuButton = require "game.interface.menubutton"
 local toggleButton = class({name = "Toggle Button", extends = menuButton})
 
 function toggleButton:new(text, font, restX, restY, selectedX, selectedY, defaultValue, referenceToSet)
