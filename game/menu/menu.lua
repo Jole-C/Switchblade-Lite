@@ -29,12 +29,12 @@ function menu:update(dt)
 
     -- Change the selected element
     local direction = 1
-    if input:pressed("menuUp") then
+    if game.input:pressed("menuUp") then
         self.selectionIndex = self.selectionIndex - 1
         direction = -1
     end
 
-    if input:pressed("menuDown") then
+    if game.input:pressed("menuDown") then
         self.selectionIndex = self.selectionIndex + 1
         direction = 1
     end
@@ -50,7 +50,7 @@ function menu:update(dt)
     end
 
     -- Execute the selected button when pressed
-    if input:pressed("select") then
+    if game.input:pressed("select") then
         selectedElement:execute()
     end
 end
@@ -72,7 +72,7 @@ function menu:clearMenuSubElements()
         local element = self.elements[i]
         
         if element then
-            interfaceRenderer:removeHudElement(element)
+            game.interfaceRenderer:removeHudElement(element)
 
             -- Make sure to reset the hud element back to its default state
             if element.reset then
@@ -90,7 +90,7 @@ function menu:updateInterfaceRenderer()
         
         if element then
             element.owner = self
-            interfaceRenderer:addHudElement(element)
+            game.interfaceRenderer:addHudElement(element)
         end
     end
 end

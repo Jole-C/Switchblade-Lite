@@ -10,7 +10,7 @@ end
 function playerHud:update()
     hudElement.update(self)
 
-    self.playerReference = playerManager.playerReference
+    self.playerReference = game.playerManager.playerReference
 end
 
 function playerHud:draw()
@@ -20,7 +20,7 @@ function playerHud:draw()
         return
     end
 
-    love.graphics.setFont(resourceManager:getResource("font main"))
+    love.graphics.setFont(game.resourceManager:getResource("font main"))
     love.graphics.print(math.floor(self.playerReference.shipTemperature), 10, 10)
     love.graphics.print(self.playerReference.health, 10, 20)
     love.graphics.print(math.abs(math.ceil(self.playerReference.ammo)), 10, 30)

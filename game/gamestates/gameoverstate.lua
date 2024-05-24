@@ -4,9 +4,9 @@ local gameoverMenu = require "game.menu.gameover.gameovermenu"
 local gameOverState = class({name = "Gameover State", extends = gamestate})
 
 function gameOverState:enter()
-    camera:setWorld(0, 0, screenWidth, screenHeight)
-    camera:setPosition(screenWidth/2, screenHeight/2)
-    interfaceRenderer:clearElements()
+    game.camera:setWorld(0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
+    game.camera:setPosition(game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2)
+    game.interfaceRenderer:clearElements()
 
     self.objects = {}
     
@@ -25,7 +25,7 @@ function gameOverState:exit()
     
     self.objects = {}
 
-    interfaceRenderer:clearElements()
+    game.interfaceRenderer:clearElements()
 end
 
 function gameOverState:update(dt)

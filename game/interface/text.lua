@@ -7,7 +7,7 @@ function textElement:new(text, fontName, centerText, x, y)
     self.text = text
     self.position = vec2(x, y)
     self.centerText = centerText
-    self.font = resourceManager:getResource(fontName)
+    self.font = game.resourceManager:getResource(fontName)
 end
 
 function textElement:draw()
@@ -15,7 +15,7 @@ function textElement:draw()
     local textY = 0
 
     love.graphics.setFont(self.font)
-    love.graphics.setColor(gameManager.currentPalette.uiColour)
+    love.graphics.setColor(game.gameManager.currentPalette.uiColour)
 
     if self.centerText == true then
         textX = self.position.x + self.font:getWidth(self.text)/2

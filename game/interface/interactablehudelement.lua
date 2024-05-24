@@ -11,9 +11,9 @@ end
 function interactableHudElement:update(dt)
 
     if self.isSelected then
-        self.drawColour = gameManager.currentPalette.uiSelectedColour
+        self.drawColour = game.gameManager.currentPalette.uiSelectedColour
     else
-        self.drawColour = gameManager.currentPalette.uiColour
+        self.drawColour = game.gameManager.currentPalette.uiColour
     end
     
     self:updateHudElement()
@@ -30,7 +30,7 @@ function interactableHudElement:updateHudElement()
 
 end
 
--- Used for things like sliders with left and right input
+-- Used for things like sliders with left and right game.input
 function interactableHudElement:checkForInteractions()
 
 end

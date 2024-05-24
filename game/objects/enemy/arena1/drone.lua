@@ -18,7 +18,7 @@ function drone:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 8, 8)
+    game.gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 8, 8)
 
     self.tail = tail("charger tail sprite", x, y, 15, 1)
     self.eye = eye(x, y, 3, 2)
@@ -28,15 +28,15 @@ function drone:update(dt)
     enemy.update(self, dt)
     
     -- Move the enemy using seek steering behaviour
-    local playerPosition = playerManager.playerPosition
+    local playerPosition = game.playerManager.playerPosition
 
     local targetVelocity = (playerPosition - self.position):normalise_inplace() * self.maxSpeed * dt
     local steeringVelocity = (targetVelocity - self.velocity):trim_length_inplace(self.maxSteeringForce) * dt
     self.velocity = (self.velocity + steeringVelocity):trim_length_inplace(self.maxSpeed)
 
     -- Clamp the enemy's position
-    if gameStateMachine:current_state().arena then
-        self.position = gameStateMachine:current_state().arena:getClampedPosition(self.position + self.velocity)
+    if game.gameStateMachine:current_state().arena then
+        self.position = game.gameStateMachine:current_state().arena:getClampedPosition(self.position + self.velocity)
     end
 
     -- Update the angle of the enemy
@@ -59,7 +59,7 @@ function drone:update(dt)
     end
 
     -- Update the collider
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -85,7 +85,7 @@ function drone:draw()
     xOffset = 5
     yOffset = yOffset/2
 
-    love.graphics.setColor(gameManager.currentPalette.enemyColour)
+    love.graphics.setColor(game.gameManager.currentPalette.enemyColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/8, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
 
@@ -96,9 +96,9 @@ function drone:draw()
 end
 
 function drone:cleanup()
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
     if world and world:hasItem(self.collider) then
-        gameStateMachine:current_state().world:remove(self.collider)
+        game.gameStateMachine:current_state().world:remove(self.collider)
     end
 end
 

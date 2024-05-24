@@ -15,11 +15,11 @@ local wall = class{
         self.dimensions = vec2(w, h)
         self.collider = collider(colliderDefinitions.wall, self)
         self.normal = normal
-        gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, self.dimensions.x, self.dimensions.y)
+        game.gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, self.dimensions.x, self.dimensions.y)
     end,
 
     cleanup = function(self)
-        local world = gameStateMachine:current_state().world
+        local world = game.gameStateMachine:current_state().world
         if world and world:hasItem(self.collider) then
             world:remove(self.collider)
         end

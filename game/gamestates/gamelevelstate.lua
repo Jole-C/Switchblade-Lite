@@ -7,8 +7,8 @@ local arena = require "game.objects.arena"
 local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
 function gameLevelState:enter()
-    camera:setWorld(worldX, worldY, worldWidth * 2, worldHeight * 2)
-    interfaceRenderer:clearElements()
+    game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
+    game.interfaceRenderer:clearElements()
 
     self.objects = {}
     
@@ -20,7 +20,7 @@ function gameLevelState:enter()
     self.stageDirector = stageDirector(level, 0, 0)
     self:addObject(self.stageDirector)
 
-    local newPlayer = playerManager:spawnPlayer(self.stageDirector.playerStartSegment.position.x, self.stageDirector.playerStartSegment.position.y)
+    local newPlayer = game.playerManager:spawnPlayer(self.stageDirector.playerStartSegment.position.x, self.stageDirector.playerStartSegment.position.y)
     self:addObject(newPlayer)
 
     self.enemyManager = enemyManager()
@@ -28,8 +28,8 @@ function gameLevelState:enter()
 end
 
 function gameLevelState:update(dt)
-    if input:pressed("pause") and gameManager.isPaused == false then
-        gameManager:togglePausing()
+    if game.input:pressed("pause") and game.gameManager.isPaused == false then
+        game.gameManager:togglePausing()
     end
 
     for i = #self.objects, 1, -1 do
@@ -73,7 +73,7 @@ function gameLevelState:leave()
     self.arena = nil
     self.stageDirector = nil
 
-    interfaceRenderer:clearElements()
+    game.interfaceRenderer:clearElements()
 end
 
 return gameLevelState

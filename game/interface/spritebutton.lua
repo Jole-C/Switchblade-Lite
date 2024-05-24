@@ -4,7 +4,7 @@ local spriteButton = class({name = "Sprite Button", extends = menuButton})
 function spriteButton:new(spriteName, restX, restY, selectedX, selectedY, execute)
     self:super(restX, restY, selectedX, selectedY, execute)
 
-    self.sprite = resourceManager:getResource(spriteName)
+    self.sprite = game.resourceManager:getResource(spriteName)
 end
 
 function spriteButton:draw()

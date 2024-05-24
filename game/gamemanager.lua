@@ -143,4 +143,44 @@ function gameManager:draw()
 
 end
 
+function gameManager:setupPalettes()
+    local paletteImage = love.image.newImageData("game/assets/sprites/palettes.png")
+
+    local width,height = paletteImage:getDimensions()
+
+    -- For each y level of the palette image
+    -- (a different palette)
+    for y = 0, height - 1 do
+        local grabbedColours = {}
+
+        -- Grab each pixel on the x axis
+        -- (a different colour)
+        for x = 0, width - 1 do
+            local r, g, b, a = paletteImage:getPixel(x, y)
+            table.insert(grabbedColours, {r, g, b, a})
+        end
+        
+        -- Add a palette with these values
+        self:addPalette(
+            {
+                playerColour = grabbedColours[1],
+                enemyColour = grabbedColours[2],
+                backgroundColour = {
+                    grabbedColours[3],
+                    grabbedColours[4],
+                    grabbedColours[5],
+                    grabbedColours[6],
+                    grabbedColours[7],
+                },
+                uiColour = grabbedColours[8],
+                enemySpawnColour = grabbedColours[9],
+                uiSelectedColour = grabbedColours[10],
+            }
+        )
+    end
+    
+    -- Swap to a random palette
+    self:swapPalette()
+end
+
 return gameManager

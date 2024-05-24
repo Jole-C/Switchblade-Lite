@@ -45,14 +45,14 @@ function playerHeavy:updateShipMovement(dt, movementDirection)
 
     if self.isOverheating == false then
         -- Apply a forward thrust to the ship
-        if input:down("thrust") then
+        if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
             steeringSpeed = self.steeringSpeedMoving
         end
 
         -- After boosting stops, set up the timer for post boosting invulnerability
-        if self.isBoosting == true and input:down("shoot") == false then
+        if self.isBoosting == true and game.input:down("shoot") == false then
             self.isBoosting = false
 
             self.isBoostingInvulnerable = true
@@ -60,11 +60,11 @@ function playerHeavy:updateShipMovement(dt, movementDirection)
         end
 
         -- Steer the ship
-        if input:down("steerLeft") then
+        if game.input:down("steerLeft") then
             self.angle = self.angle - (steeringSpeed * dt)
         end
 
-        if input:down("steerRight") then
+        if game.input:down("steerRight") then
             self.angle = self.angle + (steeringSpeed * dt)
         end
     end
@@ -76,7 +76,7 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
         self.canFire = false
     end
 
-    if self.canFire == true and input:down("shoot") then
+    if self.canFire == true and game.input:down("shoot") then
         local firePosition = self.position + ((movementDirection * -1) * self.fireOffset)
 
         for i = 1, self.bulletsToFire do
@@ -90,7 +90,7 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
                 8,
                 8
             )
-            gameStateMachine:current_state():addObject(newBullet)
+            game.gameStateMachine:current_state():addObject(newBullet)
         end
 
         self.canFire = false
@@ -107,7 +107,7 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
 end
 
 function playerHeavy:checkCollision()
-    local world = gameStateMachine:current_state().world
+    local world = game.gameStateMachine:current_state().world
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -132,7 +132,7 @@ function playerHeavy:checkCollision()
 
                         if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
                             self.ammo = self.maxAmmo
-                            gameManager:swapPalette()
+                            game.gameManager:swapPalette()
                         end
                     end
                 else
@@ -152,7 +152,7 @@ function playerHeavy:update(dt)
     -- Update the hud
     self:updateHud()
 
-    local currentGamestate = gameStateMachine:current_state()
+    local currentGamestate = game.gameStateMachine:current_state()
     if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
         return
     end
