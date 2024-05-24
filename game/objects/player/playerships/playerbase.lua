@@ -12,32 +12,32 @@ function player:new(x, y)
     self.spriteName = "player default"
     
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = 6
-    self.steeringSpeedStationary = 14
-    self.steeringSpeedBoosting = 3
-    self.accelerationSpeed = 3
-    self.boostingAccelerationSpeed = 4
-    self.friction = 1
-    self.maxSpeed = 3
-    self.maxBoostingSpeed = 6
-    self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 1
-    self.shipCoolingRate = 40
-    self.shipOverheatCoolingRate = 20
-    self.boostDamage = 5
-    self.boostEnemyHitHeatAccumulation = 25
-    self.contactDamageHeatMultiplier = 10
-    self.boostingInvulnerableGracePeriod = 1
-    self.invulnerableGracePeriod = 3
-    self.bounceDampening = 0.5
+    self.steeringSpeedMoving = self.steeringSpeedMoving or 6
+    self.steeringSpeedStationary = self.steeringSpeedStationary or 14
+    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 3
+    self.accelerationSpeed = self.accelerationSpeed or 3
+    self.boostingAccelerationSpeed = self.boostingAccelerationSpeed or 4
+    self.friction = self.friction or 1
+    self.maxSpeed = self.maxSpeed or 3
+    self.maxBoostingSpeed = self.maxBoostingSpeed or 6
+    self.maxShipTemperature = self.maxShipTemperature or 100
+    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 1
+    self.shipCoolingRate = self.shipCoolingRate or 40
+    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
+    self.boostDamage = self.boostDamage or 5
+    self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
+    self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
+    self.boostingInvulnerableGracePeriod = self.boostingInvulnerableGracePeriod or 1
+    self.invulnerableGracePeriod = self.invulnerableGracePeriod or 3
+    self.bounceDampening = self.bounceDampening or 0.5    
     
     -- Firing parameters of the ship
-    self.maxFireCooldown = 0.05
-    self.bulletSpeed = 5
-    self.bulletDamage = 3
-    self.maxAmmo = 30
-    self.shipKnockbackForce = 10
-    self.fireOffset = 10
+    self.maxFireCooldown = self.maxFireCooldown or 0.05
+    self.bulletSpeed = self.bulletSpeed or 5
+    self.bulletDamage = self.bulletDamage or 3
+    self.maxAmmo = self.maxAmmo or 30
+    self.shipKnockbackForce = self.shipKnockbackForce or 10
+    self.fireOffset = self.fireOffset or 10
     
     -- Ship variables
     self.health = self.maxHealth
