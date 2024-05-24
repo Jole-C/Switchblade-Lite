@@ -36,18 +36,18 @@ function game:new()
 
     self.input = baton.new{
         controls = {
-            thrust = {'key:w', 'key:up'},
-            reverseThrust = {'key:s', 'key:down'},
-            steerLeft = {'key:a', 'key:left'},
-            steerRight = {'key:d', 'key:right'},
-            boost = {'key:lshift', 'key:rshift'},
-            shoot = {'key:space'},
-            menuUp = {'key:w', 'key:up'},
-            menuDown = {'key:s', 'key:down'},
-            menuLeft = {'key:a', 'key:left'},
-            menuRight = {'key:d', 'key:right'},
-            select = {'key:return', 'key:space'},
-            pause = {'key:escape'},
+            thrust = {'key:w', 'key:up', 'button:a'},
+            reverseThrust = {'key:s', 'key:down', 'button:x'},
+            steerLeft = {'key:a', 'key:left', 'axis:leftx-'},
+            steerRight = {'key:d', 'key:right', 'axis:leftx+'},
+            boost = {'key:lshift', 'key:rshift', 'button:leftbumper'},
+            shoot = {'key:space', 'button:rightbumper'},
+            menuUp = {'key:w', 'key:up', 'button:dpup'},
+            menuDown = {'key:s', 'key:down', 'button:dpdown'},
+            menuLeft = {'key:a', 'key:left', 'button:dpleft'},
+            menuRight = {'key:d', 'key:right', 'button:dpright'},
+            select = {'key:return', 'key:space', 'button:a'},
+            pause = {'key:escape', 'button:start'},
         }
     }
     
