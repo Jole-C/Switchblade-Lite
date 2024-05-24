@@ -1,8 +1,8 @@
-local gameObject = require "game.objects.gameobject"
+local velocityEntity = require "game.objects.velocityentity"
 local playerBullet = require "game.objects.player.playerbullets.playerbullet"
 local collider = require "game.collision.collider"
 local playerHud = require "game.objects.player.playerhuddisplay"
-local player = class({name = "Player", extends = gameObject})
+local player = class({name = "Player", extends = velocityEntity})
 
 function player:new(x, y)
     self:super(x, y)
@@ -188,7 +188,7 @@ function player:updatePosition()
     self.velocity = self.velocity:trim_length_inplace(trimmedSpeed)
     
     if arena:isPositionWithinArena(self.position + self.velocity) == false then
-        self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
+        self:addForce((self.velocity * -2.5) * self.bounceDampening)
     end
 
     self.position = self.position + self.velocity
