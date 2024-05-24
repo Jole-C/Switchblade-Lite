@@ -69,7 +69,26 @@ local levelDefinition =
                         }
                     }
                 }
-            }
+            },
+
+            --[[
+            segmentChanges =
+            {
+                {
+                    changeType = "size", --size, position, reset
+                    arenaSegment = "mainCircle",
+                    newValue = 200,
+                    lerpSpeed = 0.015
+                },
+                {
+                    changeType = "position", --size, position, reset
+                    arenaSegment = "leftCircle",
+                    newValue = vec2(0, 0),
+                    lerpSpeed = 0.015
+                },
+            }]]
+
+            minimumKillsForNextWave = 3
         },
         {
             spawnDefinitions = 
@@ -90,7 +109,9 @@ local levelDefinition =
                         origin = "mainCircle"
                     }
                 }
-            }
+            },
+
+            minimumKillsForNextWave = 4
         },
         {
             spawnDefinitions = 
@@ -127,7 +148,31 @@ local levelDefinition =
                         origin = "rightCircle"
                     }
                 }
-            }
+            },
+
+            segmentChanges =
+            {
+                {
+                    changeType = "size",
+                    arenaSegment = "rightCircle",
+                    newValue = 150,
+                    lerpSpeed = 0.015
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "leftCircle",
+                    newValue = 150,
+                    lerpSpeed = 0.015
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "mainCircle",
+                    newValue = 50,
+                    lerpSpeed = 0.015
+                },
+            },
+
+            minimumKillsForNextWave = 3
         },
         {
             spawnDefinitions = 
@@ -180,7 +225,43 @@ local levelDefinition =
                         origin = "mainCircle"
                     }
                 }
-            }
+            },
+            segmentChanges =
+            {
+                {
+                    changeType = "size",
+                    arenaSegment = "rightCircle",
+                    newValue = 25,
+                    lerpSpeed = 0.
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "leftCircle",
+                    newValue = 25,
+                    lerpSpeed = 0.05
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "mainCircle",
+                    newValue = 70,
+                    lerpSpeed = 0.015
+                },
+
+                {
+                    changeType = "position",
+                    arenaSegment = "rightCircle",
+                    newValue = vec2(300, 0),
+                    lerpSpeed = 0.05
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "leftCircle",
+                    newValue = vec2(-300, 0),
+                    lerpSpeed = 0.05
+                }
+            },
+
+            minimumKillsForNextWave = 3
         },
         {
             spawnDefinitions = 
@@ -204,7 +285,29 @@ local levelDefinition =
                     }
                 }
             },
-            minimumEnemiesForNextWave = 0,
+
+            segmentChanges = {
+                {
+                    changeType = "reset",
+                    arenaSegment = "rightCircle",
+                    newValue = 0,
+                    lerpSpeed = 0.05
+                },
+                {
+                    changeType = "reset",
+                    arenaSegment = "leftCircle",
+                    newValue = 0,
+                    lerpSpeed = 0.05
+                },
+                {
+                    changeType = "reset",
+                    arenaSegment = "mainCircle",
+                    newValue = 0,
+                    lerpSpeed = 0.015
+                },
+            },
+
+            minimumKillsForNextWave = 2,
         },
         {
             spawnDefinitions = 
@@ -258,6 +361,8 @@ local levelDefinition =
                     }
                 }
             },
+
+            minimumKillsForNextWave = 4,
         },
     }
 }

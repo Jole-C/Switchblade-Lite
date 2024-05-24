@@ -13,7 +13,7 @@ function pauseMenu:new()
             displayMenuName = false,
             elements =
                 {
-                text("pause", "font ui", false, 10, 10),
+                text("pause", "font ui", "left", 10, 10, 1000),
 
                 textButton("resume", "font ui", 10, 25, 15, 25, function()
                     game.gameManager:togglePausing()
@@ -36,7 +36,7 @@ function pauseMenu:new()
             displayMenuName = false,
             elements =
                 {
-                text("are you sure?", "font ui", false, 10, 10),
+                text("are you sure?", "font ui", "left", 10, 10, 1000),
 
                 textButton("yes", "font ui", 10, 25, 15, 25, function()
                     game.gameStateMachine:set_state("gameLevelState")

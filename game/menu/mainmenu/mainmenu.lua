@@ -87,7 +87,7 @@ function mainMenu:new()
 
             elements =
             {
-                text("visual", "font ui", false, 10, 10),
+                text("visual", "font ui", "left", 10, 10, 1000),
 
                 toggleButton("toggle bg.", "font ui", 10, 25, 20, 25, game.gameManager.options.enableBackground, {table = game.gameManager.options, value = "enableBackground"}),
 
@@ -95,7 +95,7 @@ function mainMenu:new()
 
                 slider("bg. speed", "font ui", game.gameManager.options.speedPercentage, 0, 100, 10, 55, {table = game.gameManager.options, value = "speedPercentage"}),
 
-                text("audio", "font ui", false, 10, 80),
+                text("audio", "font ui", "left", 10, 80, 1000),
 
                 slider("music vol.", "font ui", game.gameManager.options.musicVolPercentage, 0, 100, 10, 95, {table = game.gameManager.options, value = "musicVolPercentage"}),
 
