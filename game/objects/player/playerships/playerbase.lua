@@ -231,6 +231,7 @@ function player:checkCollision()
 
                         if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
                             self.ammo = self.ammo + self.boostAmmoIncrement
+                            self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
                             game.gameManager:swapPalette()
 
                             if game.gameManager then

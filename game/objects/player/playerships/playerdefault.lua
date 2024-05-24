@@ -30,7 +30,7 @@ function playerDefault:new(x, y)
     self.maxFireCooldown = 0.08
     self.bulletSpeed = 10
     self.bulletDamage = 3
-    self.maxAmmo = 30
+    self.maxAmmo = 14
     self.shipKnockbackForce = 10
     self.fireOffset = 10
     self.boostAmmoIncrement = 7
