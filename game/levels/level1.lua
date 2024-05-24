@@ -23,23 +23,23 @@ local levelDefinition =
                 y = 0
             },
 
-            radius = 100
+            radius = 150
         },
         ["leftCircle"] = {
             position = {
-                x = -100, 
+                x = -150, 
                 y = 0
             },
 
-            radius = 80
+            radius = 100
         },
         ["rightCircle"] = {
             position = {
-                x = 100, 
+                x = 150, 
                 y = 0
             },
 
-            radius = 80
+            radius = 100
         },
     },
 

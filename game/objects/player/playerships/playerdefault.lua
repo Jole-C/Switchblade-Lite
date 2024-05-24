@@ -12,7 +12,7 @@ function playerDefault:new(x, y)
     self.steeringSpeedBoosting = 4
     self.accelerationSpeed = 5
     self.boostingAccelerationSpeed = 7
-    self.friction = 3
+    self.friction = 1.5
     self.maxSpeed = 7
     self.maxBoostingSpeed = 10
     self.maxShipTemperature = 100
