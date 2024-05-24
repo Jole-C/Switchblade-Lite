@@ -83,6 +83,12 @@ function player:updateShipMovement(dt, movementDirection)
             steeringSpeed = self.steeringSpeedMoving
         end
 
+        if game.input:down("reverseThrust") then
+            self.velocity = self.velocity - movementDirection * (self.accelerationSpeed/1.5 * dt)
+
+            steeringSpeed = self.steeringSpeedMoving
+        end
+
         -- Boost the ship
         if game.input:down("boost") then
             self.isBoosting = true

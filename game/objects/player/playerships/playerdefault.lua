@@ -24,6 +24,7 @@ function playerDefault:new(x, y)
     self.contactDamageHeatMultiplier = 20
     self.boostingInvulnerableGracePeriod = 1
     self.invulnerableGracePeriod = 3
+    self.bounceDampening = 1
 
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.08
