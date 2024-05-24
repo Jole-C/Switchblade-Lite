@@ -38,6 +38,7 @@ function player:new(x, y)
     self.maxAmmo = self.maxAmmo or 30
     self.shipKnockbackForce = self.shipKnockbackForce or 10
     self.fireOffset = self.fireOffset or 10
+    self.boostAmmoIncrement = self.boostAmmoIncrement or 5
     
     -- Ship variables
     self.health = self.maxHealth
@@ -229,7 +230,7 @@ function player:checkCollision()
                         self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
                         if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
-                            self.ammo = self.maxAmmo
+                            self.ammo = self.ammo + self.boostAmmoIncrement
                             game.gameManager:swapPalette()
 
                             if game.gameManager then

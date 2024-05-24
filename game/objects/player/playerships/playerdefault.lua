@@ -9,7 +9,7 @@ function playerDefault:new(x, y)
     -- Movement parameters of the ship
     self.steeringSpeedMoving = 10
     self.steeringSpeedStationary = 12
-    self.steeringSpeedBoosting = 4
+    self.steeringSpeedBoosting = 8
     self.accelerationSpeed = 5
     self.boostingAccelerationSpeed = 7
     self.friction = 1.5
@@ -33,6 +33,7 @@ function playerDefault:new(x, y)
     self.maxAmmo = 30
     self.shipKnockbackForce = 10
     self.fireOffset = 10
+    self.boostAmmoIncrement = 7
 
     self:super(x, y)
 end
