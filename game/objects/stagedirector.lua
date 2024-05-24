@@ -15,9 +15,9 @@ function stageDirector:new(levelDefinition)
     self.maxWarningAngleRandomiseCooldown = 0.25
     self.minimumEnemyCount = 3
 
-    self.introCounts = 3
-    self.introLerpSpeed = 0.1
-    self.secondsBetweenIntroLerps = 0.25
+    self.introText = {"Ready?", "Steady?", "GO!"}
+    self.secondsBetweenTextChange = 0.25
+    self.currentText = 1
 
     self.currentWaveIndex = 0
     self.maxWave = 0
@@ -27,6 +27,7 @@ function stageDirector:new(levelDefinition)
     self.spriteScaleFrequency = 0
     self.spriteScale = 1
     self.angleWarningRandomiseCooldown = 0
+    self.minimumKillsForNextWave = 0
 
     self.inIntro = true
 
@@ -37,13 +38,17 @@ function stageDirector:new(levelDefinition)
     self.enemyDefinitions = self.levelDefinition.enemyDefinitions
     self.playerStartSegment = self.levelDefinition.arenaSegmentDefinitions[self.levelDefinition.playerStartSegment]
     self.enemySpawnList = {}
+    self.segmentChangeList = {}
     self.arenaSegments = {}
 
+    -- Initialise the segments and add them to the arena
     for name, segment in pairs(self.levelDefinition.arenaSegmentDefinitions) do
         if segment then
             self.arenaSegments[name] = {
                 position = vec2(segment.position.x, segment.position.y),
-                radius = segment.radius
+                defaultPosition = vec2(segment.position.x, segment.position.y),
+                radius = segment.radius,
+                defaultRadius = segment.radius,
             }
 
             local currentGamestate = game.gameStateMachine:current_state()
@@ -57,13 +62,12 @@ function stageDirector:new(levelDefinition)
     -- Initialise variables
     self.spawnTime = self.maxSpawnTime
     self.angleWarningRandomiseCooldown = self.maxWarningAngleRandomiseCooldown
-    self.currentIntroCount = self.introCounts
-    self.introLerpCooldown = self.secondsBetweenIntroLerps
+    self.textChangeCooldown = self.secondsBetweenTextChange
 
     -- Set up the hud
     self.hud = stageTimeHud()
     game.interfaceRenderer:addHudElement(self.hud)
-    self.alertElement = text(self.currentIntroCount, "font alert", true, -200, 0)
+    self.alertElement = text(self.introText[1], "font alert", "center", game.arenaValues.screenWidth/2, 0, game.arenaValues.screenHeight/2)
     game.interfaceRenderer:addHudElement(self.alertElement)
 end
 
@@ -74,19 +78,14 @@ function stageDirector:update(dt)
 
     -- Quit early if the intro is in progress
     if self.inIntro == true then
-        self.introLerpCooldown = self.introLerpCooldown - 1 * dt
+        
+        self.textChangeCooldown = self.textChangeCooldown - 1 * dt
 
-        -- If the cooldown is less than 0 and the alert is across the screen, reset it
-        if self.introLerpCooldown <= 0 and self.alertElement.position.x > game.arenaValues.screenWidth then
-            self.introLerpCooldown = self.secondsBetweenIntroLerps
+        if self.textChangeCooldown <= 0 then
+            self.textChangeCooldown = self.secondsBetweenTextChange
+            self.currentText = self.currentText + 1
 
-            self.currentIntroCount = self.currentIntroCount - 1
-
-            self.alertElement.text = self.currentIntroCount
-            self.alertElement.position.x = -200
-
-            -- If all resets have happened, start the run
-            if self.currentIntroCount <= 0 then
+            if self.currentText > #self.introText then
                 local arena = game.gameStateMachine:current_state().arena
 
                 if arena then
@@ -94,13 +93,14 @@ function stageDirector:update(dt)
                 end
 
                 self.inIntro = false
+            else
+                self.alertElement.text = self.introText[self.currentText]
             end
         end
 
-        -- Lerp the element position to the right side of the screen
-        self.alertElement.position.x = math.lerp(self.alertElement.position.x, game.arenaValues.screenWidth + 200, self.introLerpSpeed)
-
         return
+    else
+        self.alertElement.text = ""
     end
 
     -- Handle gameover state switching
@@ -127,14 +127,49 @@ function stageDirector:update(dt)
     self.spriteScale = (math.sin(self.spriteScaleFrequency) * self.spriteScaleAmplitude) * 0.5 + 1
     self.spriteScaleFrequency = self.spriteScaleFrequency + self.spriteScaleFrequencyChange * dt
 
+    -- Go through the list of segment changes and perform them
+    for i = #self.segmentChangeList, 1, -1 do
+        local currentChange = self.segmentChangeList[i]
+        local segment = self.arenaSegments[currentChange.arenaSegment]
+        local completeThreshold = 10
+
+        if type(currentChange.newValue) == "number" then
+            completeThreshold = currentChange.completeThreshold or currentChange.newValue/10
+        end
+
+        -- Depending on the type of change, apply it to the correct values
+        if currentChange.changeType == "size" then
+            segment.radius = math.lerp(segment.radius, currentChange.newValue, currentChange.lerpSpeed)
+
+            if currentChange.newValue - segment.radius < completeThreshold then
+                table.remove(self.segmentChangeList, i)
+            end
+        elseif currentChange.changeType == "position" then
+            segment.position.x = math.lerp(segment.position.x, currentChange.newValue.x, currentChange.lerpSpeed)
+            segment.position.y = math.lerp(segment.position.y, currentChange.newValue.y, currentChange.lerpSpeed)
+
+            if (currentChange.newValue - segment.position):length() < 10 then
+                table.remove(self.segmentChangeList, i)
+            end
+        elseif currentChange.changeType == "reset" then
+            segment.position.x = math.lerp(segment.position.x, segment.defaultPosition.x, currentChange.lerpSpeed)
+            segment.position.y = math.lerp(segment.position.y, segment.defaultPosition.y, currentChange.lerpSpeed)
+            segment.radius = math.lerp(segment.radius, segment.defaultRadius, currentChange.lerpSpeed)
+
+            if segment.defaultRadius - segment.radius < completeThreshold and (segment.defaultPosition - segment.position):length() < 10 then
+                table.remove(self.segmentChangeList, i)
+            end
+        end
+    end
+
     -- Handle enemy spawns and wave changing
     local currentGamestate = game.gameStateMachine:current_state()
 
     if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
-        -- If no enemies are alive, switch to the next wave
-        
+        -- Start the new wave if the minimum amount of enemies are present
         if #currentGamestate.enemyManager.enemies <= self.minimumEnemyCount and self.inWaveTransition == false then
             self.enemySpawnList = {}
+            self.segmentChangeList = {}
             self.currentWaveIndex = self.currentWaveIndex + 1
             self:startWave()
             self.spawnTime = self.maxSpawnTime
@@ -164,6 +199,13 @@ function stageDirector:update(dt)
             end
 
             self.inWaveTransition = false
+
+            -- Set the minimum enemies for the next wave to start
+            local currentGamestate = game.gameStateMachine:current_state()
+            
+            if currentGamestate.enemyManager then
+                self.minimumEnemyCount = #currentGamestate.enemyManager.enemies - (self.minimumKillsForNextWave or 1)
+            end        
         end
     end
 end
@@ -194,13 +236,22 @@ function stageDirector:startWave()
     -- Unpack the current wave
     local wave = self.waveDefinitions[self.currentWaveIndex]
     local spawnDefinitions = wave.spawnDefinitions
+    local segmentChanges = wave.segmentChanges
 
     if spawnDefinitions == nil then
         return
     end
-    
-    self.minimumEnemyCount = wave.minimumEnemiesForNextWave or 3
 
+    -- Set the amount of kills required for the next wave
+    self.minimumKillsForNextWave = (wave.minimumKillsForNextWave or 1)
+
+    -- For each segment change
+    if segmentChanges then
+        for i = 1, #segmentChanges do
+            table.insert(self.segmentChangeList, segmentChanges[i])
+        end
+    end
+    
     -- For each spawn definition
     for i = 1, #spawnDefinitions do
         local currentDefinition = spawnDefinitions[i]
@@ -214,7 +265,7 @@ function stageDirector:startWave()
             origin = {},
         }
 
-        -- Calculate the vertices
+        -- Calculate the vertices of the shape, or set them to the predefined values
         if currentDefinition.shapeDef.numberOfPoints and currentDefinition.shapeDef.radius then
             local numberOfPoints = currentDefinition.shapeDef.numberOfPoints
             local radius = currentDefinition.shapeDef.radius
@@ -235,9 +286,11 @@ function stageDirector:startWave()
             generatedShape.origin = currentDefinition.shapeDef.origin
         end
 
+        -- Grab the position and radius of the origin segment for this wave
         local arenaPosition = self.arenaSegments[generatedShape.origin].position
         local arenaRadius = self.arenaSegments[generatedShape.origin].radius
 
+        -- Depending on the wave type, spawn enemies differently
         if waveType == "randomWithinShape" then
             assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
 
@@ -311,6 +364,7 @@ function stageDirector:startWave()
 end
 
 function stageDirector:cleanup()
+    game.interfaceRenderer:removeHudElement(self.alertElement)
     self.alertElement = nil
     self.arenaSegments = nil
 end
