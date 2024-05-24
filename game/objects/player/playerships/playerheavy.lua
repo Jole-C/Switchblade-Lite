@@ -15,9 +15,9 @@ function playerHeavy:new(x, y)
     self.maxSpeed = 3
     self.maxBoostingSpeed = 15
     self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 4
+    self.shipHeatAccumulationRate = 3
     self.shipCoolingRate = 40
-    self.shipOverheatCoolingRate = 15
+    self.shipOverheatCoolingRate = 20
     self.boostDamage = 5
     self.boostEnemyHitHeatAccumulation = 35
     self.contactDamageHeatAccumulation = 10
@@ -102,7 +102,7 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
 
         local steeringSpeed = self.steeringSpeedBoosting
 
-        self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate
+        self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
     end
 end
 
@@ -131,7 +131,8 @@ function playerHeavy:checkCollision()
                         collidedObject:onHit(self.boostDamage)
 
                         if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
-                            self.ammo = self.maxAmmo
+                            self.ammo = self.ammo + self.boostAmmoIncrement
+                            self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
                             game.gameManager:swapPalette()
                         end
                     end
@@ -187,4 +188,4 @@ function playerHeavy:update(dt)
     self:checkCollision()
 end
 
-return playerDefault
+return playerHeavy

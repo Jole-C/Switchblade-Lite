@@ -9,7 +9,7 @@ function player:new(x, y)
 
     -- Generic parameters of the ship
     self.maxHealth = 3
-    self.spriteName = "player default"
+    self.spriteName = self.spriteName or "player default"
     
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 6
@@ -21,7 +21,7 @@ function player:new(x, y)
     self.maxSpeed = self.maxSpeed or 3
     self.maxBoostingSpeed = self.maxBoostingSpeed or 6
     self.maxShipTemperature = self.maxShipTemperature or 100
-    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 1
+    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
     self.shipCoolingRate = self.shipCoolingRate or 40
     self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
     self.boostDamage = self.boostDamage or 5
@@ -97,7 +97,7 @@ function player:updateShipMovement(dt, movementDirection)
 
             steeringSpeed = self.steeringSpeedBoosting
 
-            self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate
+            self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
         end
 
         -- After boosting stops, set up the timer for post boosting invulnerability

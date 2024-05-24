@@ -11,13 +11,13 @@ function playerLight:new(x, y)
     self.steeringSpeedMoving = 8
     self.steeringSpeedStationary = 16
     self.steeringSpeedBoosting = 4
-    self.accelerationSpeed = 4
-    self.boostingAccelerationSpeed = 84
+    self.accelerationSpeed = 6
+    self.boostingAccelerationSpeed = 50
     self.friction = 0.8
-    self.maxSpeed = 3
-    self.maxBoostingSpeed = 6
-    self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 0.5
+    self.maxSpeed = 6
+    self.maxBoostingSpeed = 10
+    self.maxShipTemperature = 150
+    self.shipHeatAccumulationRate = 1
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 20
     self.boostDamage = 5
@@ -25,6 +25,7 @@ function playerLight:new(x, y)
     self.contactDamageHeatMultiplier = 10
     self.boostingInvulnerableGracePeriod = 1
     self.invulnerableGracePeriod = 3
+    self.idleHeatAccumulationRate = 70
     
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.1
@@ -44,6 +45,10 @@ function playerLight:updateShipMovement(dt, movementDirection)
     local steeringSpeed = self.steeringSpeedStationary
 
     if self.isOverheating == false then
+        if self.velocity:length() < 3 then
+            self.shipTemperature = self.shipTemperature + self.idleHeatAccumulationRate * dt
+        end
+
         -- Apply a forward thrust to the ship
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
@@ -57,8 +62,6 @@ function playerLight:updateShipMovement(dt, movementDirection)
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
             steeringSpeed = self.steeringSpeedBoosting
-
-            self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate
 
             self.ammo = self.ammo + self.ammoAccumulationRate * dt
             self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)

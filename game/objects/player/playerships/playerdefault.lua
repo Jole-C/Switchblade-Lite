@@ -16,7 +16,7 @@ function playerDefault:new(x, y)
     self.maxSpeed = 7
     self.maxBoostingSpeed = 10
     self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 0.6
+    self.shipHeatAccumulationRate = 40
     self.shipCoolingRate = 50
     self.shipOverheatCoolingRate = 30
     self.boostDamage = 5
