@@ -3,7 +3,7 @@ local rect = require "game.interface.rect"
 local pauseManager = class({name = "Pause Manager"})
 
 function pauseManager:new()
-    self.background = rect(-100, -100, screenWidth + 100, screenHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
+    self.background = rect(-100, -100, game.arenaValues.screenWidth + 100, game.arenaValues.screenHeight + 100, "fill", {0.1, 0.1, 0.1, 0.9})
     game.interfaceRenderer:addHudElement(self.background)
 
     self.menu = pauseMenu()

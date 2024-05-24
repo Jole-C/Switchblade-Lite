@@ -7,7 +7,7 @@ local arena = require "game.objects.arena"
 local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
 function gameLevelState:enter()
-    game.camera:setWorld(worldX, worldY, worldWidth * 2, worldHeight * 2)
+    game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
     game.interfaceRenderer:clearElements()
 
     self.objects = {}

@@ -19,7 +19,7 @@ function mainMenu:new()
     self.backgroundScrollSpeed = 10
 
     -- Offset for the menu box sliding
-    self.maxMenuBoxOffset = screenWidth
+    self.maxMenuBoxOffset = game.arenaValues.screenWidth
     self.minMenuBoxOffset = -150
     self.targetMenuBoxOffset = 0
 
@@ -44,9 +44,9 @@ function mainMenu:new()
             displayMenuName = false,
             elements =
             {
-                sprite("logo sprite", screenWidth/2, screenHeight/2 - 8, 0, 1, 1, 0, 0, true, game.gameManager.currentPalette.playerColour),
+                sprite("logo sprite", game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2 - 8, 0, 1, 1, 0, 0, true, game.gameManager.currentPalette.playerColour),
 
-                textButton("press space", "font ui", 10, screenHeight - 20, 10, screenHeight - 20, function(self)
+                textButton("press space", "font ui", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -186,7 +186,7 @@ function mainMenu:update(dt)
         local warpTiling = 0.3 + math.sin(self.shaderTime) * 0.5
         local tiling = 3.0
 
-        local resolution = {screenWidth, screenHeight}
+        local resolution = {game.arenaValues.screenWidth, game.arenaValues.screenHeight}
 
         self.menuBoxShader:send("angle", angle)
         self.menuBoxShader:send("warpScale", warpScale)
@@ -203,7 +203,7 @@ function mainMenu:update(dt)
 
         self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
 
-        if self.backgroundScrollY > screenHeight - 20 then
+        if self.backgroundScrollY > game.arenaValues.screenHeight - 20 then
             self.backgroundScrollY = 0
         end
     end
@@ -225,7 +225,7 @@ function mainMenu:draw()
 
         if enableBackground == 1 then
             love.graphics.setShader(self.menuBackgroundShader)
-            love.graphics.rectangle("fill", 0, 0, screenWidth, screenHeight)
+            love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
             love.graphics.setShader()
         end
 
@@ -234,18 +234,18 @@ function mainMenu:draw()
         -- Use the menu background as a stencil
         love.graphics.stencil(function()
             love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY))
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - screenHeight + 20))
+            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight + 20))
         end, "replace", 1, false)
 
         love.graphics.setStencilTest("greater", 0)
 
         if enableBackground == 1 then
             love.graphics.setShader(self.menuBoxShader)
-            love.graphics.rectangle("fill", 0, 0, screenWidth, screenHeight)
+            love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
             love.graphics.setShader()
         else
             love.graphics.setColor(0.1, 0.1, 0.1, 1)
-            love.graphics.rectangle("fill", 0, 0, screenWidth, screenHeight)
+            love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
             love.graphics.setColor(1, 1, 1, 1)
         end
 
@@ -261,7 +261,7 @@ function mainMenu:drawOverlay()
     -- Draw an overlay for the background fade
     local alpha = game.gameManager.options.fadingPercentage / 100
     love.graphics.setColor(0.1, 0.1, 0.1, alpha)
-    love.graphics.rectangle("fill", -100, -100, screenWidth + 100, screenHeight + 100)
+    love.graphics.rectangle("fill", -100, -100, game.arenaValues.screenWidth + 100, game.arenaValues.screenHeight + 100)
     love.graphics.setColor(1, 1, 1, 1)
 end
 

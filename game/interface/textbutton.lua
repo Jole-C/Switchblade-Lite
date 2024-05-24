@@ -16,7 +16,7 @@ function textButton:draw()
     love.graphics.setFont(self.font)
 
     if self.centerText then
-        love.graphics.printf(self.text, self.position.x, self.position.y, screenWidth, "center")
+        love.graphics.printf(self.text, self.position.x, self.position.y, game.arenaValues.screenWidth, "center")
     else
         love.graphics.print(self.text, self.position.x, self.position.y)
     end

@@ -77,7 +77,7 @@ function stageDirector:update(dt)
         self.introLerpCooldown = self.introLerpCooldown - 1 * dt
 
         -- If the cooldown is less than 0 and the alert is across the screen, reset it
-        if self.introLerpCooldown <= 0 and self.alertElement.position.x > screenWidth then
+        if self.introLerpCooldown <= 0 and self.alertElement.position.x > game.arenaValues.screenWidth then
             self.introLerpCooldown = self.secondsBetweenIntroLerps
 
             self.currentIntroCount = self.currentIntroCount - 1
@@ -98,7 +98,7 @@ function stageDirector:update(dt)
         end
 
         -- Lerp the element position to the right side of the screen
-        self.alertElement.position.x = math.lerp(self.alertElement.position.x, screenWidth + 200, self.introLerpSpeed)
+        self.alertElement.position.x = math.lerp(self.alertElement.position.x, game.arenaValues.screenWidth + 200, self.introLerpSpeed)
 
         return
     end
@@ -240,8 +240,8 @@ function stageDirector:startWave()
             assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
 
             for i = 1, enemyDef.spawnCount do
-                local pointX = math.random(0, screenWidth)
-                local pointY = math.random(0, screenHeight)
+                local pointX = math.random(0, game.arenaValues.screenWidth)
+                local pointY = math.random(0, game.arenaValues.screenHeight)
 
                 -- Inefficient, must change later
                 while PointWithinShape(generatedShape, pointX, pointY) == false do

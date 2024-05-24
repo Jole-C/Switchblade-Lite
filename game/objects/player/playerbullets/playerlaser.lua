@@ -3,7 +3,7 @@ local playerLaser = class({name = "Player Laser", extends = bullet})
 
 function playerLaser:new(x, y, angle, damage, colliderDefinition, bouncesLeft, subLaserClass)
     self.damage = damage
-    self.length = screenWidth * 2
+    self.length = game.arenaValues.screenWidth * 2
 
     self.position = vec2(x, y)
     self.circlePosition = vec2(0, 0)
