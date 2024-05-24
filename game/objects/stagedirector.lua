@@ -133,7 +133,7 @@ function stageDirector:update(dt)
     if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
         -- If no enemies are alive, switch to the next wave
         
-        if #currentGamestate.enemyManager.enemies < self.minimumEnemyCount and self.inWaveTransition == false then
+        if #currentGamestate.enemyManager.enemies <= self.minimumEnemyCount and self.inWaveTransition == false then
             self.enemySpawnList = {}
             self.currentWaveIndex = self.currentWaveIndex + 1
             self:startWave()
@@ -198,6 +198,8 @@ function stageDirector:startWave()
     if spawnDefinitions == nil then
         return
     end
+    
+    self.minimumEnemyCount = wave.minimumEnemiesForNextWave or 3
 
     -- For each spawn definition
     for i = 1, #spawnDefinitions do
