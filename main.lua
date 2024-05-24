@@ -13,30 +13,7 @@ worldWidth = 600
 worldHeight = 600
 
 -- System requirements
-require "game.misc.mathhelpers"
-local renderer = require "game.render.renderer"
-local resource = require "game.resourcemanager"
-local interface = require "game.interface.interfacerenderer"
-local gameDirector = require "game.gamemanager"
-local playerHandler = require "game.objects.player.playermanager"
-colliderDefinitions = require "game.collision.colliderdefinitions"
-
--- Set up the input
-input = baton.new{
-    controls = {
-        thrust = {'key:w', 'key:up'},
-        steerLeft = {'key:a', 'key:left'},
-        steerRight = {'key:d', 'key:right'},
-        boost = {'key:lshift', 'key:rshift'},
-        shoot = {'key:space'},
-        menuUp = {'key:w', 'key:up'},
-        menuDown = {'key:s', 'key:down'},
-        menuLeft = {'key:a', 'key:left'},
-        menuRight = {'key:d', 'key:right'},
-        select = {'key:return', 'key:space'},
-        pause = {'key:escape'},
-    }
-}
+local gameClass = require "game.game"
 
 function SetupResources()
     -- In game resources
@@ -190,76 +167,9 @@ function SetupResources()
 end
 
 function love.load()
-    -- Create a new game manager
-    gameManager = gameDirector()
+    game = gameClass()
+    game:start()
 
-    -- Create a new renderer
-    gameRenderer = renderer()
-
-    -- Create a new interface renderer
-    interfaceRenderer = interface()
-
-    -- Set the background mesh colour
-    backgroundMeshColour = 0.1
-
-    -- Create the resource manager
-    resourceManager = resource()
-    SetupResources()
-
-    -- Create the camera
-    camera = gamera.new(0, 0, screenWidth, screenHeight)
-    camera:setWindow(0, 0, screenWidth, screenHeight)
-
-    -- Create the player manager
-    playerManager = playerHandler()
-
-    -- Set up palettes
-    local paletteImage = love.image.newImageData("game/assets/sprites/palettes.png")
-
-    local width,height = paletteImage:getDimensions()
-
-    for y = 0, height - 1 do
-        local grabbedColours = {}
-
-        for x = 0, width - 1 do
-            local r, g, b, a = paletteImage:getPixel(x, y)
-            table.insert(grabbedColours, {r, g, b, a})
-        end
-        
-        gameManager:addPalette(
-            {
-                playerColour = grabbedColours[1],
-                enemyColour = grabbedColours[2],
-                backgroundColour = {
-                    grabbedColours[3],
-                    grabbedColours[4],
-                    grabbedColours[5],
-                    grabbedColours[6],
-                    grabbedColours[7],
-                },
-                uiColour = grabbedColours[8],
-                enemySpawnColour = grabbedColours[9],
-                uiSelectedColour = grabbedColours[10],
-            }
-        )
-    end
-    
-    -- Swap to a random palette
-    gameManager:swapPalette()
-
-    -- Set up the rendering
-    windowWidth, windowHeight = love.window.getDesktopDimensions();
-    love.graphics.setDefaultFilter("nearest", "nearest")
-    love.graphics.setLineStyle("rough")
-
-    backgroundCanvas = gameRenderer:addRenderCanvas("backgroundCanvas", screenWidth, screenHeight)
-    backgroundShadowCanvas = gameRenderer:addRenderCanvas("backgroundShadowCanvas", screenWidth, screenHeight)
-    foregroundShadowCanvas = gameRenderer:addRenderCanvas("foregroundShadowCanvas", screenWidth, screenHeight)
-    foregroundCanvas = gameRenderer:addRenderCanvas("foregroundCanvas", screenWidth, screenHeight)
-    menuBackgroundCanvas = gameRenderer:addRenderCanvas("menuBackgroundCanvas", screenWidth, screenHeight)
-    interfaceCanvas = gameRenderer:addRenderCanvas("interfaceCanvas", screenWidth, screenHeight)
-    transitionCanvas = gameRenderer:addRenderCanvas("transitionCanvas", screenWidth, screenHeight)
-    
     -- Temporary particle system
     local bgCol = gameManager.currentPalette.backgroundColour
     ps = love.graphics.newParticleSystem(resourceManager:getResource("particle sprite"), 1632)
@@ -312,98 +222,17 @@ function love.load()
     local dt = 0.1
     for i = 0, 4, dt do
         ps:update(dt)
-    end  
-    
-    -- Set up the gamestate machine
-    gameStateMachine = require "game.gamestates.gamestatemachine"
+    end
 end
 
 function love.update(dt)
-    input:update()
-    gameManager:update(dt)
-
-    if gameManager.isPaused or gameManager.gameFrozen then
-        return
+    if game then
+        game:update(dt)
     end
-
-    if gameStateMachine then
-        gameStateMachine:update(dt)
-    end
-    
-    playerManager:update(dt)
-
-    ps:setColors(gameManager.currentPalette.backgroundColour[1], gameManager.currentPalette.backgroundColour[2], gameManager.currentPalette.backgroundColour[3], gameManager.currentPalette.backgroundColour[4])
-    ps:update(dt/7 * gameManager.options.speedPercentage/100)
 end
 
 function love.draw()
-    love.graphics.setColor(1, 1, 1, 1)
-
-    -- Draw the background
-    love.graphics.setCanvas({backgroundCanvas.canvas, stencil = true})
-    love.graphics.setBackgroundColor(gameManager.currentPalette.backgroundColour[5])
-    love.graphics.setBlendMode("alpha")
-    
-    if gameManager.options.enableBackground == 1 then
-        love.graphics.draw(ps)
-    else
-        love.graphics.clear()
+    if game then
+        game:draw(dt)
     end
-
-    love.graphics.setStencilTest()
-    love.graphics.setCanvas()
-    love.graphics.setColor(1, 1, 1, 1)
-
-    camera:draw(function()
-        -- Draw the foreground
-        love.graphics.setCanvas({foregroundCanvas.canvas, stencil = true})
-        love.graphics.clear()
-        love.graphics.setBlendMode("alpha")
-
-        if gameStateMachine then
-            gameStateMachine:draw(dt)
-        end
-        
-        local currentGamestate = gameStateMachine:current_state()
-        
-        if currentGamestate.objects then
-            for key,object in ipairs(currentGamestate.objects) do
-                object:draw()
-            end
-        end
-        love.graphics.setCanvas()
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.setStencilTest()
-
-    end)
-
-    -- Draw the background overlay
-    love.graphics.setCanvas(backgroundShadowCanvas.canvas)
-    love.graphics.clear()
-
-    local alpha = gameManager.options.fadingPercentage / 100
-    love.graphics.setColor(0.1, 0.1, 0.1, alpha)
-    love.graphics.rectangle("fill", -100, -100, screenWidth + 100, screenHeight + 100)
-    love.graphics.setCanvas()
-    love.graphics.setColor(1, 1, 1, 1)
-
-    -- Draw the shadows
-    love.graphics.setCanvas(foregroundShadowCanvas.canvas)
-    love.graphics.clear()
-    love.graphics.setColor(0.1, 0.1, 0.1, 1)
-    love.graphics.draw(foregroundCanvas.canvas, 2, 2)
-    love.graphics.setCanvas()
-    love.graphics.setColor(1, 1, 1, 1)
-
-    -- Draw the interface
-    love.graphics.setCanvas(interfaceCanvas.canvas)
-    love.graphics.clear()
-    gameManager:draw()
-    interfaceRenderer:draw()
-    love.graphics.setFont(resourceManager:getResource("font main"))
-    love.graphics.setCanvas()
-    love.graphics.setColor(1, 1, 1, 1)
-
-    -- Render the canvases
-    gameRenderer:drawCanvases()
 end
