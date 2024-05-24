@@ -7,8 +7,6 @@ function enemyTail:new(spriteName, spriteX, spriteY, waveFrequency, waveAmplitud
     self.tailSpritePosition = vec2(spriteX or 0, spriteY or 0)
     self.tailAngleWave = 0
     self.tailAngleWaveAmount = 0
-    self.tailAngleWaveFrequency = 0
-    self.tailAngleWaveAmplitude = 0
     self.baseTailAngle = 0
 
     self.sprite = game.resourceManager:getResource(spriteName)
