@@ -1,20 +1,16 @@
 local bullet = require "game.objects.bullet.bullet"
 local playerLaser = class({name = "Player Laser", extends = bullet})
 
-function playerLaser:new(x, y, angle, damage, colliderDefinition, bouncesLeft, subLaserClass)
+function playerLaser:new(x, y, angle, damage, colliderDefinition)
     self.damage = damage
-    self.length = game.arenaValues.screenWidth * 2
+    self.length = game.arenaValues.worldWidth * math.abs(game.arenaValues.worldX)
+    self.lifetime = 0.05
 
     self.position = vec2(x, y)
     self.circlePosition = vec2(0, 0)
     self.angle = angle
 
     self.sprite = game.resourceManager:getResource("player laser sprite")
-
-    self.bouncesLeft = bouncesLeft
-    if self.bouncesLeft > 0 then
-        self.subLaserClass = subLaserClass
-    end
 end
 
 function playerLaser:update(dt)
@@ -24,13 +20,24 @@ function playerLaser:update(dt)
         self:destroy()
     end
 
-    local world = game.gameStateMachine:current_state().world
+    local currentGamestate = game.gameStateMachine:current_state()
+    local world = currentGamestate.world
 
+    -- Handle laser bouncing
+    local arena = currentGamestate.arena
+    local bulletEndPoint = vec2(self.position.x + math.cos(self.angle) * self.length, self.position.y + math.sin(self.angle) * self.length)
+    local arenaSegment
+
+    if arena then
+        bulletEndPoint, arenaSegment = arena:getClampedPosition(bulletEndPoint)
+    end
+
+    -- Handle collisions with enemy
     if world then
         local x1 = self.position.x
         local y1 = self.position.y
-        local x2 = self.position.x + math.cos(self.angle) * self.length
-        local y2 = self.position.y + math.sin(self.angle) * self.length
+        local x2 = bulletEndPoint.x
+        local y2 = bulletEndPoint.y
 
         local items, len = world:querySegmentWithCoords(x1, y1, x2, y2)
 
@@ -40,9 +47,6 @@ function playerLaser:update(dt)
             local colliderDefinition = item.colliderDefinition
             local x = items[i].x1
             local y = items[i].y1
-            
-            self.circlePosition.x = x
-            self.circlePosition.y = y
 
             if not collidedObject or not colliderDefinition then
                 goto continue
@@ -51,16 +55,6 @@ function playerLaser:update(dt)
             if colliderDefinition == colliderDefinitions.enemy then
                 if collidedObject.onHit then
                     collidedObject:onHit(self.damage)
-                end
-            elseif colliderDefinition == colliderDefinitions.wall and self.bouncesLeft > 0 then
-                if collidedObject.normal then
-                    local angleVector = vec2(math.cos(self.angle), math.sin(self.angle))
-                    local dot = collidedObject.normal * angleVector
-                    local reflectedVector = angleVector:mirrorOn(collidedObject.normal)
-                    local reflectedAngle = math.atan2(reflectedVector.y, reflectedVector.x)
-                    local newPlayerLaser = self.subLaserclass(x, y, reflectedAngle + math.pi, self.damage, self.colliderDefinition, self.bouncesLeft - 1, self.subLaserClass)
-                    newPlayerLaser.lifetime = self.lifetime
-                    game.gameStateMachine:current_state():addObject(newPlayerLaser)
                 end
             end
 
@@ -80,10 +74,7 @@ function playerLaser:draw()
     
     love.graphics.setColor(game.gameManager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, self.length, 1, 0, yOffset)
-
-    if self.bouncesLeft > 0 then
-        love.graphics.circle("fill", self.circlePosition.x, self.circlePosition.y, 15)
-    end
+    love.graphics.circle("fill", self.position.x, self.position.y, 15)
     
     love.graphics.setColor(1, 1, 1, 1)
 end
