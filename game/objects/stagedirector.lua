@@ -240,11 +240,11 @@ function stageDirector:startWave()
             assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
 
             for i = 1, enemyDef.spawnCount do
-                local pointX = math.random(0, game.arenaValues.screenWidth)
-                local pointY = math.random(0, game.arenaValues.screenHeight)
+                local pointX = math.random(arenaPosition.x - arenaRadius, arenaPosition.x + arenaRadius)
+                local pointY = math.random(arenaPosition.y - arenaRadius, arenaPosition.y + arenaRadius)
 
                 -- Inefficient, must change later
-                while PointWithinShape(generatedShape, pointX, pointY) == false do
+                while PointWithinShape(generatedShape.points, pointX, pointY) == false do
                     pointX = math.random(arenaPosition.x - arenaRadius, arenaPosition.x + arenaRadius)
                     pointY = math.random(arenaPosition.y - arenaRadius, arenaPosition.y + arenaRadius)
                 end
@@ -298,24 +298,12 @@ function stageDirector:startWave()
                 end
             end
         elseif waveType == "predefined" then
-            local enemyDefs = wave.enemyDefs
-
-            for i = 1, #enemyDefs do
-                local currentDef = enemyDefs[i]
-
-                for j = 1, currentDef.spawnCount do
-                    local position = vec2()
-                    position.x = currentDef.x
-                    position.y = currentDef.y
-
-                    table.insert(self.enemySpawnList, {
-                        enemyClass = self.enemyDefinitions[currentDef.enemyID].enemyClass,
-                        spawnPosition = position,
-                        spriteName = self.enemyDefinitions[currentDef.enemyID].spriteName,
-                        angle = math.random(0, 2*math.pi)
-                    })
-                end
-            end
+            table.insert(self.enemySpawnList, {
+                enemyClass = self.enemyDefinitions[enemyDef.enemyID].enemyClass,
+                spawnPosition = {x = arenaPosition.x + generatedShape.points.x, y = arenaPosition.y + generatedShape.points.y},
+                spriteName = self.enemyDefinitions[enemyDef.enemyID].spriteName,
+                angle = math.random(0, 2*math.pi)
+            })
         end
     end
 end
