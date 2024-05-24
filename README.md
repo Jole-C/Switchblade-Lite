@@ -3,7 +3,7 @@
 A small top down arcade project, revived from an unfinished GameMaker Studio 2 project. This readme will be updated when there's more to say.
 
 ## Any questions, just ask!
-If you want to do anything with this source that's totally fine, but I would prefer to be asked first.
+This code is licensed all rights reserved, but if you want to do anything with it, just ask me. I'll probably say it's fine.
 
 ## Switchblade was made possible thanks to the following libraries:
 - LÖVE2D - The framework used to create this project! https://love2d.org/
