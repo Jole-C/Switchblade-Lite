@@ -1,31 +1,20 @@
 local hudElement require "game.interface.hudelement"
 local textElement = class({name = "Text", extends = hudElement})
 
-function textElement:new(text, fontName, centerText, x, y)
+function textElement:new(text, fontName, textAlign, x, y)
     self:super()
 
     self.text = text
     self.position = vec2(x, y)
-    self.centerText = centerText
+    self.textAlign = textAlign
     self.font = game.resourceManager:getResource(fontName)
 end
 
 function textElement:draw()
-    local textX = 0
-    local textY = 0
-
     love.graphics.setFont(self.font)
     love.graphics.setColor(game.gameManager.currentPalette.uiColour)
-
-    if self.centerText == true then
-        textX = self.position.x + self.font:getWidth(self.text)/2
-        textY = self.position.y + self.font:getHeight(self.text)/2
-    else
-        textX = self.position.x
-        textY = self.position.y
-    end
-
-    love.graphics.print(self.text, textX, textY)
+    
+    love.graphics.printf(self.text, self.position.x, self.position.y, 1000, self.textAlign)
 
     love.graphics.setColor(1, 1, 1, 1)
 end
