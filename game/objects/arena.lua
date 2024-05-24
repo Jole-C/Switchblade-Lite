@@ -33,34 +33,16 @@ function arenaController:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setLineWidth(3)
 
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
-
-        if segment then
-            love.graphics.circle("line", segment.position.x, segment.position.y, segment.radius * self.arenaScale)
-        end
-    end
+    self:drawSegments("line")
 
     love.graphics.setLineWidth(1)
 
     love.graphics.setColor(0.1, 0, 0.1, 1)
 
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
-
-        if segment then
-            love.graphics.circle("fill", segment.position.x, segment.position.y, segment.radius * self.arenaScale)
-        end
-    end
+    self:drawSegments()
     
     love.graphics.stencil(function()
-        for i = 1, #self.arenaSegments do
-            local segment = self.arenaSegments[i]
-
-            if segment then
-                love.graphics.circle("fill", segment.position.x, segment.position.y, segment.radius * self.arenaScale)
-            end
-        end
+        self:drawSegments()
     end, "replace", 1, false)
 
     love.graphics.setStencilTest("equal", 1)
@@ -168,6 +150,16 @@ function arenaController:addArenaSegment(segment)
 end
 
 function arenaController:cleanup()
+end
+
+function arenaController:drawSegments(fillType)
+    for i = 1, #self.arenaSegments do
+        local segment = self.arenaSegments[i]
+
+        if segment then
+            love.graphics.circle(fillType or "fill", segment.position.x, segment.position.y, segment.radius * self.arenaScale)
+        end
+    end
 end
 
 return arenaController
