@@ -71,6 +71,14 @@ function vec2:angle_between(other)
 	return math.atan2(self.y, self.x)
 end
 
+-- Mirror the vector about another vector
+function vec2:mirror_inplace(v)
+	assert(v:type() == "vec2", "invalid argument: cannot mirror vector on " .. type(v))
+
+	local s = 2 * (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
+	return vec2(s * v.x - self.x, s * v.y - self.y)
+end
+
 --unpack for multi-args
 function vec2:unpack()
 	return self.x, self.y
