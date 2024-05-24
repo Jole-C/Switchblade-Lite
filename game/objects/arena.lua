@@ -8,7 +8,7 @@ function arenaController:new()
     self.circleWarpAmplitude = 15
     self.circleWarpFrequency = 0.2
     self.circleSpacing = 20
-    self.numberOfCircles = 30
+    self.numberOfCircles = 100
 
     self.circleWarpTime = 0
     self.arenaSegments = {}
