@@ -8,13 +8,24 @@ function drone:new(x, y)
     self:super(x, y, "drone sprite")
 
     -- Parameters of the enemey
-    self.maxSpeed = 40
-    self.maxSteeringForce = 30
+    self.maxSpeed = 1.5
+    self.turningRate = 0.13
     self.health = 5
+    self.maxChargeCooldown = 4
+    self.maxChargeSpeed = 6
+    self.chargeDuration = 1
+    self.friction = 1
+    self.bounceDampening = 0.5
 
     -- Variables
-    self.angle = 0
-    self.velocity = vec2(0, 0)
+    self.angle = math.random(0, 2 * math.pi)
+    self.velocity = vec2(math.cos(self.angle), math.sin(self.angle))
+    self.chargeCooldown = self.maxChargeCooldown
+    self.chargeDurationCooldown = self.chargeDuration
+    self.isCharging = false
+    self.movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
+
+    self.velocity = self.velocity * self.maxSpeed
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -27,20 +38,51 @@ end
 function drone:update(dt)
     enemy.update(self, dt)
     
-    -- Move the enemy using seek steering behaviour
-    local playerPosition = game.playerManager.playerPosition
+    -- Switch the enemy between charging and non charging state on a loop
+    self.chargeCooldown = self.chargeCooldown - 1 * dt
 
-    local targetVelocity = (playerPosition - self.position):normalise_inplace() * self.maxSpeed * dt
-    local steeringVelocity = (targetVelocity - self.velocity):trim_length_inplace(self.maxSteeringForce) * dt
-    self.velocity = (self.velocity + steeringVelocity):trim_length_inplace(self.maxSpeed)
+    if self.chargeCooldown <= 0 then
+        self.isCharging = true
 
-    -- Clamp the enemy's position
-    if game.gameStateMachine:current_state().arena then
-        self.position = game.gameStateMachine:current_state().arena:getClampedPosition(self.position + self.velocity)
+        self.chargeDurationCooldown = self.chargeDurationCooldown - 1 * dt
+
+        if self.chargeDurationCooldown <= 0 then
+            self.chargeDurationCooldown = self.chargeDuration
+            self.chargeCooldown = self.maxChargeCooldown
+            self.isCharging = false
+        end
     end
 
-    -- Update the angle of the enemy
-    self.angle = self.position:angleTo(playerPosition)
+    if self.isCharging == false then
+        local playerPosition = game.playerManager.playerPosition
+
+        self.movementDirection:lerp_direction_inplace((playerPosition - self.position), self.turningRate):normalise_inplace()
+
+        -- Rotate and push the enemy towards the player
+        self.velocity = self.velocity + (self.movementDirection * self.maxSpeed) * dt
+
+        -- Update the angle of the enemy
+        self.angle = self.velocity:angle()
+    else
+        -- Charge the enemy forwards
+        self.velocity = self.velocity + self.movementDirection * self.maxChargeSpeed * dt
+    end
+ 
+    -- Apply friction
+    self:applyFriction(dt)
+
+    local arena = game.gameStateMachine:current_state().arena
+
+    if arena then
+        -- Bounce off the wall
+        if arena:isPositionWithinArena(self.position + self.velocity) == false then
+            self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
+        end
+
+        -- Clamp the enemy's position
+        self.position = self.position + self.velocity
+        self.position = game.gameStateMachine:current_state().arena:getClampedPosition(self.position)
+    end
 
     -- Update the tail
     if self.tail then
@@ -93,6 +135,11 @@ function drone:draw()
     if self.tail then
         self.tail:draw()
     end
+end
+
+function drone:applyFriction(dt)
+    local frictionRatio = 1 / (1 + (dt * self.friction))
+    self.velocity = self.velocity * frictionRatio
 end
 
 function drone:cleanup()
