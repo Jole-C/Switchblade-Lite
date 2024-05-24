@@ -80,7 +80,7 @@ function arenaController:getClampedPosition(position)
             local positionToSegment = (segment.position - position)
 
             if positionToSegment:length() < segment.radius then
-                return position
+                return position, segment
             end
         end
     end
@@ -111,10 +111,10 @@ function arenaController:getClampedPosition(position)
     end
 
     if closestCircle then
-        return closestEdgePosition
+        return closestEdgePosition, closestCircle
     end
 
-    return position:min_inplace(arenaRadius)
+    return position:min_inplace(arenaRadius), nil
 end
 
 function arenaController:getDistanceToArena(position)
