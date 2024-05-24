@@ -67,7 +67,7 @@ function stageDirector:new(levelDefinition)
     -- Set up the hud
     self.hud = stageTimeHud()
     game.interfaceRenderer:addHudElement(self.hud)
-    self.alertElement = text(self.introText[1], "font alert", "center", game.arenaValues.screenWidth/2, 0, game.arenaValues.screenHeight/2)
+    self.alertElement = text(self.introText[1], "font alert", "center", 0, game.arenaValues.screenHeight/2 - 20, game.arenaValues.screenWidth)
     game.interfaceRenderer:addHudElement(self.alertElement)
 end
 

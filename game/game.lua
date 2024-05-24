@@ -207,7 +207,7 @@ function game:setupResources()
     font:setFilter("nearest", "nearest", 0)
     resourceManager:addResource(font, "font ui")
 
-    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 64)
+    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 32)
     font:setFilter("nearest", "nearest", 0)
     resourceManager:addResource(font, "font alert")
 
