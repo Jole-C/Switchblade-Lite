@@ -19,7 +19,7 @@ function charger:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    game.gameStateMachine:current_state().world:add(self.collider, x, y, 8, 8)
+    game.gameStateMachine:current_state().world:add(self.collider, x, y, 12, 12)
 
     self.tail = tail("charger tail sprite", self.position.x, self.position.y, 15, 1)
     self.eye = eye(x, y, 2, 2)
