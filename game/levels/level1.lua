@@ -177,6 +177,7 @@ local levelDefinition =
                     }
                 }
             },
+
             segmentChanges =
             {
                 {
@@ -276,7 +277,7 @@ local levelDefinition =
 
                     shapeDef =
                     {
-                        origin = "leftCircle",
+                        origin = "mainCircle",
                         numberOfPoints = 3,
                         radius = 70
                     }
@@ -416,6 +417,157 @@ local levelDefinition =
 
             minimumKillsForNextWave = 15
         },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 20,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 10,
+                        radius = 100,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 20,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 10,
+                        radius = 100,
+                        origin = "rightCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 50,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+
+            segmentChanges =
+            {
+                {
+                    changeType = "size",
+                    arenaSegment = "rightCircle",
+                    newValue = 150,
+                    lerpSpeed = 0.1
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "leftCircle",
+                    newValue = 150,
+                    lerpSpeed = 0.1
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "mainCircle",
+                    newValue = 150,
+                    lerpSpeed = 0.1
+                },
+
+                {
+                    changeType = "position",
+                    arenaSegment = "mainCircle",
+                    newValue = vec2(0, -200),
+                    lerpSpeed = 0.01
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "rightCircle",
+                    newValue = vec2(-200, 0),
+                    lerpSpeed = 0.1
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "leftCircle",
+                    newValue = vec2(200, 0),
+                    lerpSpeed = 0.1
+                }
+            },
+
+            minimumKillsForNextWave = 15
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "rightCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+
+            minimumKillsForNextWave = 5
+        }
     }
 }
 
