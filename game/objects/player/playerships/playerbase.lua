@@ -265,7 +265,7 @@ function player:checkCollision()
         colliderPositionX = self.position.x - colliderWidth/2
         colliderPositionY = self.position.y - colliderHeight/2
 
-        local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
+        local x, y, cols, len = world:check(self.boostCollider, colliderPositionX, colliderPositionY)
         world:update(self.collider, colliderPositionX, colliderPositionY)
 
         for i = 1, len do
