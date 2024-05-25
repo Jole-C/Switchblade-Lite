@@ -56,7 +56,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 4,
+                        spawnCount = 6,
                     },
 
                     shapeDef =
@@ -64,29 +64,12 @@ local levelDefinition =
                         origin = "mainCircle",
                         points =
                         {
-                            {x = -100, y = 0},
-                            {x = 100, y = 0}
+                            {x = -200, y = 0},
+                            {x = 200, y = 0}
                         }
                     }
                 }
             },
-
-            --[[
-            segmentChanges =
-            {
-                {
-                    changeType = "size", --size, position, reset
-                    arenaSegment = "mainCircle",
-                    newValue = 200,
-                    lerpSpeed = 0.015
-                },
-                {
-                    changeType = "position", --size, position, reset
-                    arenaSegment = "leftCircle",
-                    newValue = vec2(0, 0),
-                    lerpSpeed = 0.015
-                },
-            }]]
 
             minimumKillsForNextWave = 3
         },
@@ -99,19 +82,19 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 5,
+                        spawnCount = 10,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
-                        radius = 64,
+                        numberOfPoints = 10,
+                        radius = 100,
                         origin = "mainCircle"
                     }
                 }
             },
 
-            minimumKillsForNextWave = 4
+            minimumKillsForNextWave = 6
         },
         {
             spawnDefinitions = 
@@ -122,13 +105,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 4,
+                        spawnCount = 8,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 6,
-                        radius = 64,
+                        numberOfPoints = 8,
+                        radius = 80,
                         origin = "leftCircle"
                     }
                 },
@@ -138,13 +121,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 4,
+                        spawnCount = 8,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 6,
-                        radius = 64,
+                        numberOfPoints = 8,
+                        radius = 80,
                         origin = "rightCircle"
                     }
                 }
@@ -182,46 +165,14 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
-                        spawnCount = 4,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 6,
-                        radius = 40,
-                        origin = "leftCircle"
-                    }
-                },
-                {
-                    waveType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 4,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 6,
-                        radius = 40,
-                        origin = "rightCircle"
-                    }
-                },
-                {
-                    waveType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
                         enemyID = "charger",
-                        spawnCount = 6,
+                        spawnCount = 10,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 6,
-                        radius = 80,
+                        numberOfPoints = 10,
+                        radius = 100,
                         origin = "mainCircle"
                     }
                 }
@@ -251,17 +202,17 @@ local levelDefinition =
                     changeType = "position",
                     arenaSegment = "rightCircle",
                     newValue = vec2(400, 0),
-                    lerpSpeed = 0.05
+                    lerpSpeed = 0.01
                 },
                 {
                     changeType = "position",
                     arenaSegment = "leftCircle",
                     newValue = vec2(-400, 0),
-                    lerpSpeed = 0.05
+                    lerpSpeed = 0.01
                 }
             },
 
-            minimumKillsForNextWave = 3
+            minimumKillsForNextWave = 8
         },
         {
             spawnDefinitions = 
@@ -283,28 +234,39 @@ local levelDefinition =
                             {x = 100, y = 0}
                         }
                     }
-                }
-            },
+                },
+                {
+                    waveType = "randomWithinShape",
 
-            segmentChanges = {
-                {
-                    changeType = "reset",
-                    arenaSegment = "rightCircle",
-                    newValue = 0,
-                    lerpSpeed = 0.05
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 10,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "leftCircle",
+                        numberOfPoints = 10,
+                        radius = 70
+                    }
                 },
                 {
-                    changeType = "reset",
-                    arenaSegment = "leftCircle",
-                    newValue = 0,
-                    lerpSpeed = 0.05
-                },
-                {
-                    changeType = "reset",
-                    arenaSegment = "mainCircle",
-                    newValue = 0,
-                    lerpSpeed = 0.015
-                },
+                    waveType = "randomWithinShape",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 10,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "rightCircle",
+                        numberOfPoints = 10,
+                        radius = 70
+                    }
+                }
             },
 
             minimumKillsForNextWave = 2,
@@ -327,42 +289,29 @@ local levelDefinition =
                             x = 0, y = 0
                         }
                     }
-                },
-                {
-                    waveType = "randomWithinShape",
-    
-                    enemyDef =
-                    {
-                        enemyID = "charger",
-                        spawnCount = 6,
-                    },
-    
-                    shapeDef =
-                    {
-                        numberOfPoints = 6,
-                        radius = 30,
-                        origin = "leftCircle"
-                    }
-                },
-                {
-                    waveType = "randomWithinShape",
-    
-                    enemyDef =
-                    {
-                        enemyID = "charger",
-                        spawnCount = 6,
-                    },
-    
-                    shapeDef =
-                    {
-                        numberOfPoints = 6,
-                        radius = 30,
-                        origin = "rightCircle"
-                    }
                 }
             },
 
-            minimumKillsForNextWave = 4,
+            segmentChanges =
+            {
+                {
+                    changeType = "reset",
+                    arenaSegment = "rightCircle",
+                    lerpSpeed = 0.015
+                },
+                {
+                    changeType = "reset",
+                    arenaSegment = "leftCircle",
+                    lerpSpeed = 0.015
+                },
+                {
+                    changeType = "reset",
+                    arenaSegment = "mainCircle",
+                    lerpSpeed = 0.015
+                },
+            },
+
+            minimumKillsForNextWave = 10,
         },
     }
 }
