@@ -23,23 +23,23 @@ local levelDefinition =
                 y = 0
             },
 
-            radius = 150
+            radius = 200
         },
         ["leftCircle"] = {
             position = {
-                x = -150, 
+                x = -200, 
                 y = 0
             },
 
-            radius = 100
+            radius = 150
         },
         ["rightCircle"] = {
             position = {
-                x = 150, 
+                x = 200, 
                 y = 0
             },
 
-            radius = 100
+            radius = 150
         },
     },
 
@@ -155,19 +155,19 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newValue = 150,
+                    newValue = 200,
                     lerpSpeed = 0.015
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newValue = 150,
+                    newValue = 200,
                     lerpSpeed = 0.015
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newValue = 50,
+                    newValue = 100,
                     lerpSpeed = 0.015
                 },
             },
@@ -231,32 +231,32 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newValue = 25,
+                    newValue = 70,
                     lerpSpeed = 0.
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newValue = 25,
+                    newValue = 70,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newValue = 70,
+                    newValue = 150,
                     lerpSpeed = 0.015
                 },
 
                 {
                     changeType = "position",
                     arenaSegment = "rightCircle",
-                    newValue = vec2(300, 0),
+                    newValue = vec2(400, 0),
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "position",
                     arenaSegment = "leftCircle",
-                    newValue = vec2(-300, 0),
+                    newValue = vec2(-400, 0),
                     lerpSpeed = 0.05
                 }
             },
