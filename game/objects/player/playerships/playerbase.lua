@@ -253,6 +253,7 @@ function player:checkCollision()
                 if self.isBoosting == false  then
                     self:onHit(collidedObject.contactDamage)
                     collidedObject:destroy()
+                    game.manager:setFreezeFrames(10)
                 end
             end
 
@@ -266,7 +267,7 @@ function player:checkCollision()
         colliderPositionY = self.position.y - colliderHeight/2
 
         local x, y, cols, len = world:check(self.boostCollider, colliderPositionX, colliderPositionY)
-        world:update(self.self.boostCollider, colliderPositionX, colliderPositionY)
+        world:update(self.boostCollider, colliderPositionX, colliderPositionY)
 
         for i = 1, len do
             local collidedObject = cols[i].other.owner
