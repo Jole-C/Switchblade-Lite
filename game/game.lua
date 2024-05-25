@@ -40,15 +40,16 @@ function game:new()
             reverseThrust = {'key:s', 'key:down', 'button:x'},
             steerLeft = {'key:a', 'key:left', 'axis:leftx-'},
             steerRight = {'key:d', 'key:right', 'axis:leftx+'},
-            boost = {'key:lshift', 'key:rshift', 'button:leftbumper'},
-            shoot = {'key:space', 'button:rightbumper'},
+            boost = {'key:lshift', 'key:rshift', 'button:leftshoulder'},
+            shoot = {'key:space', 'button:rightshoulder'},
             menuUp = {'key:w', 'key:up', 'button:dpup'},
             menuDown = {'key:s', 'key:down', 'button:dpdown'},
             menuLeft = {'key:a', 'key:left', 'button:dpleft'},
             menuRight = {'key:d', 'key:right', 'button:dpright'},
             select = {'key:return', 'key:space', 'button:a'},
             pause = {'key:escape', 'button:start'},
-        }
+        },
+        joystick = love.joystick.getJoysticks()[1]
     }
     
     local windowWidth, windowHeight = love.window.getDesktopDimensions();
