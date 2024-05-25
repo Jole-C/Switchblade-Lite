@@ -66,10 +66,10 @@ function player:new(x, y)
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    game.gameStateMachine:current_state().world:add(self.collider, 0, 0, 10, 10)
+    game.gameStateMachine:current_state().world:add(self.collider, 0, 0, 8, 8)
 
     self.boostCollider = collider(colliderDefinitions.none, self)
-    game.gameStateMachine:current_state().world:add(self.boostCollider, 0, 0, 20, 20)
+    game.gameStateMachine:current_state().world:add(self.boostCollider, 0, 0, 12, 12)
 
     self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
@@ -266,7 +266,7 @@ function player:checkCollision()
         colliderPositionY = self.position.y - colliderHeight/2
 
         local x, y, cols, len = world:check(self.boostCollider, colliderPositionX, colliderPositionY)
-        world:update(self.collider, colliderPositionX, colliderPositionY)
+        world:update(self.self.boostCollider, colliderPositionX, colliderPositionY)
 
         for i = 1, len do
             local collidedObject = cols[i].other.owner
