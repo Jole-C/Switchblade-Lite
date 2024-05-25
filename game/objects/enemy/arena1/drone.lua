@@ -77,6 +77,12 @@ function drone:update(dt)
         -- Bounce off the wall
         if arena:isPositionWithinArena(self.position + self.velocity) == false then
             self.velocity = self.velocity - (self.velocity * 2)
+
+            if self.isCharging == true then
+                self.chargeDurationCooldown = self.chargeDuration
+                self.chargeCooldown = self.maxChargeCooldown
+                self.isCharging = false
+            end
         end
 
         -- Clamp the enemy's position
