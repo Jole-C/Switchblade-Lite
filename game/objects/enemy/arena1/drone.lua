@@ -76,7 +76,7 @@ function drone:update(dt)
     if arena then
         -- Bounce off the wall
         if arena:isPositionWithinArena(self.position + self.velocity) == false then
-            self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
+            self.velocity = self.velocity - (self.velocity * 2)
         end
 
         -- Clamp the enemy's position
