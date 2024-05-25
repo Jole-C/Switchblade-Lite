@@ -64,6 +64,10 @@ function game:new()
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         transitionCanvas = self.gameRenderer:addRenderCanvas("transitionCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
+
+    local song = love.audio.newSource("game/assets/audio/music/song.mp3", "stream")
+    song:play()
+    song:setLooping(true)
 end
 
 function game:start()
