@@ -20,7 +20,7 @@ function playerHeavy:new(x, y)
     self.maxSpeed = 6
     self.maxBoostingSpeed = 15
     self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 3
+    self.shipHeatAccumulationRate = 30
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 20
     self.boostDamage = 5
@@ -47,7 +47,7 @@ end
 function playerHeavy:updateShipMovement(dt, movementDirection)
     self.steeringAccelerationSpeed = self.steeringAccelerationStationary
     self.maxSteeringSpeed = self.steeringSpeedStationary
-    
+
     if self.isOverheating == false then
         -- Apply a forward thrust to the ship
         if game.input:down("thrust") then

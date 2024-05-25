@@ -7,9 +7,9 @@ function playerDefault:new(x, y)
     self.spriteName = "player default"
 
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = self.steeringSpeedMoving or 1.5
+    self.steeringSpeedMoving = self.steeringSpeedMoving or 1.3
     self.steeringSpeedStationary = self.steeringSpeedStationary or 0.7
-    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 1
+    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 1.1
     self.steeringSpeedFiring = self.steeringSpeedFiring or 1
     self.steeringAccelerationMoving = self.steeringAccelerationMoving or 1
     self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.5
@@ -22,7 +22,7 @@ function playerDefault:new(x, y)
     self.maxSpeed = 7
     self.maxBoostingSpeed = 10
     self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 40
+    self.shipHeatAccumulationRate = 30
     self.shipCoolingRate = 50
     self.shipOverheatCoolingRate = 30
     self.boostDamage = 5

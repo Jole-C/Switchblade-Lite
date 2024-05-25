@@ -68,6 +68,9 @@ function player:new(x, y)
     self.collider = collider(colliderDefinitions.player, self)
     game.gameStateMachine:current_state().world:add(self.collider, 0, 0, 10, 10)
 
+    self.boostCollider = collider(colliderDefinitions.none, self)
+    game.gameStateMachine:current_state().world:add(self.boostCollider, 0, 0, 20, 20)
+
     self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
 
@@ -247,24 +250,46 @@ function player:checkCollision()
             end
 
             if colliderDefinition == colliderDefinitions.enemy then
-                if self.isBoosting == true  then
-                    if collidedObject.onHit then
-                        collidedObject:onHit(self.boostDamage)
-                        self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
-
-                        if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
-                            self.ammo = self.ammo + self.boostAmmoIncrement
-                            self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
-                            game.manager:swapPalette()
-
-                            if game.manager then
-                                game.manager:setFreezeFrames(6)
-                            end
-                        end
-                    end
-                else
+                if self.isBoosting == false  then
                     self:onHit(collidedObject.contactDamage)
                     collidedObject:destroy()
+                end
+            end
+
+            ::continue::
+        end
+    end
+
+    if world and world:hasItem(self.boostCollider) then
+        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.boostCollider)
+        colliderPositionX = self.position.x - colliderWidth/2
+        colliderPositionY = self.position.y - colliderHeight/2
+
+        local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
+        world:update(self.collider, colliderPositionX, colliderPositionY)
+
+        for i = 1, len do
+            local collidedObject = cols[i].other.owner
+            local colliderDefinition = cols[i].other.colliderDefinition
+
+            if not collidedObject or not colliderDefinition then
+                goto continue
+            end
+
+            if colliderDefinition == colliderDefinitions.enemy then
+                if self.isBoosting == true and collidedObject.onHit then
+                    collidedObject:onHit(self.boostDamage)
+                    self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
+
+                    if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
+                        self.ammo = self.ammo + self.boostAmmoIncrement
+                        self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+                        game.manager:swapPalette()
+
+                        if game.manager then
+                            game.manager:setFreezeFrames(6)
+                        end
+                    end
                 end
             end
 
