@@ -4,7 +4,7 @@ local colliderDefinitions = {
     playerbullet = "playerbullet",
     enemybullet = "enemybullet",
     powerup = "powerup",
-    wall = "wall"
+    none = "none",
 }
 
 return colliderDefinitions
