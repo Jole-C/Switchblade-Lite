@@ -129,6 +129,20 @@ function arenaController:getDistanceToArena(position)
     end
 end
 
+function arenaController:getSegmentPointIsWithin(position)
+    for i = 1, #self.arenaSegments do
+        local segment = self.arenaSegments[i]
+
+        if segment then
+            local positionToSegment = (segment.position - position)
+
+            return segment
+        end
+    end
+
+    return nil
+end
+
 function arenaController:isPositionWithinArena(position)
     for i = 1, #self.arenaSegments do
         local segment = self.arenaSegments[i]
