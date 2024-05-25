@@ -9,11 +9,11 @@ function drone:new(x, y)
 
     -- Parameters of the enemey
     self.maxSpeed = 1.5
-    self.turningRate = 0.13
-    self.health = 5
+    self.turningRate = 0.16
+    self.health = 15
     self.maxChargeCooldown = 4
-    self.maxChargeSpeed = 6
-    self.chargeDuration = 1
+    self.maxChargeSpeed = 8
+    self.chargeDuration = 2
     self.friction = 1
     self.bounceDampening = 0.5
 
@@ -65,7 +65,7 @@ function drone:update(dt)
         self.angle = self.velocity:angle()
     else
         -- Charge the enemy forwards
-        self.velocity = self.velocity + self.movementDirection * self.maxChargeSpeed * dt
+        self.velocity = self.movementDirection * self.maxChargeSpeed * dt
     end
  
     -- Apply friction
