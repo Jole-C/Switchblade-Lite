@@ -6,13 +6,18 @@ function playerHeavy:new(x, y)
     self.spriteName = "player heavy"
 
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = 5
-    self.steeringSpeedStationary = 10
-    self.steeringSpeedBoosting = 4
-    self.accelerationSpeed = 2
-    self.boostingAccelerationSpeed = 1
+    self.steeringSpeedMoving = self.steeringSpeedMoving or 1
+    self.steeringSpeedStationary = self.steeringSpeedStationary or 0.5
+    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 0.7
+    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 0.6
+    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.3
+    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 0.4
+    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
+    self.steeringFriction = 7
+    self.accelerationSpeed = 3
+    self.boostingAccelerationSpeed = 5
     self.friction = 0.35
-    self.maxSpeed = 3
+    self.maxSpeed = 6
     self.maxBoostingSpeed = 15
     self.maxShipTemperature = 100
     self.shipHeatAccumulationRate = 3
@@ -40,15 +45,16 @@ function playerHeavy:new(x, y)
 end
 
 function playerHeavy:updateShipMovement(dt, movementDirection)
-    -- Set the steering speed to its default value
-    local steeringSpeed = self.steeringSpeedStationary
-
+    self.steeringAccelerationSpeed = self.steeringAccelerationStationary
+    self.maxSteeringSpeed = self.steeringSpeedStationary
+    
     if self.isOverheating == false then
         -- Apply a forward thrust to the ship
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
-            steeringSpeed = self.steeringSpeedMoving
+            self.steeringAccelerationSpeed = self.steeringAccelerationMoving
+            self.maxSteeringSpeed = self.steeringSpeedMoving
         end
 
         -- After boosting stops, set up the timer for post boosting invulnerability
@@ -57,15 +63,6 @@ function playerHeavy:updateShipMovement(dt, movementDirection)
 
             self.isBoostingInvulnerable = true
             self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
-        end
-
-        -- Steer the ship
-        if game.input:down("steerLeft") then
-            self.angle = self.angle - (steeringSpeed * dt)
-        end
-
-        if game.input:down("steerRight") then
-            self.angle = self.angle + (steeringSpeed * dt)
         end
     end
 end
@@ -100,7 +97,8 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
         self.isBoosting = true
         self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
-        local steeringSpeed = self.steeringSpeedBoosting
+        self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
+        self.maxSteeringSpeed = self.steeringSpeedBoosting
 
         self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
     end
@@ -164,6 +162,7 @@ function playerHeavy:update(dt)
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)
     self:updateShipShooting(dt, movementDirection)
+    self:updateShipSteering(dt)
 
     -- Handle game timers
     self:updatePlayerTimers(dt)
@@ -179,7 +178,7 @@ function playerHeavy:update(dt)
 
     -- Apply the velocity to the ship and then apply friction
     self:updatePosition()
-    self:applyFriction(dt)
+    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
 
     -- Wrap the ship's position
     self:wrapShipPosition()

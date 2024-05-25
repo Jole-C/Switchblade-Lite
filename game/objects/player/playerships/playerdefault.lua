@@ -7,12 +7,18 @@ function playerDefault:new(x, y)
     self.spriteName = "player default"
 
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = 10
-    self.steeringSpeedStationary = 12
-    self.steeringSpeedBoosting = 8
+    self.steeringSpeedMoving = self.steeringSpeedMoving or 1.5
+    self.steeringSpeedStationary = self.steeringSpeedStationary or 0.7
+    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 1
+    self.steeringSpeedFiring = self.steeringSpeedFiring or 1
+    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 1
+    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.5
+    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 0.7
+    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
+    self.steeringFriction = 7
     self.accelerationSpeed = 5
     self.boostingAccelerationSpeed = 7
-    self.friction = 1.5
+    self.friction = 1
     self.maxSpeed = 7
     self.maxBoostingSpeed = 10
     self.maxShipTemperature = 100
@@ -24,7 +30,7 @@ function playerDefault:new(x, y)
     self.contactDamageHeatMultiplier = 20
     self.boostingInvulnerableGracePeriod = 1
     self.invulnerableGracePeriod = 3
-    self.bounceDampening = 1
+    self.bounceDampening = 0.5
 
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.08
@@ -53,6 +59,7 @@ function playerDefault:update(dt)
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)
     self:updateShipShooting(dt, movementDirection)
+    self:updateShipSteering(dt)
     
     -- Handle game timers
     self:updatePlayerTimers(dt)
@@ -62,7 +69,7 @@ function playerDefault:update(dt)
 
     -- Apply the velocity to the ship and then apply friction
     self:updatePosition()
-    self:applyFriction(dt)
+    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
 
     -- Wrap the ship's position
     self:wrapShipPosition()

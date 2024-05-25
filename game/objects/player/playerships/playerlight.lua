@@ -8,14 +8,20 @@ function playerLight:new(x, y)
     self.spriteName = "player light"
     
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = 8
-    self.steeringSpeedStationary = 16
-    self.steeringSpeedBoosting = 4
+    self.steeringSpeedMoving = self.steeringSpeedMoving or 1.5
+    self.steeringSpeedStationary = self.steeringSpeedStationary or 0.7
+    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 1
+    self.steeringSpeedFiring = self.steeringSpeedFiring or 1
+    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 1
+    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.5
+    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 0.7
+    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
+    self.steeringSpeedFiring = 4
     self.accelerationSpeed = 6
-    self.boostingAccelerationSpeed = 50
+    self.boostingAccelerationSpeed = 5
     self.friction = 0.8
     self.maxSpeed = 6
-    self.maxBoostingSpeed = 10
+    self.maxBoostingSpeed = 15
     self.maxShipTemperature = 150
     self.shipHeatAccumulationRate = 1
     self.shipCoolingRate = 40
@@ -25,7 +31,7 @@ function playerLight:new(x, y)
     self.contactDamageHeatMultiplier = 10
     self.boostingInvulnerableGracePeriod = 1
     self.invulnerableGracePeriod = 3
-    self.idleHeatAccumulationRate = 70
+    self.idleHeatAccumulationRate = 30
     
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.1
@@ -41,8 +47,8 @@ function playerLight:new(x, y)
 end
 
 function playerLight:updateShipMovement(dt, movementDirection)
-    -- Set the steering speed to its default value
-    local steeringSpeed = self.steeringSpeedStationary
+    self.steeringAccelerationSpeed = self.steeringAccelerationStationary
+    self.maxSteeringSpeed = self.steeringSpeedStationary
 
     if self.isOverheating == false then
         if self.velocity:length() < 3 then
@@ -53,7 +59,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
-            steeringSpeed = self.steeringSpeedMoving
+            self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
+            self.maxSteeringSpeed = self.steeringSpeedBoosting
         end
 
         -- Boost the ship
@@ -61,7 +68,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
             self.isBoosting = true
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
-            steeringSpeed = self.steeringSpeedBoosting
+            self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
+            self.maxSteeringSpeed = self.steeringSpeedBoosting
 
             self.ammo = self.ammo + self.ammoAccumulationRate * dt
             self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
@@ -73,15 +81,6 @@ function playerLight:updateShipMovement(dt, movementDirection)
 
             self.isBoostingInvulnerable = true
             self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
-        end
-
-        -- Steer the ship
-        if game.input:down("steerLeft") then
-            self.angle = self.angle - (steeringSpeed * dt)
-        end
-
-        if game.input:down("steerRight") then
-            self.angle = self.angle + (steeringSpeed * dt)
         end
     end
 end
@@ -154,6 +153,7 @@ function playerLight:update(dt)
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)
     self:updateShipShooting(dt, movementDirection)
+    self:updateShipSteering(dt)
     
     -- Handle game timers
     self:updatePlayerTimers(dt)
@@ -163,7 +163,7 @@ function playerLight:update(dt)
 
     -- Apply the velocity to the ship and then apply friction
     self:updatePosition()
-    self:applyFriction(dt)
+    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
 
     -- Wrap the ship's position
     self:wrapShipPosition()

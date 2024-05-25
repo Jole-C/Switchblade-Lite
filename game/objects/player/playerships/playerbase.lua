@@ -15,6 +15,12 @@ function player:new(x, y)
     self.steeringSpeedMoving = self.steeringSpeedMoving or 6
     self.steeringSpeedStationary = self.steeringSpeedStationary or 14
     self.steeringSpeedBoosting = self.steeringSpeedBoosting or 3
+    self.steeringSpeedFiring = self.steeringSpeedFiring or 3
+    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 3
+    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 6
+    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 2
+    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 2
+    self.steeringFriction = self.steeringFriction or 7
     self.accelerationSpeed = self.accelerationSpeed or 3
     self.boostingAccelerationSpeed = self.boostingAccelerationSpeed or 4
     self.friction = self.friction or 1
@@ -54,6 +60,9 @@ function player:new(x, y)
     self.isBoostingInvulnerable = false
     self.isInvulnerable = false
     self.canFire = true
+    self.steeringSpeed = 0
+    self.maxSteeringSpeed = self.steeringSpeedStationary
+    self.steeringAccelerationSpeed = self.steeringAccelerationStationary
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
@@ -73,21 +82,23 @@ function player:updateHud()
 end
 
 function player:updateShipMovement(dt, movementDirection)
-    -- Set the steering speed to its default value
-    local steeringSpeed = self.steeringSpeedStationary
+    self.steeringAccelerationSpeed = self.steeringAccelerationStationary
+    self.maxSteeringSpeed = self.steeringSpeedStationary
 
     if self.isOverheating == false then
         -- Apply a forward thrust to the ship
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
-            steeringSpeed = self.steeringSpeedMoving
+            self.steeringAccelerationSpeed = self.steeringAccelerationMoving
+            self.maxSteeringSpeed = self.steeringSpeedMoving
         end
 
         if game.input:down("reverseThrust") then
             self.velocity = self.velocity - movementDirection * (self.accelerationSpeed/1.5 * dt)
 
-            steeringSpeed = self.steeringSpeedMoving
+            self.steeringAccelerationSpeed = self.steeringAccelerationStationary
+            self.maxSteeringSpeed = self.steeringSpeedStationary
         end
 
         -- Boost the ship
@@ -95,7 +106,8 @@ function player:updateShipMovement(dt, movementDirection)
             self.isBoosting = true
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
-            steeringSpeed = self.steeringSpeedBoosting
+            self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
+            self.maxSteeringSpeed = self.steeringSpeedBoosting
 
             self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
         end
@@ -107,22 +119,33 @@ function player:updateShipMovement(dt, movementDirection)
             self.isBoostingInvulnerable = true
             self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
         end
-
-        -- Steer the ship
-        if game.input:down("steerLeft") then
-            self.angle = self.angle - (steeringSpeed * dt)
-        end
-
-        if game.input:down("steerRight") then
-            self.angle = self.angle + (steeringSpeed * dt)
-        end
     end
+end
+
+function player:updateShipSteering(dt)
+    -- Steer the ship
+    if game.input:down("steerLeft") then
+        self.steeringSpeed = self.steeringSpeed - (self.steeringAccelerationSpeed * dt)
+    end
+
+    if game.input:down("steerRight") then
+        self.steeringSpeed = self.steeringSpeed + (self.steeringAccelerationSpeed * dt)
+    end
+
+    self.steeringSpeed = math.clamp(self.steeringSpeed, -self.maxSteeringSpeed, self.maxSteeringSpeed)
+    self.angle = self.angle + self.steeringSpeed
+    self.steeringSpeed = self:applyFriction(dt, self.steeringSpeed, self.steeringFriction)
 end
 
 function player:updateShipShooting(dt, movementDirection)
     -- Fire gun
     if self.isBoosting == true or self.ammo <= 0 then
         self.canFire = false
+    end
+
+    if game.input:down("shoot") then
+        self.steeringAccelerationSpeed = self.steeringAccelerationFiring
+        self.maxSteeringSpeed = self.steeringSpeedFiring
     end
 
     if self.canFire == true and game.input:down("shoot") then
@@ -250,9 +273,9 @@ function player:checkCollision()
     end
 end
 
-function player:applyFriction(dt)
-    local frictionRatio = 1 / (1 + (dt * self.friction))
-    self.velocity = self.velocity * frictionRatio
+function player:applyFriction(dt, value, frictionValue)
+    local frictionRatio = 1 / (1 + (dt * frictionValue))
+    return value * frictionRatio
 end
 
 function player:wrapShipPosition()
@@ -269,6 +292,7 @@ function player:update(dt)
     -- Handle ship functionality, moving boosting and firing
     self:updateShipMovement(dt, movementDirection)
     self:updateShipShooting(dt, movementDirection)
+    self:updateShipSteering(dt)
     
     -- Handle game timers
     self:updatePlayerTimers(dt)
@@ -278,7 +302,7 @@ function player:update(dt)
 
     -- Apply the velocity to the ship and then apply friction
     self:updatePosition()
-    self:applyFriction(dt)
+    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
 
     -- Wrap the ship's position
     self:wrapShipPosition()
