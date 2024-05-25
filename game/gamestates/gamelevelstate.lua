@@ -28,8 +28,8 @@ function gameLevelState:enter()
 end
 
 function gameLevelState:update(dt)
-    if game.input:pressed("pause") and game.gameManager.isPaused == false then
-        game.gameManager:togglePausing()
+    if game.input:pressed("pause") and game.manager.isPaused == false then
+        game.manager:togglePausing()
     end
 
     for i = #self.objects, 1, -1 do

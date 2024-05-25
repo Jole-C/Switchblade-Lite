@@ -6,7 +6,7 @@ function playerManager:new()
 end
 
 function playerManager:spawnPlayer(x, y)
-    local newPlayer = game.gameManager.currentPlayerDefinition.shipClass(x, y)
+    local newPlayer = game.manager.currentPlayerDefinition.shipClass(x, y)
     self.playerReference = newPlayer
 
     return newPlayer

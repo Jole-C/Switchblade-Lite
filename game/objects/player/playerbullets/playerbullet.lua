@@ -33,7 +33,7 @@ function playerBullet:checkCollision(xx, yy)
 end
 
 function playerBullet:draw()
-    love.graphics.setColor(game.gameManager.currentPalette.playerColour)
+    love.graphics.setColor(game.manager.currentPalette.playerColour)
     love.graphics.circle("fill", self.position.x, self.position.y, 5)
     love.graphics.setColor(1, 1, 1, 1)
 end

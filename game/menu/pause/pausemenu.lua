@@ -16,7 +16,7 @@ function pauseMenu:new()
                 text("pause", "font ui", "left", 10, 10, 1000),
 
                 textButton("resume", "font ui", 10, 25, 15, 25, function()
-                    game.gameManager:togglePausing()
+                    game.manager:togglePausing()
                 end),
 
                 textButton("restart", "font ui", 10, 40, 15, 40, function(self)
@@ -27,7 +27,7 @@ function pauseMenu:new()
 
                 textButton("quit", "font ui", 10, 65, 15, 65, function()
                     game.gameStateMachine:set_state("menuState")
-                    game.gameManager:togglePausing()
+                    game.manager:togglePausing()
                 end),
             }
         },
@@ -40,7 +40,7 @@ function pauseMenu:new()
 
                 textButton("yes", "font ui", 10, 25, 15, 25, function()
                     game.gameStateMachine:set_state("gameLevelState")
-                    game.gameManager:togglePausing()
+                    game.manager:togglePausing()
                 end),
 
                 textButton("no!", "font ui", 10, 40, 15, 40, function(self)

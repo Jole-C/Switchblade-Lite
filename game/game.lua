@@ -21,8 +21,8 @@ function game:new()
     }
 
     -- Load all services
-    self.gameManager = gameManager()
-    self.gameManager:setupPalettes()
+    self.manager = gameManager()
+    self.manager:setupPalettes()
     
     self.gameRenderer = gameRenderer()
     self.interfaceRenderer = interfaceRenderer()
@@ -73,17 +73,17 @@ end
 function game:update(dt)
     self.input:update()
 
-    self.gameManager:update(dt)
+    self.manager:update(dt)
 
-    if self.gameManager.isPaused or self.gameManager.gameFrozen then
+    if self.manager.isPaused or self.manager.gameFrozen then
         return
     end
 
     self.gameStateMachine:update(dt)
     self.playerManager:update(dt)
 
-    ps:setColors(self.gameManager.currentPalette.backgroundColour[1], self.gameManager.currentPalette.backgroundColour[2], self.gameManager.currentPalette.backgroundColour[3], self.gameManager.currentPalette.backgroundColour[4])
-    ps:update(dt/7 * self.gameManager.options.speedPercentage/100)
+    ps:setColors(self.manager.currentPalette.backgroundColour[1], self.manager.currentPalette.backgroundColour[2], self.manager.currentPalette.backgroundColour[3], self.manager.currentPalette.backgroundColour[4])
+    ps:update(dt/7 * self.manager.options.speedPercentage/100)
 end
 
 function game:draw()
@@ -99,10 +99,10 @@ function game:drawBackground()
 
     -- Draw the background
     love.graphics.setCanvas({self.canvases.backgroundCanvas.canvas, stencil = true})
-    love.graphics.setBackgroundColor(self.gameManager.currentPalette.backgroundColour[5])
+    love.graphics.setBackgroundColor(self.manager.currentPalette.backgroundColour[5])
     love.graphics.setBlendMode("alpha")
     
-    if self.gameManager.options.enableBackground == 1 then
+    if self.manager.options.enableBackground == 1 then
         love.graphics.draw(ps)
     else
         love.graphics.clear()
@@ -115,7 +115,7 @@ function game:drawBackground()
     love.graphics.setCanvas(self.canvases.backgroundShadowCanvas.canvas)
     love.graphics.clear()
 
-    local alpha = self.gameManager.options.fadingPercentage / 100
+    local alpha = self.manager.options.fadingPercentage / 100
     love.graphics.setColor(0.1, 0.1, 0.1, alpha)
     love.graphics.rectangle("fill", -100, -100, self.arenaValues.screenWidth + 100, self.arenaValues.screenHeight + 100)
     love.graphics.setCanvas()
@@ -157,7 +157,7 @@ function game:drawInterface()
     -- Draw the interface
     love.graphics.setCanvas(self.canvases.interfaceCanvas.canvas)
     love.graphics.clear()
-    self.gameManager:draw()
+    self.manager:draw()
     self.interfaceRenderer:draw()
     love.graphics.setFont(self.resourceManager:getResource("font main"))
     love.graphics.setCanvas()

@@ -45,8 +45,8 @@ function enemy:onHit(damage)
     self.isInvulnerable = true
     self.invulnerableTime = self.maxInvulnerableTime
 
-    if game.gameManager then
-        game.gameManager:setFreezeFrames(3)
+    if game.manager then
+        game.manager:setFreezeFrames(3)
     end
 end
 

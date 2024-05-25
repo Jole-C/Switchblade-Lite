@@ -89,7 +89,7 @@ function charger:draw()
     xOffset = 5
     yOffset = yOffset/2
 
-    love.graphics.setColor(game.gameManager.currentPalette.enemyColour)
+    love.graphics.setColor(game.manager.currentPalette.enemyColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
 

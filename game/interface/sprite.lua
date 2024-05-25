@@ -27,7 +27,7 @@ function spriteHudElement:draw()
         yOffset = yOffset/2
     end
     
-    local drawColour = game.gameManager.currentPalette.uiColour
+    local drawColour = game.manager.currentPalette.uiColour
 
     if self.overrideDrawColour then
         drawColour = self.overrideDrawColour

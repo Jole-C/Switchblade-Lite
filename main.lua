@@ -12,7 +12,7 @@ function love.load()
     game:start()
 
     -- Temporary particle system
-    local bgCol = game.gameManager.currentPalette.backgroundColour
+    local bgCol = game.manager.currentPalette.backgroundColour
     ps = love.graphics.newParticleSystem(game.resourceManager:getResource("particle sprite"), 1632)
     
     --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])

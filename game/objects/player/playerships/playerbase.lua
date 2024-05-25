@@ -232,10 +232,10 @@ function player:checkCollision()
                         if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
                             self.ammo = self.ammo + self.boostAmmoIncrement
                             self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
-                            game.gameManager:swapPalette()
+                            game.manager:swapPalette()
 
-                            if game.gameManager then
-                                game.gameManager:setFreezeFrames(6)
+                            if game.manager then
+                                game.manager:setFreezeFrames(6)
                             end
                         end
                     end
@@ -296,7 +296,7 @@ function player:draw()
     xOffset = xOffset/2
     yOffset = yOffset/2
     
-    love.graphics.setColor(game.gameManager.currentPalette.playerColour)
+    love.graphics.setColor(game.manager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
 end

@@ -44,7 +44,7 @@ function mainMenu:new()
             displayMenuName = false,
             elements =
             {
-                sprite("logo sprite", game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2 - 8, 0, 1, 1, 0, 0, true, game.gameManager.currentPalette.playerColour),
+                sprite("logo sprite", game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2 - 8, 0, 1, 1, 0, 0, true, game.manager.currentPalette.playerColour),
 
                 textButton("press space", "font ui", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
                     if self.owner then
@@ -89,17 +89,17 @@ function mainMenu:new()
             {
                 text("visual", "font ui", "left", 10, 10, 1000),
 
-                toggleButton("toggle bg.", "font ui", 10, 25, 20, 25, game.gameManager.options.enableBackground, {table = game.gameManager.options, value = "enableBackground"}),
+                toggleButton("toggle bg.", "font ui", 10, 25, 20, 25, game.manager.options.enableBackground, {table = game.manager.options, value = "enableBackground"}),
 
-                slider("bg. fading", "font ui", game.gameManager.options.fadingPercentage, 0, 100, 10, 40, {table = game.gameManager.options, value = "fadingPercentage"}),
+                slider("bg. fading", "font ui", game.manager.options.fadingPercentage, 0, 100, 10, 40, {table = game.manager.options, value = "fadingPercentage"}),
 
-                slider("bg. speed", "font ui", game.gameManager.options.speedPercentage, 0, 100, 10, 55, {table = game.gameManager.options, value = "speedPercentage"}),
+                slider("bg. speed", "font ui", game.manager.options.speedPercentage, 0, 100, 10, 55, {table = game.manager.options, value = "speedPercentage"}),
 
                 text("audio", "font ui", "left", 10, 80, 1000),
 
-                slider("music vol.", "font ui", game.gameManager.options.musicVolPercentage, 0, 100, 10, 95, {table = game.gameManager.options, value = "musicVolPercentage"}),
+                slider("music vol.", "font ui", game.manager.options.musicVolPercentage, 0, 100, 10, 95, {table = game.manager.options, value = "musicVolPercentage"}),
 
-                slider("sfx vol.", "font ui", game.gameManager.options.sfxVolPercentage, 0, 100, 10, 110, {table = game.gameManager.options, value = "sfxVolPercentage"}),
+                slider("sfx vol.", "font ui", game.manager.options.sfxVolPercentage, 0, 100, 10, 110, {table = game.manager.options, value = "sfxVolPercentage"}),
 
                 textButton("back", "font ui", 10, 135, 15, 135, function(self)
                     if self.owner then
@@ -107,7 +107,7 @@ function mainMenu:new()
                         self.owner:setBackgroundSlideAmount(0.32)
                     end
                     
-                    game.gameManager:saveOptions()
+                    game.manager:saveOptions()
                 end),
             }
         },
@@ -144,17 +144,17 @@ function mainMenu:new()
             elements =
             {
                 textButton("level 1", "font ui", 10, 10, 15, 10, function()
-                    game.gameManager:changePlayerDefinition("default definition")
+                    game.manager:changePlayerDefinition("default definition")
                     game.gameStateMachine:set_state("gameLevelState")
                 end),
 
                 textButton("level 2", "font ui", 10, 25, 15, 25, function()
-                    game.gameManager:changePlayerDefinition("light definition")
+                    game.manager:changePlayerDefinition("light definition")
                     game.gameStateMachine:set_state("gameLevelState")
                 end),
 
                 textButton("level 3", "font ui", 10, 40, 15, 40, function()
-                    game.gameManager:changePlayerDefinition("heavy definition")
+                    game.manager:changePlayerDefinition("heavy definition")
                     game.gameStateMachine:set_state("gameLevelState")
                 end),
 
@@ -178,7 +178,7 @@ function mainMenu:update(dt)
     
     -- Update the shader parameters
     if self.menuBoxShader and self.menuBackgroundShader then
-        local shaderSpeed = game.gameManager.options.speedPercentage / 100
+        local shaderSpeed = game.manager.options.speedPercentage / 100
         self.shaderTime = self.shaderTime + (0.1 * shaderSpeed) * dt
 
         local angle = 0.4
@@ -198,7 +198,7 @@ function mainMenu:update(dt)
         self.menuBackgroundShader:send("resolution", resolution)
         self.menuBackgroundShader:send("time", self.shaderTime)
 
-        local bgColour = game.gameManager.currentPalette.backgroundColour[1]
+        local bgColour = game.manager.currentPalette.backgroundColour[1]
         self.menuBackgroundShader:send("colour", {bgColour[1], bgColour[2], bgColour[3]})
 
         self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
@@ -221,7 +221,7 @@ function mainMenu:draw()
     love.graphics.clear()
 
     if self.menuBackgroundSprite then
-        local enableBackground = game.gameManager.options.enableBackground
+        local enableBackground = game.manager.options.enableBackground
 
         if enableBackground == 1 then
             love.graphics.setShader(self.menuBackgroundShader)
@@ -259,7 +259,7 @@ end
 
 function mainMenu:drawOverlay()
     -- Draw an overlay for the background fade
-    local alpha = game.gameManager.options.fadingPercentage / 100
+    local alpha = game.manager.options.fadingPercentage / 100
     love.graphics.setColor(0.1, 0.1, 0.1, alpha)
     love.graphics.rectangle("fill", -100, -100, game.arenaValues.screenWidth + 100, game.arenaValues.screenHeight + 100)
     love.graphics.setColor(1, 1, 1, 1)

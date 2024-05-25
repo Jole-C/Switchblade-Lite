@@ -13,7 +13,7 @@ end
 
 function textElement:draw()
     love.graphics.setFont(self.font)
-    love.graphics.setColor(game.gameManager.currentPalette.uiColour)
+    love.graphics.setColor(game.manager.currentPalette.uiColour)
     
     love.graphics.printf(self.text, self.position.x, self.position.y, self.width, self.textAlign)
 

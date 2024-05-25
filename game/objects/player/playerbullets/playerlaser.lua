@@ -72,7 +72,7 @@ function playerLaser:draw()
     xOffset = xOffset/2
     yOffset = yOffset/2
     
-    love.graphics.setColor(game.gameManager.currentPalette.playerColour)
+    love.graphics.setColor(game.manager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, self.length, 1, 0, yOffset)
     love.graphics.circle("fill", self.position.x, self.position.y, 15)
     

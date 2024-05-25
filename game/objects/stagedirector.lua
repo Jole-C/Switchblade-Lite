@@ -221,7 +221,7 @@ function stageDirector:draw()
             xOffset = xOffset/2
             yOffset = yOffset/2
     
-            love.graphics.setColor(game.gameManager.currentPalette.enemySpawnColour)
+            love.graphics.setColor(game.manager.currentPalette.enemySpawnColour)
             love.graphics.draw(sprite, nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y, nextSpawn.angle, self.spriteScale, self.spriteScale, xOffset, yOffset)
             love.graphics.setColor(1, 1, 1, 1)
         end
