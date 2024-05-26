@@ -310,6 +310,7 @@ function player:checkCollision()
 
                         local newEffect = boostAmmoEffect(self.position.x, self.position.y)
                         game.gameStateMachine:current_state():addObject(newEffect)
+                        game.manager:setFreezeFrames(5)
 
                         game.manager:swapPalette()
                     end

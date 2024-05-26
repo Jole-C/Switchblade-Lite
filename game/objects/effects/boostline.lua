@@ -19,8 +19,8 @@ end
 function boostLine:update(dt)
     effect.update(self, dt)
 
-    self.position.x = self.position.x + math.cos(self.angle) * self.speed * dt
-    self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
+    self.position.x = self.position.x + math.cos(self.angle) * (self.speed * dt)
+    self.position.y = self.position.y + math.sin(self.angle) * (self.speed * dt)
 end
 
 function boostLine:draw()

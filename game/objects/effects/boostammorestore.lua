@@ -6,7 +6,7 @@ function boostRestore:new(x, y)
 
     self.lifetime = 0.05
     self.angle = math.random(0, 2 * math.pi)
-    self.lineLength = 45
+    self.lineLength = 500
     self.circleRadius = 15
     self.lineCount = math.random(3, 4)
 
@@ -26,7 +26,6 @@ function boostRestore:draw()
     local angleIncrement = 2*math.pi/self.lineCount
 
     love.graphics.setColor(1, 1, 1, 1)
-    --[[
     for i = 1, self.lineCount do
         local x1 = self.position.x
         local y1 = self.position.y
@@ -35,7 +34,7 @@ function boostRestore:draw()
 
         love.graphics.line(x1, y1, x2, y2)
     end
-]]
+
     love.graphics.circle("line", self.position.x, self.position.y, self.circleRadius * self.sizePercentage)
 end
 

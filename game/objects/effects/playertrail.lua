@@ -14,7 +14,7 @@ end
 function playerTrail:update(dt)
     effect.update(self, dt)
 
-    self.circleRadius = self.circleRadius - self.radiusDecrement * dt
+    self.circleRadius = self.circleRadius - (self.radiusDecrement * dt)
 
     if self.circleRadius <= 0 then
         self:destroy()
