@@ -12,8 +12,8 @@ function game:new()
     -- Set up the arena values
     self.arenaValues =
     {
-        screenWidth = 320,
-        screenHeight = 180,
+        screenWidth = 480,
+        screenHeight = 270,
         worldX = -600,
         worldY = -600,
         worldWidth = 600,
