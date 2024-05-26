@@ -209,13 +209,7 @@ function player:updateOverheating(dt)
     self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
 end
 
-function player:updatePosition()
-    local arena = gameHelper:getCurrentState().arena
-
-    if not arena then
-        return
-    end
-
+function player:spawnTrail()
     local newTrailSegment
     local x = self.position.x + math.cos(self.angle) * -10
     local y = self.position.y + math.sin(self.angle) * -10
@@ -231,6 +225,16 @@ function player:updatePosition()
     if newTrailSegment then
         gameHelper:addGameObject(newTrailSegment)
     end
+end
+
+function player:updatePosition()
+    local arena = gameHelper:getCurrentState().arena
+
+    if not arena then
+        return
+    end
+
+    self:spawnTrail()
 
     local trimmedSpeed = self.maxSpeed
 
@@ -241,8 +245,13 @@ function player:updatePosition()
     self.velocity = self.velocity:trim_length_inplace(trimmedSpeed)
     
     if arena:isPositionWithinArena(self.position + self.velocity) == false then
-        self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
-        gameHelper:getCurrentState().cameraManager:screenShake(0.2)
+        local segment = arena:getSegmentPointIsWithin(self.position)
+        local normal = (segment.position - self.position)
+        normal:normalise_inplace()
+
+        self.velocity = self.velocity - (2 * normal:dot(self.velocity) * normal)
+
+        gameHelper:getCurrentState().cameraManager:screenShake(0.05)
     end
 
     self.position = self.position + self.velocity
