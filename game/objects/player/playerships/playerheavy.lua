@@ -1,5 +1,6 @@
 local playerBase = require "game.objects.player.playerships.playerbase"
 local playerBullet = require "game.objects.player.playerbullets.playerbullet"
+local trailEffect = require "game.objects.effects.playertrail"
 local playerHeavy = class({name = "Player Heavy", extends = playerBase})
 
 function playerHeavy:new(x, y)
@@ -15,12 +16,12 @@ function playerHeavy:new(x, y)
     self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
     self.steeringFriction = 7
     self.accelerationSpeed = 3
-    self.boostingAccelerationSpeed = 5
+    self.boostingAccelerationSpeed = 15
     self.friction = 0.35
     self.maxSpeed = 6
     self.maxBoostingSpeed = 15
     self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 30
+    self.shipHeatAccumulationRate = 600
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 20
     self.boostDamage = 5
@@ -55,6 +56,11 @@ function playerHeavy:updateShipMovement(dt, movementDirection)
             self.steeringAccelerationSpeed = self.steeringAccelerationMoving
             self.maxSteeringSpeed = self.steeringSpeedMoving
         end
+
+        if self.velocity:length() > self.speedForContactDamage then
+            self:spawnBoostLines()
+            self:spawnTrail()
+        end
     end
 end
 
@@ -81,22 +87,38 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
             gameHelper:addGameObject(newBullet)
         end
 
-        self:setFireCooldown()
-        self:setDisplayAmmo()
-
         self.isBoosting = true
         self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
         self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
         self.maxSteeringSpeed = self.steeringSpeedBoosting
 
-        self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
+        self.shipTemperature = self.shipTemperature + (self.shipHeatAccumulationRate * dt)
 
         self.ammo = self.ammo - 1
-        
-        self:spawnBoostLines()
+
+        self:setFireCooldown()
+        self:setDisplayAmmo()
     else
         self.isBoosting = false
+    end
+end
+
+function playerHeavy:spawnTrail()
+    local newTrailSegment
+    local x = self.position.x + math.cos(self.angle) * -10
+    local y = self.position.y + math.sin(self.angle) * -10
+
+    if self.velocity:length() > 0 then
+        if self.isBoosting == true or self.velocity:length() > self.speedForContactDamage then
+            newTrailSegment = trailEffect(x, y, 10, self.velocity:length()/2, math.pi + self.velocity:angle())
+        else
+            newTrailSegment = trailEffect(x, y, 3)
+        end
+    end
+
+    if newTrailSegment then
+        gameHelper:addGameObject(newTrailSegment)
     end
 end
 
