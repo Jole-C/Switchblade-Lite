@@ -130,14 +130,35 @@ function arenaController:getDistanceToArena(position)
 end
 
 function arenaController:getSegmentPointIsWithin(position)
+    local eligibleSegments = {}
+
     for i = 1, #self.arenaSegments do
         local segment = self.arenaSegments[i]
 
         if segment then
             local positionToSegment = (segment.position - position)
 
-            return segment
+            if positionToSegment:length() < segment.radius then
+                table.insert(eligibleSegments, segment)
+            end
         end
+    end
+
+    if #eligibleSegments == 1 then
+        return eligibleSegments[1]
+    else
+        local closestSegment = nil
+        local minimumDistance = math.huge
+        for i = 1, #eligibleSegments do
+            local segment = eligibleSegments[i]
+
+            if segment.radius < minimumDistance then
+                closestSegment = segment
+                minimumDistance = segment.radius
+            end
+        end
+
+        return closestSegment
     end
 
     return nil

@@ -243,15 +243,14 @@ function player:updatePosition()
     end
 
     self.velocity = self.velocity:trim_length_inplace(trimmedSpeed)
-    
+
     if arena:isPositionWithinArena(self.position + self.velocity) == false then
         local segment = arena:getSegmentPointIsWithin(self.position)
-        local normal = (segment.position - self.position)
-        normal:normalise_inplace()
-
-        self.velocity = self.velocity - (2 * normal:dot(self.velocity) * normal)
-
-        gameHelper:getCurrentState().cameraManager:screenShake(0.05)
+        
+        if segment then
+            local normal = (segment.position - self.position):normalise_inplace()
+            self.velocity = self.velocity - (2 * self.velocity:dot(normal) * normal)
+        end
     end
 
     self.position = self.position + self.velocity
