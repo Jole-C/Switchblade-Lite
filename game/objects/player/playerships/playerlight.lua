@@ -71,6 +71,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
             self.maxSteeringSpeed = self.steeringSpeedBoosting
 
             self:setDisplayAmmo()
+            
+            self:spawnBoostLines()
         else
             self.isBoosting = false
         end

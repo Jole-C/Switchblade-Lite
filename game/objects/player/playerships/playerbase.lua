@@ -3,6 +3,7 @@ local playerBullet = require "game.objects.player.playerbullets.playerbullet"
 local collider = require "game.collision.collider"
 local playerHud = require "game.objects.player.playerhuddisplay"
 local boostAmmoEffect = require "game.objects.effects.boostammorestore"
+local boostLineEffect = require "game.objects.effects.boostline"
 local player = class({name = "Player", extends = gameObject})
 
 function player:new(x, y)
@@ -36,6 +37,8 @@ function player:new(x, y)
     self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
     self.invulnerableGracePeriod = self.invulnerableGracePeriod or 3
     self.bounceDampening = self.bounceDampening or 0.5    
+    self.boostLineCount = 5
+    self.boostLineSpawnRange = 500
     
     -- Firing parameters of the ship
     self.maxFireCooldown = self.maxFireCooldown or 0.05
@@ -119,6 +122,7 @@ function player:updateShipMovement(dt, movementDirection)
             self.maxSteeringSpeed = self.steeringSpeedBoosting
 
             self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
+            self:spawnBoostLines()
         else
             self.isBoosting = false
         end
@@ -376,6 +380,15 @@ function player:draw()
         local width = self.ammoFont:getWidth(self.ammo)
 
         love.graphics.printf(self.ammo, self.position.x - width/2, self.position.y + 10, width, "center")
+    end
+end
+
+function player:spawnBoostLines()
+    for i = 1, self.boostLineCount do
+        local x = self.position.x + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)
+        local y = self.position.y + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)
+        local newBoostLine = boostLineEffect(x, y)
+        game.gameStateMachine:current_state():addObject(newBoostLine)
     end
 end
 

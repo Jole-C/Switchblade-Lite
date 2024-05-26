@@ -93,6 +93,8 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
         self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
 
         self.ammo = self.ammo - 1
+        
+        self:spawnBoostLines()
     else
         self.isBoosting = false
     end
