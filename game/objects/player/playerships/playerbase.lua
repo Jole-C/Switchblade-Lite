@@ -45,6 +45,7 @@ function player:new(x, y)
     self.shipKnockbackForce = self.shipKnockbackForce or 10
     self.fireOffset = self.fireOffset or 10
     self.boostAmmoIncrement = self.boostAmmoIncrement or 5
+    self.maxAmmoDisplayTime = 1
     
     -- Ship variables
     self.health = self.maxHealth
@@ -61,6 +62,8 @@ function player:new(x, y)
     self.steeringSpeed = 0
     self.maxSteeringSpeed = self.steeringSpeedStationary
     self.steeringAccelerationSpeed = self.steeringAccelerationStationary
+    self.displayAmmo = false
+    self.ammoDisplayTime = self.maxAmmoDisplayTime
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
@@ -151,9 +154,10 @@ function player:updateShipShooting(dt, movementDirection)
         game.gameStateMachine:current_state():addObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
+
+        self:setFireCooldown()
+        self:setDisplayAmmo()
         
-        self.canFire = false
-        self.fireCooldown = self.maxFireCooldown
         self.ammo = self.ammo - 1
     end
 end
@@ -161,6 +165,7 @@ end
 function player:updatePlayerTimers(dt)
     self.fireCooldown = self.fireCooldown - 1 * dt
     self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
+    self.ammoDisplayTime = self.ammoDisplayTime - 1 * dt
 
     if self.invulnerabilityCooldown <= 0 then
         self.isInvulnerable = false
@@ -168,6 +173,10 @@ function player:updatePlayerTimers(dt)
 
     if self.fireCooldown <= 0 then
         self.canFire = true
+    end
+
+    if self.ammoDisplayTime <= 0 then
+        self.displayAmmo = false
     end
 end
 
@@ -272,8 +281,7 @@ function player:checkCollision()
                     self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
                     if collidedObject.health <= 0 then
-                        self.ammo = self.ammo + self.boostAmmoIncrement
-                        self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+                        self:incrementAmmo()
 
                         local newEffect = boostAmmoEffect(self.position.x, self.position.y)
                         game.gameStateMachine:current_state():addObject(newEffect)
@@ -290,6 +298,22 @@ function player:checkCollision()
             ::continue::
         end
     end
+end
+
+function player:setDisplayAmmo()
+    self.displayAmmo = true
+    self.ammoDisplayTime = self.maxAmmoDisplayTime
+end
+
+function player:incrementAmmo()
+    self.ammo = self.ammo + self.boostAmmoIncrement
+    self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+    self:setDisplayAmmo()
+end
+
+function player:setFireCooldown()
+    self.fireCooldown = self.maxFireCooldown
+    self.canFire = false
 end
 
 function player:applyFriction(dt, value, frictionValue)
@@ -344,7 +368,7 @@ function player:draw()
     love.graphics.setColor(1, 1, 1, 1)
 
     -- Draw the ammo count if the player is firing
-    if game.input:down("shoot") then
+    if self.displayAmmo == true then
         love.graphics.setFont(self.ammoFont)
         love.graphics.setColor(1, 1, 1, 1)
         local width = self.ammoFont:getWidth(self.ammo)

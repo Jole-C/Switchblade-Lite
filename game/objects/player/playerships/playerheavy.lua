@@ -81,9 +81,8 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
             game.gameStateMachine:current_state():addObject(newBullet)
         end
 
-        self.canFire = false
-        self.fireCooldown = self.maxFireCooldown
-        self.ammo = self.ammo - 1
+        self:setFireCooldown()
+        self:setDisplayAmmo()
 
         self.isBoosting = true
         self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
@@ -92,6 +91,8 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
         self.maxSteeringSpeed = self.steeringSpeedBoosting
 
         self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
+
+        self.ammo = self.ammo - 1
     else
         self.isBoosting = false
     end
@@ -122,8 +123,7 @@ function playerHeavy:checkCollision()
                         collidedObject:onHit(self.boostDamage)
 
                         if collidedObject.health <= 0 then
-                            self.ammo = self.ammo + self.boostAmmoIncrement
-                            self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+                            self:incrementAmmo()
                             game.manager:swapPalette()
                         end
                     end

@@ -69,9 +69,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
 
             self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
             self.maxSteeringSpeed = self.steeringSpeedBoosting
-
-            self.ammo = self.ammo + self.ammoAccumulationRate * dt
-            self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+            
+            self:setDisplayAmmo()
         else
             self.isBoosting = false
         end
@@ -91,8 +90,8 @@ function playerLight:updateShipShooting(dt, movementDirection)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
         
-        self.canFire = false
-        self.fireCooldown = self.maxFireCooldown
+        self:setFireCooldown()
+        self:setDisplayAmmo()
 
         self.ammo = self.ammo - 1
     end
