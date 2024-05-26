@@ -29,7 +29,7 @@ function drone:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    game.gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 12, 12)
+    gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
 
     self.tail = tail("charger tail sprite", x, y, 15, 1)
     self.eye = eye(x, y, 3, 2)
@@ -71,7 +71,7 @@ function drone:update(dt)
     -- Apply friction
     self:applyFriction(dt)
 
-    local arena = game.gameStateMachine:current_state().arena
+    local arena = gameHelper:getCurrentState().arena
 
     if arena then
         -- Bounce off the wall
@@ -87,7 +87,7 @@ function drone:update(dt)
 
         -- Clamp the enemy's position
         self.position = self.position + self.velocity
-        self.position = game.gameStateMachine:current_state().arena:getClampedPosition(self.position)
+        self.position = gameHelper:getCurrentState().arena:getClampedPosition(self.position)
     end
 
     -- Update the tail
@@ -107,7 +107,7 @@ function drone:update(dt)
     end
 
     -- Update the collider
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -149,9 +149,9 @@ function drone:applyFriction(dt)
 end
 
 function drone:cleanup()
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
-        game.gameStateMachine:current_state().world:remove(self.collider)
+        gameHelper:getWorld():remove(self.collider)
     end
 end
 

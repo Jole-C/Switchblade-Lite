@@ -72,10 +72,10 @@ function player:new(x, y)
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    game.gameStateMachine:current_state().world:add(self.collider, 0, 0, 8, 8)
+    gameHelper:getWorld():add(self.collider, 0, 0, 8, 8)
 
     self.boostCollider = collider(colliderDefinitions.none, self)
-    game.gameStateMachine:current_state().world:add(self.boostCollider, 0, 0, 12, 12)
+    gameHelper:getWorld():add(self.boostCollider, 0, 0, 12, 12)
 
     self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
@@ -86,9 +86,10 @@ function player:new(x, y)
     self.ammoFont = game.resourceManager:getResource("font main")
     self.cameraWeight = {position = self.position, weight = 3}
 
-    game.gameStateMachine:current_state().cameraManager:addTarget(self.cameraWeight)
+    gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
 end
 
+-- Update the player hud
 function player:updateHud()
     if self.hud then
         self.hud:update()
@@ -100,7 +101,6 @@ function player:updateShipMovement(dt, movementDirection)
     self.maxSteeringSpeed = self.steeringSpeedStationary
 
     if self.isOverheating == false then
-        -- Apply a forward thrust to the ship
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
@@ -115,7 +115,6 @@ function player:updateShipMovement(dt, movementDirection)
             self.maxSteeringSpeed = self.steeringSpeedStationary
         end
 
-        -- Boost the ship
         if game.input:down("boost") then
             self.isBoosting = true
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
@@ -132,7 +131,6 @@ function player:updateShipMovement(dt, movementDirection)
 end
 
 function player:updateShipSteering(dt)
-    -- Steer the ship
     if game.input:down("steerLeft") then
         self.steeringSpeed = self.steeringSpeed - (self.steeringAccelerationSpeed * dt)
     end
@@ -147,7 +145,6 @@ function player:updateShipSteering(dt)
 end
 
 function player:updateShipShooting(dt, movementDirection)
-    -- Fire gun
     if self.isBoosting == true or self.ammo <= 0 then
         self.canFire = false
     end
@@ -160,7 +157,7 @@ function player:updateShipShooting(dt, movementDirection)
     if self.canFire == true and game.input:down("shoot") then
         local firePosition = self.position + (movementDirection * self.fireOffset)
         local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, 16, 16)
-        game.gameStateMachine:current_state():addObject(newBullet)
+        gameHelper:addGameObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
 
@@ -213,7 +210,7 @@ function player:updateOverheating(dt)
 end
 
 function player:updatePosition()
-    local arena = game.gameStateMachine:current_state().arena
+    local arena = gameHelper:getCurrentState().arena
 
     if not arena then
         return
@@ -232,7 +229,7 @@ function player:updatePosition()
     end
 
     if newTrailSegment then
-        game.gameStateMachine:current_state():addObject(newTrailSegment)
+        gameHelper:addGameObject(newTrailSegment)
     end
 
     local trimmedSpeed = self.maxSpeed
@@ -245,7 +242,7 @@ function player:updatePosition()
     
     if arena:isPositionWithinArena(self.position + self.velocity) == false then
         self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
-        game.gameStateMachine:current_state().cameraManager:screenShake(0.2)
+        gameHelper:getCurrentState().cameraManager:screenShake(0.2)
     end
 
     self.position = self.position + self.velocity
@@ -254,7 +251,7 @@ function player:updatePosition()
 end
 
 function player:checkCollision()
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -309,7 +306,7 @@ function player:checkCollision()
                         self:incrementAmmo()
 
                         local newEffect = boostAmmoEffect(self.position.x, self.position.y)
-                        game.gameStateMachine:current_state():addObject(newEffect)
+                        gameHelper:addGameObject(newEffect)
                         game.manager:setFreezeFrames(5)
 
                         game.manager:swapPalette()
@@ -400,13 +397,13 @@ function player:draw()
 end
 
 function player:spawnBoostLines()
-    game.gameStateMachine:current_state().cameraManager:screenShake(0.05)
+    gameHelper:getCurrentState().cameraManager:screenShake(0.05)
 
     for i = 1, self.boostLineCount do
         local x = self.position.x + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)
         local y = self.position.y + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)
         local newBoostLine = boostLineEffect(x, y)
-        game.gameStateMachine:current_state():addObject(newBoostLine)
+        gameHelper:addGameObject(newBoostLine)
     end
 end
 
@@ -427,9 +424,9 @@ function player:onHit(damage)
 end
 
 function player:cleanup()
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
-        game.gameStateMachine:current_state().world:remove(self.collider)
+        gameHelper:getWorld():remove(self.collider)
     end
 end
 

@@ -8,9 +8,9 @@ local bombEnemy = class{
     cleanup = function(self)
         enemy.cleanup(self)
         
-        local world = game.gameStateMachine:current_state().world
+        local world = gameHelper:getWorld()
         if world and world:hasItem(self.collider) then
-            game.gameStateMachine:current_state().world:remove(self.collider)
+            gameHelper:getWorld():remove(self.collider)
         end
     end
 }

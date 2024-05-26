@@ -12,7 +12,7 @@ function bullet:new(x, y, speed, angle, damage, colliderDefinition, width, heigh
     self.radius = width
 
     self.collider = collider(colliderDefinition, self)
-    game.gameStateMachine:current_state().world:add(self.collider, x, y, width, height)
+    gameHelper:getWorld():add(self.collider, x, y, width, height)
 end
 
 function bullet:update(dt)
@@ -20,7 +20,7 @@ function bullet:update(dt)
     self:updateBullet(dt)
 
     -- Update the collider position and check it for collisions
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
     local world = currentGamestate.world
 
     if world and world:hasItem(self.collider) then
@@ -57,9 +57,9 @@ function bullet:draw()
 end
 
 function bullet:cleanup()
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
-        game.gameStateMachine:current_state().world:remove(self.collider)
+        gameHelper:getWorld():remove(self.collider)
     end
 end
 

@@ -19,7 +19,7 @@ function charger:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    game.gameStateMachine:current_state().world:add(self.collider, x, y, 12, 12)
+    gameHelper:getWorld():add(self.collider, x, y, 12, 12)
 
     self.tail = tail("charger tail sprite", self.position.x, self.position.y, 15, 1)
     self.eye = eye(x, y, 2, 2)
@@ -28,7 +28,7 @@ end
 function charger:update(dt)
     enemy.update(self, dt)
 
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
     local arena = currentGamestate.arena
 
     if not arena then
@@ -100,9 +100,9 @@ function charger:draw()
 end
 
 function charger:cleanup()
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
-        game.gameStateMachine:current_state().world:remove(self.collider)
+        gameHelper:getWorld():remove(self.collider)
     end
 end
 

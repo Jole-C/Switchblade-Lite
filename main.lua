@@ -6,6 +6,7 @@ gamera = require "lib.camera.gamera"
 
 -- System requirements
 local gameClass = require "game.game"
+gameHelper = require "game.misc.gamehelper"
 
 function love.load()
     game = gameClass()

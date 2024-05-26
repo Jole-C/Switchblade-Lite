@@ -78,7 +78,7 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
                 16,
                 16
             )
-            game.gameStateMachine:current_state():addObject(newBullet)
+            gameHelper:addGameObject(newBullet)
         end
 
         self:setFireCooldown()
@@ -101,7 +101,7 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
 end
 
 function playerHeavy:checkCollision()
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
@@ -146,7 +146,7 @@ function playerHeavy:update(dt)
     -- Update the hud
     self:updateHud()
 
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
     if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
         return
     end

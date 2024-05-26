@@ -48,7 +48,7 @@ function playerDefault:update(dt)
     -- Update the hud
     self:updateHud()
 
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
     if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
         return
     end

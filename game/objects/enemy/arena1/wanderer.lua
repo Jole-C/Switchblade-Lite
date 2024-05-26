@@ -20,7 +20,7 @@ function wanderer:new(x, y)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
-    game.gameStateMachine:current_state().world:add(self.collider, self.position.x, self.position.y, 12, 12)
+    gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
 
     self.tail = tail("wanderer tail sprite", x, y, 15, 1)
     self.eye = eye(x, y, 2, 2)
@@ -35,8 +35,8 @@ function wanderer:update(dt)
     local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
     -- Clamp the enemy's position to the world border
-    if game.gameStateMachine:current_state().arena then
-        self.position = game.gameStateMachine:current_state().arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
+    if gameHelper:getCurrentState().arena then
+        self.position = gameHelper:getCurrentState().arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
     end
 
     -- Randomise the enemy's angle
@@ -64,7 +64,7 @@ function wanderer:update(dt)
     end
 
     -- Handle collisions
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
         -- Move the collider
@@ -104,9 +104,9 @@ end
 function wanderer:cleanup()
     enemy.cleanup(self)
     
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
-        game.gameStateMachine:current_state().world:remove(self.collider)
+        gameHelper:getWorld():remove(self.collider)
     end
 end
 

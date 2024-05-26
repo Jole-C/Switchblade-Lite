@@ -20,7 +20,7 @@ function playerLaser:update(dt)
         self:destroy()
     end
 
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
     local world = currentGamestate.world
 
     -- Handle laser bouncing

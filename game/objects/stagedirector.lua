@@ -51,7 +51,7 @@ function stageDirector:new(levelDefinition)
                 defaultRadius = segment.radius,
             }
 
-            local currentGamestate = game.gameStateMachine:current_state()
+            local currentGamestate = gameHelper:getCurrentState()
             
             if currentGamestate.arena and self.arenaSegments[name] then
                 currentGamestate.arena:addArenaSegment(self.arenaSegments[name])
@@ -86,7 +86,7 @@ function stageDirector:update(dt)
             self.currentText = self.currentText + 1
 
             if self.currentText > #self.introText then
-                local arena = game.gameStateMachine:current_state().arena
+                local arena = gameHelper:getCurrentState().arena
 
                 if arena then
                     arena:enableIntro()
@@ -163,7 +163,7 @@ function stageDirector:update(dt)
     end
 
     -- Handle enemy spawns and wave changing
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
 
     if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
         -- Start the new wave if the minimum amount of enemies are present
@@ -195,13 +195,13 @@ function stageDirector:update(dt)
             for i = 1, #self.enemySpawnList do
                 local nextSpawn = self.enemySpawnList[i]
                 local newEnemy = nextSpawn.enemyClass(nextSpawn.spawnPosition.x, nextSpawn.spawnPosition.y)
-                game.gameStateMachine:current_state():addObject(newEnemy)
+                gameHelper:addGameObject(newEnemy)
             end
 
             self.inWaveTransition = false
 
             -- Set the minimum enemies for the next wave to start
-            local currentGamestate = game.gameStateMachine:current_state()
+            local currentGamestate = gameHelper:getCurrentState()
             
             if currentGamestate.enemyManager then
                 self.minimumEnemyCount = #currentGamestate.enemyManager.enemies - (self.minimumKillsForNextWave or 1)

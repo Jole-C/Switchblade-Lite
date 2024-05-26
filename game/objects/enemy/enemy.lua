@@ -17,7 +17,7 @@ function enemy:new(x, y, spriteName)
     self.sprite = game.resourceManager:getResource(spriteName)
     
     -- Register the enemy
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:registerEnemy(self)
     end
@@ -55,13 +55,13 @@ function enemy:setVulnerable()
 end
 
 function enemy:cleanup()
-    game.gameStateMachine:current_state().cameraManager:screenShake(0.1)
+    gameHelper:getCurrentState().cameraManager:screenShake(0.1)
 
     if game.manager then
         game.manager:setFreezeFrames(2)
     end
 
-    local currentGamestate = game.gameStateMachine:current_state()
+    local currentGamestate = gameHelper:getCurrentState()
 
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:unregisterEnemy(self)

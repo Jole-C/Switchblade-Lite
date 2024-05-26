@@ -2,7 +2,7 @@ local bullet = require "game.objects.bullet.bullet"
 local playerBullet = class({name = "Player Bullet", extends = bullet})
 
 function playerBullet:checkCollision(xx, yy)
-    local world = game.gameStateMachine:current_state().world
+    local world = gameHelper:getWorld()
     
     if world and world:hasItem(self.collider) then
         local x, y, cols, len = world:check(self.collider, xx, yy)
