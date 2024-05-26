@@ -15,6 +15,12 @@ function cameraManager:new()
     end
 
     self.cameraLerpSpeed = 0.1
+
+    self.screenShakeAmount = 0
+    self.cameraShakeOffset = vec2(0, 0)
+    self.shakeFadeAmount = 0.95
+    
+    self.cameraShakeRange = 32
 end
 
 function cameraManager:update(dt)
@@ -36,10 +42,18 @@ function cameraManager:update(dt)
     self.cameraTargetPosition.x = numeratorX / denominatorX
     self.cameraTargetPosition.y = numeratorY / denominatorY
 
+    self.cameraShakeOffset.x = math.random(-self.cameraShakeRange, self.cameraShakeRange)
+    self.cameraShakeOffset.y = math.random(-self.cameraShakeRange, self.cameraShakeRange)
+
+    self.cameraShakeOffset.x = self.cameraShakeOffset.x * self.screenShakeAmount
+    self.cameraShakeOffset.y = self.cameraShakeOffset.y * self.screenShakeAmount
+
+    self.screenShakeAmount = self.screenShakeAmount * self.shakeFadeAmount
+
     self.cameraPosition.x = math.lerp(self.cameraPosition.x, self.cameraTargetPosition.x, self.cameraLerpSpeed)
     self.cameraPosition.y = math.lerp(self.cameraPosition.y, self.cameraTargetPosition.y, self.cameraLerpSpeed)
 
-    game.camera:setPosition(self.cameraPosition.x, self.cameraPosition.y)
+    game.camera:setPosition(self.cameraPosition.x + self.cameraShakeOffset.x, self.cameraPosition.y + self.cameraShakeOffset.y)
 end
 
 function cameraManager:addTarget(newTarget)
@@ -48,6 +62,10 @@ end
 
 function cameraManager:removeTarget(targetToRemove)
     tablex.remove_value(self.cameraTargets, targetToRemove)
+end
+
+function cameraManager:screenShake(amount)
+    self.screenShakeAmount = amount
 end
 
 return cameraManager

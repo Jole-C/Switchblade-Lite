@@ -55,8 +55,10 @@ function enemy:setVulnerable()
 end
 
 function enemy:cleanup()
-    if self.invulnerableTimer then
-        timer.clear(self.invulnerableTimer)
+    game.gameStateMachine:current_state().cameraManager:screenShake(0.1)
+
+    if game.manager then
+        game.manager:setFreezeFrames(2)
     end
 
     local currentGamestate = game.gameStateMachine:current_state()

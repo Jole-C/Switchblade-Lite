@@ -227,6 +227,7 @@ function player:updatePosition()
     
     if arena:isPositionWithinArena(self.position + self.velocity) == false then
         self.velocity = (self.velocity - (self.velocity * 2)) * self.bounceDampening
+        game.gameStateMachine:current_state().cameraManager:screenShake(0.2)
     end
 
     self.position = self.position + self.velocity
@@ -293,10 +294,6 @@ function player:checkCollision()
                         game.gameStateMachine:current_state():addObject(newEffect)
 
                         game.manager:swapPalette()
-
-                        if game.manager then
-                            game.manager:setFreezeFrames(6)
-                        end
                     end
                 end
             end
@@ -384,6 +381,8 @@ function player:draw()
 end
 
 function player:spawnBoostLines()
+    game.gameStateMachine:current_state().cameraManager:screenShake(0.05)
+
     for i = 1, self.boostLineCount do
         local x = self.position.x + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)
         local y = self.position.y + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)
