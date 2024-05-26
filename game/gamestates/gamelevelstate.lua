@@ -1,6 +1,7 @@
 local gamestate = require "game.gamestates.gamestate"
 local stageDirector = require "game.objects.stagedirector"
 local enemyManager = require "game.objects.enemy.enemymanager"
+local cameraManager = require "game.objects.cameramanager"
 local level = require "game.levels.level1"
 local arena = require "game.objects.arena"
 
@@ -16,6 +17,10 @@ function gameLevelState:enter()
 
     self.arena = arena()
     self:addObject(self.arena)
+
+    self.cameraManager = cameraManager()
+    self:addObject(self.cameraManager)
+    self.cameraManager:addTarget({position = vec2(0, 0), weight = 3})
 
     self.stageDirector = stageDirector(level, 0, 0)
     self:addObject(self.stageDirector)
@@ -72,6 +77,7 @@ function gameLevelState:leave()
     self.enemyManager = nil
     self.arena = nil
     self.stageDirector = nil
+    self.cameraManager = nil
 
     game.interfaceRenderer:clearElements()
 end

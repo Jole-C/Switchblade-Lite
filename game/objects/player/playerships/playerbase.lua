@@ -79,6 +79,9 @@ function player:new(x, y)
     game.interfaceRenderer:addHudElement(self.hud)
 
     self.ammoFont = game.resourceManager:getResource("font main")
+    self.cameraWeight = {position = self.position, weight = 3}
+
+    game.gameStateMachine:current_state().cameraManager:addTarget(self.cameraWeight)
 end
 
 function player:updateHud()
@@ -224,8 +227,7 @@ function player:updatePosition()
 
     self.position = self.position + self.velocity
     self.position = arena:getClampedPosition(self.position)
-
-    game.camera:setPosition(self.position.x, self.position.y)
+    self.cameraWeight.position = self.position
 end
 
 function player:checkCollision()
