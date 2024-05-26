@@ -73,6 +73,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
             self:setDisplayAmmo()
             
             self:spawnBoostLines()
+
+            self.ammo = self.ammo + self.boostAmmoIncrement
         else
             self.isBoosting = false
         end
