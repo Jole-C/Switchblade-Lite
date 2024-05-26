@@ -75,8 +75,8 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
                 (self.angle + math.pi) + math.rad(love.math.random(-self.maxBulletAngle, self.maxBulletAngle)),
                 self.bulletDamage,
                 colliderDefinitions.playerbullet,
-                8,
-                8
+                16,
+                16
             )
             game.gameStateMachine:current_state():addObject(newBullet)
         end

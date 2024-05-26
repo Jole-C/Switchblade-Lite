@@ -34,7 +34,7 @@ end
 
 function playerBullet:draw()
     love.graphics.setColor(game.manager.currentPalette.playerColour)
-    love.graphics.circle("fill", self.position.x, self.position.y, 5)
+    love.graphics.circle("fill", self.position.x, self.position.y, self.radius/2)
     love.graphics.setColor(1, 1, 1, 1)
 end
 

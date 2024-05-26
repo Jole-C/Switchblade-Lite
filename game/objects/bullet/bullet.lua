@@ -9,6 +9,7 @@ function bullet:new(x, y, speed, angle, damage, colliderDefinition, width, heigh
     self.angle = angle
     self.damage = damage
     self.lifetime = lifetime
+    self.radius = width
 
     self.collider = collider(colliderDefinition, self)
     game.gameStateMachine:current_state().world:add(self.collider, x, y, width, height)
@@ -52,7 +53,7 @@ function bullet:checkCollision(x, y)
 end
 
 function bullet:draw()
-    love.graphics.circle("fill", self.position.x, self.position.y, 5)
+    love.graphics.circle("fill", self.position.x, self.position.y, self.radius/2)
 end
 
 function bullet:cleanup()
