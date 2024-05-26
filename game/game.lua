@@ -245,7 +245,7 @@ function game:setupResources()
         local vertexXoffset = 0
         
         if generateInnerVertex == false then
-            vertexXoffset = 20
+            vertexXoffset = 30
         end
 
         local vertexX = baseVertexX + vertexXoffset

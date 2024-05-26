@@ -234,7 +234,7 @@ function mainMenu:draw()
         -- Use the menu background as a stencil
         love.graphics.stencil(function()
             love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY))
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight + 20))
+            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight + 30))
         end, "replace", 1, false)
 
         love.graphics.setStencilTest("greater", 0)
