@@ -4,6 +4,8 @@ local collider = require "game.collision.collider"
 local playerHud = require "game.objects.player.playerhuddisplay"
 local boostAmmoEffect = require "game.objects.effects.boostammorestore"
 local boostLineEffect = require "game.objects.effects.boostline"
+local trailEffect = require "game.objects.effects.playertrail"
+
 local player = class({name = "Player", extends = gameObject})
 
 function player:new(x, y)
@@ -215,6 +217,22 @@ function player:updatePosition()
 
     if not arena then
         return
+    end
+
+    local newTrailSegment
+    local x = self.position.x + math.cos(self.angle) * -10
+    local y = self.position.y + math.sin(self.angle) * -10
+
+    if self.velocity:length() > 0 then
+        if self.isBoosting == true then
+            newTrailSegment = trailEffect(x, y, 10, self.velocity:length()/2, math.pi + self.velocity:angle())
+        else
+            newTrailSegment = trailEffect(x, y, 3)
+        end
+    end
+
+    if newTrailSegment then
+        game.gameStateMachine:current_state():addObject(newTrailSegment)
     end
 
     local trimmedSpeed = self.maxSpeed

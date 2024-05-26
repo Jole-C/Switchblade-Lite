@@ -12,7 +12,7 @@ function boostLine:new(x, y)
     local player = game.playerManager.playerReference
     if player then
         self.angle = player.velocity:angle()
-        self.speed = -player.velocity:length() * 100
+        self.speed = -player.velocity:length() * 200
     end
 end
 
