@@ -2,6 +2,7 @@ local gameObject = require "game.objects.gameobject"
 local playerBullet = require "game.objects.player.playerbullets.playerbullet"
 local collider = require "game.collision.collider"
 local playerHud = require "game.objects.player.playerhuddisplay"
+local boostAmmoEffect = require "game.objects.effects.boostammorestore"
 local player = class({name = "Player", extends = gameObject})
 
 function player:new(x, y)
@@ -33,7 +34,6 @@ function player:new(x, y)
     self.boostDamage = self.boostDamage or 5
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
-    self.boostingInvulnerableGracePeriod = self.boostingInvulnerableGracePeriod or 1
     self.invulnerableGracePeriod = self.invulnerableGracePeriod or 3
     self.bounceDampening = self.bounceDampening or 0.5    
     
@@ -54,10 +54,8 @@ function player:new(x, y)
     self.isOverheating = false
     self.shipTemperature = 0
     self.ammo = self.maxAmmo
-    self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
     self.invulnerabilityCooldown = self.invulnerableGracePeriod
     self.fireCooldown = self.maxFireCooldown
-    self.isBoostingInvulnerable = false
     self.isInvulnerable = false
     self.canFire = true
     self.steeringSpeed = 0
@@ -76,6 +74,8 @@ function player:new(x, y)
 
     self.hud = playerHud()
     game.interfaceRenderer:addHudElement(self.hud)
+
+    self.ammoFont = game.resourceManager:getResource("font main")
 end
 
 function player:updateHud()
@@ -113,14 +113,8 @@ function player:updateShipMovement(dt, movementDirection)
             self.maxSteeringSpeed = self.steeringSpeedBoosting
 
             self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
-        end
-
-        -- After boosting stops, set up the timer for post boosting invulnerability
-        if self.isBoosting == true and game.input:down("boost") == false then
+        else
             self.isBoosting = false
-
-            self.isBoostingInvulnerable = true
-            self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
         end
     end
 end
@@ -167,7 +161,6 @@ end
 function player:updatePlayerTimers(dt)
     self.fireCooldown = self.fireCooldown - 1 * dt
     self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
-    self.boostingInvulnerabilityCooldown = self.boostingInvulnerabilityCooldown - 1 * dt
 
     if self.invulnerabilityCooldown <= 0 then
         self.isInvulnerable = false
@@ -175,10 +168,6 @@ function player:updatePlayerTimers(dt)
 
     if self.fireCooldown <= 0 then
         self.canFire = true
-    end
-
-    if self.boostingInvulnerabilityCooldown <= 0 then
-        self.isBoostingInvulnerable = false
     end
 end
 
@@ -282,9 +271,13 @@ function player:checkCollision()
                     collidedObject:onHit(self.boostDamage)
                     self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
-                    if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
+                    if collidedObject.health <= 0 then
                         self.ammo = self.ammo + self.boostAmmoIncrement
                         self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
+
+                        local newEffect = boostAmmoEffect(self.position.x, self.position.y)
+                        game.gameStateMachine:current_state():addObject(newEffect)
+
                         game.manager:swapPalette()
 
                         if game.manager then
@@ -349,10 +342,19 @@ function player:draw()
     love.graphics.setColor(game.manager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
+
+    -- Draw the ammo count if the player is firing
+    if game.input:down("shoot") then
+        love.graphics.setFont(self.ammoFont)
+        love.graphics.setColor(1, 1, 1, 1)
+        local width = self.ammoFont:getWidth(self.ammo)
+
+        love.graphics.printf(self.ammo, self.position.x - width/2, self.position.y + 10, width, "center")
+    end
 end
 
 function player:onHit(damage)
-    if self.isInvulnerable or self.isBoostingInvulnerable then
+    if self.isInvulnerable then
         return
     end
 

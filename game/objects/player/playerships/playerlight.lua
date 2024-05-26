@@ -29,7 +29,6 @@ function playerLight:new(x, y)
     self.boostDamage = 5
     self.boostEnemyHitHeatAccumulation = 25
     self.contactDamageHeatMultiplier = 10
-    self.boostingInvulnerableGracePeriod = 1
     self.invulnerableGracePeriod = 3
     self.idleHeatAccumulationRate = 30
     
@@ -73,14 +72,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
 
             self.ammo = self.ammo + self.ammoAccumulationRate * dt
             self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
-        end
-
-        -- After boosting stops, set up the timer for post boosting invulnerability
-        if self.isBoosting == true and game.input:down("boost") == false then
+        else
             self.isBoosting = false
-
-            self.isBoostingInvulnerable = true
-            self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
         end
     end
 end

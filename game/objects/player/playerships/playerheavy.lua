@@ -26,7 +26,6 @@ function playerHeavy:new(x, y)
     self.boostDamage = 5
     self.boostEnemyHitHeatAccumulation = 35
     self.contactDamageHeatAccumulation = 10
-    self.boostingInvulnerableGracePeriod = 1
     self.invulnerableGracePeriod = 3
     self.speedForContactDamage = 2
     
@@ -55,14 +54,6 @@ function playerHeavy:updateShipMovement(dt, movementDirection)
 
             self.steeringAccelerationSpeed = self.steeringAccelerationMoving
             self.maxSteeringSpeed = self.steeringSpeedMoving
-        end
-
-        -- After boosting stops, set up the timer for post boosting invulnerability
-        if self.isBoosting == true and game.input:down("shoot") == false then
-            self.isBoosting = false
-
-            self.isBoostingInvulnerable = true
-            self.boostingInvulnerabilityCooldown = self.boostingInvulnerableGracePeriod
         end
     end
 end
@@ -101,6 +92,8 @@ function playerHeavy:updateShipShooting(dt, movementDirection)
         self.maxSteeringSpeed = self.steeringSpeedBoosting
 
         self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
+    else
+        self.isBoosting = false
     end
 end
 
@@ -128,7 +121,7 @@ function playerHeavy:checkCollision()
                     if collidedObject.onHit then
                         collidedObject:onHit(self.boostDamage)
 
-                        if collidedObject.health <= 0 and self.isBoostingInvulnerable == false then
+                        if collidedObject.health <= 0 then
                             self.ammo = self.ammo + self.boostAmmoIncrement
                             self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
                             game.manager:swapPalette()
