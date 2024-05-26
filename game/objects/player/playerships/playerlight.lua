@@ -26,7 +26,7 @@ function playerLight:new(x, y)
     self.shipHeatAccumulationRate = 1
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 20
-    self.boostDamage = 5
+    self.boostDamage = 0
     self.boostEnemyHitHeatAccumulation = 25
     self.contactDamageHeatMultiplier = 10
     self.invulnerableGracePeriod = 3
@@ -69,7 +69,7 @@ function playerLight:updateShipMovement(dt, movementDirection)
 
             self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
             self.maxSteeringSpeed = self.steeringSpeedBoosting
-            
+
             self:setDisplayAmmo()
         else
             self.isBoosting = false

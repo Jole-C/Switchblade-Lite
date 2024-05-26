@@ -25,7 +25,7 @@ function playerDefault:new(x, y)
     self.shipHeatAccumulationRate = 30
     self.shipCoolingRate = 50
     self.shipOverheatCoolingRate = 30
-    self.boostDamage = 5
+    self.boostDamage = 3
     self.boostEnemyHitHeatAccumulation = 7
     self.contactDamageHeatMultiplier = 20
     self.boostingInvulnerableGracePeriod = 1

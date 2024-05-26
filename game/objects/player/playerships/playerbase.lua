@@ -31,7 +31,7 @@ function player:new(x, y)
     self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
     self.shipCoolingRate = self.shipCoolingRate or 40
     self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
-    self.boostDamage = self.boostDamage or 5
+    self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
     self.invulnerableGracePeriod = self.invulnerableGracePeriod or 3
