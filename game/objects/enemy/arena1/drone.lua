@@ -10,7 +10,7 @@ function drone:new(x, y)
     -- Parameters of the enemey
     self.maxSpeed = 1.5
     self.turningRate = 0.16
-    self.health = 15
+    self.health = 5
     self.maxChargeCooldown = 4
     self.maxChargeSpeed = 6
     self.chargeDuration = 2
