@@ -149,6 +149,8 @@ function drone:applyFriction(dt)
 end
 
 function drone:cleanup()
+    enemy.cleanup(self)
+    
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
         gameHelper:getWorld():remove(self.collider)
