@@ -39,6 +39,8 @@ function pauseMenu:new()
                 text("are you sure?", "font ui", "left", 10, 10, 1000),
 
                 textButton("yes", "font ui", 10, 25, 15, 25, function()
+                    -- I think this sucks but it works for now
+                    game.gameStateMachine:set_state("menuState")
                     game.gameStateMachine:set_state("gameLevelState")
                     game.manager:togglePausing()
                 end),
