@@ -3,6 +3,7 @@ require "lib.batteries":export()
 bump = require "lib.bump.bump"
 baton = require "lib.input.baton"
 gamera = require "lib.camera.gamera"
+ripple = require "lib.audio.ripple"
 
 -- System requirements
 local gameClass = require "game.game"
@@ -41,7 +42,7 @@ function love.load()
     ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(0.045423280447721)
     ps:setEmissionArea("uniform", 480, 270, 0, false)
-    ps:setEmissionRate(512)
+    ps:setEmissionRate(4096)
     ps:setEmitterLifetime(-1)
     ps:setInsertMode("top")
     ps:setLinearAcceleration(0, 0, 0, 0)
