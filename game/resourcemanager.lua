@@ -7,7 +7,7 @@ end
 function resourceManager:addResource(resource, identifier)
     self.resources[identifier] = resource
     
-    if resource.setFilter then
+    if resource.setFilter and resource:type() ~= "Source" then
         resource:setFilter("nearest", "nearest")
     end
 end
