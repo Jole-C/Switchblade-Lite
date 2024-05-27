@@ -657,19 +657,19 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newValue = 150,
+                    newRadius = 150,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newValue = 150,
+                    newRadius = 150,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newValue = 150,
+                    newRadius = 150,
                     lerpSpeed = 0.05
                 },
 
