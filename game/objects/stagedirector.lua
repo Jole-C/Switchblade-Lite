@@ -18,7 +18,7 @@ function stageDirector:new(levelDefinition)
 
     self.currentWaveIndex = 0
     self.maxWave = 0
-    self.waveTransitionTime = 3
+    self.waveTransitionTime = 2
     self.elapsedWaveTime = 0
     self.defaultTimeForNextWave = 15
 
@@ -30,7 +30,6 @@ function stageDirector:new(levelDefinition)
 
     self.enemyKills = 0
     self.minimumEnemyKills = 0
-    self.waveTimer = 0
     self.nextWaveConditions = {
         {
             conditionType = "timer",
@@ -205,7 +204,7 @@ function stageDirector:update(dt)
 end
 
 function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
-    local newWarning = enemyWarning(x, y, originSegment, spawnClass)
+    local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.waveTransitionTime)
     gameHelper:addGameObject(newWarning)
 end
 

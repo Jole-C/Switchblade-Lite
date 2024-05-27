@@ -1,14 +1,14 @@
 local gameObject = require "game.objects.gameobject"
 local enemyWarning = class({name = "Enemy Warning", extends = gameObject})
 
-function enemyWarning:new(x, y, originSegment, enemyDefinition)
+function enemyWarning:new(x, y, originSegment, enemyDefinition, spawnTime)
     self:super(0, 0)
 
     self.originSegment = originSegment
     self.spawnClass = enemyDefinition.enemyClass
     self.segmentOffset = vec2(x, y)
 
-    self.spawnTime = 2
+    self.spawnTime = spawnTime or 2
     self.spriteScaleFrequencyChange = 8
     self.spriteScaleAmplitude = 1
     self.maxWarningAngleRandomiseCooldown = 0.25
