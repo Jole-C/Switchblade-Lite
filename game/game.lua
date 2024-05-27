@@ -320,6 +320,13 @@ function game:setupResources()
         }
     ]])
     resourceManager:addResource(menuBoxShader, "menu box shader")
+
+    -- Ship audio
+    local defaultBoost = love.audio.newSource("game/assets/audio/sfx/defaultboost.wav", "static")
+    resourceManager:addResource(defaultBoost, "default boost")
+    
+    local defaultFire = love.audio.newSource("game/assets/audio/sfx/defaultfire.wav", "static")
+    resourceManager:addResource(defaultFire, "default fire")
 end
 
 return game

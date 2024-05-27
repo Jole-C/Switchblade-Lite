@@ -86,6 +86,9 @@ function player:new(x, y)
     self.ammoFont = game.resourceManager:getResource("font main")
     self.cameraWeight = {position = self.position, weight = 3}
 
+    self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
+    self.boostSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default boost"))
+
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
 end
 
@@ -127,6 +130,10 @@ function player:updateShipMovement(dt, movementDirection)
         else
             self.isBoosting = false
         end
+
+        if game.input:pressed("boost") and not game.input:down("shoot") then
+            self.boostSound:play()
+        end
     end
 end
 
@@ -163,6 +170,9 @@ function player:updateShipShooting(dt, movementDirection)
 
         self:setFireCooldown()
         self:setDisplayAmmo()
+
+        self.fireSound:play()
+        gameHelper:getCurrentState().cameraManager:screenShake(0.05)
         
         self.ammo = self.ammo - 1
     end
