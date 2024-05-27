@@ -55,13 +55,16 @@ function enemy:setVulnerable()
 end
 
 function enemy:cleanup()
-    gameHelper:getCurrentState().cameraManager:screenShake(0.1)
+    local currentGamestate = gameHelper:getCurrentState()
+    currentGamestate.cameraManager:screenShake(0.1)
 
     if game.manager then
         game.manager:setFreezeFrames(2)
     end
 
-    local currentGamestate = gameHelper:getCurrentState()
+    if currentGamestate.stageDirector then
+        currentGamestate.stageDirector:registerEnemyKill()
+    end
 
     if currentGamestate.enemyManager then
         currentGamestate.enemyManager:unregisterEnemy(self)
