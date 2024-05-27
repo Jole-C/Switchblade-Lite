@@ -104,7 +104,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 6
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 5
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 5
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -165,7 +175,17 @@ local levelDefinition =
                 },
             },
 
-            minimumKillsForNextWave = 3
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 8
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 15
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -223,7 +243,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 8
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 5
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 5
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -246,7 +276,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 2,
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 1
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 15
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -271,7 +311,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 2,
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 2
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 15
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -326,7 +376,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 1,
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 3
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 15
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -356,21 +416,31 @@ local levelDefinition =
                 {
                     changeType = "reset",
                     arenaSegment = "leftCircle",
-                    lerpSpeed = 0.1
+                    lerpSpeed = 0.01
                 },
                 {
                     changeType = "reset",
                     arenaSegment = "rightCircle",
-                    lerpSpeed = 0.1
+                    lerpSpeed = 0.01
                 },
                 {
                     changeType = "reset",
                     arenaSegment = "mainCircle",
-                    lerpSpeed = 0.1
+                    lerpSpeed = 0.01
                 }
             },
 
-            minimumKillsForNextWave = 20,
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 10
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 15
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -425,7 +495,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 15
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 15
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 20
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -486,19 +566,19 @@ local levelDefinition =
                     changeType = "size",
                     arenaSegment = "rightCircle",
                     newValue = 150,
-                    lerpSpeed = 0.1
+                    lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
                     newValue = 150,
-                    lerpSpeed = 0.1
+                    lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
                     newValue = 150,
-                    lerpSpeed = 0.1
+                    lerpSpeed = 0.05
                 },
 
                 {
@@ -521,7 +601,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 15
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 3
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 15
+                }
+            }
         },
         {
             spawnDefinitions = 
@@ -576,7 +666,17 @@ local levelDefinition =
                 },
             },
 
-            minimumKillsForNextWave = 5
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 6
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 20
+                }
+            }
         }
     }
 }
