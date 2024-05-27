@@ -67,7 +67,6 @@ function stageDirector:new(levelDefinition)
 
     -- Initialise variables
     self.spawnTime = self.maxSpawnTime
-    self.angleWarningRandomiseCooldown = self.maxWarningAngleRandomiseCooldown
     self.textChangeCooldown = self.secondsBetweenTextChange
 
     -- Set up the hud
@@ -75,6 +74,8 @@ function stageDirector:new(levelDefinition)
     game.interfaceRenderer:addHudElement(self.hud)
     self.alertElement = text(self.introText[1], "font alert", "center", 0, game.arenaValues.screenHeight/2 - 20, game.arenaValues.screenWidth)
     game.interfaceRenderer:addHudElement(self.alertElement)
+    self.debugText = text("", "font main", "left", 360, 10, game.arenaValues.screenWidth)
+    game.interfaceRenderer:addHudElement(self.debugText)
 end
 
 function stageDirector:update(dt)
@@ -359,6 +360,38 @@ end
 function stageDirector:registerEnemyKill()
     if self.waveTransitionTime <= 0 then
         self.enemyKills = self.enemyKills + 1
+    end
+end
+
+function stageDirector:draw()
+    local debugText = ""
+
+    for i = 1, #self.nextWaveConditions do
+        local condition = self.nextWaveConditions[i]
+
+        if condition then
+            if condition.conditionType == "minimumKills" then
+                local minimumKills = condition.minimumKills or 1
+                debugText = debugText.."Kills: "..self.enemyKills.."\n/"..minimumKills.."\n"
+
+                if self.enemyKills >= minimumKills then
+                    self:startWave()
+                end
+            elseif condition.conditionType == "timer" then
+                local time = condition.timeUntilNextWave or 3
+                debugText = debugText.."Max time: "..self.elapsedWaveTime.."\n/"..time.."\n"
+
+                if self.elapsedWaveTime > time then
+                    self:startWave()
+                end
+                
+                useDefaultOverride = false
+            end
+        end
+    end
+    
+    if self.debugText then
+        self.debugText.text = debugText
     end
 end
 
