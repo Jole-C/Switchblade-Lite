@@ -40,7 +40,7 @@ function love.load()
 -------
     ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(0.045423280447721)
-    ps:setEmissionArea("uniform", 339.4328918457, 224.59356689453, 0, false)
+    ps:setEmissionArea("uniform", 480, 270, 0, false)
     ps:setEmissionRate(512)
     ps:setEmitterLifetime(-1)
     ps:setInsertMode("top")
