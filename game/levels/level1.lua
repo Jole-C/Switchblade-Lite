@@ -205,6 +205,38 @@ local levelDefinition =
                         radius = 100,
                         origin = "mainCircle"
                     }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "rightCircle"
+                    }
                 }
             },
 
@@ -273,6 +305,38 @@ local levelDefinition =
                             x = 0, y = 0
                         }
                     }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "rightCircle"
+                    }
                 }
             },
 
@@ -292,21 +356,67 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    waveType = "predefined",
 
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 2,
                     },
 
                     shapeDef =
                     {
                         origin = "mainCircle",
                         points = {
-                            {x = -100, y = 0},
-                            {x = 100, y = 0}
+                            x = 0, y = 0
                         }
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 4,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 4,
+                        radius = 100,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 4,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 4,
+                        radius = 100,
+                        origin = "rightCircle"
                     }
                 }
             },
@@ -315,7 +425,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 2
+                    minimumKills = 3
                 },
                 {
                     conditionType = "timer",
@@ -327,19 +437,35 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    waveType = "predefined",
 
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
                         origin = "mainCircle",
-                        numberOfPoints = 3,
-                        radius = 70
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 100,
+                        origin = "mainCircle"
                     }
                 },
                 {
@@ -348,12 +474,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 10,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
                     {
-                        origin = "leftCircle",
+                        origin = "rightCircle",
                         numberOfPoints = 10,
                         radius = 70
                     }
@@ -364,12 +490,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 10,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
                     {
-                        origin = "rightCircle",
+                        origin = "leftCircle",
                         numberOfPoints = 10,
                         radius = 70
                     }
@@ -392,20 +518,18 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    waveType = "predefined",
 
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 2,
                     },
 
                     shapeDef =
                     {
                         origin = "mainCircle",
                         points = {
-                            {x = -100, y = 0},
-                            {x = 100, y = 0}
+                            x = 0, y = 0
                         }
                     }
                 }
@@ -450,46 +574,14 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
-                        spawnCount = 10,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 10,
-                        radius = 150,
-                        origin = "mainCircle"
-                    }
-                },
-                {
-                    waveType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 10,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 10,
-                        radius = 50,
-                        origin = "mainCircle"
-                    }
-                },
-                {
-                    waveType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
                         enemyID = "charger",
-                        spawnCount = 5,
+                        spawnCount = 10,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
-                        radius = 150,
+                        numberOfPoints = 10,
+                        radius = 100,
                         origin = "mainCircle"
                     }
                 }
@@ -516,12 +608,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 20,
+                        spawnCount = 7,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 10,
+                        numberOfPoints = 7,
                         radius = 100,
                         origin = "leftCircle"
                     }
@@ -532,12 +624,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 20,
+                        spawnCount = 7,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 10,
+                        numberOfPoints = 7,
                         radius = 100,
                         origin = "rightCircle"
                     }
@@ -548,12 +640,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 5,
+                        spawnCount = 7,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
+                        numberOfPoints = 7,
                         radius = 50,
                         origin = "mainCircle"
                     }
@@ -585,19 +677,19 @@ local levelDefinition =
                     changeType = "position",
                     arenaSegment = "mainCircle",
                     newValue = vec2(0, -200),
-                    lerpSpeed = 0.01
+                    lerpSpeed = 0.05
                 },
                 {
                     changeType = "position",
                     arenaSegment = "rightCircle",
-                    newValue = vec2(-200, 0),
-                    lerpSpeed = 0.1
+                    newValue = vec2(200, 0),
+                    lerpSpeed = 0.05
                 },
                 {
                     changeType = "position",
                     arenaSegment = "leftCircle",
-                    newValue = vec2(200, 0),
-                    lerpSpeed = 0.1
+                    newValue = vec2(-200, 0),
+                    lerpSpeed = 0.05
                 }
             },
 
@@ -605,63 +697,63 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 3
+                    minimumKills = 15
                 },
                 {
                     conditionType = "timer",
-                    timeUntilNextWave = 15
+                    timeUntilNextWave = 20
                 }
             }
         },
         {
             spawnDefinitions = 
-            {
+            {            
                 {
-                    waveType = "alongShapePerimeter",
+                    waveType = "predefined",
 
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 3,
-                        radius = 100,
-                        origin = "leftCircle"
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
                     }
-                },
+                },          
                 {
-                    waveType = "alongShapePerimeter",
+                    waveType = "predefined",
 
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 3,
-                        radius = 100,
-                        origin = "rightCircle"
+                        origin = "rightCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
                     }
-                },
+                },          
                 {
-                    waveType = "alongShapePerimeter",
+                    waveType = "predefined",
 
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 3,
-                        radius = 100,
-                        origin = "mainCircle"
+                        origin = "leftCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
                     }
                 },
             },
