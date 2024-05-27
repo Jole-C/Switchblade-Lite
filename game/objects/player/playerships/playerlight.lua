@@ -30,7 +30,8 @@ function playerLight:new(x, y)
     self.boostEnemyHitHeatAccumulation = 25
     self.contactDamageHeatMultiplier = 10
     self.invulnerableGracePeriod = 3
-    self.idleHeatAccumulationRate = 30
+    self.idleHeatAccumulationRate = 15
+    self.minimumSpeedForTemperature = 2
     
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.1
@@ -39,8 +40,7 @@ function playerLight:new(x, y)
     self.maxAmmo = 70
     self.shipKnockbackForce = 50
     self.fireOffset = 10
-    self.ammoAccumulationRate = 3
-    self.laserBounces = 3
+    self.boostAmmoIncrement = 5
     
     self:super(x, y)
 end
@@ -71,9 +71,12 @@ function playerLight:updateShipMovement(dt, movementDirection)
             self.maxSteeringSpeed = self.steeringSpeedBoosting
 
             self:setDisplayAmmo()
+        
             self:spawnBoostLines()
+            self:spawnTrail()
 
-            self.ammo = self.ammo + self.boostAmmoIncrement
+            self.ammo = self.ammo + self.boostAmmoIncrement * dt
+            self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
         else
             self.isBoosting = false
         end
@@ -98,6 +101,29 @@ function playerLight:updateShipShooting(dt, movementDirection)
 
         self.ammo = self.ammo - 1
     end
+end
+
+function playerLight:updateOverheating(dt)
+    if self.shipTemperature >= self.maxShipTemperature then
+        self.isOverheating = true
+    end
+    
+    local coolingRate = self.shipCoolingRate
+
+    if self.isOverheating == true then
+        self.isBoosting = false
+        coolingRate = self.shipOverheatCoolingRate
+        
+        if self.shipTemperature <= 0 then
+            self.isOverheating = false
+        end
+    end
+
+    if self.velocity:length() > self.minimumSpeedForTemperature or (self.isOverheating == true and self.isBoosting == false) then
+        self.shipTemperature = self.shipTemperature - (coolingRate * dt)
+    end
+
+    self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
 end
 
 function playerLight:checkCollision()
@@ -149,6 +175,11 @@ function playerLight:update(dt)
     self:updateShipMovement(dt, movementDirection)
     self:updateShipShooting(dt, movementDirection)
     self:updateShipSteering(dt)
+
+    -- Build temperature if the ship is still
+    if self.velocity:length() < self.minimumSpeedForTemperature then
+        self.shipTemperature = self.shipTemperature + (self.idleHeatAccumulationRate * dt)
+    end
     
     -- Handle game timers
     self:updatePlayerTimers(dt)
