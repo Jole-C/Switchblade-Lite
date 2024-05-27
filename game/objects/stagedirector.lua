@@ -18,12 +18,25 @@ function stageDirector:new(levelDefinition)
 
     self.currentWaveIndex = 0
     self.maxWave = 0
+    self.waveTransitionTime = 3
+    self.elapsedWaveTime = 0
+    self.defaultTimeForNextWave = 15
+
     self.timeMinutes = 3
     self.timeSeconds = 0
-    self.inWaveTransition = false
+
+    self.arenaSegments = {}
+    self.segmentChangeList = {}
+
     self.enemyKills = 0
     self.minimumEnemyKills = 0
-    self.waveTransitionTime = 3
+    self.waveTimer = 0
+    self.nextWaveConditions = {
+        {
+            conditionType = "minimumKills",
+            minimumKills = 0
+        }
+    }
 
     self.inIntro = true
 
@@ -33,8 +46,6 @@ function stageDirector:new(levelDefinition)
     self.maxWave = #self.levelDefinition.level
     self.enemyDefinitions = self.levelDefinition.enemyDefinitions
     self.playerStartSegment = self.levelDefinition.arenaSegmentDefinitions[self.levelDefinition.playerStartSegment]
-    self.segmentChangeList = {}
-    self.arenaSegments = {}
 
     -- Initialise the segments and add them to the arena
     for name, segment in pairs(self.levelDefinition.arenaSegmentDefinitions) do
@@ -156,14 +167,37 @@ function stageDirector:update(dt)
     -- Once this timer hits zero, kills can be registered with the stage director and will count towards starting the next wave
     self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
 
-    -- Handle enemy spawns and wave changing
-    local currentGamestate = gameHelper:getCurrentState()
+    -- This timer is the elapsed time into a wave, and is used for both the wave defined override, but also for a default override
+    self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
 
-    if self.currentWaveIndex <= self.maxWave and currentGamestate.enemyManager then
-        -- Start the new wave if the minimum amount of enemies are present
-        if self.waveTransitionTime <= 0 and self.enemyKills >= self.minimumEnemyKills then
-            self.segmentChangeList = {}
-            self.currentWaveIndex = self.currentWaveIndex + 1
+    -- Go over the conditions and use them to decide when the next wave will start
+    if self.waveTransitionTime <= 0 then
+        local useDefaultOverride = true
+
+        for i = 1, #self.nextWaveConditions do
+            local condition = self.nextWaveConditions[i]
+
+            if condition then
+                if condition.conditionType == "minimumKills" then
+                    local minimumKills = condition.minimumKills or 1
+
+                    if self.enemyKills >= minimumKills then
+                        self:startWave()
+                    end
+                elseif condition.conditionType == "timer" then
+                    local time = condition.timeUntilNextWave or 3
+
+                    if self.elapsedWaveTime > time then
+                        self:startWave()
+                    end
+                    
+                    useDefaultOverride = false
+                end
+            end
+        end
+
+        -- Handle the default timer override
+        if useDefaultOverride == true and self.elapsedWaveTime > self.defaultTimeForNextWave then
             self:startWave()
         end
     end
@@ -175,6 +209,8 @@ function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
 end
 
 function stageDirector:startWave()
+    self.currentWaveIndex = self.currentWaveIndex + 1
+
     if self.currentWaveIndex > self.maxWave then
         return
     end
@@ -183,11 +219,14 @@ function stageDirector:startWave()
     local wave = self.waveDefinitions[self.currentWaveIndex]
     local spawnDefinitions = wave.spawnDefinitions
     local segmentChanges = wave.segmentChanges
+    local nextWaveConditions = wave.nextWaveConditions
 
-    -- Reset the number of kills
+    -- Reset the number of kills and other values
+    self.segmentChangeList = {}
     self.enemyKills = 0
     self.minimumEnemyKills = (wave.minimumKillsForNextWave or 1)
     self.waveTransitionTime = 3
+    self.elapsedWaveTime = 0
 
     -- For each segment change
     if segmentChanges then
@@ -196,6 +235,19 @@ function stageDirector:startWave()
         end
     end
     
+    -- For each next wave override
+    self.nextWaveConditions = {}
+    if nextWaveConditions then
+        for i = 1, #nextWaveConditions do
+            table.insert(self.nextWaveConditions, nextWaveConditions[i])
+        end
+    else
+        table.insert(self.nextWaveConditions, {
+            conditionType = "timer",
+            timeUntilNextWave = 10
+        })
+    end
+
     -- For each spawn definition
     if not spawnDefinitions then
         return

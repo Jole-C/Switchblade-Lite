@@ -71,7 +71,17 @@ local levelDefinition =
                 }
             },
 
-            minimumKillsForNextWave = 3
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 3
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 10
+                }
+            }
         },
         {
             spawnDefinitions = 
