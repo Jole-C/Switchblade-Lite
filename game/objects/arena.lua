@@ -1,23 +1,30 @@
 local gameObject = require "game.objects.gameobject"
+local arenaSegment = require "game.objects.arenasegment"
+
 local arenaController = class({name = "Arena Controller", extends = gameObject})
 
 function arenaController:new()
     self:super(0, 0)    
     
+    -- Background parameters
     self.circleSize = 10
     self.circleWarpAmplitude = 15
     self.circleWarpFrequency = 0.2
     self.circleSpacing = 20
     self.numberOfCircles = 100
 
+    -- Variables
     self.circleWarpTime = 0
     self.arenaSegments = {}
+    self.numberOfSegments = 0
     self.arenaScale = 0
     self.doIntro = false
 end
 
 function arenaController:update(dt)
-    assert(#self.arenaSegments > 0, "Number of arena segments cannot be 0!")
+    if self.numberOfSegments <= 0 then
+        return
+    end
 
     -- Animate the background circles
     self.circleWarpTime = self.circleWarpTime + self.circleWarpFrequency * dt
@@ -67,14 +74,15 @@ function arenaController:enableIntro()
 end
 
 function arenaController:getClampedPosition(position)
-    if #self.arenaSegments == 0 then
-        return
+    if self.numberOfSegments <= 0 then
+        print("No segments!")
+        return position, nil
     end
 
     -- Decide if the position is within any circle or not
     -- If it is just return the position
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
+    for k, v in pairs(self.arenaSegments) do
+        local segment = v
 
         if segment then
             local positionToSegment = (segment.position - position)
@@ -90,8 +98,8 @@ function arenaController:getClampedPosition(position)
     local closestCircle = nil
     local closestEdgePosition = nil
 
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
+    for k, v in pairs(self.arenaSegments) do
+        local segment = v
 
         if segment then
             local positionToSegment = (position - segment.position)
@@ -114,12 +122,12 @@ function arenaController:getClampedPosition(position)
         return closestEdgePosition, closestCircle
     end
 
-    return position:min_inplace(arenaRadius), nil
+    return position, nil
 end
 
 function arenaController:getDistanceToArena(position)
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
+    for k, v in pairs(self.arenaSegments) do
+        local segment = v
 
         if segment then
             local positionToSegment = (segment.position - position)
@@ -132,8 +140,8 @@ end
 function arenaController:getSegmentPointIsWithin(position)
     local eligibleSegments = {}
 
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
+    for k, v in pairs(self.arenaSegments) do
+        local segment = v
 
         if segment then
             local positionToSegment = (segment.position - position)
@@ -149,6 +157,7 @@ function arenaController:getSegmentPointIsWithin(position)
     else
         local closestSegment = nil
         local minimumDistance = math.huge
+
         for i = 1, #eligibleSegments do
             local segment = eligibleSegments[i]
 
@@ -165,8 +174,8 @@ function arenaController:getSegmentPointIsWithin(position)
 end
 
 function arenaController:isPositionWithinArena(position)
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
+    for k, v in pairs(self.arenaSegments) do
+        local segment = v
 
         if segment then
             local positionToSegment = (segment.position - position)
@@ -180,21 +189,32 @@ function arenaController:isPositionWithinArena(position)
     return false
 end
 
-function arenaController:addArenaSegment(segment)
-    return table.insert(self.arenaSegments, segment)
-end
+function arenaController:addArenaSegment(x, y, radius, name)
+    local newSegment = arenaSegment(x, y, radius)
+    print(newSegment)
+    gameHelper:addGameObject(newSegment)
 
-function arenaController:cleanup()
+    self.arenaSegments[name] = newSegment
+
+    for k, v in pairs(self.arenaSegments) do
+        self.numberOfSegments = self.numberOfSegments + 1
+    end
+
+    return newSegment
 end
 
 function arenaController:drawSegments(fillType)
-    for i = 1, #self.arenaSegments do
-        local segment = self.arenaSegments[i]
+    for k, v in pairs(self.arenaSegments) do
+        local segment = v
 
         if segment then
             love.graphics.circle(fillType or "fill", segment.position.x, segment.position.y, segment.radius * self.arenaScale)
         end
     end
+end
+
+function arenaController:getArenaSegment(name)
+    return self.arenaSegments[name]
 end
 
 return arenaController

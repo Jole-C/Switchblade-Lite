@@ -270,7 +270,7 @@ end
 
 function player:checkCollision()
     local world = gameHelper:getWorld()
-
+    
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
         colliderPositionX = self.position.x - colliderWidth/2

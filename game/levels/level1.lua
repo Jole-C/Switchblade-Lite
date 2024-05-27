@@ -17,28 +17,28 @@ local levelDefinition =
     
     arenaSegmentDefinitions =
     {
-        ["mainCircle"] = {
+        {
+            name = "mainCircle",
             position = {
                 x = 0, 
                 y = 0
             },
-
             radius = 200
         },
-        ["leftCircle"] = {
+        {
+            name = "leftCircle",
             position = {
                 x = -200, 
                 y = 0
             },
-
             radius = 150
         },
-        ["rightCircle"] = {
+        {
+            name = "rightCircle",
             position = {
                 x = 200, 
                 y = 0
             },
-
             radius = 150
         },
     },
@@ -158,19 +158,19 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newValue = 200,
+                    newRadius = 200,
                     lerpSpeed = 0.015
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newValue = 200,
+                    newRadius = 200,
                     lerpSpeed = 0.015
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newValue = 100,
+                    newRadius = 100,
                     lerpSpeed = 0.015
                 },
             },
@@ -245,32 +245,32 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newValue = 70,
+                    newRadius = 70,
                     lerpSpeed = 0.
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newValue = 70,
+                    newRadius = 70,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newValue = 150,
+                    newRadius = 150,
                     lerpSpeed = 0.015
                 },
 
                 {
                     changeType = "position",
                     arenaSegment = "rightCircle",
-                    newValue = vec2(400, 0),
+                    newPosition = vec2(450, 0),
                     lerpSpeed = 0.01
                 },
                 {
                     changeType = "position",
                     arenaSegment = "leftCircle",
-                    newValue = vec2(-400, 0),
+                    newPosition = vec2(-450, 0),
                     lerpSpeed = 0.01
                 }
             },
@@ -676,19 +676,19 @@ local levelDefinition =
                 {
                     changeType = "position",
                     arenaSegment = "mainCircle",
-                    newValue = vec2(0, -200),
+                    newPosition = vec2(0, -200),
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "position",
                     arenaSegment = "rightCircle",
-                    newValue = vec2(200, 0),
+                    newPosition = vec2(200, 0),
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "position",
                     arenaSegment = "leftCircle",
-                    newValue = vec2(-200, 0),
+                    newPosition = vec2(-200, 0),
                     lerpSpeed = 0.05
                 }
             },

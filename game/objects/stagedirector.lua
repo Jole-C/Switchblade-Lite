@@ -25,9 +25,6 @@ function stageDirector:new(levelDefinition)
     self.timeMinutes = 3
     self.timeSeconds = 0
 
-    self.arenaSegments = {}
-    self.segmentChangeList = {}
-
     self.enemyKills = 0
     self.minimumEnemyKills = 0
     self.nextWaveConditions = {
@@ -44,24 +41,24 @@ function stageDirector:new(levelDefinition)
     self.waveDefinitions = self.levelDefinition.level
     self.maxWave = #self.levelDefinition.level
     self.enemyDefinitions = self.levelDefinition.enemyDefinitions
-    self.playerStartSegment = self.levelDefinition.arenaSegmentDefinitions[self.levelDefinition.playerStartSegment]
+    self.playerStartSegment = nil
 
     -- Initialise the segments and add them to the arena
-    for name, segment in pairs(self.levelDefinition.arenaSegmentDefinitions) do
-        if segment then
-            self.arenaSegments[name] = {
-                position = vec2(segment.position.x, segment.position.y),
-                defaultPosition = vec2(segment.position.x, segment.position.y),
-                radius = segment.radius,
-                defaultRadius = segment.radius,
-            }
+    for i = 1, #self.levelDefinition.arenaSegmentDefinitions do
+        local segment = self.levelDefinition.arenaSegmentDefinitions[i]
 
+        if segment then
             local currentGamestate = gameHelper:getCurrentState()
-            
-            if currentGamestate.arena and self.arenaSegments[name] then
-                currentGamestate.arena:addArenaSegment(self.arenaSegments[name])
+            local newSegment = currentGamestate.arena:addArenaSegment(segment.position.x, segment.position.y, segment.radius, segment.name)
+
+            if segment.name == self.levelDefinition.playerStartSegment then
+                self.playerStartSegment = newSegment
             end
         end
+    end
+
+    if self.playerStartSegment == nil then
+        assert(false, "No player segment specified!")
     end
 
     -- Initialise variables
@@ -129,41 +126,6 @@ function stageDirector:update(dt)
         player:onHit(3)
     end
 
-    -- Go through the list of segment changes and perform them
-    for i = #self.segmentChangeList, 1, -1 do
-        local currentChange = self.segmentChangeList[i]
-        local segment = self.arenaSegments[currentChange.arenaSegment]
-        local completeThreshold = 10
-
-        if type(currentChange.newValue) == "number" then
-            completeThreshold = currentChange.completeThreshold or currentChange.newValue/10
-        end
-
-        -- Depending on the type of change, apply it to the correct values
-        if currentChange.changeType == "size" then
-            segment.radius = math.lerp(segment.radius, currentChange.newValue, currentChange.lerpSpeed)
-
-            if currentChange.newValue - segment.radius < completeThreshold then
-                table.remove(self.segmentChangeList, i)
-            end
-        elseif currentChange.changeType == "position" then
-            segment.position.x = math.lerp(segment.position.x, currentChange.newValue.x, currentChange.lerpSpeed)
-            segment.position.y = math.lerp(segment.position.y, currentChange.newValue.y, currentChange.lerpSpeed)
-
-            if (currentChange.newValue - segment.position):length() < 10 then
-                table.remove(self.segmentChangeList, i)
-            end
-        elseif currentChange.changeType == "reset" then
-            segment.position.x = math.lerp(segment.position.x, segment.defaultPosition.x, currentChange.lerpSpeed)
-            segment.position.y = math.lerp(segment.position.y, segment.defaultPosition.y, currentChange.lerpSpeed)
-            segment.radius = math.lerp(segment.radius, segment.defaultRadius, currentChange.lerpSpeed)
-
-            if segment.defaultRadius - segment.radius < completeThreshold and (segment.defaultPosition - segment.position):length() < 10 then
-                table.remove(self.segmentChangeList, i)
-            end
-        end
-    end
-
     -- Once this timer hits zero, kills can be registered with the stage director and will count towards starting the next wave
     self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
 
@@ -215,6 +177,14 @@ function stageDirector:startWave()
         return
     end
 
+    -- Get a reference to the gamestate and arena
+    local currentGamestate = gameHelper:getCurrentState()
+    local arena = currentGamestate.arena
+
+    if not arena then
+        return
+    end
+
     -- Unpack the current wave
     local wave = self.waveDefinitions[self.currentWaveIndex]
     local spawnDefinitions = wave.spawnDefinitions
@@ -222,7 +192,6 @@ function stageDirector:startWave()
     local nextWaveConditions = wave.nextWaveConditions
 
     -- Reset the number of kills and other values
-    self.segmentChangeList = {}
     self.enemyKills = 0
     self.minimumEnemyKills = (wave.minimumKillsForNextWave or 1)
     self.waveTransitionTime = 3
@@ -231,7 +200,8 @@ function stageDirector:startWave()
     -- For each segment change
     if segmentChanges then
         for i = 1, #segmentChanges do
-            table.insert(self.segmentChangeList, segmentChanges[i])
+            local segment = currentGamestate.arena:getArenaSegment(segmentChanges[i].arenaSegment)
+            segment:addChange(segmentChanges[i])
         end
     end
     
@@ -260,7 +230,7 @@ function stageDirector:startWave()
         -- and set up a table for the generated shape, if applicable
         local waveType = currentDefinition.waveType
         local enemyDef = currentDefinition.enemyDef
-        local originSegment = self.arenaSegments[currentDefinition.shapeDef.origin]
+        local originSegment = arena:getArenaSegment(currentDefinition.shapeDef.origin)
         local generatedShape = {
             points = {},
             origin = {},
@@ -397,7 +367,6 @@ end
 function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.alertElement)
     self.alertElement = nil
-    self.arenaSegments = nil
 end
 
 return stageDirector
