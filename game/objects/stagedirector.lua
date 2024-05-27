@@ -33,8 +33,8 @@ function stageDirector:new(levelDefinition)
     self.waveTimer = 0
     self.nextWaveConditions = {
         {
-            conditionType = "minimumKills",
-            minimumKills = 0
+            conditionType = "timer",
+            timeUntilNextWave = 0
         }
     }
 
