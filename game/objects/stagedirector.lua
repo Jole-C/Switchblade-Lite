@@ -10,7 +10,7 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 3
     self.maxSeconds = 0
-    self.maxWaveTransitionTime = 3
+    self.maxWaveTransitionTime = 1
     self.secondsBetweenTextChange = 0.25
     self.enemySpawnTime = 2
     self.defaultTimeForNextWave = 15

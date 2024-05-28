@@ -108,7 +108,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 5
+                    minimumKills = 7
                 },
                 {
                     conditionType = "timer",
@@ -179,7 +179,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 8
+                    minimumKills = 13
                 },
                 {
                     conditionType = "timer",
@@ -196,7 +196,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 10,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
@@ -279,7 +279,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 5
+                    minimumKills = 3
                 },
                 {
                     conditionType = "timer",
@@ -558,7 +558,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 10
+                    minimumKills = 20
                 },
                 {
                     conditionType = "timer",
@@ -575,7 +575,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 10,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
@@ -608,7 +608,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 7,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
@@ -624,7 +624,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 7,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
@@ -640,12 +640,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 7,
+                        spawnCount = 5,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 7,
+                        numberOfPoints = 5,
                         radius = 50,
                         origin = "mainCircle"
                     }
