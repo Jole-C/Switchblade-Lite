@@ -84,7 +84,7 @@ function player:new(x, y)
     game.interfaceRenderer:addHudElement(self.hud)
 
     self.ammoFont = game.resourceManager:getResource("font main")
-    self.cameraWeight = {position = self.position, weight = 3}
+    self.cameraWeight = {position = self.position, weight = 50}
 
     self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
     self.boostSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default boost"))
