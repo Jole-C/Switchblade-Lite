@@ -86,8 +86,8 @@ function player:new(x, y)
     self.ammoFont = game.resourceManager:getResource("font main")
     self.cameraWeight = {position = self.position, weight = 50}
 
-    self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
-    self.boostSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default boost"))
+    self.fireSound = self.fireSound or game.resourceManager:getResource("default fire")
+    self.boostSound = self.boostSound or game.resourceManager:getResource("default boost")
 
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
 end
