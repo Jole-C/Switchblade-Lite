@@ -10,20 +10,22 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 3
     self.maxSeconds = 0
-    self.minimumEnemyCount = 3
+    self.maxWaveTransitionTime = 3
+    self.secondsBetweenTextChange = 0.25
+    self.enemySpawnTime = 2
+    self.defaultTimeForNextWave = 15
 
     self.introText = {"Ready?", "Steady?", "GO!"}
-    self.secondsBetweenTextChange = 0.25
+    self.textChangeCooldown = self.secondsBetweenTextChange
     self.currentText = 1
 
     self.currentWaveIndex = 0
-    self.maxWave = 0
-    self.waveTransitionTime = 2
+    self.waveTransitionTime = self.maxWaveTransitionTime
+    self.inWaveTransition = false
     self.elapsedWaveTime = 0
-    self.defaultTimeForNextWave = 15
 
-    self.timeMinutes = 3
-    self.timeSeconds = 0
+    self.timeMinutes = self.maxMinutes
+    self.timeSeconds = self.maxSeconds
 
     self.enemyKills = 0
     self.minimumEnemyKills = 0
@@ -62,8 +64,6 @@ function stageDirector:new(levelDefinition)
     end
 
     -- Initialise variables
-    self.spawnTime = self.maxSpawnTime
-    self.textChangeCooldown = self.secondsBetweenTextChange
 
     -- Set up the hud
     self.hud = stageTimeHud()
@@ -126,47 +126,53 @@ function stageDirector:update(dt)
         player:onHit(3)
     end
 
-    -- Once this timer hits zero, kills can be registered with the stage director and will count towards starting the next wave
-    self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
+    -- Transition to the next wave
+    if self.inWaveTransition == true then
+        self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
+
+        if self.waveTransitionTime <= 0 then
+            self:startWave()
+            self.inWaveTransition = false
+            self.waveTransitionTime = self.maxWaveTransitionTime
+        end
+    end
 
     -- This timer is the elapsed time into a wave, and is used for both the wave defined override, but also for a default override
     self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
 
     -- Go over the conditions and use them to decide when the next wave will start
-    if self.waveTransitionTime <= 0 then
-        local useDefaultOverride = true
+    local useDefaultOverride = true
 
-        for i = 1, #self.nextWaveConditions do
-            local condition = self.nextWaveConditions[i]
+    for i = 1, #self.nextWaveConditions do
+        local condition = self.nextWaveConditions[i]
 
-            if condition then
-                if condition.conditionType == "minimumKills" then
-                    local minimumKills = condition.minimumKills or 1
+        if condition then
+            if condition.conditionType == "minimumKills" then
+                local minimumKills = condition.minimumKills or 1
 
-                    if self.enemyKills >= minimumKills then
-                        self:startWave()
-                    end
-                elseif condition.conditionType == "timer" then
-                    local time = condition.timeUntilNextWave or 3
-
-                    if self.elapsedWaveTime > time then
-                        self:startWave()
-                    end
-                    
-                    useDefaultOverride = false
+                if self.enemyKills >= minimumKills and self.inWaveTransition == false then
+                    self.inWaveTransition = true
                 end
+            elseif condition.conditionType == "timer" then
+                local time = condition.timeUntilNextWave or 3
+
+                if self.elapsedWaveTime > time and self.inWaveTransition == false then
+                    self.inWaveTransition = true
+                end
+                
+                useDefaultOverride = false
             end
         end
 
         -- Handle the default timer override
         if useDefaultOverride == true and self.elapsedWaveTime > self.defaultTimeForNextWave then
-            self:startWave()
+            self.inWaveTransition = true
         end
     end
 end
 
 function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
-    local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.waveTransitionTime)
+    local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.enemySpawnTime)
     gameHelper:addGameObject(newWarning)
 end
 
@@ -327,9 +333,7 @@ function stageDirector:startWave()
 end
 
 function stageDirector:registerEnemyKill()
-    if self.waveTransitionTime <= 0 then
-        self.enemyKills = self.enemyKills + 1
-    end
+    self.enemyKills = self.enemyKills + 1
 end
 
 function stageDirector:draw()
@@ -342,19 +346,9 @@ function stageDirector:draw()
             if condition.conditionType == "minimumKills" then
                 local minimumKills = condition.minimumKills or 1
                 debugText = debugText.."Kills: "..self.enemyKills.."\n/"..minimumKills.."\n"
-
-                if self.enemyKills >= minimumKills then
-                    self:startWave()
-                end
             elseif condition.conditionType == "timer" then
                 local time = condition.timeUntilNextWave or 3
                 debugText = debugText.."Max time: "..self.elapsedWaveTime.."\n/"..time.."\n"
-
-                if self.elapsedWaveTime > time then
-                    self:startWave()
-                end
-                
-                useDefaultOverride = false
             end
         end
     end
