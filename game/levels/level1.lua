@@ -701,7 +701,7 @@ local levelDefinition =
                 },
                 {
                     conditionType = "timer",
-                    timeUntilNextWave = 20
+                    timeUntilNextWave = 40
                 }
             }
         },
@@ -766,7 +766,72 @@ local levelDefinition =
                 },
                 {
                     conditionType = "timer",
-                    timeUntilNextWave = 20
+                    timeUntilNextWave = 30
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 100,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 100,
+                        origin = "rightCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 50,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 15
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 40
                 }
             }
         }
