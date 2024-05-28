@@ -38,6 +38,12 @@ function enemy:update(dt)
     end
 end
 
+function enemy:handleDamage(damage)
+    if damage.type == "bullet" or "boost" then
+        self.health = self.health - damage.amount
+    end
+end
+
 function enemy:onHit(damage)
     if self.isInvulnerable == true then
         return
@@ -57,12 +63,6 @@ function enemy:onHit(damage)
 
     if game.manager then
         game.manager:setFreezeFrames(3)
-    end
-end
-
-function enemy:handleDamage(damage)
-    if damage.type == "bullet" or "boot" then
-        self.health = self.health - damage.amount
     end
 end
 

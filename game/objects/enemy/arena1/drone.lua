@@ -118,6 +118,12 @@ function drone:update(dt)
     end
 end
 
+function drone:handleDamage(damage)
+    if damage.type == "bullet" or "boost" then
+        self.health = self.health - damage.amount
+    end
+end
+
 function drone:draw()
     if not self.sprite then
         return

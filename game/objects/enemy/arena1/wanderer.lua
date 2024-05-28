@@ -76,6 +76,12 @@ function wanderer:update(dt)
     end
 end
 
+function enemy:handleDamage(damage)
+    if damage.type == "bullet" or "boost" then
+        self.health = self.health - damage.amount
+    end
+end
+
 function wanderer:draw()
     if not self.sprite or not self.tail then
         return

@@ -25,6 +25,12 @@ function charger:new(x, y)
     self.eye = eye(x, y, 2, 2)
 end
 
+function charger:handleDamage(damage)
+    if damage.type == "bullet" or "boost" then
+        self.health = self.health - damage.amount
+    end
+end
+
 function charger:update(dt)
     enemy.update(self, dt)
 
