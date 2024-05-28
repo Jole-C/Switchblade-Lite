@@ -291,7 +291,6 @@ function player:checkCollision()
                 if self.isBoosting == false  then
                     self:onHit(collidedObject.contactDamage)
                     collidedObject:destroy()
-                    game.manager:setFreezeFrames(10)
                 end
             end
 
@@ -316,7 +315,7 @@ function player:checkCollision()
             end
 
             if colliderDefinition == colliderDefinitions.enemy then
-                if self.isBoosting == true and collidedObject.onHit then
+                if self.isBoosting == true and collidedObject.onHit and collidedObject.isInvulnerable == false then
                     collidedObject:onHit(self.boostDamage)
                     self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
@@ -407,10 +406,13 @@ function player:draw()
     -- Draw the ammo count if the player is firing
     if self.displayAmmo == true then
         love.graphics.setFont(self.ammoFont)
-        love.graphics.setColor(1, 1, 1, 1)
         local width = self.ammoFont:getWidth(self.ammo)
 
         love.graphics.printf(self.ammo, self.position.x - width/2, self.position.y + 10, width, "center")
+    end
+
+    if self.isInvulnerable == true then
+        love.graphics.circle("line", self.position.x, self.position.y, 10)
     end
 end
 
