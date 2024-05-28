@@ -14,6 +14,7 @@ function player:new(x, y)
     -- Generic parameters of the ship
     self.maxHealth = 3
     self.spriteName = self.spriteName or "player default"
+    self.maxOverheatPlayRate = 0.5
     
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 6
@@ -69,6 +70,7 @@ function player:new(x, y)
     self.steeringAccelerationSpeed = self.steeringAccelerationStationary
     self.displayAmmo = false
     self.ammoDisplayTime = self.maxAmmoDisplayTime
+    self.overheatPlayCooldown = 0
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
@@ -86,8 +88,11 @@ function player:new(x, y)
     self.ammoFont = game.resourceManager:getResource("font main")
     self.cameraWeight = {position = self.position, weight = 50}
 
-    self.fireSound = self.fireSound or game.resourceManager:getResource("default fire")
-    self.boostSound = self.boostSound or game.resourceManager:getResource("default boost")
+    self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
+    self.boostSound = self.boostSound or ripple.newSound(game.resourceManager:getResource("default boost"))
+    self.hurtSound = ripple.newSound(game.resourceManager:getResource("ship hurt"))
+    self.overheatWarningSound = ripple.newSound(game.resourceManager:getResource("ship overheat warning"))
+    self.overheatSound = ripple.newSound(game.resourceManager:getResource("ship overheat"))
 
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
 end
@@ -171,7 +176,7 @@ function player:updateShipShooting(dt, movementDirection)
         self:setFireCooldown()
         self:setDisplayAmmo()
 
-        self.fireSound:play()
+        self.fireSound:play({pitch = 1 + (2 * (1 - (self.ammo / self.maxAmmo)))})
         gameHelper:getCurrentState().cameraManager:screenShake(0.05)
         
         self.ammo = self.ammo - 1
@@ -196,11 +201,34 @@ function player:updatePlayerTimers(dt)
     end
 end
 
+function player:playOverheatSound(dt)
+    if self.shipTemperature > self.maxShipTemperature/2.3 and self.isOverheating == false then
+        self.overheatPlayCooldown = self.overheatPlayCooldown - (1 * dt)
+
+        if self.overheatPlayCooldown <= 0 then
+            self.overheatWarningSound:play()
+
+            if self.maxShipTemperature < 0.75 then
+                self.overheatPlayCooldown = self.maxOverheatPlayRate
+            else
+                self.overheatPlayCooldown = self.maxOverheatPlayRate/2
+            end
+        end
+
+        if self.shipTemperature > self.maxShipTemperature then
+            self.overheatSound:play()
+        end
+    end
+
+end
+
 function player:updateOverheating(dt)
+    self:playOverheatSound(dt)
+
     if self.shipTemperature >= self.maxShipTemperature then
         self.isOverheating = true
     end
-    
+
     local coolingRate = self.shipCoolingRate
 
     if self.isOverheating == true then
@@ -220,6 +248,10 @@ function player:updateOverheating(dt)
 end
 
 function player:spawnTrail()
+    if self.isOverheating == true then
+        return
+    end
+
     local newTrailSegment
     local x = self.position.x + math.cos(self.angle) * -10
     local y = self.position.y + math.sin(self.angle) * -10
@@ -441,6 +473,8 @@ function player:onHit(damage)
     if self.health <= 0 then
         self:destroy()
     end
+
+    self.hurtSound:play()
 end
 
 function player:cleanup()
