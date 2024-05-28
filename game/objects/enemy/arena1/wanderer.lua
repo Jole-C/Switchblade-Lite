@@ -80,25 +80,26 @@ function wanderer:draw()
     if not self.sprite or not self.tail then
         return
     end
-
     -- Draw the eye
     if self.eye then
         self.eye:draw()
     end
+
+    love.graphics.setColor(self.enemyColour)
 
     -- Draw the sprite
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
 
-    love.graphics.setColor(game.manager.currentPalette.enemyColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
-    love.graphics.setColor(1, 1, 1, 1)
 
     -- Draw the tail
     if self.tail then
         self.tail:draw()
     end
+
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function wanderer:cleanup()

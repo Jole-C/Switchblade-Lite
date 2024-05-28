@@ -8,6 +8,7 @@ function enemy:new(x, y, spriteName)
     self.contactDamage = 1
     self.health = 0
     self.maxInvulnerableTime = 0.5
+    self.enemyColour = game.manager.currentPalette.enemyColour
 
     -- Variables
     self.isInvulnerable = false
@@ -28,6 +29,12 @@ function enemy:update(dt)
 
     if self.invulnerableTime <= 0 then
         self.isInvulnerable = false
+    end
+
+    if self.isInvulnerable == true then
+        self.enemyColour = {1, 1, 1, 1}
+    else
+        self.enemyColour = game.manager.currentPalette.enemyColour
     end
 end
 

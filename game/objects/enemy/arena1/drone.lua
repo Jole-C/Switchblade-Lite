@@ -128,19 +128,21 @@ function drone:draw()
         self.eye:draw()
     end
 
+    love.graphics.setColor(self.enemyColour)
+
     -- Draw the sprite
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = 5
     yOffset = yOffset/2
 
-    love.graphics.setColor(game.manager.currentPalette.enemyColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/8, 1, 1, xOffset, yOffset)
-    love.graphics.setColor(1, 1, 1, 1)
 
     -- Draw the tail
     if self.tail then
         self.tail:draw()
     end
+    
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function drone:applyFriction(dt)
