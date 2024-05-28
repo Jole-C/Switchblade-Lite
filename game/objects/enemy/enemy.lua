@@ -11,7 +11,7 @@ function enemy:new(x, y, spriteName)
 
     -- Variables
     self.isInvulnerable = false
-    self.invulnerableTime = self.maxInvulnerableTime
+    self.invulnerableTime = 0
 
     -- Components
     self.sprite = game.resourceManager:getResource(spriteName)
@@ -42,16 +42,16 @@ function enemy:onHit(damage)
         self:destroy()
     end
 
-    self.isInvulnerable = true
-    self.invulnerableTime = self.maxInvulnerableTime
+    self:setInvulnerable()
 
     if game.manager then
         game.manager:setFreezeFrames(3)
     end
 end
 
-function enemy:setVulnerable()
-    self.isInvulnerable = false
+function enemy:setInvulnerable()
+    self.isInvulnerable = true
+    self.invulnerableTime = self.maxInvulnerableTime
 end
 
 function enemy:cleanup()
