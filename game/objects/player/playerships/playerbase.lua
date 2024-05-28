@@ -290,7 +290,7 @@ function player:checkCollision()
             if colliderDefinition == colliderDefinitions.enemy then
                 if self.isBoosting == false  then
                     self:onHit(collidedObject.contactDamage)
-                    collidedObject:destroy()
+                    collidedObject:onHit(collidedObject.health)
                 end
             end
 

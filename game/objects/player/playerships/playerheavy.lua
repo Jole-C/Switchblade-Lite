@@ -153,7 +153,7 @@ function playerHeavy:checkCollision()
                     end
                 else
                     self:onHit(collidedObject.contactDamage)
-                    collidedObject:destroy()
+                    collidedObject:onHit(collidedObject.health)
                 end
 
                 self.shipTemperature = self.shipTemperature + self.contactDamageHeatAccumulation
