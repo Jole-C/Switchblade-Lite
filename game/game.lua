@@ -338,6 +338,9 @@ function game:setupResources()
 
     local shipOverheat = love.audio.newSource("game/assets/audio/sfx/overheat.wav", "static")
     resourceManager:addResource(shipOverheat, "ship overheat")
+
+    local boostHit = love.audio.newSource("game/assets/audio/sfx/boosthit.wav", "static")
+    resourceManager:addResource(boostHit, "boost hit")
 end
 
 return game

@@ -93,6 +93,7 @@ function player:new(x, y)
     self.hurtSound = ripple.newSound(game.resourceManager:getResource("ship hurt"))
     self.overheatWarningSound = ripple.newSound(game.resourceManager:getResource("ship overheat warning"))
     self.overheatSound = ripple.newSound(game.resourceManager:getResource("ship overheat"))
+    self.boostHitSound = ripple.newSound(game.resourceManager:getResource("boost hit"))
 
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
 end
@@ -359,6 +360,8 @@ function player:checkCollision()
                         game.manager:setFreezeFrames(5)
 
                         game.manager:swapPalette()
+
+                        self.boostHitSound:play()
                     end
                 end
             end
