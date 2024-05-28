@@ -227,7 +227,7 @@ function game:setupResources()
     resourceManager:addResource(logo, "logo sprite")
 
     -- Set up the mesh with given parameters
-    local numberOfVertices = 9
+    local numberOfVertices = 10
     local baseVertexX = 100
     local mesh = love.graphics.newMesh(2 + numberOfVertices + 1, "fan")
 
@@ -245,7 +245,7 @@ function game:setupResources()
         local vertexXoffset = 0
         
         if generateInnerVertex == false then
-            vertexXoffset = 30
+            vertexXoffset = 27
         end
 
         local vertexX = baseVertexX + vertexXoffset

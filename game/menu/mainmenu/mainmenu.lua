@@ -231,10 +231,14 @@ function mainMenu:draw()
 
         self:drawOverlay()
 
+        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, math.floor(self.backgroundScrollY))
+        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight))
+
         -- Use the menu background as a stencil
         love.graphics.stencil(function()
             love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY))
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight + 30))
+            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight))
         end, "replace", 1, false)
 
         love.graphics.setStencilTest("greater", 0)
