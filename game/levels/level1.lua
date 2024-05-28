@@ -1,8 +1,7 @@
 local wanderer = require "game.objects.enemy.arena1.wanderer"
 local charger = require "game.objects.enemy.arena1.charger"
 local drone = require "game.objects.enemy.arena1.drone"
-local utility = require "game.objects.enemy.arena1.charger"
-local specialist = require "game.objects.enemy.arena1.charger"
+local shielder = require "game.objects.enemy.arena1.shielder"
 
 local levelDefinition = 
 {
@@ -11,8 +10,7 @@ local levelDefinition =
         ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer sprite"},
         ["charger"] = {enemyClass = charger, spriteName = "charger sprite"},
         ["drone"] = {enemyClass = drone, spriteName = "drone sprite"},
-        ["utility"] = utility,
-        ["specialist"] = specialist,
+        ["shielder"] = {enemyClass = shielder, spriteName = "wanderer sprite"},
     },
     
     arenaSegmentDefinitions =
@@ -778,14 +776,254 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
+                        enemyID = "wanderer",
                         spawnCount = 5,
                     },
 
                     shapeDef =
                     {
                         numberOfPoints = 5,
-                        radius = 100,
+                        radius = 70,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 70,
+                        origin = "rightCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 70,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+
+            segmentChanges =
+            {
+                {
+                    changeType = "size",
+                    arenaSegment = "rightCircle",
+                    newRadius = 100,
+                    lerpSpeed = 0.01
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "leftCircle",
+                    newRadius = 100,
+                    lerpSpeed = 0.01
+                },
+                {
+                    changeType = "size",
+                    arenaSegment = "mainCircle",
+                    newRadius = 100,
+                    lerpSpeed = 0.01
+                },
+
+                {
+                    changeType = "position",
+                    arenaSegment = "mainCircle",
+                    newPosition = vec2(0, -120),
+                    lerpSpeed = 0.01
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "rightCircle",
+                    newPosition = vec2(120, 0),
+                    lerpSpeed = 0.01
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "leftCircle",
+                    newPosition = vec2(-120, 0),
+                    lerpSpeed = 0.01
+                }
+            },
+            
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 15
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 40
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 70,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 70,
+                        origin = "rightCircle"
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 70,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+            
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 7
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 30
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "rightCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "leftCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 70,
                         origin = "leftCircle"
                     }
                 },
@@ -795,13 +1033,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 5,
+                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
-                        radius = 100,
+                        numberOfPoints = 3,
+                        radius = 70,
                         origin = "rightCircle"
                     }
                 },
@@ -811,23 +1049,108 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 5,
+                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
-                        radius = 50,
+                        numberOfPoints = 3,
+                        radius = 70,
                         origin = "mainCircle"
                     }
                 },
             },
-
+            
             nextWaveConditions = 
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 15
+                    minimumKills = 7
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 40
+                }
+            }
+        },
+        {
+            spawnDefinitions = 
+            {
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "rightCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "leftCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    waveType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                }
+            },
+            
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 7
                 },
                 {
                     conditionType = "timer",
