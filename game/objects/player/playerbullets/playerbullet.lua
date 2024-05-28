@@ -4,30 +4,22 @@ local playerBullet = class({name = "Player Bullet", extends = bullet})
 function playerBullet:checkCollision(xx, yy)
     local world = gameHelper:getWorld()
     
-    if world and world:hasItem(self.collider) then
+    if world:hasItem(self.collider) then
         local x, y, cols, len = world:check(self.collider, xx, yy)
 
         for i = 1, len do
             local collidedObject = cols[i].other.owner
             local colliderDefinition = cols[i].other.colliderDefinition
 
-            if not collidedObject or not colliderDefinition then
-                goto continue
-            end
-
-            if colliderDefinition == colliderDefinitions.enemy then
-                if collidedObject.onHit then
-                    collidedObject:onHit(self.damage)
+            if collidedObject and colliderDefinition then
+                if colliderDefinition == colliderDefinitions.enemy then
+                    if collidedObject.onHit then
+                        collidedObject:onHit(self.damage)
+                    end
+                    
+                    self:destroy()
                 end
-                
-                self:destroy()
             end
-
-            if colliderDefinition == colliderDefinitions.wall then
-                self:destroy()
-            end
-
-            ::continue::
         end
     end
 end
