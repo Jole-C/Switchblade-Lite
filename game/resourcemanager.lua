@@ -17,7 +17,10 @@ function resourceManager:removeResource(identifier)
 end
 
 function resourceManager:getResource(identifier)
-    return self.resources[identifier]
+    local resource = self.resources[identifier]
+    assert(resource ~= nil, "Resource does not exist!")
+    
+    return resource
 end
 
 function resourceManager:updateResource(newResource, identifier)
