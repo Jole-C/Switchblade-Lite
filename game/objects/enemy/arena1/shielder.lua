@@ -81,6 +81,12 @@ function shielder:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
+function enemy:handleDamage(damage)
+    if damage.type == "boost" then
+        self.health = self.health - damage.amount
+    end
+end
+
 function shielder:cleanup()
     enemy.cleanup(self)
     

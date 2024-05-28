@@ -316,7 +316,7 @@ function player:checkCollision()
 
             if colliderDefinition == colliderDefinitions.enemy then
                 if self.isBoosting == true and collidedObject.onHit and collidedObject.isInvulnerable == false then
-                    collidedObject:onHit(self.boostDamage)
+                    collidedObject:onHit({type = "boost", amount = self.boostDamage})
                     self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
 
                     if collidedObject.health <= 0 then

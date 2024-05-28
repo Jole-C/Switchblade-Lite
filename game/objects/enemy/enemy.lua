@@ -43,7 +43,11 @@ function enemy:onHit(damage)
         return
     end
 
-    self.health = self.health - damage
+    if type(damage) ~= "table" then
+        damage = {type = "bullet", amount = 1}
+    end
+
+    self:handleDamage(damage)
 
     if self.health <= 0 then
         self:destroy()
@@ -53,6 +57,12 @@ function enemy:onHit(damage)
 
     if game.manager then
         game.manager:setFreezeFrames(3)
+    end
+end
+
+function enemy:handleDamage(damage)
+    if damage.type == "bullet" or "boot" then
+        self.health = self.health - damage.amount
     end
 end
 

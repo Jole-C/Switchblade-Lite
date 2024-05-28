@@ -144,7 +144,7 @@ function playerHeavy:checkCollision()
             if colliderDefinition == colliderDefinitions.enemy then
                 if self.velocity:length() > self.speedForContactDamage then
                     if collidedObject.onHit then
-                        collidedObject:onHit(self.boostDamage)
+                        collidedObject:onHit({type = "boost", amount = self.boostDamage})
 
                         if collidedObject.health <= 0 then
                             self:incrementAmmo()

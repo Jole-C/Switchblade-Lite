@@ -146,12 +146,7 @@ function playerLight:checkCollision()
             end
 
             if colliderDefinition == colliderDefinitions.enemy then
-                if collidedObject.onHit then
-                    collidedObject:onHit(self.boostDamage)
-                    self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
-
-                    self:onHit(collidedObject.contactDamage)
-                end
+                self:onHit(collidedObject.contactDamage)
             end
 
             ::continue::
