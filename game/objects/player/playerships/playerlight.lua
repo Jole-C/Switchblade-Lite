@@ -1,11 +1,15 @@
 local playerBase = require "game.objects.player.playerships.playerbase"
 local playerLaser = require "game.objects.player.playerbullets.playerlaser"
+local boostAmmoEffect = require "game.objects.effects.boostammorestore"
 local playerLight = class({name = "Player Light", extends = playerBase})
 
 function playerLight:new(x, y)
     -- Generic parameters of the ship
     self.maxHealth = 3
     self.spriteName = "player light"
+    self.maxEnemiesForExplosion = 8
+    self.boostExplosionDistance = 150
+    self.maxBoostHeatDividend = 6
     
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 1.5
@@ -25,19 +29,19 @@ function playerLight:new(x, y)
     self.maxShipTemperature = 150
     self.shipHeatAccumulationRate = 1
     self.shipCoolingRate = 40
-    self.shipOverheatCoolingRate = 20
-    self.boostDamage = 0
-    self.boostEnemyHitHeatAccumulation = 25
+    self.shipOverheatCoolingRate = 60
+    self.boostDamage = 1
+    self.boostEnemyHitHeatAccumulation = 30
     self.contactDamageHeatMultiplier = 10
     self.invulnerableGracePeriod = 3
     self.idleHeatAccumulationRate = 15
-    self.minimumSpeedForTemperature = 2
+    self.minimumSpeedForTemperature = 4
     
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.1
     self.bulletSpeed = 5
     self.bulletDamage = 3
-    self.maxAmmo = 70
+    self.maxAmmo = 30
     self.shipKnockbackForce = 50
     self.fireOffset = 10
     self.boostAmmoIncrement = 5
@@ -50,10 +54,6 @@ function playerLight:updateShipMovement(dt, movementDirection)
     self.maxSteeringSpeed = self.steeringSpeedStationary
 
     if self.isOverheating == false then
-        if self.velocity:length() < 3 then
-            self.shipTemperature = self.shipTemperature + self.idleHeatAccumulationRate * dt
-        end
-
         -- Apply a forward thrust to the ship
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
@@ -110,6 +110,10 @@ function playerLight:updateOverheating(dt)
     
     local coolingRate = self.shipCoolingRate
 
+    if self.velocity:length() < self.minimumSpeedForTemperature then
+        coolingRate = 0
+    end
+
     if self.isOverheating == true then
         self.isBoosting = false
         coolingRate = self.shipOverheatCoolingRate
@@ -119,37 +123,37 @@ function playerLight:updateOverheating(dt)
         end
     end
 
-    if self.velocity:length() > self.minimumSpeedForTemperature or (self.isOverheating == true and self.isBoosting == false) then
-        self.shipTemperature = self.shipTemperature - (coolingRate * dt)
-    end
-
+    self.shipTemperature = self.shipTemperature - (coolingRate * dt)
     self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
 end
 
-function playerLight:checkCollision()
-    local world = gameHelper:getWorld()
-
-    if world and world:hasItem(self.collider) then
-        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
-        colliderPositionX = self.position.x - colliderWidth/2
-        colliderPositionY = self.position.y - colliderHeight/2
-
-        local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
-        world:update(self.collider, colliderPositionX, colliderPositionY)
-
-        for i = 1, len do
-            local collidedObject = cols[i].other.owner
-            local colliderDefinition = cols[i].other.colliderDefinition
-
-            if not collidedObject or not colliderDefinition then
-                goto continue
-            end
-
-            if colliderDefinition == colliderDefinitions.enemy then
+function playerLight:handleCollision(colliderHit, collidedObject, colliderDefinition)
+    if colliderHit == self.collider then
+        if colliderDefinition == colliderDefinitions.enemy then
+            if self.isBoosting == false and collidedObject.onHit then
                 self:onHit(collidedObject.contactDamage)
+                collidedObject:onHit(collidedObject.health)
             end
+        end
+    elseif colliderHit == self.boostCollider then
+        if colliderDefinition == colliderDefinitions.enemy then
+            if self.isBoosting and collidedObject.onHit and collidedObject.isInvulnerable == false then
+                collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
 
-            ::continue::
+                if collidedObject.health <= 0 then
+                    local newEffect = boostAmmoEffect(self.position.x, self.position.y)
+                    gameHelper:addGameObject(newEffect)
+                    game.manager:setFreezeFrames(5)
+
+                    game.manager:swapPalette()
+
+                    self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
+
+                    self:handleBoostHeatDividend()
+                    self:handleBoostExplosion()
+                end
+            end
         end
     end
 end
@@ -172,7 +176,7 @@ function playerLight:update(dt)
     self:updateShipSteering(dt)
 
     -- Build temperature if the ship is still
-    if self.velocity:length() < self.minimumSpeedForTemperature then
+    if self.velocity:length() < self.minimumSpeedForTemperature and self.isOverheating == false then
         self.shipTemperature = self.shipTemperature + (self.idleHeatAccumulationRate * dt)
     end
     
