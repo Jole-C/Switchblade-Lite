@@ -91,7 +91,7 @@ function playerLight:updateShipShooting(dt, movementDirection)
 
     if self.canFire == true and game.input:down("shoot") then
         local firePosition = self.position + (movementDirection * self.fireOffset)
-        local newBullet = playerLaser(firePosition.x, firePosition.y, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, self.laserBounces, playerLaser)
+        local newBullet = playerLaser(firePosition.x, firePosition.y, self.angle, self.bulletDamage, 500, 0.05)
         gameHelper:addGameObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
