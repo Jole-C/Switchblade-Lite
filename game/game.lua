@@ -151,6 +151,20 @@ function game:drawForeground()
             end
         end
 
+        if currentGamestate.world then
+            local items = currentGamestate.world:getItems()
+
+            for i = 1, #items do
+                local item = items[i]
+
+                if item then
+                    local x, y, w, h = currentGamestate.world:getRect(item)
+
+                    love.graphics.rectangle("line", x, y, w, h)
+                end
+            end
+        end
+
         love.graphics.setCanvas()
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.setStencilTest()
