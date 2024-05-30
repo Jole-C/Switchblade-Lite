@@ -1,5 +1,6 @@
 local gameObject = require "game.objects.gameobject"
 local playerBullet = require "game.objects.player.playerbullets.playerbullet"
+local playerExplosion = require "game.objects.player.playerbullets.playerexplosion"
 local collider = require "game.collision.collider"
 local playerHud = require "game.objects.player.playerhuddisplay"
 local boostAmmoEffect = require "game.objects.effects.boostammorestore"
@@ -15,6 +16,9 @@ function player:new(x, y)
     self.maxHealth = 3
     self.spriteName = self.spriteName or "player default"
     self.maxOverheatPlayRate = 0.5
+    self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 5
+    self.boostExplosionDistance = self.boostExplosionDistance or 100
+    self.maxBoostHeatDividend = self.maxBoostHeatDividend or 5
     
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 6
@@ -71,6 +75,8 @@ function player:new(x, y)
     self.displayAmmo = false
     self.ammoDisplayTime = self.maxAmmoDisplayTime
     self.overheatPlayCooldown = 0
+    self.boostHeatDividend = 1
+    self.boostHitEnemies = 0
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
@@ -159,7 +165,7 @@ end
 
 function player:updateShipShooting(dt, movementDirection)
     if self.isBoosting == true or self.ammo <= 0 then
-        self.canFire = false
+        self.canFire = true
     end
 
     if game.input:down("shoot") then
@@ -243,6 +249,8 @@ function player:updateOverheating(dt)
 
     if self.isBoosting == false then
         self.shipTemperature = self.shipTemperature - (coolingRate * dt)
+        self.boostHeatDividend = 1
+        self.boostHitEnemies = 0
     end
 
     self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
@@ -320,12 +328,7 @@ function player:checkCollision()
                 goto continue
             end
 
-            if colliderDefinition == colliderDefinitions.enemy then
-                if self.isBoosting == false  then
-                    self:onHit(collidedObject.contactDamage)
-                    collidedObject:onHit(collidedObject.health)
-                end
-            end
+            self:handleCollision(self.collider, collidedObject, colliderDefinition)
 
             ::continue::
         end
@@ -347,27 +350,59 @@ function player:checkCollision()
                 goto continue
             end
 
-            if colliderDefinition == colliderDefinitions.enemy then
-                if self.isBoosting == true and collidedObject.onHit and collidedObject.isInvulnerable == false then
-                    collidedObject:onHit({type = "boost", amount = self.boostDamage})
-                    self.shipTemperature = self.shipTemperature + self.boostEnemyHitHeatAccumulation
-
-                    if collidedObject.health <= 0 then
-                        self:incrementAmmo()
-
-                        local newEffect = boostAmmoEffect(self.position.x, self.position.y)
-                        gameHelper:addGameObject(newEffect)
-                        game.manager:setFreezeFrames(5)
-
-                        game.manager:swapPalette()
-
-                        self.boostHitSound:play()
-                    end
-                end
-            end
+            self:handleCollision(self.boostCollider, collidedObject, colliderDefinition)
 
             ::continue::
         end
+    end
+end
+
+function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
+    if colliderHit == self.collider then
+        if colliderDefinition == colliderDefinitions.enemy then
+            if self.isBoosting == false and collidedObject.onHit then
+                self:onHit(collidedObject.contactDamage)
+                collidedObject:onHit(collidedObject.health)
+            end
+        end
+    elseif colliderHit == self.boostCollider then
+        if colliderDefinition == colliderDefinitions.enemy then
+            if self.isBoosting and collidedObject.onHit and collidedObject.isInvulnerable == false then
+                collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
+
+                if collidedObject.health <= 0 then
+                    self:incrementAmmo()
+
+                    local newEffect = boostAmmoEffect(self.position.x, self.position.y)
+                    gameHelper:addGameObject(newEffect)
+                    game.manager:setFreezeFrames(5)
+
+                    game.manager:swapPalette()
+
+                    self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
+
+                    self:handleBoostHeatDividend()
+                    self:handleBoostExplosion()
+                end
+            end
+        end
+    end
+end
+
+function player:handleBoostHeatDividend()
+    self.boostHeatDividend = self.boostHeatDividend + 1
+    self.boostHeatDividend = math.clamp(self.boostHeatDividend, 0, self.maxBoostHeatDividend)
+end
+
+function player:handleBoostExplosion()
+    self.boostHitEnemies = self.boostHitEnemies + 1
+
+    if self.boostHitEnemies >= self.maxEnemiesForExplosion then
+        self.boostHitEnemies = 0
+
+        local newExplosion = playerExplosion(self.position.x, self.position.y, self.boostExplosionDistance, self.boostDamage)
+        gameHelper:addGameObject(newExplosion)
     end
 end
 
@@ -449,6 +484,8 @@ function player:draw()
     if self.isInvulnerable == true then
         love.graphics.circle("line", self.position.x, self.position.y, 10)
     end
+
+    love.graphics.print(self.boostHitEnemies)
 end
 
 function player:spawnBoostLines()
