@@ -24,6 +24,14 @@ function gameHelper:getWorld()
     return currentGamestate.world
 end
 
+function gameHelper:getArena()
+    local currentGamestate = self:getCurrentState()
+    
+    assert(currentGamestate.arena ~= nil, "Gamestate's arena is nil!")
+
+    return currentGamestate.arena
+end
+
 function gameHelper:screenShake(amount)
     local currentGamestate = self:getCurrentState()
 
