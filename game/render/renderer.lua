@@ -49,6 +49,10 @@ function renderer:getRenderCanvas(canvasName)
     assert(false, "Canvas does not exist")
 end
 
+function renderer:setMode(width, height, flags)
+    love.window.setMode(width, height, flags)
+end
+
 function renderer:drawCanvases()
     for i = 1, #self.renderCanvases do
         local canvas = self.renderCanvases[i]
