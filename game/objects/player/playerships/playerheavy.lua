@@ -1,10 +1,14 @@
 local playerBase = require "game.objects.player.playerships.playerbase"
 local playerBullet = require "game.objects.player.playerbullets.playerbullet"
 local trailEffect = require "game.objects.effects.playertrail"
+local boostAmmoEffect = require "game.objects.effects.boostammorestore"
 local playerHeavy = class({name = "Player Heavy", extends = playerBase})
 
 function playerHeavy:new(x, y)
     self.spriteName = "player heavy"
+    self.maxEnemiesForExplosion = 3
+    self.boostExplosionDistance = 50
+    self.maxBoostHeatDividend = 3
 
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 1
@@ -21,22 +25,22 @@ function playerHeavy:new(x, y)
     self.maxSpeed = 6
     self.maxBoostingSpeed = 15
     self.maxShipTemperature = 100
-    self.shipHeatAccumulationRate = 600
+    self.shipHeatAccumulationRate = 250
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 20
     self.boostDamage = 5
-    self.boostEnemyHitHeatAccumulation = 35
-    self.contactDamageHeatAccumulation = 10
     self.invulnerableGracePeriod = 3
     self.speedForContactDamage = 2
+    self.boostEnemyHitHeatAccumulation = 10
+    self.contactDamageHeatMultiplier = 30
     
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.15
     self.bulletSpeed = 5
-    self.bulletDamage = 3
+    self.bulletDamage = 0.5
     self.maxAmmo = 30
     self.shipKnockbackForce = 10
-    self.fireOffset = 10
+    self.fireOffset = 40
     self.bulletsToFire = 3
     self.maxBulletAngle = 30
     self.overheatDamageTaken = false
@@ -65,40 +69,39 @@ function playerHeavy:updateShipMovement(dt, movementDirection)
 end
 
 function playerHeavy:updateShipShooting(dt, movementDirection)
-    -- Fire gun
-    if self.ammo <= 0 then
-        self.canFire = false
-    end
-
-    if self.canFire == true and game.input:down("shoot") then
-        local firePosition = self.position + ((movementDirection * -1) * self.fireOffset)
-
-        for i = 1, self.bulletsToFire do
-            local newBullet = playerBullet(
-                firePosition.x,
-                firePosition.y,
-                self.bulletSpeed,
-                (self.angle + math.pi) + math.rad(love.math.random(-self.maxBulletAngle, self.maxBulletAngle)),
-                self.bulletDamage,
-                colliderDefinitions.playerbullet,
-                16,
-                16
-            )
-            gameHelper:addGameObject(newBullet)
-        end
+    if game.input:down("shoot") and self.ammo > 0 then
 
         self.isBoosting = true
-        self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
-        self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
-        self.maxSteeringSpeed = self.steeringSpeedBoosting
-
-        self.shipTemperature = self.shipTemperature + (self.shipHeatAccumulationRate * dt)
-
-        self.ammo = self.ammo - 1
-
-        self:setFireCooldown()
-        self:setDisplayAmmo()
+        if self.canFire then
+            local firePosition = self.position + ((movementDirection * -1) * self.fireOffset)
+    
+            for i = 1, self.bulletsToFire do
+                local newBullet = playerBullet(
+                    firePosition.x,
+                    firePosition.y,
+                    self.bulletSpeed,
+                    (self.angle + math.pi) + math.rad(love.math.random(-self.maxBulletAngle, self.maxBulletAngle)),
+                    self.bulletDamage,
+                    colliderDefinitions.playerbullet,
+                    16,
+                    16
+                )
+                gameHelper:addGameObject(newBullet)
+            end
+    
+            self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
+    
+            self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
+            self.maxSteeringSpeed = self.steeringSpeedBoosting
+    
+            self.shipTemperature = self.shipTemperature + (self.shipHeatAccumulationRate * dt)
+    
+            self.ammo = self.ammo - 1
+    
+            self:setFireCooldown()
+            self:setDisplayAmmo()
+        end
     else
         self.isBoosting = false
     end
@@ -122,44 +125,37 @@ function playerHeavy:spawnTrail()
     end
 end
 
-function playerHeavy:checkCollision()
-    local world = gameHelper:getWorld()
-
-    if world and world:hasItem(self.collider) then
-        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
-        colliderPositionX = self.position.x - colliderWidth / 2
-        colliderPositionY = self.position.y - colliderHeight / 2
-
-        local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
-        world:update(self.collider, colliderPositionX, colliderPositionY)
-
-        for i = 1, len do
-            local collidedObject = cols[i].other.owner
-            local colliderDefinition = cols[i].other.colliderDefinition
-
-            if not collidedObject or not colliderDefinition then
-                goto continue
+function playerHeavy:handleCollision(colliderHit, collidedObject, colliderDefinition)
+    if colliderHit == self.collider then
+        if colliderDefinition == colliderDefinitions.enemy then
+            if self.velocity:length() < self.speedForContactDamage and collidedObject.onHit then
+                self:onHit(collidedObject.contactDamage)
+                collidedObject:onHit(collidedObject.health)
             end
+        end
+    elseif colliderHit == self.boostCollider then
+        if colliderDefinition == colliderDefinitions.enemy then
+            if (self.isBoosting or self.velocity:length() > self.speedForContactDamage) and collidedObject.onHit then
+                collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
 
-            if colliderDefinition == colliderDefinitions.enemy then
-                if self.velocity:length() > self.speedForContactDamage then
-                    if collidedObject.onHit then
-                        collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                if collidedObject.health <= 0 then
+                    self:incrementAmmo()
 
-                        if collidedObject.health <= 0 then
-                            self:incrementAmmo()
-                            game.manager:swapPalette()
-                        end
+                    if self.isBoosting == true then
+                        local newEffect = boostAmmoEffect(self.position.x, self.position.y)
+                        gameHelper:addGameObject(newEffect)
+                        game.manager:setFreezeFrames(5)
+
+                        game.manager:swapPalette()
+
+                        self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
+
+                        self:handleBoostHeatDividend()
+                        self:handleBoostExplosion()
                     end
-                else
-                    self:onHit(collidedObject.contactDamage)
-                    collidedObject:onHit(collidedObject.health)
                 end
-
-                self.shipTemperature = self.shipTemperature + self.contactDamageHeatAccumulation
             end
-
-            ::continue::
         end
     end
 end
