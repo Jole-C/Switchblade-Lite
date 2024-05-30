@@ -76,7 +76,7 @@ function wanderer:update(dt)
     end
 end
 
-function enemy:handleDamage(damage)
+function wanderer:handleDamage(damage)
     if damage.type == "bullet" or "boost" then
         self.health = self.health - damage.amount
     end
