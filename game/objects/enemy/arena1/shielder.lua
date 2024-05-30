@@ -6,11 +6,16 @@ function shielder:new(x, y)
     self:super(x, y, "wanderer sprite")
 
     -- Parameters of the enemey
-    self.health = 5
+    self.health = 3
     self.speed = 15
+    self.fleeSpeed = 80
     self.turnRate = 0.05
-    self.direction = vec2(30, 30)
+    self.fleeTurnRate = 0.3
     self.shieldDistance = 80
+    self.fleeDistance = 100
+
+    -- Variables
+    self.direction = vec2(30, 30)
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -23,13 +28,25 @@ function shielder:update(dt)
     -- Move the enemy to the player
     local playerReference = game.playerManager.playerReference
 
+    local speed = self.speed
+    local lerpDirection = self.position
+    local lerpRate = self.turnRate
+
     if playerReference then
-        self.direction:lerp_direction_inplace((playerReference.position - self.position), self.turnRate)
+        lerpDirection = (playerReference.position - self.position)
+
+        if playerReference.isBoosting and (self.position - playerReference.position):length() < self.fleeDistance then
+            lerpDirection = (self.position - playerReference.position)
+            speed = self.fleeSpeed
+            lerpRate = self.fleeTurnRate
+        end
+
+        self.direction:lerp_direction_inplace(lerpDirection, lerpRate)
     end
 
     self.direction:normalise_inplace()
 
-    self.position = self.position + (self.direction * self.speed) * dt
+    self.position = self.position + (self.direction * speed) * dt
 
     -- Update the collider
     local world = gameHelper:getWorld()
