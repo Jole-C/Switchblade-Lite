@@ -80,10 +80,10 @@ function player:new(x, y)
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    gameHelper:getWorld():add(self.collider, 0, 0, 8, 8)
+    gameHelper:getWorld():add(self.collider, 0, 0, 6, 6)
 
     self.boostCollider = collider(colliderDefinitions.none, self)
-    gameHelper:getWorld():add(self.boostCollider, 0, 0, 12, 12)
+    gameHelper:getWorld():add(self.boostCollider, 0, 0, 16, 16)
 
     self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
@@ -165,7 +165,7 @@ end
 
 function player:updateShipShooting(dt, movementDirection)
     if self.isBoosting == true or self.ammo <= 0 then
-        self.canFire = true
+        self.canFire = false
     end
 
     if game.input:down("shoot") then
