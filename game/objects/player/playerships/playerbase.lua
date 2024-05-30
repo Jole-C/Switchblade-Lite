@@ -95,11 +95,17 @@ function player:new(x, y)
     self.cameraWeight = {position = self.position, weight = 50}
 
     self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
+    self.fireSound:tag(game.tags.sfx)
     self.boostSound = self.boostSound or ripple.newSound(game.resourceManager:getResource("default boost"))
+    self.boostSound:tag(game.tags.sfx)
     self.hurtSound = ripple.newSound(game.resourceManager:getResource("ship hurt"))
+    self.hurtSound:tag(game.tags.sfx)
     self.overheatWarningSound = ripple.newSound(game.resourceManager:getResource("ship overheat warning"))
+    self.overheatWarningSound:tag(game.tags.sfx)
     self.overheatSound = ripple.newSound(game.resourceManager:getResource("ship overheat"))
+    self.overheatSound:tag(game.tags.sfx)
     self.boostHitSound = ripple.newSound(game.resourceManager:getResource("boost hit"))
+    self.boostHitSound:tag(game.tags.sfx)
 
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
 end

@@ -65,9 +65,16 @@ function game:new()
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         transitionCanvas = self.gameRenderer:addRenderCanvas("transitionCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
+
+    self.tags = 
+    {
+        music = ripple.newTag(),
+        sfx = ripple.newTag()
+    }
     
     local music = ripple.newSound(self.resourceManager:getResource("music"))
     music:play({loop = true, volume = 0.2})
+    music:tag(self.tags.music)
 end
 
 function game:start()
@@ -88,6 +95,9 @@ function game:update(dt)
 
     ps:setColors(self.manager.currentPalette.backgroundColour[1], self.manager.currentPalette.backgroundColour[2], self.manager.currentPalette.backgroundColour[3], self.manager.currentPalette.backgroundColour[4])
     ps:update(dt/7 * self.manager.options.speedPercentage/100)
+
+    self.tags.music.volume = 1 * (self.manager.options.musicVolPercentage/100)
+    self.tags.sfx.volume = 1 * (self.manager.options.sfxVolPercentage/100)
 end
 
 function game:draw()
