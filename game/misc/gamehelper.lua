@@ -24,4 +24,12 @@ function gameHelper:getWorld()
     return currentGamestate.world
 end
 
+function gameHelper:screenShake(amount)
+    local currentGamestate = self:getCurrentState()
+
+    assert(currentGamestate.cameraManager ~= nil, "Gamestate's camera manager is nil!")
+
+    currentGamestate.cameraManager:screenShake(amount)
+end
+
 return gameHelper
