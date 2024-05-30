@@ -1,66 +1,10 @@
-local bullet = require "game.objects.bullet.bullet"
-local playerLaser = class({name = "Player Laser", extends = bullet})
+local laser = require "game.objects.bullet.laser"
+local playerLaser = class({name = "Player Laser", extends = laser})
 
-function playerLaser:new(x, y, angle, damage, colliderDefinition)
-    self.damage = damage
-    self.length = game.arenaValues.worldWidth * math.abs(game.arenaValues.worldX)
-    self.lifetime = 0.05
-
-    self.position = vec2(x, y)
-    self.circlePosition = vec2(0, 0)
-    self.angle = angle
-
+function playerLaser:new(x, y, angle, damage, length, lifetime)
     self.sprite = game.resourceManager:getResource("player laser sprite")
-end
-
-function playerLaser:update(dt)
-    self.lifetime = self.lifetime - 1 * dt
-
-    if self.lifetime <= 0 then
-        self:destroy()
-    end
-
-    local currentGamestate = gameHelper:getCurrentState()
-    local world = currentGamestate.world
-
-    -- Handle laser bouncing
-    local arena = currentGamestate.arena
-    local bulletEndPoint = vec2(self.position.x + math.cos(self.angle) * self.length, self.position.y + math.sin(self.angle) * self.length)
-    local arenaSegment
-
-    if arena then
-        bulletEndPoint, arenaSegment = arena:getClampedPosition(bulletEndPoint)
-    end
-
-    -- Handle collisions with enemy
-    if world then
-        local x1 = self.position.x
-        local y1 = self.position.y
-        local x2 = bulletEndPoint.x
-        local y2 = bulletEndPoint.y
-
-        local items, len = world:querySegmentWithCoords(x1, y1, x2, y2)
-
-        for i = 1, len do
-            local item = items[i].item
-            local collidedObject = item.owner
-            local colliderDefinition = item.colliderDefinition
-            local x = items[i].x1
-            local y = items[i].y1
-
-            if not collidedObject or not colliderDefinition then
-                goto continue
-            end
-
-            if colliderDefinition == colliderDefinitions.enemy then
-                if collidedObject.onHit then
-                    collidedObject:onHit(self.damage)
-                end
-            end
-
-            ::continue::
-        end
-    end
+    
+    self:super(x, y, angle, damage, length, lifetime)
 end
 
 function playerLaser:draw()
@@ -77,6 +21,28 @@ function playerLaser:draw()
     love.graphics.circle("fill", self.position.x, self.position.y, 15)
     
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function playerLaser:handleCollision(items, len)
+    for i = 1, len do
+        local item = items[i]
+        local collidedObject = item.owner
+        local colliderDefinition = item.colliderDefinition
+        local x = items[i].x1
+        local y = items[i].y1
+
+        if not collidedObject or not colliderDefinition then
+            goto continue
+        end
+
+        if colliderDefinition == colliderDefinitions.enemy then
+            if collidedObject.onHit then
+                collidedObject:onHit(self.damage)
+            end
+        end
+
+        ::continue::
+    end
 end
 
 return playerLaser
