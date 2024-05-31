@@ -28,7 +28,7 @@ function arenaSegment:update()
         elseif changeType == "size" then
             self.radius = math.lerp(self.radius, change.newRadius, self.changeLerpSpeed)
 
-            if (change.newRadius - self.radius) < 3 then
+            if math.abs(change.newRadius - self.radius) < 3 then
                 table.remove(self.segmentChanges, i)
             end
         elseif changeType == "reset" then
@@ -36,7 +36,7 @@ function arenaSegment:update()
             self.position.x = math.lerp(self.position.x, self.originPosition.x, self.changeLerpSpeed)
             self.position.y = math.lerp(self.position.y, self.originPosition.y, self.changeLerpSpeed)
 
-            if (self.radius - self.originRadius) < 3 and (self.originPosition - self.position):length() < 3 then
+            if math.abs(self.radius - self.originRadius) < 3 and (self.originPosition - self.position):length() < 3 then
                 table.remove(self.segmentChanges, i)
             end
         end
