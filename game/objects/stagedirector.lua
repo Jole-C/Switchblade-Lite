@@ -44,6 +44,7 @@ function stageDirector:new(levelDefinition)
     self.maxWave = #self.levelDefinition.level
     self.enemyDefinitions = self.levelDefinition.enemyDefinitions
     self.playerStartSegment = nil
+    self.currentWaveIndex = self.levelDefinition.startingWave or self.currentWaveIndex
 
     -- Initialise the segments and add them to the arena
     for i = 1, #self.levelDefinition.arenaSegmentDefinitions do
@@ -120,11 +121,6 @@ function stageDirector:update(dt)
     end
 
     self.timeSeconds = self.timeSeconds - 1 * dt
-
-    -- Kill the player when time runs out
-    if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
-        player:onHit(3)
-    end
 
     -- Transition to the next wave
     if self.inWaveTransition == true then
