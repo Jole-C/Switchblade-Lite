@@ -345,7 +345,7 @@ function game:setupResources()
     resourceManager:addResource(menuBoxShader, "menu box shader")
 
     -- Audio
-    local song = love.audio.newSource("game/assets/audio/music/song.mp3", "stream")
+    local song = love.audio.newSource("game/assets/audio/music/song.wav", "stream")
     resourceManager:addResource(song, "music")
 
     local defaultBoost = love.audio.newSource("game/assets/audio/sfx/defaultboost.wav", "static")
