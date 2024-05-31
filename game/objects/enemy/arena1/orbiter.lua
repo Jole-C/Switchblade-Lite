@@ -20,6 +20,7 @@ function orbiter:new(x, y)
     self.angle = 0
     self.positionOffset = vec2(math.cos(self.offsetAngle) * self.distanceFromPlayer, math.sin(self.offsetAngle) * self.distanceFromPlayer)
     self.fireCooldown = self.maxFireCooldown
+    self.drawLine = false
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -50,12 +51,14 @@ function orbiter:update(dt)
     local targetPosition = vec2(math.cos(self.offsetAngle) * self.distanceFromPlayer, math.sin(self.offsetAngle) * self.distanceFromPlayer)
     self.positionOffset:lerp_direction_inplace(targetPosition, self.offsetAngleLerpRate)
 
-    self.position:lerp_inplace(playerReference.position + self.positionOffset, 0.2)
+    self.position:lerp_inplace(playerReference.position + self.positionOffset, 0.05)
     self.position = gameHelper:getArena():getClampedPosition(self.position)
 
     self.angle = (playerReference.position - self.position):angle()
     
-    if playerReference.isOverheating == false then
+    if playerReference.isOverheating == false and playerReference.isBoosting == false then
+        self.drawLine = true
+
         self.fireCooldown = self.fireCooldown - (1 * dt)
 
         if self.fireCooldown <= 0 then
@@ -65,6 +68,7 @@ function orbiter:update(dt)
         end
     else
         self.fireCooldown = self.maxFireCooldown
+        self.drawLine = false
     end
 
     local world = gameHelper:getWorld()
@@ -95,6 +99,15 @@ function orbiter:draw()
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
+
+    local x1 = self.position.x
+    local y1 = self.position.y
+    local x2 = x1 + math.cos(self.angle) * 400
+    local y2 = y1 + math.sin(self.angle) * 400
+
+    if self.drawLine == true then
+        love.graphics.line(x1, y1, x2, y2)
+    end
 
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.offsetAngle, 1, 1, xOffset, yOffset)
     
