@@ -8,7 +8,7 @@ function shielder:new(x, y)
     -- Parameters of the enemey
     self.health = 3
     self.speed = 15
-    self.fleeSpeed = 80
+    self.fleeSpeed = 20
     self.turnRate = 0.05
     self.fleeTurnRate = 0.3
     self.shieldDistance = 80
