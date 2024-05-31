@@ -53,22 +53,6 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
-
-                    enemyDef =
-                    {
-                        enemyID = "orbiter",
-                    },
-
-                    shapeDef =
-                    {
-                        origin = "mainCircle",
-                        points = {
-                            x = 0, y = 0
-                        }
-                    }
-                },
-                {
                     waveType = "alongShapePerimeter",
 
                     enemyDef =
