@@ -12,7 +12,7 @@ function boostLine:new(x, y)
     local player = game.playerManager.playerReference
     if player then
         self.angle = player.velocity:angle()
-        self.speed = -player.velocity:length() * 200
+        self.speed = -player.velocity:length() * 5
     end
 end
 
@@ -21,6 +21,12 @@ function boostLine:update(dt)
 
     self.position.x = self.position.x + math.cos(self.angle) * (self.speed * dt)
     self.position.y = self.position.y + math.sin(self.angle) * (self.speed * dt)
+
+    local player = game.playerManager.playerReference
+    
+    if player and player.isBoosting == false then
+        self:destroy()
+    end
 end
 
 function boostLine:draw()
