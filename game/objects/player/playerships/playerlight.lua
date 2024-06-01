@@ -12,20 +12,19 @@ function playerLight:new(x, y)
     self.maxBoostHeatDividend = 6
     
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = self.steeringSpeedMoving or 1.5
-    self.steeringSpeedStationary = self.steeringSpeedStationary or 0.7
-    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 1
-    self.steeringSpeedFiring = self.steeringSpeedFiring or 1
-    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 1
-    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.5
-    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 0.7
-    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
-    self.steeringSpeedFiring = 4
-    self.accelerationSpeed = 6
-    self.boostingAccelerationSpeed = 5
+    self.steeringSpeedMoving = 93.75
+    self.steeringSpeedStationary = 43.75
+    self.steeringSpeedBoosting = 62.5
+    self.steeringSpeedFiring = 250
+    self.steeringAccelerationMoving = 62.5
+    self.steeringAccelerationStationary = 31.25
+    self.steeringAccelerationBoosting = 43.75
+    self.steeringAccelerationFiring = 31.25
+    self.accelerationSpeed = 375
+    self.boostingAccelerationSpeed = 312.5
     self.friction = 0.8
-    self.maxSpeed = 6
-    self.maxBoostingSpeed = 15
+    self.maxSpeed = 375
+    self.maxBoostingSpeed = 937.5
     self.maxShipTemperature = 150
     self.shipHeatAccumulationRate = 1
     self.shipCoolingRate = 40
@@ -35,7 +34,7 @@ function playerLight:new(x, y)
     self.contactDamageHeatMultiplier = 10
     self.invulnerableGracePeriod = 3
     self.idleHeatAccumulationRate = 15
-    self.minimumSpeedForTemperature = 4
+    self.minimumSpeedForTemperature = 250
     
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.1
@@ -58,8 +57,8 @@ function playerLight:updateShipMovement(dt, movementDirection)
         if game.input:down("thrust") then
             self.velocity = self.velocity + movementDirection * (self.accelerationSpeed * dt)
 
-            self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
-            self.maxSteeringSpeed = self.steeringSpeedBoosting
+            self.steeringAccelerationSpeed = self.steeringAccelerationMoving
+            self.maxSteeringSpeed = self.steeringSpeedMoving
         end
 
         -- Boost the ship
@@ -187,8 +186,7 @@ function playerLight:update(dt)
     self:updateOverheating(dt)
 
     -- Apply the velocity to the ship and then apply friction
-    self:updatePosition()
-    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
+    self:updatePosition(dt)
 
     -- Wrap the ship's position
     self:wrapShipPosition()

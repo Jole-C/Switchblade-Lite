@@ -7,20 +7,20 @@ function playerDefault:new(x, y)
     self.spriteName = "player default"
 
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = self.steeringSpeedMoving or 1.3
-    self.steeringSpeedStationary = self.steeringSpeedStationary or 0.7
-    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 1.1
-    self.steeringSpeedFiring = self.steeringSpeedFiring or 1
-    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 1
-    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.5
-    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 0.7
-    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
+    self.steeringSpeedMoving = 81.25
+    self.steeringSpeedStationary = 43.75
+    self.steeringSpeedBoosting = 68.75
+    self.steeringSpeedFiring = 62.5
+    self.steeringAccelerationMoving = 62.5
+    self.steeringAccelerationStationary = 31.25
+    self.steeringAccelerationBoosting = 43.75
+    self.steeringAccelerationFiring = 31.25
     self.steeringFriction = 7
-    self.accelerationSpeed = 5
-    self.boostingAccelerationSpeed = 7
+    self.accelerationSpeed = 312.5
+    self.boostingAccelerationSpeed = 437.5
     self.friction = 1
-    self.maxSpeed = 7
-    self.maxBoostingSpeed = 10
+    self.maxSpeed = 437.5
+    self.maxBoostingSpeed = 625
     self.maxShipTemperature = 100
     self.shipHeatAccumulationRate = 30
     self.shipCoolingRate = 50
@@ -72,8 +72,7 @@ function playerDefault:update(dt)
     self:updateOverheating(dt)
 
     -- Apply the velocity to the ship and then apply friction
-    self:updatePosition()
-    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
+    self:updatePosition(dt)
 
     -- Wrap the ship's position
     self:wrapShipPosition()

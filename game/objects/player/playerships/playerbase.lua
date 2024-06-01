@@ -21,20 +21,20 @@ function player:new(x, y)
     self.maxBoostHeatDividend = self.maxBoostHeatDividend or 5
     
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = self.steeringSpeedMoving or 6
-    self.steeringSpeedStationary = self.steeringSpeedStationary or 14
-    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 3
-    self.steeringSpeedFiring = self.steeringSpeedFiring or 3
-    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 3
-    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 6
-    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 2
-    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 2
+    self.steeringSpeedMoving = self.steeringSpeedMoving or 60
+    self.steeringSpeedStationary = self.steeringSpeedStationary or 140
+    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 30
+    self.steeringSpeedFiring = self.steeringSpeedFiring or 30
+    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 30
+    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 60
+    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 20
+    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 20
     self.steeringFriction = self.steeringFriction or 7
-    self.accelerationSpeed = self.accelerationSpeed or 3
-    self.boostingAccelerationSpeed = self.boostingAccelerationSpeed or 4
+    self.accelerationSpeed = self.accelerationSpeed or 30
+    self.boostingAccelerationSpeed = self.boostingAccelerationSpeed or 40
     self.friction = self.friction or 1
-    self.maxSpeed = self.maxSpeed or 3
-    self.maxBoostingSpeed = self.maxBoostingSpeed or 6
+    self.maxSpeed = self.maxSpeed or 30
+    self.maxBoostingSpeed = self.maxBoostingSpeed or 60
     self.maxShipTemperature = self.maxShipTemperature or 100
     self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
     self.shipCoolingRate = self.shipCoolingRate or 40
@@ -165,7 +165,7 @@ function player:updateShipSteering(dt)
     end
 
     self.steeringSpeed = math.clamp(self.steeringSpeed, -self.maxSteeringSpeed, self.maxSteeringSpeed)
-    self.angle = self.angle + self.steeringSpeed
+    self.angle = self.angle + (self.steeringSpeed * dt)
     self.steeringSpeed = self:applyFriction(dt, self.steeringSpeed, self.steeringFriction)
 end
 
@@ -284,7 +284,7 @@ function player:spawnTrail()
     end
 end
 
-function player:updatePosition()
+function player:updatePosition(dt)
     local arena = gameHelper:getCurrentState().arena
 
     if not arena then
@@ -301,7 +301,7 @@ function player:updatePosition()
 
     self.velocity = self.velocity:trim_length_inplace(trimmedSpeed)
 
-    if arena:isPositionWithinArena(self.position + self.velocity) == false then
+    if arena:isPositionWithinArena(self.position + self.velocity * dt) == false then
         local segment = arena:getSegmentPointIsWithin(self.position)
         
         if segment then
@@ -310,8 +310,11 @@ function player:updatePosition()
         end
     end
 
-    self.position = self.position + self.velocity
+    self.position = self.position + (self.velocity * dt)
     self.position = arena:getClampedPosition(self.position)
+
+    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
+
     self.cameraWeight.position = self.position
 end
 
@@ -456,8 +459,7 @@ function player:update(dt)
     self:updateOverheating(dt)
 
     -- Apply the velocity to the ship and then apply friction
-    self:updatePosition()
-    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
+    self:updatePosition(dt)
 
     -- Wrap the ship's position
     self:wrapShipPosition()

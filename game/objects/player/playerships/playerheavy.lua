@@ -11,26 +11,26 @@ function playerHeavy:new(x, y)
     self.maxBoostHeatDividend = 3
 
     -- Movement parameters of the ship
-    self.steeringSpeedMoving = self.steeringSpeedMoving or 1
-    self.steeringSpeedStationary = self.steeringSpeedStationary or 0.5
-    self.steeringSpeedBoosting = self.steeringSpeedBoosting or 0.7
-    self.steeringAccelerationMoving = self.steeringAccelerationMoving or 0.6
-    self.steeringAccelerationStationary = self.steeringAccelerationStationary or 0.3
-    self.steeringAccelerationBoosting = self.steeringAccelerationBoosting or 0.4
-    self.steeringAccelerationFiring = self.steeringAccelerationFiring or 0.5
+    self.steeringSpeedMoving = 62.5
+    self.steeringSpeedStationary = 31.25
+    self.steeringSpeedBoosting = 43.75
+    self.steeringAccelerationMoving = 37.5
+    self.steeringAccelerationStationary = 18.75
+    self.steeringAccelerationBoosting = 25
+    self.steeringAccelerationFiring = 31.25
     self.steeringFriction = 7
-    self.accelerationSpeed = 3
-    self.boostingAccelerationSpeed = 15
+    self.accelerationSpeed = 187.5
+    self.boostingAccelerationSpeed = 937.5
     self.friction = 0.35
-    self.maxSpeed = 6
-    self.maxBoostingSpeed = 15
+    self.maxSpeed = 375
+    self.maxBoostingSpeed = 937.5
     self.maxShipTemperature = 100
     self.shipHeatAccumulationRate = 250
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 20
     self.boostDamage = 5
     self.invulnerableGracePeriod = 3
-    self.speedForContactDamage = 2
+    self.speedForContactDamage = 125
     self.boostEnemyHitHeatAccumulation = 10
     self.contactDamageHeatMultiplier = 30
     
@@ -190,8 +190,7 @@ function playerHeavy:update(dt)
     self:updateOverheating(dt)
 
     -- Apply the velocity to the ship and then apply friction
-    self:updatePosition()
-    self.velocity = self:applyFriction(dt, self.velocity, self.friction)
+    self:updatePosition(dt)
 
     -- Wrap the ship's position
     self:wrapShipPosition()
