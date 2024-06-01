@@ -21,8 +21,8 @@ function playerTrail:update(dt)
     end
 
     if self.speed and self.angle then
-        self.position.x = self.position.x + math.cos(self.angle) * self.speed
-        self.position.y = self.position.y + math.sin(self.angle) * self.speed
+        self.position.x = self.position.x + math.cos(self.angle) * (self.speed * dt)
+        self.position.y = self.position.y + math.sin(self.angle) * (self.speed * dt)
     end
 end
 
