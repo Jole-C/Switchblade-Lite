@@ -7,12 +7,12 @@ local drone = class({name = "Drone Enemy", extends = enemy})
 function drone:new(x, y)
     self:super(x, y, "drone sprite")
 
-    -- Parameters of the enemey
-    self.maxSpeed = 1.5
+    -- Parameters of the enemy
+    self.maxSpeed = 93.75
     self.turningRate = 0.16
     self.health = 5
     self.maxChargeCooldown = 4
-    self.maxChargeSpeed = 6
+    self.maxChargeSpeed = 375
     self.chargeDuration = 2
     self.friction = 1
     self.bounceDampening = 0.5
@@ -75,7 +75,7 @@ function drone:update(dt)
 
     if arena then
         -- Bounce off the wall
-        if arena:isPositionWithinArena(self.position + self.velocity) == false then
+        if arena:isPositionWithinArena(self.position + self.velocity * dt) == false then
             self.velocity = self.velocity - (self.velocity * 2)
 
             if self.isCharging == true then
@@ -86,7 +86,7 @@ function drone:update(dt)
         end
 
         -- Clamp the enemy's position
-        self.position = self.position + self.velocity
+        self.position = self.position + self.velocity * dt
         self.position = gameHelper:getCurrentState().arena:getClampedPosition(self.position)
     end
 
