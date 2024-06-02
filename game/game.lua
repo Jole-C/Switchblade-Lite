@@ -227,7 +227,7 @@ function game:setupResources()
     local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
 
-    local font = love.graphics.newFont("game/assets/fonts/kenneyrocketsquare.ttf", 8)
+    local font = love.graphics.newImageFont("game/assets/fonts/font.png", "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-", 1)
     font:setFilter("nearest", "nearest", 0)
     resourceManager:addResource(font, "font main")
 
