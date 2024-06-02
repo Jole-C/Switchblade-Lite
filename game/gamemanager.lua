@@ -27,10 +27,10 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.22"
+    self.expectedOptionsVersion = "0.23"
     
     self.options = {
-        OPTIONS_VERSION = "0.22",
+        OPTIONS_VERSION = "0.23",
         enableDebugMode = false,
         enableFullscreen = true,
         enableBackground = true,

@@ -492,8 +492,6 @@ function player:draw()
     if self.isInvulnerable == true then
         love.graphics.circle("line", self.position.x, self.position.y, 10)
     end
-
-    love.graphics.print(self.boostHitEnemies)
 end
 
 function player:spawnBoostLines()

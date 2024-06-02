@@ -349,7 +349,7 @@ function stageDirector:draw()
         end
     end
     
-    if self.debugText then
+    if game.manager:getOption("enableDebugMode") == true and self.debugText then
         self.debugText.text = debugText
     end
 end

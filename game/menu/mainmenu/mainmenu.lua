@@ -100,7 +100,8 @@ function mainMenu:new()
                 end),
 
                 textButton("Accessibility", "font ui", 10, 40, 15, 40, function(self)
-                    
+                    self.owner:switchMenu("optionsAccessibility")
+                    self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
                 textButton("back", "font ui", 10, 65, 15, 65, function(self)
@@ -109,6 +110,25 @@ function mainMenu:new()
                         self.owner:setBackgroundSlideAmount(0.32)
                     end
                 end)
+            }
+        },
+
+        ["optionsAccessibility"] =
+        {
+            elements =
+            {
+                text("Accessibility", "font ui", "left", 10, 10, 1000),
+
+                toggleButton("Enable Debug", "font ui", 10, 25, 20, 25, "enableDebugMode"),
+
+                textButton("back", "font ui", 10, 95, 15, 95, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("optionsSelect")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                    end
+                    
+                    game.manager:saveOptions()
+                end),
             }
         },
 
@@ -271,7 +291,7 @@ function mainMenu:draw()
     if self.menuBackgroundSprite then
         local enableBackground = game.manager:getOption("enableBackground")
 
-        if enableBackground == 1 then
+        if game.manager:getOption("enableBackground") == true then
             love.graphics.setShader(self.menuBackgroundShader)
             love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
             love.graphics.setShader()
