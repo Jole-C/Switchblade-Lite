@@ -11,13 +11,13 @@ function menuButton:new(restX, restY, selectedX, selectedY, execute)
     self.lerpSpeed = 0.2
 end
 
-function menuButton:updateHudElement()
+function menuButton:updateHudElement(dt)
     if self.isSelected then
-        self.position.x = math.lerp(self.position.x, self.selectedPosition.x, self.lerpSpeed)
-        self.position.y = math.lerp(self.position.y, self.selectedPosition.y, self.lerpSpeed)
+        self.position.x = math.lerpDT(self.position.x, self.selectedPosition.x, self.lerpSpeed, dt)
+        self.position.y = math.lerpDT(self.position.y, self.selectedPosition.y, self.lerpSpeed, dt)
     else
-        self.position.x = math.lerp(self.position.x, self.restPosition.x, self.lerpSpeed)
-        self.position.y = math.lerp(self.position.y, self.restPosition.y, self.lerpSpeed)
+        self.position.x = math.lerpDT(self.position.x, self.restPosition.x, self.lerpSpeed, dt)
+        self.position.y = math.lerpDT(self.position.y, self.restPosition.y, self.lerpSpeed, dt)
     end
 end
 
