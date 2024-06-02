@@ -37,11 +37,11 @@ function slider:draw()
     love.graphics.print(self.text, self.position.x, self.position.y)
 
     -- Print the text for the slider's percentage
-    love.graphics.print(tostring(self.value/self.maxValue * 100).."%", self.position.x + 160, self.position.y)
+    love.graphics.print(tostring(self.value/self.maxValue * 100).."%", self.position.x + 200, self.position.y)
     
     -- Print the slider
     local textHeight = self.font:getHeight(self.text)
-    local lineX = self.position.x + 230
+    local lineX = self.position.x + 270
     local lineY = self.position.y + textHeight/2 + 1
 
     love.graphics.setLineWidth(2)

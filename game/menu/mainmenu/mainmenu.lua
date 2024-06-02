@@ -119,7 +119,13 @@ function mainMenu:new()
             {
                 text("Accessibility", "font ui", "left", 10, 10, 1000),
 
-                toggleButton("Enable Debug", "font ui", 10, 25, 20, 25, "enableDebugMode"),
+                toggleButton("Enable Debug", "font ui", 10, 25, 20, 25, "enableDebugMode", 260),
+
+                toggleButton("Limit Palette Swaps", "font ui", 10, 40, 20, 40, "limitPaletteSwaps", 260),
+
+                toggleButton("Toggle Screenshake", "font ui", 10, 55, 20, 55, "toggleScreenshake", 260),
+
+                toggleButton("Center Camera", "font ui", 10, 70, 20, 70, "centerCamera", 260),
 
                 textButton("back", "font ui", 10, 95, 15, 95, function(self)
                     if self.owner then
@@ -289,8 +295,6 @@ function mainMenu:draw()
     love.graphics.clear()
 
     if self.menuBackgroundSprite then
-        local enableBackground = game.manager:getOption("enableBackground")
-
         if game.manager:getOption("enableBackground") == true then
             love.graphics.setShader(self.menuBackgroundShader)
             love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
@@ -311,7 +315,7 @@ function mainMenu:draw()
 
         love.graphics.setStencilTest("greater", 0)
 
-        if enableBackground == 1 then
+        if game.manager:getOption("enableBackground") then
             love.graphics.setShader(self.menuBoxShader)
             love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
             love.graphics.setShader()

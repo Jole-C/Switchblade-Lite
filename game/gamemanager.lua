@@ -27,17 +27,21 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.23"
+    self.expectedOptionsVersion = "0.3"
     
     self.options = {
-        OPTIONS_VERSION = "0.23",
-        enableDebugMode = false,
+        OPTIONS_VERSION = "0.3",
         enableFullscreen = true,
         enableBackground = true,
         fadingPercentage = 10,
         speedPercentage = 100,
         musicVolPercentage = 70,
         sfxVolPercentage = 100,
+        enableDebugMode = false,
+        limitPaletteSwaps = false,
+        toggleScreenshake = false,
+        disableFreeze = false,
+        centerCamera = false,
     }
 
     self.unlocks = {
