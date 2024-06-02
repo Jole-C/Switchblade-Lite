@@ -1,11 +1,12 @@
 local interactiveHudElement = require "game.interface.interactablehudelement"
 local slider = class({name = "Menu Slider", extends = interactiveHudElement})
 
-function slider:new(text, font, value, minValue, maxValue, x, y, referenceToSet)
+function slider:new(text, font, minValue, maxValue, x, y, option)
     self:super()
     
     self.position = vec2(x, y)
-    self.value = value
+    self.option = option
+    self.value = game.manager:getOption(option)
     self.minValue = minValue
     self.maxValue = maxValue
     self.text = text
@@ -25,12 +26,7 @@ function slider:checkForInteractions()
         self.value = self.value + 1
     end
 
-    local table = self.referenceToSet.table
-    local value = self.referenceToSet.value
-
-    if table and value then
-        table[value] = self.value
-    end
+    game.manager:setOption(self.option, self.value)
 end
 
 function slider:draw()

@@ -27,14 +27,19 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
+    self.expectedOptionsVersion = "0.22"
     
     self.options = {
-        enableBackground = 1,
-        fadingPercentage = 50,
-        speedPercentage = 50,
+        OPTIONS_VERSION = "0.22",
+        enableDebugMode = false,
+        enableFullscreen = true,
+        enableBackground = true,
+        fadingPercentage = 10,
+        speedPercentage = 100,
         musicVolPercentage = 70,
-        sfxVolPercentage = 100
+        sfxVolPercentage = 100,
     }
+
     self.unlocks = {
         level1beaten = false,
         level2beaten = false,
@@ -45,38 +50,7 @@ function gameManager:new()
     }
 
     love.filesystem.setIdentity("switchblade")
-    local info = love.filesystem.getInfo(self.optionsFile)
-
-    if info then
-        print("file exists")
-
-        local loadedOptions = {}
-
-        for line in love.filesystem.lines(self.optionsFile) do
-            table.insert(loadedOptions, tonumber(line))
-            print(line)
-        end
-        
-        self.options = {
-            enableBackground = loadedOptions[1],
-            fadingPercentage = loadedOptions[2],
-            speedPercentage = loadedOptions[3],
-            musicVolPercentage = loadedOptions[4],
-            sfxVolPercentage = loadedOptions[5]
-        }
-    else
-        local file = love.filesystem.newFile(self.optionsFile)
-        local bool, err = file:open("w")
-        print(err)
-
-        file:write(self.options.enableBackground.."\n")
-        file:write(self.options.fadingPercentage.."\n")
-        file:write(self.options.speedPercentage.."\n")
-        file:write(self.options.musicVolPercentage.."\n")
-        file:write(self.options.sfxVolPercentage.."\n")
-
-        file:close()
-    end
+    self:loadOptions()
 end
 
 function gameManager:update(dt)
@@ -126,17 +100,86 @@ function gameManager:swapPalette()
 end
 
 function gameManager:saveOptions()
+    local string = ""
+
+    for k, v in pairs(self.options) do
+        string = string..k.."="..tostring(v).."\n"
+    end
+
     local file = love.filesystem.newFile(self.optionsFile)
     local bool, err = file:open("w")
     print(err)
 
-    file:write(self.options.enableBackground.."\n")
-    file:write(self.options.fadingPercentage.."\n")
-    file:write(self.options.speedPercentage.."\n")
-    file:write(self.options.musicVolPercentage.."\n")
-    file:write(self.options.sfxVolPercentage.."\n")
-
+    file:write(string)
     file:close()
+end
+
+function gameManager:loadOptions()
+    local info = love.filesystem.getInfo(self.optionsFile)
+
+    if info then
+        print("file exists")
+        local options = {}
+
+        for line in love.filesystem.lines(self.optionsFile) do
+            local lineVals = {}
+            
+            for string in string.gmatch(line, "([^".."=".."]+)") do
+                table.insert(lineVals, string)
+            end
+
+            local option = lineVals[1]
+            local value = lineVals[2]
+
+            if value == "true" then
+                value = true
+            elseif value == "false" then
+                value = false
+            elseif type(value) == "string" then
+                value = value
+            elseif tonumber(value) then
+                value = tonumber(value)
+            end
+
+            options[option] = value
+            print(line)
+        end
+
+        -- Check to see if the options file is using the old version
+        if options.OPTIONS_VERSION then
+            print ("Current options version: "..options.OPTIONS_VERSION)
+        end
+
+        if options.OPTIONS_VERSION == nil or options.OPTIONS_VERSION ~= self.expectedOptionsVersion then
+            print("Options are using old values or options file is out of date. Recreating...")
+            self:saveOptions()
+            return
+        end
+
+        self.options = options
+    else
+        self:saveOptions()
+    end
+end
+
+function gameManager:getOption(optionName)
+    assert(self:optionExists(optionName), "Option does not exist!")
+    return self.options[optionName]
+end
+
+function gameManager:setOption(optionName, newValue)
+    assert(self:optionExists(optionName), "Option does not exist!")
+    self.options[optionName] = newValue
+end
+
+function gameManager:optionExists(optionName)
+    for k, v in pairs(self.options) do
+        if k == optionName then
+            return true
+        end
+    end
+
+    return false
 end
 
 function gameManager:draw()

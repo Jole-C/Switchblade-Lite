@@ -52,7 +52,18 @@ function game:new()
         joystick = love.joystick.getJoysticks()[1]
     }
     
-    local windowWidth, windowHeight = love.window.getDesktopDimensions();
+    self.fullscreenMode = self.manager:getOption("enableFullscreen")
+
+    if self.manager:getOption("enableFullscreen") == true then
+        local width, height = love.window.getDesktopDimensions()
+        self.gameRenderer:setMode(width, height, {fullscreen = true})
+    else
+        local width, height = love.window.getDesktopDimensions()
+        width = width * 0.7
+        height = height * 0.7
+        self.gameRenderer:setMode(width, height, {fullscreen = false})
+    end
+
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setLineStyle("rough")
 
@@ -94,10 +105,27 @@ function game:update(dt)
     self.playerManager:update(dt)
 
     ps:setColors(self.manager.currentPalette.backgroundColour[1], self.manager.currentPalette.backgroundColour[2], self.manager.currentPalette.backgroundColour[3], self.manager.currentPalette.backgroundColour[4])
-    ps:update(dt/7 * self.manager.options.speedPercentage/100)
+    ps:update(dt/7 * self.manager:getOption("speedPercentage")/100)
 
-    self.tags.music.volume = 1 * (self.manager.options.musicVolPercentage/100)
-    self.tags.sfx.volume = 1 * (self.manager.options.sfxVolPercentage/100)
+    self.tags.music.volume = 1 * (self.manager:getOption("musicVolPercentage")/100)
+    self.tags.sfx.volume = 1 * (self.manager:getOption("sfxVolPercentage")/100)
+
+    local fullscreenSetting = self.manager:getOption("enableFullscreen")
+
+    if self.fullscreenMode ~= fullscreenSetting then
+        if fullscreenSetting == true then
+            local width, height = love.window.getDesktopDimensions()
+            self.gameRenderer:setMode(width, height, {fullscreen = true})
+        else
+            local width, height = love.window.getDesktopDimensions()
+            width = width * 0.7
+            height = height * 0.7
+            self.gameRenderer:setMode(width, height, {fullscreen = false})
+        end
+
+        self.fullscreenMode = fullscreenSetting
+    end
+    
 end
 
 function game:draw()
@@ -116,7 +144,7 @@ function game:drawBackground()
     love.graphics.setBackgroundColor(self.manager.currentPalette.backgroundColour[5])
     love.graphics.setBlendMode("alpha")
     
-    if self.manager.options.enableBackground == 1 then
+    if self.manager:getOption("enableBackground") == true then
         love.graphics.draw(ps)
     else
         love.graphics.clear()
@@ -129,7 +157,7 @@ function game:drawBackground()
     love.graphics.setCanvas(self.canvases.backgroundShadowCanvas.canvas)
     love.graphics.clear()
 
-    local alpha = self.manager.options.fadingPercentage / 100
+    local alpha = self.manager:getOption("fadingPercentage") / 100
     love.graphics.setColor(0.1, 0.1, 0.1, alpha)
     love.graphics.rectangle("fill", -100, -100, self.arenaValues.screenWidth + 100, self.arenaValues.screenHeight + 100)
     love.graphics.setCanvas()

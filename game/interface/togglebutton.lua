@@ -1,7 +1,7 @@
 local menuButton = require "game.interface.menubutton"
 local toggleButton = class({name = "Toggle Button", extends = menuButton})
 
-function toggleButton:new(text, font, restX, restY, selectedX, selectedY, defaultValue, referenceToSet)
+function toggleButton:new(text, font, restX, restY, selectedX, selectedY, option)
     self:super(restX, restY, selectedX, selectedY, execute)
 
     self.text = text
@@ -9,19 +9,14 @@ function toggleButton:new(text, font, restX, restY, selectedX, selectedY, defaul
     self.selectedSprite = game.resourceManager:getResource("selected box")
     self.unselectedSprite = game.resourceManager:getResource("unselected box")
     self.spritePosition = vec2(restX + 170, restY)
-    self.bool = defaultValue == 1
+    self.option = option
+    self.bool = game.manager:getOption(option)
     self.referenceToSet = referenceToSet
 end
 
 function toggleButton:execute()
     self.bool = not self.bool
-
-    local table = self.referenceToSet.table
-    local value = self.referenceToSet.value
-
-    if table and value then
-        table[value] = self.bool and 1 or 0
-    end
+    game.manager:setOption(self.option, self.bool)
 end
 
 function toggleButton:draw()
