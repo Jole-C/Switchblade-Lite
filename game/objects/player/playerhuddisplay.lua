@@ -7,8 +7,8 @@ function playerHud:new()
     self.playerReference = nil
 end
 
-function playerHud:update()
-    hudElement.update(self)
+function playerHud:update(dt)
+    hudElement.update(self, dt)
 
     self.playerReference = game.playerManager.playerReference
 end

@@ -23,7 +23,7 @@ function menu:update(dt)
         
         if element and element.update then
             element.isSelected = i == self.selectionIndex
-            element:update()
+            element:update(dt)
         end
     end
 

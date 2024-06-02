@@ -4,8 +4,21 @@ function math.clamp(val, lower, upper)
     return math.max(lower, math.min(upper, val))
 end
 
+function math.exp2(x)
+	return math.pow(2, x)
+end
+
+function math.log2(x)
+	return math.log(x) / math.log(2)
+end
+
 function math.lerp(val, pos, perc)
     return (1 - perc) * val + perc * pos
+end
+
+function math.lerpDT(val, pos, perc, dt)
+	perc = -love.timer.getDelta() / math.log2(1 - perc)
+	return pos + (val - pos) * math.exp2(-dt/perc)
 end
 
 function math.round(val)

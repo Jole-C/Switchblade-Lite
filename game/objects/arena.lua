@@ -32,7 +32,7 @@ function arenaController:update(dt)
 
     -- Scale the arena on intro
     if self.doIntro then
-        self.arenaScale = math.lerp(self.arenaScale, 1, 0.01)
+        self.arenaScale = math.lerpDT(self.arenaScale, 1, 0.01, dt)
     end
 end
 

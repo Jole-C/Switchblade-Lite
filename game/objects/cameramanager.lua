@@ -50,8 +50,8 @@ function cameraManager:update(dt)
 
     self.screenShakeAmount = self.screenShakeAmount * self.shakeFadeAmount
 
-    self.cameraPosition.x = math.lerp(self.cameraPosition.x, self.cameraTargetPosition.x, self.cameraLerpSpeed)
-    self.cameraPosition.y = math.lerp(self.cameraPosition.y, self.cameraTargetPosition.y, self.cameraLerpSpeed)
+    self.cameraPosition.x = math.lerpDT(self.cameraPosition.x, self.cameraTargetPosition.x, self.cameraLerpSpeed, dt)
+    self.cameraPosition.y = math.lerpDT(self.cameraPosition.y, self.cameraTargetPosition.y, self.cameraLerpSpeed, dt)
 
     game.camera:setPosition(self.cameraPosition.x + self.cameraShakeOffset.x, self.cameraPosition.y + self.cameraShakeOffset.y)
 end

@@ -51,7 +51,7 @@ function orbiter:update(dt)
     local targetPosition = vec2(math.cos(self.offsetAngle) * self.distanceFromPlayer, math.sin(self.offsetAngle) * self.distanceFromPlayer)
     self.positionOffset:lerp_direction_inplace(targetPosition, self.offsetAngleLerpRate)
 
-    self.position:lerp_inplace(playerReference.position + self.positionOffset, 0.05)
+    self.position:lerpDT_inplace(playerReference.position + self.positionOffset, 0.05, dt)
     self.position = gameHelper:getArena():getClampedPosition(self.position)
 
     self.angle = (playerReference.position - self.position):angle()

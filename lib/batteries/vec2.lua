@@ -384,6 +384,12 @@ function vec2:lerp_inplace(other, amount)
 	return self
 end
 
+function vec2:lerpDT_inplace(other, amount, dt)
+	self.x = math.lerpDT(self.x, other.x, amount, dt)
+	self.y = math.lerpDT(self.y, other.y, amount, dt)
+	return self
+end
+
 function vec2:lerp_eps_inplace(other, amount, eps)
 	self.x = math.lerp_eps(self.x, other.x, amount, eps)
 	self.y = math.lerp_eps(self.y, other.y, amount, eps)

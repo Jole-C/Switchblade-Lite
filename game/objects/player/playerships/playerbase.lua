@@ -111,9 +111,9 @@ function player:new(x, y)
 end
 
 -- Update the player hud
-function player:updateHud()
+function player:updateHud(dt)
     if self.hud then
-        self.hud:update()
+        self.hud:update(dt)
     end
 end
 

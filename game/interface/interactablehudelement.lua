@@ -16,7 +16,7 @@ function interactableHudElement:update(dt)
         self.drawColour = game.manager.currentPalette.uiColour
     end
     
-    self:updateHudElement()
+    self:updateHudElement(dt)
 
     if self.isSelected == true then
         self:checkForInteractions()
@@ -26,7 +26,7 @@ end
 function interactableHudElement:draw()
 end
 
-function interactableHudElement:updateHudElement()
+function interactableHudElement:updateHudElement(dt)
 
 end
 
