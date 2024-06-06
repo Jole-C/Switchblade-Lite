@@ -4,7 +4,12 @@ local spriteHudElement = class({name = "Sprite", extends = hudElement})
 function spriteHudElement:new(sprite, x, y, angle, scaleX, scaleY, offsetX, offsetY, centerSprite, overrideDrawColour)
     self:super()
     
-    self.sprite = game.resourceManager:getResource(sprite)
+    if type(sprite) == "string" then
+        self.sprite = game.resourceManager:getResource(sprite)
+    else
+        self.sprite = sprite
+    end
+
     self.position = vec2(x, y)
     self.angle = angle
     self.scale = vec2(scaleX, scaleY)
