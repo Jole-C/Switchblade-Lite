@@ -16,6 +16,7 @@ function shielder:new(x, y)
 
     -- Variables
     self.direction = vec2(30, 30)
+    self.shader = game.resourceManager:getResource("outline shader")
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -92,6 +93,12 @@ function shielder:draw()
     yOffset = yOffset/2
 
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+
+    self.shader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
+    
+    love.graphics.setShader(self.shader)
+    love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+    love.graphics.setShader()
 
     love.graphics.circle("line", self.position.x, self.position.y, self.shieldDistance)
 

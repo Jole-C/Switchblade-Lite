@@ -372,6 +372,22 @@ function game:setupResources()
     ]])
     resourceManager:addResource(menuBoxShader, "menu box shader")
 
+    local outlineShader = love.graphics.newShader([[
+        extern vec2 stepSize;
+
+        vec4 effect(vec4 colour, Image texture, vec2 texturePos, vec2 screenPos)
+        {
+            float alpha = 4 * texture2D(texture, texturePos).a;
+            alpha -= texture2D(texture, texturePos + (stepSize.x, 0.0)).a;
+            alpha -= texture2D(texture, texturePos + (-stepSize.x, 0.0)).a;
+            alpha -= texture2D(texture, texturePos + (0, stepSize.y)).a;
+            alpha -= texture2D(texture, texturePos + (0, -stepSize.y)).a;
+            
+            return vec4(1, 1, 1, alpha);
+        }
+    ]])
+    resourceManager:addResource(outlineShader, "outline shader")
+
     -- Audio
     local song = love.audio.newSource("game/assets/audio/music/song.wav", "stream")
     resourceManager:addResource(song, "music")
