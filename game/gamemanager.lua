@@ -103,6 +103,11 @@ function gameManager:swapPalette()
     self.currentPalette = self.palettes[paletteIndex]
 end
 
+function gameManager:setPalette(paletteIndex)
+    local paletteIndex = math.clamp(paletteIndex, 1, #self.palettes)
+    self.currentPalette = self.palettes[paletteIndex]
+end
+
 function gameManager:saveOptions()
     local string = ""
 
