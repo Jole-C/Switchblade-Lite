@@ -277,6 +277,13 @@ function game:setupResources()
     local logo = love.graphics.newImage("game/assets/sprites/interface/logo.png")
     resourceManager:addResource(logo, "logo sprite")
 
+    local warning = love.graphics.newImage("game/assets/sprites/interface/warning/warning.png")
+    resourceManager:addResource(warning, "boss warning")
+
+    local cautionStrip = love.graphics.newImage("game/assets/sprites/interface/warning/cautionstrip.png")
+    cautionStrip:setWrap("repeat", "repeat")
+    resourceManager:addResource(cautionStrip, "caution strip")
+
     -- Set up the mesh with given parameters
     local numberOfVertices = 10
     local baseVertexX = 100
@@ -409,6 +416,12 @@ function game:setupResources()
 
     local boostHit = love.audio.newSource("game/assets/audio/sfx/boosthit.wav", "static")
     resourceManager:addResource(boostHit, "boost hit")
+    
+    local bossWarningBoom = love.audio.newSource("game/assets/audio/sfx/bosswarningboom.wav", "static")
+    resourceManager:addResource(bossWarningBoom, "boss warning boom")
+
+    local bossWarningSiren = love.audio.newSource("game/assets/audio/sfx/bosswarning.wav", "static")
+    resourceManager:addResource(bossWarningSiren, "boss warning siren")
 end
 
 return game
