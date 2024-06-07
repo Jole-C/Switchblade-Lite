@@ -38,22 +38,18 @@ function enemy:update(dt)
     end
 end
 
-function enemy:handleDamage(damage)
-    if damage.type == "bullet" or damage.type == "boost" then
-        self.health = self.health - damage.amount
+function enemy:handleDamage(damageType, amount)
+    if damageType == "bullet" or damageType == "boost" then
+        self.health = self.health - amount
     end
 end
 
-function enemy:onHit(damage)
+function enemy:onHit(damageType, amount)
     if self.isInvulnerable == true then
         return
     end
 
-    if type(damage) ~= "table" then
-        damage = {type = "bullet", amount = 1}
-    end
-
-    self:handleDamage(damage)
+    self:handleDamage(damageType, amount)
 
     if self.health <= 0 then
         self:destroy()

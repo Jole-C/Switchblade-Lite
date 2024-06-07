@@ -53,34 +53,6 @@ function bossOrb:update(dt)
     end
 end
 
-function bossOrb:handleDamage(damage)
-    if damage.type == "boost" and self.isDamageable == true then
-        self:destroy()
-    end
-end
-
-function bossOrb:onHit(damage)
-    if self.isInvulnerable == true then
-        return
-    end
-
-    if type(damage) ~= "table" then
-        damage = {type = "bullet", amount = 1}
-    end
-
-    self:handleDamage(damage)
-
-    if self.health <= 0 then
-        self:destroy()
-    end
-
-    self:setInvulnerable()
-
-    if game.manager then
-        game.manager:setFreezeFrames(3)
-    end
-end
-
 function bossOrb:draw()
     love.graphics.setColor(self.enemyColour)
 
@@ -96,6 +68,12 @@ function bossOrb:draw()
         self.damageableShader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
         love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
         love.graphics.setShader()
+    end
+end
+
+function bossOrb:handleDamage(damageType, amount)
+    if damageType == "boost" and self.isDamageable == true then
+        self:destroy()
     end
 end
 

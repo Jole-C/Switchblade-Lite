@@ -37,7 +37,7 @@ function playerLaser:handleCollision(items, len)
 
         if colliderDefinition == colliderDefinitions.enemy then
             if collidedObject.onHit then
-                collidedObject:onHit(self.damage)
+                collidedObject:onHit("bullet", self.damage)
             end
         end
 

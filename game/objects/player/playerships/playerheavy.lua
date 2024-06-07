@@ -130,13 +130,13 @@ function playerHeavy:handleCollision(colliderHit, collidedObject, colliderDefini
         if colliderDefinition == colliderDefinitions.enemy then
             if self.velocity:length() < self.speedForContactDamage and collidedObject.onHit then
                 self:onHit(collidedObject.contactDamage)
-                collidedObject:onHit(collidedObject.health)
+                collidedObject:onHit("bullet", collidedObject.health)
             end
         end
     elseif colliderHit == self.boostCollider then
         if colliderDefinition == colliderDefinitions.enemy then
             if (self.isBoosting or self.velocity:length() > self.speedForContactDamage) and collidedObject.onHit then
-                collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                collidedObject:onHit("boost", self.boostDamage)
                 self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
 
                 if collidedObject.health <= 0 then

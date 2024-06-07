@@ -14,7 +14,7 @@ function playerBullet:checkCollision(xx, yy)
             if collidedObject and colliderDefinition then
                 if colliderDefinition == colliderDefinitions.enemy then
                     if collidedObject.onHit then
-                        collidedObject:onHit({type = "bullet", amount = self.damage})
+                        collidedObject:onHit("bullet", self.damage)
                     end
                     
                     self:destroy()

@@ -131,13 +131,13 @@ function playerLight:handleCollision(colliderHit, collidedObject, colliderDefini
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting == false and collidedObject.onHit then
                 self:onHit(collidedObject.contactDamage)
-                collidedObject:onHit(collidedObject.health)
+                collidedObject:onHit("bullet", collidedObject.health)
             end
         end
     elseif colliderHit == self.boostCollider then
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting and collidedObject.onHit and collidedObject.isInvulnerable == false then
-                collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                collidedObject:onHit("boost",self.boostDamage)
                 self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
 
                 if collidedObject.health <= 0 then

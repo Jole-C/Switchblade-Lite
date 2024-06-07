@@ -106,9 +106,9 @@ function shielder:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function shielder:handleDamage(damage)
-    if damage.type == "boost" then
-        self.health = self.health - damage.amount
+function shielder:handleDamage(damageType, amount)
+    if damageType == "boost" then
+        self.health = self.health - amount
     end
 end
 

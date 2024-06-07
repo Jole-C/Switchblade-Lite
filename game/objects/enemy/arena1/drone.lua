@@ -145,9 +145,9 @@ function drone:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function drone:handleDamage(damage)
-    if damage.type == "bullet" or damage.type == "boost" then
-        self.health = self.health - damage.amount
+function drone:handleDamage(damageType, amount)
+    if damageType == "bullet" or damageType == "boost" then
+        self.health = self.health - amount
     end
 end
 
