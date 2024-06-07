@@ -378,9 +378,10 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting and collidedObject.onHit and collidedObject.isInvulnerable == false then
                 collidedObject:onHit({type = "boost", amount = self.boostDamage})
+                
                 self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
 
-                if collidedObject.health <= 0 then
+                if collidedObject.health and collidedObject.health <= 0 then
                     self:incrementAmmo()
 
                     local newEffect = boostAmmoEffect(self.position.x, self.position.y)
@@ -509,6 +510,8 @@ function player:onHit(damage)
     if self.isInvulnerable then
         return
     end
+
+    damage = damage or 1
 
     self.health = self.health - damage
     self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
