@@ -118,12 +118,6 @@ function drone:update(dt)
     end
 end
 
-function drone:handleDamage(damage)
-    if damage.type == "bullet" or "boost" then
-        self.health = self.health - damage.amount
-    end
-end
-
 function drone:draw()
     if not self.sprite then
         return
@@ -149,6 +143,12 @@ function drone:draw()
     end
     
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function drone:handleDamage(damage)
+    if damage.type == "bullet" or damage.type == "boost" then
+        self.health = self.health - damage.amount
+    end
 end
 
 function drone:applyFriction(dt)

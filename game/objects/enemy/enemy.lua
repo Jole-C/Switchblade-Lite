@@ -39,7 +39,7 @@ function enemy:update(dt)
 end
 
 function enemy:handleDamage(damage)
-    if damage.type == "bullet" or "boost" then
+    if damage.type == "bullet" or damage.type == "boost" then
         self.health = self.health - damage.amount
     end
 end

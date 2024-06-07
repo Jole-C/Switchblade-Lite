@@ -81,13 +81,6 @@ function orbiter:update(dt)
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
 end
-
-function orbiter:handleDamage(damage)
-    if damage.type == "bullet" or "boost" then
-        self.health = self.health - damage.amount
-    end
-end
-
 function orbiter:draw()
     if not self.sprite then
         return
@@ -113,6 +106,13 @@ function orbiter:draw()
     
     love.graphics.setColor(1, 1, 1, 1)
 end
+
+function orbiter:handleDamage(damage)
+    if damage.type == "bullet" or damage.type == "boost" then
+        self.health = self.health - damage.amount
+    end
+end
+
 
 function orbiter:cleanup()
     enemy.cleanup(self)

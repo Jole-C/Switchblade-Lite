@@ -76,12 +76,6 @@ function wanderer:update(dt)
     end
 end
 
-function wanderer:handleDamage(damage)
-    if damage.type == "bullet" or "boost" then
-        self.health = self.health - damage.amount
-    end
-end
-
 function wanderer:draw()
     if not self.sprite or not self.tail then
         return
@@ -106,6 +100,12 @@ function wanderer:draw()
     end
 
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function wanderer:handleDamage(damage)
+    if damage.type == "boost" or damage.type == "bullet" then
+        self.health = self.health - damage.amount
+    end
 end
 
 function wanderer:cleanup()
