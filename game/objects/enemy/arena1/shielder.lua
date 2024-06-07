@@ -1,5 +1,6 @@
 local enemy = require "game.objects.enemy.enemy"
 local collider = require "game.collision.collider"
+
 local shielder = class({name = "Shielder Enemy", extends = enemy})
 
 function shielder:new(x, y)
@@ -105,7 +106,7 @@ function shielder:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function enemy:handleDamage(damage)
+function shielder:handleDamage(damage)
     if damage.type == "boost" then
         self.health = self.health - damage.amount
     end
