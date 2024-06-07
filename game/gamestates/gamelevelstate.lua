@@ -4,6 +4,7 @@ local enemyManager = require "game.objects.enemy.enemymanager"
 local cameraManager = require "game.objects.cameramanager"
 local level = require "game.levels.level1"
 local arena = require "game.objects.arena"
+local boss1 = require "game.objects.enemy.boss.boss1.boss1"
 
 local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
@@ -30,6 +31,8 @@ function gameLevelState:enter()
 
     self.enemyManager = enemyManager()
     self:addObject(self.enemyManager)
+
+    self:addObject(boss1(0, 0))
 end
 
 function gameLevelState:update(dt)

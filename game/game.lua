@@ -251,6 +251,10 @@ function game:setupResources()
     local wandererTail = love.graphics.newImage("game/assets/sprites/enemy/wanderertail.png")
     resourceManager:addResource(wandererTail, "wanderer tail sprite")
 
+    -- Boss 1
+    local boss1Orb = love.graphics.newImage("game/assets/sprites/enemy/boss1/orb.png")
+    resourceManager:addResource(boss1Orb, "boss 1 orb")
+
     -- Global resources
     local particle = love.graphics.newImage("game/assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
