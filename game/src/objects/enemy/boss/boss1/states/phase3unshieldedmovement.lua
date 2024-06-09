@@ -1,12 +1,12 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
-local phase1UnshieldedMovement = class({name = "Boss 1 Phase 1 Unshield Movement", extends = bossState})
+local phase3UnshieldedMovement = class({name = "Boss 1 Phase 3 Unshield Movement", extends = bossState})
 
-function phase1UnshieldedMovement:enter(bossInstance)
+function phase3UnshieldedMovement:enter(bossInstance)
     self.maxAttackCooldown = 5
     self.attackCooldown = self.maxAttackCooldown
 end
 
-function phase1UnshieldedMovement:update(dt, bossInstance)
+function phase3UnshieldedMovement:update(dt, bossInstance)
     local playerPosition = game.playerManager.playerPosition
     bossInstance.angle = (playerPosition - bossInstance.position):angle()
 
@@ -21,8 +21,8 @@ function phase1UnshieldedMovement:update(dt, bossInstance)
     end
 
     if bossInstance.phaseHealth <= 0 then
-        bossInstance:switchState(bossInstance.states.phase2.shielded.intro)
+        bossInstance:destroy()
     end
 end
 
-return phase1UnshieldedMovement
+return phase3UnshieldedMovement

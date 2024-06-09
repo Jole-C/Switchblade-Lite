@@ -1,12 +1,12 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
-local phase1ShieldedIntro = class({name = "Boss 1 Phase 1 Shield Intro", extends = bossState})
+local phase3ShieldedIntro = class({name = "Boss 1 Phase 3 Shield Intro", extends = bossState})
 
-function phase1ShieldedIntro:enter(bossInstance)
+function phase3ShieldedIntro:enter(bossInstance)
     self.lerpSpeed = 0.05
     self.lerpRadius = 5
 end
 
-function phase1ShieldedIntro:update(dt, bossInstance)
+function phase3ShieldedIntro:update(dt, bossInstance)
     bossInstance.position.x = math.lerpDT(bossInstance.position.x, 0, self.lerpSpeed, dt)
     bossInstance.position.y = math.lerpDT(bossInstance.position.y, 0, self.lerpSpeed, dt)
 
@@ -17,4 +17,4 @@ function phase1ShieldedIntro:update(dt, bossInstance)
     end
 end
 
-return phase1ShieldedIntro
+return phase3ShieldedIntro

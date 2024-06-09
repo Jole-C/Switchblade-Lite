@@ -7,6 +7,7 @@ local boss1 = class({name = "Boss 1", extends = boss})
 function boss1:new(x, y)
     self.orbs = {}
     self.numberOfOrbs = 0
+    self.angle = 0
     
     self.states = states
     self:super(x, y)
