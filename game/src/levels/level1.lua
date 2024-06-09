@@ -3,6 +3,7 @@ local charger = require "src.objects.enemy.arena1.charger"
 local drone = require "src.objects.enemy.arena1.drone"
 local shielder = require "src.objects.enemy.arena1.shielder"
 local orbiter = require "src.objects.enemy.arena1.orbiter"
+local boss = require "src.objects.enemy.boss.boss1.boss1"
 
 local levelDefinition = 
 {
@@ -13,6 +14,7 @@ local levelDefinition =
         ["drone"] = {enemyClass = drone, spriteName = "drone sprite"},
         ["shielder"] = {enemyClass = shielder, spriteName = "wanderer sprite"},
         ["orbiter"] = {enemyClass = orbiter, spriteName = "wanderer sprite"},
+        ["boss"] = {enemyClass = boss}
     },
     
     arenaSegmentDefinitions =
@@ -45,7 +47,7 @@ local levelDefinition =
 
     playerStartSegment = "mainCircle",
 
-    startingWave = 0,
+    startingWave = 25,
 
     level = 
     {
@@ -53,7 +55,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -89,7 +91,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -122,7 +124,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -138,7 +140,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -187,7 +189,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -203,7 +205,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -219,7 +221,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -287,7 +289,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -303,7 +305,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -319,7 +321,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -352,7 +354,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -368,7 +370,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -384,7 +386,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -400,7 +402,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -433,7 +435,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -449,7 +451,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -465,7 +467,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -481,7 +483,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -514,7 +516,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -566,7 +568,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -583,7 +585,7 @@ local levelDefinition =
                 }
             },
             {
-                waveType = "predefined",
+                spawnType = "predefined",
 
                 enemyDef =
                 {
@@ -599,7 +601,7 @@ local levelDefinition =
                 }
             },
             {
-                waveType = "predefined",
+                spawnType = "predefined",
 
                 enemyDef =
                 {
@@ -631,7 +633,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -647,7 +649,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -663,7 +665,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -737,7 +739,7 @@ local levelDefinition =
             spawnDefinitions = 
             {            
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -753,7 +755,7 @@ local levelDefinition =
                     }
                 },          
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -769,7 +771,7 @@ local levelDefinition =
                     }
                 },          
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -802,7 +804,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -818,7 +820,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -834,7 +836,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -889,7 +891,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -907,7 +909,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -923,7 +925,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -939,7 +941,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -994,7 +996,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1011,7 +1013,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1028,7 +1030,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -1044,7 +1046,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -1060,7 +1062,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -1093,7 +1095,7 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1110,7 +1112,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1144,7 +1146,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "randomWithinShape",
+                    spawnType = "randomWithinShape",
 
                     enemyDef =
                     {
@@ -1160,7 +1162,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "randomWithinShape",
+                    spawnType = "randomWithinShape",
 
                     enemyDef =
                     {
@@ -1176,7 +1178,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "randomWithinShape",
+                    spawnType = "randomWithinShape",
 
                     enemyDef =
                     {
@@ -1192,7 +1194,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1209,7 +1211,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1262,7 +1264,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1295,7 +1297,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1311,7 +1313,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1344,7 +1346,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
@@ -1360,7 +1362,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -1376,7 +1378,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
@@ -1409,7 +1411,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1425,7 +1427,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1441,7 +1443,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1457,7 +1459,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1490,7 +1492,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1506,7 +1508,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1522,7 +1524,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1577,7 +1579,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1593,7 +1595,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1609,7 +1611,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1642,7 +1644,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1658,7 +1660,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1674,7 +1676,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1707,7 +1709,7 @@ local levelDefinition =
             spawnDefinitions =
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1723,7 +1725,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "predefined",
+                    spawnType = "predefined",
     
                     enemyDef =
                     {
@@ -1762,12 +1764,11 @@ local levelDefinition =
                 }
             }
         },
-
         {
             spawnDefinitions =
             {
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1783,7 +1784,7 @@ local levelDefinition =
                     }
                 },
                 {
-                    waveType = "alongShapePerimeter",
+                    spawnType = "alongShapePerimeter",
     
                     enemyDef =
                     {
@@ -1811,8 +1812,12 @@ local levelDefinition =
                     timeUntilNextWave = 40
                 }
             }
+        },
+        {
+            waveType = "bossWave",
+            bossID = "boss"
         }
-    }
+    },
 }
 
 return levelDefinition
