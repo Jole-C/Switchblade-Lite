@@ -145,12 +145,6 @@ function drone:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function drone:handleDamage(damageType, amount)
-    if damageType == "bullet" or damageType == "boost" then
-        self.health = self.health - amount
-    end
-end
-
 function drone:applyFriction(dt)
     local frictionRatio = 1 / (1 + (dt * self.friction))
     self.velocity = self.velocity * frictionRatio

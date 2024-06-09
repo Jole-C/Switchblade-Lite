@@ -81,6 +81,7 @@ function orbiter:update(dt)
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
 end
+
 function orbiter:draw()
     if not self.sprite then
         return

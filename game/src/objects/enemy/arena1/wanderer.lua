@@ -103,12 +103,6 @@ function wanderer:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function wanderer:handleDamage(damageType, amount)
-    if damageType == "bullet" or damageType == "boost" then
-        self.health = self.health - amount
-    end
-end
-
 function wanderer:cleanup()
     enemy.cleanup(self)
     

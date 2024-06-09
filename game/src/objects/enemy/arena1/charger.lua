@@ -101,12 +101,6 @@ function charger:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function charger:handleDamage(damageType, amount)
-    if damageType == "bullet" or damageType == "boost" then
-        self.health = self.health - amount
-    end
-end
-
 function charger:cleanup()
     enemy.cleanup(self)
     
