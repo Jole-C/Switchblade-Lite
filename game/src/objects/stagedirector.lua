@@ -2,6 +2,7 @@ local gameObject = require "src.objects.gameobject"
 local stageTimeHud = require "src.stagetimedisplay"
 local text = require "src.interface.text"
 local enemyWarning = require "src.objects.enemy.enemywarning"
+local bossWarning = require "src.objects.enemy.boss.bosswarning"
 
 local stageDirector = class({name = "Stage Director", extends = gameObject})
 
@@ -20,6 +21,7 @@ function stageDirector:new(levelDefinition)
     self.currentText = 1
 
     self.currentWaveIndex = 0
+    self.currentWaveType = "enemy"
     self.waveTransitionTime = self.maxWaveTransitionTime
     self.inWaveTransition = false
     self.elapsedWaveTime = 0
@@ -28,6 +30,7 @@ function stageDirector:new(levelDefinition)
     self.timeSeconds = self.maxSeconds
 
     self.enemyKills = 0
+    self.bossReference = nil
     self.minimumEnemyKills = 0
     self.nextWaveConditions = {
         {
@@ -122,49 +125,59 @@ function stageDirector:update(dt)
 
     self.timeSeconds = self.timeSeconds - 1 * dt
 
-    -- Transition to the next wave
-    if self.inWaveTransition == true then
-        self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
+    if self.currentWaveType ~= "bossWave" then
+        -- Transition to the next wave
+        if self.inWaveTransition == true then
+            self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
 
-        if self.waveTransitionTime <= 0 then
-            self:startWave()
-            self.inWaveTransition = false
-            self.waveTransitionTime = self.maxWaveTransitionTime
-        end
-    end
-
-    -- This timer is the elapsed time into a wave, and is used for both the wave defined override, but also for a default override
-    self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
-
-    -- Go over the conditions and use them to decide when the next wave will start
-    local useDefaultOverride = true
-
-    for i = 1, #self.nextWaveConditions do
-        local condition = self.nextWaveConditions[i]
-
-        if condition then
-            if condition.conditionType == "minimumKills" then
-                local minimumKills = condition.minimumKills or 1
-
-                if self.enemyKills >= minimumKills and self.inWaveTransition == false then
-                    self.inWaveTransition = true
-                end
-            elseif condition.conditionType == "timer" then
-                local time = condition.timeUntilNextWave or 3
-
-                if self.elapsedWaveTime > time and self.inWaveTransition == false then
-                    self.inWaveTransition = true
-                end
-                
-                useDefaultOverride = false
+            if self.waveTransitionTime <= 0 then
+                self:startWave()
+                self.inWaveTransition = false
+                self.waveTransitionTime = self.maxWaveTransitionTime
             end
         end
 
-        -- Handle the default timer override
-        if useDefaultOverride == true and self.elapsedWaveTime > self.defaultTimeForNextWave then
-            self.inWaveTransition = true
+        -- This timer is the elapsed time into a wave, and is used for both the wave defined override, but also for a default override
+        self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
+
+        -- Go over the conditions and use them to decide when the next wave will start
+        local useDefaultOverride = true
+
+        for i = 1, #self.nextWaveConditions do
+            local condition = self.nextWaveConditions[i]
+
+            if condition then
+                if condition.conditionType == "minimumKills" then
+                    local minimumKills = condition.minimumKills or 1
+
+                    if self.enemyKills >= minimumKills and self.inWaveTransition == false then
+                        self.inWaveTransition = true
+                    end
+                elseif condition.conditionType == "timer" then
+                    local time = condition.timeUntilNextWave or 3
+
+                    if self.elapsedWaveTime > time and self.inWaveTransition == false then
+                        self.inWaveTransition = true
+                    end
+                    
+                    useDefaultOverride = false
+                end
+            end
+
+            -- Handle the default timer override
+            if useDefaultOverride == true and self.elapsedWaveTime > self.defaultTimeForNextWave then
+                self.inWaveTransition = true
+            end
+        end
+    else
+        if self.bossReference and self.bossReference.markedForDelete then
+            game.gameStateMachine:set_state("gameOverState")
         end
     end
+end
+
+function stageDirector:registerBoss(boss)
+    self.bossReference = boss
 end
 
 function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
@@ -192,6 +205,7 @@ function stageDirector:startWave()
     local spawnDefinitions = wave.spawnDefinitions
     local segmentChanges = wave.segmentChanges
     local nextWaveConditions = wave.nextWaveConditions
+    self.currentWaveType = wave.waveType or "enemyWave"
 
     -- Reset the number of kills and other values
     self.enemyKills = 0
@@ -209,6 +223,7 @@ function stageDirector:startWave()
     
     -- For each next wave override
     self.nextWaveConditions = {}
+
     if nextWaveConditions then
         for i = 1, #nextWaveConditions do
             table.insert(self.nextWaveConditions, nextWaveConditions[i])
@@ -221,6 +236,11 @@ function stageDirector:startWave()
     end
 
     -- For each spawn definition
+    if self.currentWaveType == "bossWave" then
+        local newBossWarning = bossWarning(0, 0, self.enemyDefinitions[wave.bossID])
+        gameHelper:addGameObject(newBossWarning)
+    end
+
     if not spawnDefinitions then
         return
     end
@@ -230,7 +250,7 @@ function stageDirector:startWave()
 
         -- Grab the values from the current definition
         -- and set up a table for the generated shape, if applicable
-        local waveType = currentDefinition.waveType
+        local spawnType = currentDefinition.spawnType
         local enemyDef = currentDefinition.enemyDef
         local originSegment = arena:getArenaSegment(currentDefinition.shapeDef.origin)
         local generatedShape = {
@@ -266,7 +286,7 @@ function stageDirector:startWave()
         -- Enemies are spawned offset from 0, 0, and then the segment to offset from is
         -- passed to the enemy warning.
         -- This is so enemy warnings can move if their segment moves
-        if waveType == "randomWithinShape" then
+        if spawnType == "randomWithinShape" then
             assert(#generatedShape.points > 1, "Number of points in shape must be greater than 1.")
             
             local enemyDefinition = self.enemyDefinitions[enemyDef.enemyID]
@@ -283,7 +303,7 @@ function stageDirector:startWave()
 
                 self:spawnEnemy(pointX, pointY, generatedShape.origin, enemyDefinition)
             end
-        elseif waveType == "alongShapePerimeter" then
+        elseif spawnType == "alongShapePerimeter" then
             local enemiesPerLine = math.ceil(enemyDef.spawnCount/#generatedShape.points)
 
             if #generatedShape.points == 2 then
@@ -321,7 +341,7 @@ function stageDirector:startWave()
                     self:spawnEnemy(enemyPosition.x, enemyPosition.y, generatedShape.origin, enemyDefinition)
                 end
             end
-        elseif waveType == "predefined" then
+        elseif spawnType == "predefined" then
             local enemyDefinition = self.enemyDefinitions[enemyDef.enemyID]
             self:spawnEnemy(generatedShape.points.x, generatedShape.points.y, generatedShape.origin, enemyDefinition)
         end
