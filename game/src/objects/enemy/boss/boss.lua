@@ -22,6 +22,8 @@ function boss:new(x, y)
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 32, 32)
+
+    gameHelper:getCurrentState().stageDirector:registerBoss(self)
 end
 
 function boss:update(dt)
