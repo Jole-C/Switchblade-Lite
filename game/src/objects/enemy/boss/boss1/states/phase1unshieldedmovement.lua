@@ -4,15 +4,12 @@ local phase1UnshieldedMovement = class({name = "Boss 1 Phase 1 Unshield Movement
 function phase1UnshieldedMovement:enter(bossInstance)
     self.maxAttackCooldown = 5
     self.attackCooldown = self.maxAttackCooldown
+    bossInstance:setMandibleOpenAmount(0)
 end
 
 function phase1UnshieldedMovement:update(dt, bossInstance)
-    local playerPosition = game.playerManager.playerPosition
-    bossInstance.angle = (playerPosition - bossInstance.position):angle()
-
-    bossInstance.position.x = bossInstance.position.x + math.cos(bossInstance.angle) * (10 * dt)
-    bossInstance.position.y = bossInstance.position.y + math.sin(bossInstance.angle) * (10 * dt)
-
+    bossInstance:moveRandomly(dt)
+    
     self.attackCooldown = self.attackCooldown - (1 * dt)
 
     if self.attackCooldown <= 0 then

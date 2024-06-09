@@ -6,7 +6,6 @@ function phase1ShieldedMovement:enter(bossInstance)
 end
 
 function phase1ShieldedMovement:update(dt, bossInstance)
-
     if #bossInstance.orbs <= 0 then
         bossInstance:switchState(bossInstance.states.phase1.unshielded.intro)
     end

@@ -4,6 +4,8 @@ local drone = require "src.objects.enemy.arena1.drone"
 local phase2ShieldedIntro = class({name = "Boss 1 Phase 2 Shield Intro", extends = bossState})
 
 function phase2ShieldedIntro:enter(bossInstance)
+    gameHelper:getCurrentState().enemyManager:destroyAllEnemies()
+    
     self.lerpSpeed = 0.05
     self.lerpRadius = 5
 end

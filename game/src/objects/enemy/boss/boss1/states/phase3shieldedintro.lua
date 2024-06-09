@@ -2,6 +2,8 @@ local bossState = require "src.objects.enemy.boss.bossstate"
 local phase3ShieldedIntro = class({name = "Boss 1 Phase 3 Shield Intro", extends = bossState})
 
 function phase3ShieldedIntro:enter(bossInstance)
+    gameHelper:getCurrentState().enemyManager:destroyAllEnemies()
+    
     self.lerpSpeed = 0.05
     self.lerpRadius = 5
 end

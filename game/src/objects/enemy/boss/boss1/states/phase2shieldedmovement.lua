@@ -8,7 +8,7 @@ end
 function phase2ShieldedMovement:update(dt, bossInstance)
 
     if #bossInstance.orbs <= 0 then
-        bossInstance:switchState(bossInstance.states.phase3.unshielded.intro)
+        bossInstance:switchState(bossInstance.states.phase2.unshielded.intro)
     end
 end
 

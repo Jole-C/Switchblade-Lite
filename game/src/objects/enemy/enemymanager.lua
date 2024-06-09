@@ -10,12 +10,17 @@ end
 function enemyManager:update(dt)
     gameObject.update(self, dt)
     
-    for i = 1, #self.enemies do
-        local currentEnemy = self.enemies[i]
+    for index, enemy in ipairs(self.enemies) do
+        if enemy.markedForDelete == false then
+            table.remove(self.enemies, index)
+        end
+    end
+end
 
-        if currentEnemy.markedForDelete == true then
-            table.remove(self.enemies, i)
-            return
+function enemyManager:destroyAllEnemies()
+    for index, enemy in ipairs(self.enemies) do
+        if enemy.markedForDelete == false then
+            enemy:destroy()
         end
     end
 end

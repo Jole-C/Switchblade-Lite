@@ -1,33 +1,33 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
 local charger = require "src.objects.enemy.arena1.charger"
 
-local phase1UnshieldedChargerfire = class({name = "Boss 1 Phase 1 Unshield Charger Fire Rotation", extends = bossState})
+local phase1UnshieldedChargerfire = class({name = "Boss 1 Phase 1 Unshield Charger Fire Directed", extends = bossState})
 
 function phase1UnshieldedChargerfire:enter(bossInstance)
-    self.angleTurnSpeed = 3
-    self.targetAngle = bossInstance.angle + 2 * math.pi
-
-    self.maxFireCooldown = 0.1
+    self.bulletsToFire = 10
+    self.maxFireCooldown = 0.5
     self.fireCooldown = self.maxFireCooldown
     
     bossInstance:setMandibleOpenAmount(1)
 end
 
 function phase1UnshieldedChargerfire:update(dt, bossInstance)
+    bossInstance:moveRandomly(dt)
+    
     self.fireCooldown = self.fireCooldown - (1 * dt)
 
     if self.fireCooldown <= 0 then
         self.fireCooldown = self.maxFireCooldown
-        
+
         local newEnemy = charger(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
         newEnemy.angle = bossInstance.angle
         gameHelper:addGameObject(newEnemy)
+
+        self.bulletsToFire = self.bulletsToFire - 1
     end
 
-    bossInstance.angle = bossInstance.angle + (self.angleTurnSpeed * dt)
-
-    if bossInstance.angle > self.targetAngle then
-        bossInstance:switchState(bossInstance.states.phase1.unshielded.movement)
+    if self.bulletsToFire <= 0 then
+        bossInstance:switchState(bossInstance.states.phase2.unshielded.movement)
     end
 end
 

@@ -13,11 +13,13 @@ local phase2shieldedintro = require "src.objects.enemy.boss.boss1.states.phase2s
 local phase2shieldedmovement = require "src.objects.enemy.boss.boss1.states.phase2shieldedmovement"
 local phase2unshieldedintro = require "src.objects.enemy.boss.boss1.states.phase2unshieldedintro"
 local phase2unshieldedmovement = require "src.objects.enemy.boss.boss1.states.phase2unshieldedmovement"
+local phase2unshieldedchargerfiredirected = require "src.objects.enemy.boss.boss1.states.phase2unshieldedchargerfiredirected"
 
 local phase3shieldedintro = require "src.objects.enemy.boss.boss1.states.phase3shieldedintro"
 local phase3shieldedmovement = require "src.objects.enemy.boss.boss1.states.phase3shieldedmovement"
 local phase3unshieldedintro = require "src.objects.enemy.boss.boss1.states.phase3unshieldedintro"
 local phase3unshieldedmovement = require "src.objects.enemy.boss.boss1.states.phase3unshieldedmovement"
+local phase3unshieldedchargerfiredirected = require "src.objects.enemy.boss.boss1.states.phase3unshieldedchargerfiredirected"
 
 local states =
 {
@@ -62,9 +64,7 @@ local states =
 
             attacks =
             {
-                phase1unshieldedchargerfirerandom(),
-                phase1unshieldedchargerfirerotation(),
-                phase1unshieldedchargerfiredirected(),
+                phase2unshieldedchargerfiredirected(),
             }
         },
     },
@@ -85,9 +85,7 @@ local states =
 
             attacks =
             {
-                phase1unshieldedchargerfirerandom(),
-                phase1unshieldedchargerfirerotation(),
-                phase1unshieldedchargerfiredirected(),
+                phase3unshieldedchargerfiredirected(),
             }
         },
     },
