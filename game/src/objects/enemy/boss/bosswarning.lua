@@ -3,8 +3,10 @@ local quad = require "src.interface.quad"
 local rect = require "src.interface.rect"
 local bossWarning = class({name = "Boss Warning", extends = gameObject})
 
-function bossWarning:new(x, y)
+function bossWarning:new(x, y, bossClass)
     self:super(x, y)
+
+    self.bossClass = bossClass
 
     -- Create a sprite to hold the caution strip
     self.cautionSprites = {}
@@ -101,6 +103,10 @@ function bossWarning:new(x, y)
     self.warningBoom:tag(game.tags.sfx)
     self.warningSiren = ripple.newSound(game.resourceManager:getResource("boss warning siren"))
     self.warningSiren:tag(game.tags.sfx)
+
+    if game.manager:getOption("enableDebugMode") == true then
+        self:spawnBoss()
+    end
 end
 
 function bossWarning:update(dt)
@@ -162,9 +168,9 @@ function bossWarning:update(dt)
 
             local sin = (math.sin(self.warningColourSine + (0.2 * i)) + 1) / 2
             local overrideDrawColour = {}
-            overrideDrawColour[1] = math.lerp(1, game.manager.currentPalette.enemySpawnColour[1], sin)
-            overrideDrawColour[2] = math.lerp(1, game.manager.currentPalette.enemySpawnColour[2], sin)
-            overrideDrawColour[3] = math.lerp(1, game.manager.currentPalette.enemySpawnColour[3], sin)
+            overrideDrawColour[1] = math.lerp(1, game.manager.currentPalette.enemyColour[1], sin)
+            overrideDrawColour[2] = math.lerp(1, game.manager.currentPalette.enemyColour[2], sin)
+            overrideDrawColour[3] = math.lerp(1, game.manager.currentPalette.enemyColour[3], sin)
             overrideDrawColour[4] = 1
     
             sprite.overrideDrawColour = overrideDrawColour
@@ -196,10 +202,15 @@ function bossWarning:update(dt)
         self.screenFlashAlpha = math.lerp(self.screenFlashAlpha, 0, 0.02)
 
         if self.screenFlashAlpha <= 0.1 then
-            self:destroy()
-            game.manager:setPalette(1)
+            self:spawnBoss()
         end
     end
+end
+
+function bossWarning:spawnBoss()
+    self:destroy()
+    game.manager:setPalette(1)
+    gameHelper:addGameObject(self.bossClass.enemyClass(0, 0))
 end
 
 function bossWarning:cleanup()
