@@ -12,7 +12,6 @@ function slider:new(text, font, minValue, maxValue, x, y, option)
     self.text = text
     self.font = game.resourceManager:getResource(font)
     self.lineLength = 75
-    self.referenceToSet = referenceToSet
 end
 
 function slider:checkForInteractions()

@@ -11,6 +11,7 @@ function wanderer:new(x, y)
     self.secondsBetweenAngleChange = 1
     self.randomChangeOffset = 0.5
     self.speed = 16
+    self.health = 1
 
     -- Variables
     self.targetAngle = love.math.random(0, math.pi * 2)
@@ -67,7 +68,6 @@ function wanderer:update(dt)
     local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
-        -- Move the collider
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
         colliderPositionX = self.position.x - colliderWidth/2
         colliderPositionY = self.position.y - colliderHeight/2
@@ -80,6 +80,7 @@ function wanderer:draw()
     if not self.sprite or not self.tail then
         return
     end
+    
     -- Draw the eye
     if self.eye then
         self.eye:draw()

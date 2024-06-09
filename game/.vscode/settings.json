@@ -5,4 +5,17 @@
 	],
 	"Lua.runtime.version": "LuaJIT",
 	"Lua.workspace.checkThirdParty": false,
+	"Lua.diagnostics.globals": [
+		"class",
+		"vec2",
+		"checkIntersect",
+		"gameHelper",
+		"game",
+		"ps",
+		"bump",
+		"baton",
+		"tablex",
+		"backgroundMeshColour",
+		"state_machine"
+	],
 }

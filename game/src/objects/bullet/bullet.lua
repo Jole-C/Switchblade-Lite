@@ -8,7 +8,6 @@ function bullet:new(x, y, speed, angle, damage, colliderDefinition, width, heigh
     self.speed = speed
     self.angle = angle
     self.damage = damage
-    self.lifetime = lifetime
     self.radius = width
 
     self.collider = collider(colliderDefinition, self)

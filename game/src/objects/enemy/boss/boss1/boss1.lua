@@ -6,12 +6,15 @@ local boss1 = class({name = "Boss 1", extends = boss})
 
 function boss1:new(x, y)
     self.orbs = {}
+    self.numberOfOrbs = 0
     
     self.states = states
     self:super(x, y)
 end
 
 function boss1:summonOrbs(numberOfOrbs)
+    self.numberOfOrbs = numberOfOrbs
+
     local angleIncrement = 2 * math.pi / numberOfOrbs
 
     for i = 1, numberOfOrbs do
@@ -23,17 +26,26 @@ function boss1:summonOrbs(numberOfOrbs)
     end
 end
 
+function boss1:handleDamage(damage)
+    if damage.type == "bullet" then
+        if self.isShielded == false then
+            self.phaseHealth = self.phaseHealth - damage.amount
+        end
+    end
+end
+
 function boss1:update(dt)
     boss.update(self, dt)
 
-    -- Remove the orbs from the table if destroyed. Used by shielded states to know when to transition to unshielded
-    for i = #self.orbs, 1, -1 do
-        local orb = self.orbs[i]
-
+    for index, orb in ipairs(self.orbs) do
         if orb.markedForDelete then
-            table.remove(self.orbs, i)
+            table.remove(self.orbs, index)
         end
     end
+end
+
+function boss1:damageShieldHealth()
+    self.shieldHealth = self.shieldHealth - (100/self.numberOfOrbs)
 end
 
 function boss1:draw()

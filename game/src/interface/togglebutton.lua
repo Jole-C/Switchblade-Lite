@@ -2,7 +2,7 @@ local menuButton = require "src.interface.menubutton"
 local toggleButton = class({name = "Toggle Button", extends = menuButton})
 
 function toggleButton:new(text, font, restX, restY, selectedX, selectedY, option, overrideSpriteX)
-    self:super(restX, restY, selectedX, selectedY, execute)
+    self:super(restX, restY, selectedX, selectedY)
 
     self.text = text
     self.font = game.resourceManager:getResource(font)
@@ -11,7 +11,6 @@ function toggleButton:new(text, font, restX, restY, selectedX, selectedY, option
     self.spritePosition = vec2(restX + (overrideSpriteX or 205), restY)
     self.option = option
     self.bool = game.manager:getOption(option)
-    self.referenceToSet = referenceToSet
 end
 
 function toggleButton:execute()

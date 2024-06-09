@@ -6,7 +6,7 @@ function enemy:new(x, y, spriteName)
 
     -- Parameters
     self.contactDamage = 1
-    self.health = 0
+    self.health = 3
     self.maxInvulnerableTime = 0.15
     self.enemyColour = game.manager.currentPalette.enemyColour
 

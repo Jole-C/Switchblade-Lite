@@ -179,7 +179,7 @@ function game:drawForeground()
         love.graphics.clear()
         love.graphics.setBlendMode("alpha")
 
-        self.gameStateMachine:draw(dt)
+        self.gameStateMachine:draw()
         
         local currentGamestate = self.gameStateMachine:current_state()
         

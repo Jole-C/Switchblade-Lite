@@ -76,6 +76,6 @@ end
 
 function love.draw()
     if game then
-        game:draw(dt)
+        game:draw()
     end
 end

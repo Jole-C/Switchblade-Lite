@@ -1,7 +1,7 @@
 local effect = require "src.objects.effects.effect"
 local boostLine = class({name = "Boost Lines Effect", extends = effect})
 
-function boostLine:new(x, y)
+function boostLine:new(x, y, angle)
     self:super(x, y)
 
     self.speed = -1000

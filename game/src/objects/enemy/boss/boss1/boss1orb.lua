@@ -79,6 +79,10 @@ end
 
 function bossOrb:cleanup()
     enemy.cleanup(self)
+
+    if self.bossReference then
+        self.bossReference:damageShieldHealth()
+    end
     
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
