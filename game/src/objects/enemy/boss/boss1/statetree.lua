@@ -66,6 +66,7 @@ local states =
             attacks =
             {
                 phase2unshieldedlaserfire(),
+                phase2unshieldedchargerfiredirected(),
             }
         },
     },
