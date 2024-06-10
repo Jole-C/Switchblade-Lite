@@ -16,6 +16,8 @@
 		"baton",
 		"tablex",
 		"backgroundMeshColour",
-		"state_machine"
+		"state_machine",
+		"deltaTime",
+		"mathx"
 	],
 }
