@@ -26,7 +26,7 @@ function playerLight:new(x, y)
     self.maxSpeed = 375
     self.maxBoostingSpeed = 937.5
     self.maxShipTemperature = 150
-    self.shipHeatAccumulationRate = 1
+    self.shipHeatAccumulationRate = 250
     self.shipCoolingRate = 40
     self.shipOverheatCoolingRate = 60
     self.boostDamage = 1

@@ -283,6 +283,10 @@ function player:spawnTrail()
     end
 end
 
+function player:accumulateTemperature(dt, multiplier)
+    self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * multiplier * dt
+end
+
 function player:updatePosition(dt)
     local arena = gameHelper:getCurrentState().arena
 
