@@ -18,6 +18,30 @@ function boss1:new(x, y)
     self.angle = 0
     self.speed = 16
 
+    self.fearValues = 
+    {
+        movementSpeed =
+        {
+            16,
+            20,
+            25,
+        },
+        
+        wiggleSpeed =
+        {
+            4,
+            6,
+            8
+        },
+        
+        eyeRadius =
+        {
+            10,
+            12,
+            14
+        }
+    }
+
     self.coreSprite = game.resourceManager:getResource("boss 1 core")
     self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
     self.tail2 = tail("boss 1 tail 2", 0, 0, 4, 1)
@@ -33,6 +57,8 @@ function boss1:new(x, y)
 
     self.mesh = nil
     self:generateMesh()
+
+    self:setFearLevel(1)
     
     self.states = states
     self:super(x, y)
@@ -89,8 +115,8 @@ function boss1:draw()
 
         love.graphics.draw(self.coreSprite, self.position.x, self.position.y, self.angle - self.tail1.tailAngleWave, 1, 1, xOffset, yOffset)
 
-        love.graphics.draw(self.mandibleSprite, self.position.x + math.cos(self.angle + math.rad(5)) * 15, self.position.y + math.sin(self.angle + math.rad(5)) * 15, self.angle + self.mandibleAngle)
-        love.graphics.draw(self.mandibleSprite, self.position.x + math.cos(self.angle + math.rad(-5)) * 15, self.position.y + math.sin(self.angle + math.rad(-5)) * 15, self.angle + -self.mandibleAngle, 1, -1)
+        love.graphics.draw(self.mandibleSprite, self.position.x + math.cos(self.angle + math.rad(5)) * 15, self.position.y + math.sin(self.angle + math.rad(5)) * 18, self.angle + self.mandibleAngle)
+        love.graphics.draw(self.mandibleSprite, self.position.x + math.cos(self.angle + math.rad(-5)) * 15, self.position.y + math.sin(self.angle + math.rad(-5)) * 18, self.angle + -self.mandibleAngle, 1, -1)
 
         if self.tail1 then
             self.tail1:draw()
@@ -113,7 +139,7 @@ function boss1:draw()
 end
 
 function boss1:moveRandomly(dt)
-    self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.005)
+    self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.005, dt)
 
     local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
@@ -121,7 +147,8 @@ function boss1:moveRandomly(dt)
 
     if self.angleChangeCooldown <= 0 then
         self.angleChangeCooldown = self.secondsBetweenAngleChange + math.random(-self.randomChangeOffset, self.randomChangeOffset)
-        self.targetAngle = love.math.random(0, math.pi * 2)
+        
+        self.targetAngle = (gameHelper:getArena():getRandomPosition(0.8) - self.position):angle()
     end
 
     if gameHelper:getCurrentState().arena then
@@ -135,6 +162,15 @@ end
 
 function boss1:damageShieldHealth()
     self.shieldHealth = self.shieldHealth - (100/self.numberOfOrbs)
+end
+
+function boss1:setFearLevel(fearLevel)
+    fearLevel = fearLevel or 1
+
+    self.speed = self.fearValues.movementSpeed[fearLevel]
+    self.tail1.tailAngleWaveFrequency = self.fearValues.wiggleSpeed[fearLevel]
+    self.tail2.tailAngleWaveFrequency = self.fearValues.wiggleSpeed[fearLevel]
+    self.eye.eyeRadius = self.fearValues.eyeRadius[fearLevel]
 end
 
 function boss1:summonOrbs(numberOfOrbs)
