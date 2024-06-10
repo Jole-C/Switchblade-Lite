@@ -63,6 +63,8 @@ function shielder:update(dt)
         end
     end
 
+    self:checkColliders(self.collider)
+
     local currentGamestate = gameHelper:getCurrentState()
     local enemyManager = currentGamestate.enemyManager
 

@@ -80,6 +80,8 @@ function orbiter:update(dt)
         
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
+
+    self:checkColliders(self.collider)
 end
 
 function orbiter:draw()

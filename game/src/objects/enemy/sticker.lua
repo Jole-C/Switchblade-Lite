@@ -21,6 +21,8 @@ function sticker:new(x, y)
     self.stickOffset = vec2(0, 0)
 
     self.isSticking = false
+    self.maxStickGracePeriod = 3
+    self.stickGracePeriod = 0
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
@@ -34,6 +36,8 @@ function sticker:update(dt)
     local playerPosition = game.playerManager.playerPosition
     local playerReference = game.playerManager.playerReference
 
+    self.stickGracePeriod = self.maxStickGracePeriod - (1 * dt)
+
     if self.isSticking == false then
         local angleToPlayer = (playerPosition - self.position):angle()
 
@@ -42,9 +46,13 @@ function sticker:update(dt)
         self.position.x = self.position.x + math.cos(self.angle) * self.speed * dt
         self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
 
-        if (playerPosition - self.position):length() < 40 then
+        if (playerPosition - self.position):length() < 25 then
             self.isSticking = true
-            self.stickOffset = (self.position - playerPosition)
+
+            self.stickOffset = (self.position - playerPosition):normalise_inplace()
+            self.stickOffset = self.stickOffset * 10
+
+            self.position = playerPosition + self.stickOffset
         end
     else
         self.position = playerPosition + self.stickOffset
@@ -58,12 +66,19 @@ function sticker:update(dt)
 
             if playerReference.isBoosting == true then
                 self.isSticking = false
+                self.stickGracePeriod = self.maxStickGracePeriod
             end
         end
     end
 
     self.circleSine = self.circleSine + self.circleFrequency * dt
     self.circleRadiusOffset = math.sin(self.circleSine) * self.circleAmplitude
+
+    if self.eye then
+        self.eye.eyeBasePosition.x = self.position.x
+        self.eye.eyeBasePosition.y = self.position.y
+        self.eye:update()
+    end
 
     local world = gameHelper:getWorld()
 
@@ -75,11 +90,21 @@ function sticker:update(dt)
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
 
-    if self.eye then
-        self.eye.eyeBasePosition.x = self.position.x
-        self.eye.eyeBasePosition.y = self.position.y
-        self.eye:update()
+    self:checkColliders(self.collider)
+end
+
+function sticker:handleCollision(collider, collidedObject, colliderDefinition)
+    return false
+end
+
+function sticker:handleDamage(damageType, amount)
+    if self.isSticking == true and damageType == "boost" or damageType == "bullet" then
+        self.health = self.health - amount
+    elseif self.isSticking == true and damageType ~= "boost" then
+        return
     end
+
+    enemy.handleDamage(self, damageType, amount)
 end
 
 function sticker:draw()
