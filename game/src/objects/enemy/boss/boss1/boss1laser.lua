@@ -6,12 +6,10 @@ function bossLaser:new(x, y, angle, length, lifetime)
     self.spriteInner = game.resourceManager:getResource("boss 1 laser inner")
     
     self:super(x, y, angle, 0, length, lifetime, 8)
-
-    self.circleSine = 0
 end
 
 function bossLaser:update(dt)
-    self.circleSine = math.sin(self.circle)
+    laser.update(self, dt)
 end
 
 function bossLaser:draw()
@@ -30,7 +28,7 @@ function bossLaser:draw()
     love.graphics.draw(self.spriteInner, self.position.x, self.position.y, self.angle, self.length, 1, 0, yOffset)
     
     love.graphics.setColor(game.manager.currentPalette.enemyColour)
-    love.graphics.circle("fill", self.position.x, self.position.y, 32 + self.circleSine)
+    love.graphics.circle("fill", self.position.x, self.position.y, 32)
 end
 
 function bossLaser:handleCollision(items, len, dt)
