@@ -31,7 +31,7 @@ function wanderer:update(dt)
     enemy.update(self, dt)
     
     -- Move the enemy and lerp its angle to the target angle
-    self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.01)
+    self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.01, dt)
 
     local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
