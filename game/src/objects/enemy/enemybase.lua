@@ -36,6 +36,10 @@ function enemyBase:checkColliders(colliders)
     local world = gameHelper:getWorld()
     local colliderTable = colliders
 
+    if colliders == nil then
+        return
+    end
+
     if colliders ~= "table" then
         colliderTable = {colliders}
     end
