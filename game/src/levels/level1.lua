@@ -1,8 +1,8 @@
-local wanderer = require "src.objects.enemy.arena1.wanderer"
-local charger = require "src.objects.enemy.arena1.charger"
-local drone = require "src.objects.enemy.arena1.drone"
-local shielder = require "src.objects.enemy.arena1.shielder"
-local orbiter = require "src.objects.enemy.arena1.orbiter"
+local wanderer = require "src.objects.enemy.wanderer"
+local charger = require "src.objects.enemy.charger"
+local drone = require "src.objects.enemy.drone"
+local shielder = require "src.objects.enemy.shielder"
+local orbiter = require "src.objects.enemy.orbiter"
 local boss = require "src.objects.enemy.boss.boss1.boss1"
 
 local levelDefinition = 
