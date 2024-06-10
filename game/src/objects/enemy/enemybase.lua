@@ -78,7 +78,10 @@ end
 function enemyBase:handleDamage(damageType, amount)
     if damageType == "bullet" or damageType == "boost" or damageType == "contact" then
         self.health = self.health - amount
+        return true
     end
+
+    return false
 end
 
 function enemyBase:onHit(damageType, amount)
@@ -86,7 +89,7 @@ function enemyBase:onHit(damageType, amount)
         return
     end
 
-    self:handleDamage(damageType, amount)
+    local tookDamage = self:handleDamage(damageType, amount)
 
     if self.health <= 0 then
         self:destroy()
@@ -97,6 +100,8 @@ function enemyBase:onHit(damageType, amount)
     if game.manager then
         game.manager:setFreezeFrames(1)
     end
+
+    return tookDamage
 end
 
 function enemyBase:setInvulnerable()

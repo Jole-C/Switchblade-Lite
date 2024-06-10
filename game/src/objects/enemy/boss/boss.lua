@@ -70,6 +70,8 @@ function boss:handleDamage(damageType, amount)
         else
             self.phaseHealth = self.phaseHealth - amount
         end
+        
+        return true
     end
 end
 

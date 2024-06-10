@@ -100,8 +100,9 @@ end
 function sticker:handleDamage(damageType, amount)
     if self.isSticking == true and damageType == "boost" or damageType == "bullet" then
         self.health = self.health - amount
+        return true
     elseif self.isSticking == true and damageType ~= "boost" then
-        return
+        return false
     end
 
     enemy.handleDamage(self, damageType, amount)

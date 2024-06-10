@@ -109,8 +109,9 @@ function shielder:draw()
 end
 
 function shielder:handleDamage(damageType, amount)
-    if damageType == "boost" then
+    if damageType == "boost" or damageType == "contact" then
         self.health = self.health - amount
+        return true
     end
 end
 

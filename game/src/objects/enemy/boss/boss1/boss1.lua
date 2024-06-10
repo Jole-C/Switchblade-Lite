@@ -214,6 +214,7 @@ function boss1:handleDamage(damage)
     if damage.type == "bullet" then
         if self.isShielded == false then
             self.phaseHealth = self.phaseHealth - damage.amount
+            return true
         end
     end
 end
