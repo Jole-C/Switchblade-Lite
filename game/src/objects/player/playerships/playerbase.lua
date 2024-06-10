@@ -491,7 +491,7 @@ function player:draw()
         love.graphics.setFont(self.ammoFont)
         local width = self.ammoFont:getWidth(self.ammo)
 
-        love.graphics.printf(self.ammo, self.position.x - width/2, self.position.y + 10, width, "center")
+        love.graphics.printf(tostring(self.ammo), self.position.x - width/2, self.position.y + 10, width, "center")
     end
 
     if self.isInvulnerable == true then
