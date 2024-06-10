@@ -210,10 +210,11 @@ function boss1:generateMesh()
     self.mesh:setVertices(vertices)
 end
 
-function boss1:handleDamage(damage)
-    if damage.type == "bullet" then
+function boss1:handleDamage(damageType, amount)
+    if damageType == "bullet" then
         if self.isShielded == false then
-            self.phaseHealth = self.phaseHealth - damage.amount
+            print("damaged")
+            self.phaseHealth = self.phaseHealth - amount
             return true
         end
     end
