@@ -33,21 +33,19 @@ function math.normalizeAngle(angle)
 	end
 end
 
-function math.lerpAngle(val, tar, perc)
-	val = math.normalizeAngle(val)
-	tar = math.normalizeAngle(tar)
+function math.lerpAngle(val, tar, perc, dt)
+	val = mathx.normalise_angle(val)
+	tar = mathx.normalise_angle(tar)
 
 	local difference = tar - val
 
 	if difference > math.pi then
 		difference = difference - 2 * math.pi
-	elseif difference < math.pi then
+	elseif difference < -math.pi then
 		difference = difference + 2 * math.pi
 	end
 
-	local interpolatedAngle = val + difference * perc
-
-	return math.normalizeAngle(interpolatedAngle)
+	return math.lerpDT(val, val + difference, perc, dt)
 end
 ------------------------------------------
 function PointWithinShape(shape, tx, ty)
