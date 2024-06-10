@@ -1,5 +1,5 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
-local drone = require "src.objects.enemy.arena1.drone"
+local drone = require "src.objects.enemy.drone"
 
 local phase2ShieldedIntro = class({name = "Boss 1 Phase 2 Shield Intro", extends = bossState})
 

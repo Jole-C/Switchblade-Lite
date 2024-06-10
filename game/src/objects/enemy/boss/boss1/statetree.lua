@@ -14,6 +14,7 @@ local phase2shieldedmovement = require "src.objects.enemy.boss.boss1.states.phas
 local phase2unshieldedintro = require "src.objects.enemy.boss.boss1.states.phase2unshieldedintro"
 local phase2unshieldedmovement = require "src.objects.enemy.boss.boss1.states.phase2unshieldedmovement"
 local phase2unshieldedchargerfiredirected = require "src.objects.enemy.boss.boss1.states.phase2unshieldedchargerfiredirected"
+local phase2unshieldedlaserfire = require "src.objects.enemy.boss.boss1.states.phase2unshieldedlaserfire"
 
 local phase3shieldedintro = require "src.objects.enemy.boss.boss1.states.phase3shieldedintro"
 local phase3shieldedmovement = require "src.objects.enemy.boss.boss1.states.phase3shieldedmovement"
@@ -64,7 +65,7 @@ local states =
 
             attacks =
             {
-                phase2unshieldedchargerfiredirected(),
+                phase2unshieldedlaserfire(),
             }
         },
     },

@@ -6,6 +6,8 @@ function phase3UnshieldedMovement:enter(bossInstance)
     self.attackCooldown = self.maxAttackCooldown
     
     bossInstance:setMandibleOpenAmount(0)
+
+    bossInstance:setFearLevel(3)
 end
 
 function phase3UnshieldedMovement:update(dt, bossInstance)

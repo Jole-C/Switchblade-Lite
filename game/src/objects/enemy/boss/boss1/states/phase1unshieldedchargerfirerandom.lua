@@ -1,5 +1,5 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
-local charger = require "src.objects.enemy.arena1.charger"
+local charger = require "src.objects.enemy.charger"
 
 local phase1UnshieldedChargerfire = class({name = "Boss 1 Phase 1 Unshield Charger Fire Random", extends = bossState})
 

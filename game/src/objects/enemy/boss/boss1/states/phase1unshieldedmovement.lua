@@ -4,7 +4,10 @@ local phase1UnshieldedMovement = class({name = "Boss 1 Phase 1 Unshield Movement
 function phase1UnshieldedMovement:enter(bossInstance)
     self.maxAttackCooldown = 5
     self.attackCooldown = self.maxAttackCooldown
+
     bossInstance:setMandibleOpenAmount(0)
+
+    bossInstance:setFearLevel(1)
 end
 
 function phase1UnshieldedMovement:update(dt, bossInstance)

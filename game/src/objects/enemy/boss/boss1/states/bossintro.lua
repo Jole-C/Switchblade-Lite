@@ -16,7 +16,7 @@ function bossIntro:update(dt, bossInstance)
     bossInstance.position.y = math.lerpDT(bossInstance.position.y, 0, self.lerpSpeed, dt)
 
     if (bossInstance.position - vec2:zero()):length() < self.lerpRadius then
-        bossInstance:switchState(bossInstance.states.phase1.unshielded.intro)
+        bossInstance:switchState(bossInstance.states.phase2.unshielded.intro)
     end
 end
 
