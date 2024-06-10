@@ -267,6 +267,12 @@ function game:setupResources()
     local boss1mandible = love.graphics.newImage("assets/sprites/enemy/boss1/mandible.png")
     resourceManager:addResource(boss1mandible, "boss 1 mandible")
 
+    local boss1LaserOuter = love.graphics.newImage("assets/sprites/enemy/boss1/laserouter.png")
+    resourceManager:addResource(boss1LaserOuter, "boss 1 laser outer")
+
+    local boss1LaserInner = love.graphics.newImage("assets/sprites/enemy/boss1/laserinner.png")
+    resourceManager:addResource(boss1LaserInner, "boss 1 laser inner")
+
     -- Global resources
     local particle = love.graphics.newImage("assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
