@@ -373,13 +373,12 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
     if colliderHit == self.collider then
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting == false and collidedObject.onHit then
-                self:onHit(collidedObject.contactDamage)
-                collidedObject:onHit("boost", collidedObject.health)
+                collidedObject:onHit("contact", collidedObject.health)
             end
         end
     elseif colliderHit == self.boostCollider then
         if colliderDefinition == colliderDefinitions.enemy then
-            if self.isBoosting and collidedObject.onHit and collidedObject.isInvulnerable == false then
+            if self.isBoosting and collidedObject.onHit then
                 collidedObject:onHit("boost", self.boostDamage)
                 
                 self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
@@ -510,7 +509,7 @@ function player:spawnBoostLines()
 end
 
 function player:onHit(damage)
-    if self.isInvulnerable then
+    if self.isInvulnerable or self.isBoosting then
         return
     end
 
