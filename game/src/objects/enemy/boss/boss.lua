@@ -1,8 +1,8 @@
-local gameObject = require "src.objects.gameObject"
+local enemyBase = require "src.objects.enemy.enemybase"
 local text = require "src.interface.text"
 local collider = require "src.collision.collider"
 
-local boss = class({name = "Boss", extends = gameObject})
+local boss = class({name = "Boss", extends = enemyBase})
 
 function boss:new(x, y)
     self:super(x, y)
@@ -27,18 +27,7 @@ function boss:new(x, y)
 end
 
 function boss:update(dt)
-    -- Handle invulnerable switching
-    self.invulnerableTime = self.invulnerableTime - 1 * dt
-
-    if self.invulnerableTime <= 0 then
-        self.isInvulnerable = false
-    end
-
-    if self.isInvulnerable == true then
-        self.enemyColour = {1, 1, 1, 1}
-    else
-        self.enemyColour = game.manager.currentPalette.enemyColour
-    end
+    enemyBase.update(self, dt)
 
     -- Update the current state
     if self.currentState and self.currentState.update then
@@ -60,6 +49,8 @@ function boss:update(dt)
         
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
+
+    self:checkColliders(self.collider)
 end
 
 function boss:draw()
@@ -72,12 +63,12 @@ function boss:setShielded(isShielded)
     self.shieldHealth = 100
 end
 
-function boss:handleDamage(damage)
-    if damage.type == "bullet" then
+function boss:handleDamage(damageType, amount)
+    if damageType == "bullet" then
         if self.isShielded == true then
-            self.shieldHealth = self.shieldHealth - damage.amount
+            self.shieldHealth = self.shieldHealth - amount
         else
-            self.phaseHealth = self.phaseHealth - damage.amount
+            self.phaseHealth = self.phaseHealth - amount
         end
     end
 end
@@ -85,24 +76,6 @@ end
 function boss:setInvulnerable()
     self.isInvulnerable = true
     self.invulnerableTime = self.maxInvulnerableTime
-end
-
-function boss:onHit(damage)
-    if self.isInvulnerable == true then
-        return
-    end
-
-    if type(damage) ~= "table" then
-        damage = {type = "bullet", amount = 1}
-    end
-
-    self:handleDamage(damage)
-
-    self:setInvulnerable()
-
-    if game.manager then
-        game.manager:setFreezeFrames(3)
-    end
 end
 
 function boss:switchAttack(attacksTable)
