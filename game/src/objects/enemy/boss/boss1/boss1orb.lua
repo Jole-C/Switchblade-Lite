@@ -12,6 +12,7 @@ function bossOrb:new(x, y, bossReference, angle)
     self.angle = angle or 0
     self.turnRate = 0.5
 
+    self.isDamageable = false
     self.damageableShader = game.resourceManager:getResource("outline shader")
     self.maxDamageableCooldown = 3
     self.damageableCooldown = self.maxDamageableCooldown
@@ -37,7 +38,7 @@ function bossOrb:update(dt)
     if self.damageableCooldown <= 0 then
         self.damageableCooldown = self.maxDamageableCooldown
 
-        self.isInvulnerable = not self.isInvulnerable
+        self.isDamageable = not self.isDamageable
     end
 
     -- Move enemy collider
@@ -62,7 +63,7 @@ function bossOrb:draw()
 
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
 
-    if self.isInvulnerable == false then
+    if self.isDamageable == false then
         love.graphics.setShader(self.damageableShader)
         self.damageableShader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
         love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
@@ -71,7 +72,7 @@ function bossOrb:draw()
 end
 
 function bossOrb:handleDamage(damageType, amount)
-    if damageType == "boost" then
+    if damageType == "boost" and self.isDamageable == true then
         self:destroy()
         return true
     end
