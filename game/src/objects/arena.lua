@@ -16,6 +16,7 @@ function arenaController:new()
     -- Variables
     self.circleWarpTime = 0
     self.arenaSegments = {}
+    self.segmentIndices = {}
     self.numberOfSegments = 0
     self.arenaScale = 0
     self.doIntro = false
@@ -169,8 +170,6 @@ function arenaController:getSegmentPointIsWithin(position)
 
         return closestSegment
     end
-
-    return nil
 end
 
 function arenaController:isPositionWithinArena(position)
@@ -189,18 +188,42 @@ function arenaController:isPositionWithinArena(position)
     return false
 end
 
+function arenaController:getRandomSegment()
+    local randomIndex = self.segmentIndices[math.random(1, #self.segmentIndices)]
+
+    for k, v in pairs(self.arenaSegments) do
+        if k == randomIndex then
+            return v
+        end
+    end
+end
+
 function arenaController:addArenaSegment(x, y, radius, name)
     local newSegment = arenaSegment(x, y, radius)
     print(newSegment)
     gameHelper:addGameObject(newSegment)
 
     self.arenaSegments[name] = newSegment
+    table.insert(self.segmentIndices, name)
 
     for k, v in pairs(self.arenaSegments) do
         self.numberOfSegments = self.numberOfSegments + 1
     end
 
     return newSegment
+end
+
+function arenaController:getRandomPosition(maximumDistancePercentage)
+    maximumDistancePercentage = maximumDistancePercentage or 1
+
+    local segment = self:getRandomSegment()
+
+    local segmentPosition = segment.position:copy()
+    local randomDirection = segmentPosition:rotate_inplace(math.random(0, 2 * math.pi))
+
+    randomDirection = randomDirection * (segment.radius * math.random(0, maximumDistancePercentage))
+
+    return randomDirection
 end
 
 function arenaController:drawSegments(fillType)
