@@ -239,7 +239,7 @@ function game:setupResources()
     local chargerEnemy = love.graphics.newImage("assets/sprites/enemy/charger.png")
     resourceManager:addResource(chargerEnemy, "charger sprite")
 
-    local chargerTail = love.graphics.newImage("assets/sprites/enemy/chargertail.png")
+    local chargerTail = love.graphics.newImage("assets/sprites/enemy/chargerenemytail.png")
     resourceManager:addResource(chargerTail, "charger tail sprite")
 
     local droneEnemy = love.graphics.newImage("assets/sprites/enemy/drone.png")
@@ -250,6 +250,9 @@ function game:setupResources()
 
     local wandererTail = love.graphics.newImage("assets/sprites/enemy/wanderertail.png")
     resourceManager:addResource(wandererTail, "wanderer tail sprite")
+
+    local stickerEnemy = love.graphics.newImage("assets/sprites/enemy/sticker.png")
+    resourceManager:addResource(stickerEnemy, "sticker sprite")
 
     -- Boss 1
     local boss1Orb = love.graphics.newImage("assets/sprites/enemy/boss1/orb.png")

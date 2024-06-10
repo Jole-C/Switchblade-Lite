@@ -1,5 +1,6 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
 local charger = require "src.objects.enemy.charger"
+local sticker = require "src.objects.enemy.sticker"
 
 local phase1UnshieldedChargerfire = class({name = "Boss 1 Phase 1 Unshield Charger Fire Rotation", extends = bossState})
 
@@ -19,9 +20,18 @@ function phase1UnshieldedChargerfire:update(dt, bossInstance)
     if self.fireCooldown <= 0 then
         self.fireCooldown = self.maxFireCooldown
         
-        local newEnemy = charger(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
-        newEnemy.angle = bossInstance.angle
-        gameHelper:addGameObject(newEnemy)
+        local newEnemy = nil
+
+        if math.random(0, 1) == 0 then
+            newEnemy = charger(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
+        else
+            newEnemy = sticker(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
+        end
+
+        if newEnemy ~= nil then
+            newEnemy.angle = bossInstance.angle
+            gameHelper:addGameObject(newEnemy)
+        end
     end
 
     bossInstance.angle = bossInstance.angle + (self.angleTurnSpeed * dt)
