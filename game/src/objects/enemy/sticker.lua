@@ -41,6 +41,10 @@ function sticker:update(dt)
     local playerPosition = game.playerManager.playerPosition
     local playerReference = game.playerManager.playerReference
 
+    if playerReference == nil then
+        return
+    end
+
     self.stickGracePeriod = self.maxStickGracePeriod - (1 * dt)
 
     if playerReference.isOverheating == false then
