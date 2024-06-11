@@ -40,14 +40,14 @@ function enemyBase:checkColliders(colliders)
         return
     end
 
-    if colliders ~= "table" then
+    if colliderTable.type and colliderTable:type() == "Collider" then
         colliderTable = {colliders}
     end
 
-    for _, collider in ipairs(colliderTable) do
+    for _, collider in pairs(colliderTable) do
         if world:hasItem(collider) then
             local colliderPositionX, colliderPositionY = world:getRect(collider)
-            local x, y, cols, len = world:check(self.collider, colliderPositionX, colliderPositionY)
+            local x, y, cols, len = world:check(collider, colliderPositionX, colliderPositionY)
     
             for i = 1, len do
                 local collidedObject = cols[i].other.owner
