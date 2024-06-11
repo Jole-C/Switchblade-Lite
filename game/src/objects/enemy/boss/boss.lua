@@ -9,10 +9,12 @@ function boss:new(x, y)
 
     self.contactDamage = 1
     self.shieldHealth = 100
-    self.phaseHealth = 50
+    self.phaseHealth = 30
     self.isInvulnerable = false
     self.invulnerableTime = 0
     self.maxInvulnerableTime = 0.05
+    self.colliders = {}
+    self.colliderIndices = {}
 
     self:setShielded(true)
     self:switchState(self.states.bossIntro)
@@ -20,37 +22,33 @@ function boss:new(x, y)
     self.debugText = text("", "font main", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
 
-    self.collider = collider(colliderDefinitions.enemy, self)
-    gameHelper:getWorld():add(self.collider, x, y, 32, 32)
-
     gameHelper:getCurrentState().stageDirector:registerBoss(self)
 end
 
 function boss:update(dt)
     enemyBase.update(self, dt)
 
-    -- Update the current state
+    local world = gameHelper:getWorld()
+
+    for _, colliderParameter in pairs(self.colliders) do
+        if world:hasItem(colliderParameter.colliderReference) then
+            local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(colliderParameter.colliderReference)
+            colliderPositionX = colliderParameter.position.x - colliderWidth/2
+            colliderPositionY = colliderParameter.position.y - colliderHeight/2
+            
+            world:update(colliderParameter.colliderReference, colliderPositionX, colliderPositionY)
+        end
+    end
+
+    self:checkColliders(self.colliderIndices)
+
     if self.currentState and self.currentState.update then
         self.currentState:update(dt, self)
     end
 
-    -- Update the debug text
     if self.debugText and game.manager:getOption("enableDebugMode") == true then
         self.debugText.text = "Current State: "..self.currentState:type().."\n".."Health: "..self.phaseHealth.."\n".."Shield: "..self.shieldHealth
     end
-
-    -- Move enemy collider
-    local world = gameHelper:getWorld()
-
-    if world and world:hasItem(self.collider) then
-        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
-        colliderPositionX = self.position.x - colliderWidth/2
-        colliderPositionY = self.position.y - colliderHeight/2
-        
-        world:update(self.collider, colliderPositionX, colliderPositionY)
-    end
-
-    self:checkColliders(self.collider)
 end
 
 function boss:draw()
@@ -59,8 +57,34 @@ end
 
 function boss:setShielded(isShielded)
     self.isShielded = isShielded or false
-    self.phaseHealth = 50
+    self.phaseHealth = 30
     self.shieldHealth = 100
+end
+
+function boss:initialiseColliders(colliderParameters)
+    local world = gameHelper:getWorld()
+
+    for colliderName, colliderParameter in pairs(colliderParameters) do
+        local newCollider = collider(colliderDefinitions.enemy, self)
+
+        self.colliders[colliderName] = {
+            colliderReference = newCollider,
+            position = self.position:copy(),
+            width = colliderParameter.width
+        }
+
+        world:add(newCollider, self.position.x, self.position.y, colliderParameter.width, colliderParameter.width)
+        table.insert(self.colliderIndices, newCollider)
+    end
+end
+
+function boss:updateColliderPosition(colliderName, x, y)
+    local collider = self.colliders[colliderName]
+
+    assert(collider ~= nil, "Collider does not exist!")
+
+    collider.position.x = x
+    collider.position.y = y
 end
 
 function boss:handleDamage(damageType, amount)

@@ -7,6 +7,9 @@ local eye = require "src.objects.enemy.enemyeye"
 local boss1 = class({name = "Boss 1", extends = boss})
 
 function boss1:new(x, y)
+    self.states = states
+    self:super(x, y)
+
     self.orbs = {}
     self.numberOfOrbs = 3
 
@@ -59,34 +62,60 @@ function boss1:new(x, y)
     self:generateMesh()
 
     self:setFearLevel(1)
-    
-    self.states = states
-    self:super(x, y)
+
+    self:initialiseColliders(
+    {
+        mainCollider = {
+            width = 37,
+        },
+        tail1Collider = {
+            width = 22,
+        },
+        tail2Collider = {
+            width = 12,
+        },
+    })
 end
 
 function boss1:update(dt)
-    boss.update(self, dt)
-
     for index, orb in ipairs(self.orbs) do
         if orb.markedForDelete then
             table.remove(self.orbs, index)
         end
     end
 
-    if self.tail1 then
-        self.tail1.tailSpritePosition.x = self.position.x + math.cos(self.angle + math.pi) * 15
-        self.tail1.tailSpritePosition.y = self.position.y + math.sin(self.angle + math.pi) * 15
-        self.tail1.baseTailAngle = self.angle
+    if self.isShielded == false then
+        if self.tail1 then
+            local angle = self.angle + math.pi
+            local x = self.position.x + math.cos(angle) * 15
+            local y = self.position.y + math.sin(angle) * 15
+            
+            self.tail1.tailSpritePosition.x = x
+            self.tail1.tailSpritePosition.y = y
+            self.tail1.baseTailAngle = self.angle
 
-        self.tail1:update(dt)
-    end
+            self:updateColliderPosition("tail1Collider", x + math.cos(angle + self.tail1.tailAngleWave) * 16, y + math.sin(angle + self.tail1.tailAngleWave) * 16)
 
-    if self.tail2 then
-        self.tail2.tailSpritePosition.x = self.tail1.tailSpritePosition.x + math.cos(self.tail1.baseTailAngle + self.tail1.tailAngleWave + math.pi) * 27
-        self.tail2.tailSpritePosition.y = self.tail1.tailSpritePosition.y + math.sin(self.tail1.baseTailAngle + self.tail1.tailAngleWave + math.pi) * 27
-        self.tail2.baseTailAngle = self.angle
+            self.tail1:update(dt)
+        end
 
-        self.tail2:update(dt)
+        if self.tail2 then
+            local angle = self.tail1.baseTailAngle + self.tail1.tailAngleWave + math.pi
+            local x = self.tail1.tailSpritePosition.x + math.cos(angle) * 27
+            local y = self.tail1.tailSpritePosition.y + math.sin(angle) * 27
+
+            self.tail2.tailSpritePosition.x = x
+            self.tail2.tailSpritePosition.y = y
+            self.tail2.baseTailAngle = self.angle
+
+            self:updateColliderPosition("tail2Collider", x + math.cos(angle) * 8, y + math.sin(angle) * 8)
+
+            self.tail2:update(dt)
+        end
+    else
+        self:updateColliderPosition("mainCollider", self.position.x, self.position.y)
+        self:updateColliderPosition("tail1Collider", self.position.x, self.position.y)
+        self:updateColliderPosition("tail2Collider", self.position.x, self.position.y)
     end
 
     if self.eye then
@@ -99,6 +128,8 @@ function boss1:update(dt)
 
     self.enemySpawnPosition.x = self.position.x + math.cos(self.angle - self.tail1.tailAngleWave) * 17
     self.enemySpawnPosition.y = self.position.y + math.sin(self.angle - self.tail1.tailAngleWave) * 17
+
+    boss.update(self, dt)
 end
 
 function boss1:draw()
@@ -139,6 +170,8 @@ function boss1:draw()
 end
 
 function boss1:moveRandomly(dt)
+    local arena = gameHelper:getArena()
+
     self.angle = math.lerpAngle(self.angle, self.targetAngle, 0.005, dt)
 
     local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
@@ -147,13 +180,11 @@ function boss1:moveRandomly(dt)
 
     if self.angleChangeCooldown <= 0 then
         self.angleChangeCooldown = self.secondsBetweenAngleChange + math.random(-self.randomChangeOffset, self.randomChangeOffset)
-        
-        self.targetAngle = (gameHelper:getArena():getRandomPosition(0.8) - self.position):angle()
+        self.targetAngle = (arena:getRandomPosition(0.8) - self.position):angle()
     end
 
-    if gameHelper:getCurrentState().arena then
-        self.position = gameHelper:getCurrentState().arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
-    end
+    self.position = arena:getClampedPosition(self.position + movementDirection * self.speed * dt)
+    self:updateColliderPosition("mainCollider", self.position.x, self.position.y)
 end
 
 function boss1:setMandibleOpenAmount(percentage)
