@@ -8,20 +8,25 @@ function sticker:new(x, y)
     self:super(x, y, "sticker sprite")
 
     self.health = 1
-    self.speed = 60
+    self.speed = 85
     self.angleTurnRate = 0.05
-
-    self.circleSine = 0
+    self.secondsBetweenAngleChange = 1
+    self.randomChangeOffset = 0.5
     self.circleFrequency = 3
     self.circleAmplitude = 5
     self.circleRadius = 5
+    self.maxStickGracePeriod = 3
+
+    self.circleSine = 0
     self.circleRadiusOffset = 0
 
     self.angle = 0
+    self.targetAngle = love.math.random(0, math.pi * 2)
+    self.angleChangeCooldown = self.secondsBetweenAngleChange
+
     self.stickOffset = vec2(0, 0)
 
     self.isSticking = false
-    self.maxStickGracePeriod = 3
     self.stickGracePeriod = 0
 
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -38,37 +43,53 @@ function sticker:update(dt)
 
     self.stickGracePeriod = self.maxStickGracePeriod - (1 * dt)
 
-    if self.isSticking == false then
-        local angleToPlayer = (playerPosition - self.position):angle()
+    if playerReference.isOverheating == false then
+        if self.isSticking == false then
+            local angleToPlayer = (playerPosition - self.position):angle()
 
-        self.angle = math.lerpAngle(self.angle, angleToPlayer, self.angleTurnRate, dt)
-        
-        self.position.x = self.position.x + math.cos(self.angle) * self.speed * dt
-        self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
+            self.angle = math.lerpAngle(self.angle, angleToPlayer, self.angleTurnRate, dt)
+            
+            self.position.x = self.position.x + math.cos(self.angle) * self.speed * dt
+            self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
 
-        if (playerPosition - self.position):length() < 25 then
-            self.isSticking = true
+            if (playerPosition - self.position):length() < 25 then
+                self.isSticking = true
 
-            self.stickOffset = (self.position - playerPosition):normalise_inplace()
-            self.stickOffset = self.stickOffset * 10
+                self.stickOffset = (self.position - playerPosition):normalise_inplace()
+                self.stickOffset = self.stickOffset * 10
 
+                self.position = playerPosition + self.stickOffset
+            end
+        else
             self.position = playerPosition + self.stickOffset
+
+            if playerReference then
+                playerReference:accumulateTemperature(dt, 1.35)
+
+                if playerReference.isOverheating == true then
+                    self:destroy()
+                end
+
+                if playerReference.isBoosting == true then
+                    self.isSticking = false
+                    self.stickGracePeriod = self.maxStickGracePeriod
+                end
+            end
         end
     else
-        self.position = playerPosition + self.stickOffset
+        self.isSticking = false
+        
+        self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
 
-        if playerReference then
-            playerReference:accumulateTemperature(dt, 1.35)
-
-            if playerReference.isOverheating == true then
-                self:destroy()
-            end
-
-            if playerReference.isBoosting == true then
-                self.isSticking = false
-                self.stickGracePeriod = self.maxStickGracePeriod
-            end
+        if self.angleChangeCooldown <= 0 then
+            self.angleChangeCooldown = self.secondsBetweenAngleChange + math.random(-self.randomChangeOffset, self.randomChangeOffset)
+            self.targetAngle = love.math.random(0, math.pi * 2)
         end
+        
+        self.angle = math.lerpAngle(self.angle, self.targetAngle, self.angleTurnRate, dt)
+        
+        self.position.x = self.position.x + math.cos(self.angle) * self.speed / 3 * dt
+        self.position.y = self.position.y + math.sin(self.angle) * self.speed / 3 * dt
     end
 
     self.circleSine = self.circleSine + self.circleFrequency * dt
@@ -79,6 +100,9 @@ function sticker:update(dt)
         self.eye.eyeBasePosition.y = self.position.y
         self.eye:update()
     end
+
+    local arena = gameHelper:getArena()
+    self.position = arena:getClampedPosition(self.position)
 
     local world = gameHelper:getWorld()
 
