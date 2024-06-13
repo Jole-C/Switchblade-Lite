@@ -7,8 +7,8 @@ local eye = require "src.objects.enemy.enemyeye"
 local boss1 = class({name = "Boss 1", extends = boss})
 
 function boss1:new(x, y)
-    self.states = states
     self:super(x, y)
+    self.states = states
 
     self.orbs = {}
     self.numberOfOrbs = 3
@@ -75,6 +75,9 @@ function boss1:new(x, y)
             width = 12,
         },
     })
+
+    self:setPhase()
+    self:switchState("intro")
 end
 
 function boss1:update(dt)
