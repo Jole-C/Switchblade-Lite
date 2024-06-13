@@ -21,6 +21,25 @@ function boss1:new(x, y)
     self.angle = 0
     self.speed = 16
 
+    self.angleTurnSpeed = 1
+    self.angleFriction = 2
+
+    self.coreSprite = game.resourceManager:getResource("boss 1 core")
+    self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
+    self.tail2 = tail("boss 1 tail 2", 0, 0, 4, 1)
+    self.eye = eye(x, y, 10, 10, true)
+
+    self.mandibleSprite = game.resourceManager:getResource("boss 1 mandible")
+    self.mandibleOpenAngle = 1
+    self.mandibleCloseAngle = 0
+    self.mandibleAngle = self.mandibleCloseAngle
+    self.mandibleTargetAngle = self.mandibleCloseAngle
+
+    self.enemySpawnPosition = vec2(0, 0)
+
+    self.mesh = nil
+    self:generateMesh()
+
     self.fearValues = 
     {
         movementSpeed =
@@ -44,22 +63,6 @@ function boss1:new(x, y)
             14
         }
     }
-
-    self.coreSprite = game.resourceManager:getResource("boss 1 core")
-    self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
-    self.tail2 = tail("boss 1 tail 2", 0, 0, 4, 1)
-    self.eye = eye(x, y, 10, 10, true)
-
-    self.mandibleSprite = game.resourceManager:getResource("boss 1 mandible")
-    self.mandibleOpenAngle = 1
-    self.mandibleCloseAngle = 0
-    self.mandibleAngle = self.mandibleCloseAngle
-    self.mandibleTargetAngle = self.mandibleCloseAngle
-
-    self.enemySpawnPosition = vec2(0, 0)
-
-    self.mesh = nil
-    self:generateMesh()
 
     self:setFearLevel(1)
 
@@ -119,6 +122,10 @@ function boss1:update(dt)
         self:updateColliderPosition("mainCollider", self.position.x, self.position.y)
         self:updateColliderPosition("tail1Collider", self.position.x, self.position.y)
         self:updateColliderPosition("tail2Collider", self.position.x, self.position.y)
+
+        self.angle = self.angle + (self.angleTurnSpeed * dt)
+        self.angleTurnSpeed = applyFriction(self.angleTurnSpeed, self.angleFriction, dt)
+        self.angleTurnSpeed = math.clamp(self.angleTurnSpeed, 1, math.huge)
     end
 
     if self.eye then
@@ -170,6 +177,10 @@ function boss1:draw()
             self.eye:draw()
         end
     end
+end
+
+function boss1:addAngleSpeed(speedAddition)
+    self.angleTurnSpeed = self.angleTurnSpeed + speedAddition
 end
 
 function boss1:moveRandomly(dt)

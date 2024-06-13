@@ -18,7 +18,6 @@ function shieldMovement:update(dt, bossInstance)
     end
 
     if #bossInstance.orbs <= 0 then
-        bossInstance:setShielded(false)
         bossInstance:switchState(self.returnState)
     end
 end

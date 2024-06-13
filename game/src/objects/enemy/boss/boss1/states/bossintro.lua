@@ -7,10 +7,13 @@ function bossIntro:enter(bossInstance)
     bossInstance.position = vec2(math.cos(randomAngle), math.sin(randomAngle)) * 500
 
     -- Lerping variables
-    self.lerpSpeed = 0.05
+    self.lerpSpeed = 0.0125
     self.lerpRadius = 5
     self.returnState = self.parameters.returnState
     self.phase = self.parameters.phase
+
+    gameHelper:screenShake(0.6)
+    bossInstance:addAngleSpeed(50)
 end
 
 function bossIntro:update(dt, bossInstance)
@@ -21,6 +24,7 @@ function bossIntro:update(dt, bossInstance)
         bossInstance:setPhase(self.phase)
         bossInstance:setShielded(true)
         bossInstance:switchState(self.returnState)
+        bossInstance.position = vec2:zero()
     end
 end
 

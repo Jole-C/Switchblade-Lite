@@ -2,6 +2,7 @@ local bossIntro = require "src.objects.enemy.boss.boss1.states.bossintro"
 
 local shieldIntro = require "src.objects.enemy.boss.boss1.states.shieldintro"
 local shieldMovement = require "src.objects.enemy.boss.boss1.states.shieldmovement"
+local shieldOutro = require "src.objects.enemy.boss.boss1.states.shieldoutro"
 
 local unshieldIntro = require "src.objects.enemy.boss.boss1.states.unshieldintro"
 local unshieldMovement = require "src.objects.enemy.boss.boss1.states.unshieldmovement"
@@ -42,6 +43,14 @@ local states =
                     })
                 },
                 
+                returnState = "outro"
+            }),
+
+            outro = shieldOutro(
+            {
+                numberOfExplosions = 7,
+                timeBetweenExplosions = 0.25,
+                maxExplosionDistanceOffset = 50,
                 returnState = "intro"
             })
         },
@@ -107,6 +116,14 @@ local states =
                     })
                 },
                 
+                returnState = "outro"
+            }),
+
+            outro = shieldOutro(
+            {
+                numberOfExplosions = 12,
+                timeBetweenExplosions = 0.1,
+                maxExplosionDistanceOffset = 50,
                 returnState = "intro"
             })
         },
@@ -179,6 +196,14 @@ local states =
                     })
                 },
                 
+                returnState = "outro"
+            }),
+
+            outro = shieldOutro(
+            {
+                numberOfExplosions = 16,
+                timeBetweenExplosions = 0.1,
+                maxExplosionDistanceOffset = 50,
                 returnState = "intro"
             })
         },
