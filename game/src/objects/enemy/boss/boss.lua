@@ -15,9 +15,9 @@ function boss:new(x, y)
     self.maxInvulnerableTime = 0.05
     self.colliders = {}
     self.colliderIndices = {}
-
-    self:setShielded(true)
-    self:switchState(self.states.bossIntro)
+    self.phaseIndex = ""
+    self.phase = nil
+    self.shieldState = {}
 
     self.debugText = text("", "font main", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
@@ -47,18 +47,36 @@ function boss:update(dt)
     end
 
     if self.debugText and game.manager:getOption("enableDebugMode") == true then
-        self.debugText.text = "Current State: "..self.currentState:type().."\n".."Health: "..self.phaseHealth.."\n".."Shield: "..self.shieldHealth
+        self.debugText.text = "Current Phase: "..self.phaseIndex.."\n".."Current State: "..self.currentState:type().."\n".."Health: "..self.phaseHealth.."\n".."Shield: "..self.shieldHealth
     end
-end
-
-function boss:draw()
-
 end
 
 function boss:setShielded(isShielded)
     self.isShielded = isShielded or false
+
+    local shieldIndex = "shielded"
+
+    if self.isShielded == false then
+        shieldIndex = "unshielded"
+    end
+
+    assert(type(self.phase) == "table", "No phase table specified! Did you setPhase?")
+
+    self.shieldState = self.phase[shieldIndex]
+
     self.phaseHealth = 30
     self.shieldHealth = 100
+end
+
+function boss:setPhase(phase)
+    if phase == nil then
+        self.phaseIndex = "none"
+        self.phase = nil
+    else
+        self.phase = self.states[phase]
+        assert(self.phase ~= nil, "Current Phase is nil! Does it exist in the States?")
+        self.phaseIndex = phase
+    end
 end
 
 function boss:initialiseColliders(colliderParameters)
@@ -105,7 +123,7 @@ function boss:setInvulnerable()
 end
 
 function boss:switchAttack(attacksTable)
-    assert(attacksTable ~= nil, "Attacks table is nil!")
+    assert(attacksTable ~= nil, "Attacks table is nil! Did you specify an attacks table in the state parameters?")
 
     local index = math.random(1, #attacksTable)
     local state = attacksTable[index]
@@ -121,7 +139,16 @@ function boss:switchState(newState)
         self.currentState:exit(self)
     end
 
-    local state = newState
+    local state
+    
+    if type(self.phase) ~= "table" then
+        state = self.states[newState]
+        assert(state ~= nil, "Current State is nil (No phase specified)! Does it exist on the States table?")
+    else
+        assert(self.shieldState ~= nil or type(self.shieldState) ~= "table", "Current Shield state is not set! Did you set isShielded or set the current phase to none?")
+        state = self.shieldState[newState]
+    end
+
     assert(state ~= nil, "State does not exist!")
 
     self.currentState = state
