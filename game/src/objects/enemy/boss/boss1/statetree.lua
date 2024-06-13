@@ -1,97 +1,216 @@
 local bossIntro = require "src.objects.enemy.boss.boss1.states.bossintro"
 
-local phase1shieldedintro = require "src.objects.enemy.boss.boss1.states.phase1shieldedintro"
-local phase1shieldedmovement = require "src.objects.enemy.boss.boss1.states.phase1shieldedmovement"
+local shieldIntro = require "src.objects.enemy.boss.boss1.states.shieldintro"
+local shieldMovement = require "src.objects.enemy.boss.boss1.states.shieldmovement"
 
-local phase1unshieldedintro = require "src.objects.enemy.boss.boss1.states.phase1unshieldedintro"
-local phase1unshieldedmovement = require "src.objects.enemy.boss.boss1.states.phase1unshieldedmovement"
-local phase1unshieldedchargerfirerandom = require "src.objects.enemy.boss.boss1.states.phase1unshieldedchargerfirerandom"
-local phase1unshieldedchargerfirerotation = require "src.objects.enemy.boss.boss1.states.phase1unshieldedchargerfirerotation"
-local phase1unshieldedchargerfiredirected = require "src.objects.enemy.boss.boss1.states.phase1unshieldedchargerfiredirected"
+local unshieldIntro = require "src.objects.enemy.boss.boss1.states.unshieldintro"
+local unshieldMovement = require "src.objects.enemy.boss.boss1.states.unshieldmovement"
 
-local phase2shieldedintro = require "src.objects.enemy.boss.boss1.states.phase2shieldedintro"
-local phase2shieldedmovement = require "src.objects.enemy.boss.boss1.states.phase2shieldedmovement"
-local phase2unshieldedintro = require "src.objects.enemy.boss.boss1.states.phase2unshieldedintro"
-local phase2unshieldedmovement = require "src.objects.enemy.boss.boss1.states.phase2unshieldedmovement"
-local phase2unshieldedchargerfiredirected = require "src.objects.enemy.boss.boss1.states.phase2unshieldedchargerfiredirected"
-local phase2unshieldedlaserfire = require "src.objects.enemy.boss.boss1.states.phase2unshieldedlaserfire"
-
-local phase3shieldedintro = require "src.objects.enemy.boss.boss1.states.phase3shieldedintro"
-local phase3shieldedmovement = require "src.objects.enemy.boss.boss1.states.phase3shieldedmovement"
-local phase3unshieldedintro = require "src.objects.enemy.boss.boss1.states.phase3unshieldedintro"
-local phase3unshieldedmovement = require "src.objects.enemy.boss.boss1.states.phase3unshieldedmovement"
-local phase3unshieldedchargerfiredirected = require "src.objects.enemy.boss.boss1.states.phase3unshieldedchargerfiredirected"
+local circularChargerFire = require "src.objects.enemy.boss.boss1.states.circularchargerfire"
+local directedFire = require "src.objects.enemy.boss.boss1.states.directedfire"
+local randomFire = require "src.objects.enemy.boss.boss1.states.randomfire"
+local rotationFire = require "src.objects.enemy.boss.boss1.states.rotationfire"
+local laserFire = require "src.objects.enemy.boss.boss1.states.laserfire"
 
 local states =
 {
-    bossIntro = bossIntro(),
-
-    phase1 =
+    intro = bossIntro(
     {
-        shielded =
-        {
-            intro = phase1shieldedintro(),
+        phase = "phase1",
+        returnState = "intro"
+    }),
 
-            movement = phase1shieldedmovement(),
+    phase1 = 
+    {
+        shielded = 
+        {
+            intro = shieldIntro(
+            {
+                orbsToSummon = 3,
+                returnState = "movement"
+            }),
+    
+            movement = shieldMovement(
+            {
+                attacks = 
+                {
+                    circularChargerFire(
+                    {
+                        numberOfEnemies = 3,
+                        timesToRepeat = 3,
+                        returnState = "movement"
+                    })
+                },
+                
+                returnState = "intro"
+            })
         },
+
         unshielded =
         {
-            intro = phase1unshieldedintro(),
-
-            movement = phase1unshieldedmovement(),
-
-            attacks =
+            intro = unshieldIntro(
             {
-                phase1unshieldedchargerfirerandom(),
-                phase1unshieldedchargerfirerotation(),
-                phase1unshieldedchargerfiredirected(),
-            }
-        },
+                returnState = "movement"
+            }),
+
+            movement = unshieldMovement(
+            {
+                attacks =
+                {
+                    directedFire(
+                    {
+                        enemiesToFire = 5,
+                        returnState = "movement"
+                    }),
+                    randomFire(
+                    {
+                        enemiesToFire = 7,
+                        maxAngle = 45,
+                        returnState = "movement"
+                    }),
+                    rotationFire(
+                    {
+                        angleTurnSpeed = 3,
+                        maxFireCooldown = 0.25,
+                        returnState = "movement"
+                    }),
+                },
+
+                returnState = 
+                {
+                    phase = "phase2",
+                    state = "intro"
+                }
+            })
+        }
     },
 
-    phase2 =
+    phase2 = 
     {
-        shielded =
+        shielded = 
         {
-            intro = phase2shieldedintro(),
-
-            movement = phase2shieldedmovement(),
+            intro = shieldIntro(
+            {
+                orbsToSummon = 5,
+                returnState = "movement"
+            }),
+    
+            movement = shieldMovement(
+            {
+                attacks = 
+                {
+                    circularChargerFire(
+                    {
+                        numberOfEnemies = 6,
+                        timesToRepeat = 3,
+                        returnState = "movement"
+                    })
+                },
+                
+                returnState = "intro"
+            })
         },
+
         unshielded =
         {
-            intro = phase2unshieldedintro(),
-
-            movement = phase2unshieldedmovement(),
-
-            attacks =
+            intro = unshieldIntro(
             {
-                phase2unshieldedlaserfire(),
-                phase2unshieldedchargerfiredirected(),
-            }
-        },
+                returnState = "movement"
+            }),
+
+            movement = unshieldMovement(
+            {
+                attacks =
+                {
+                    directedFire(
+                    {
+                        enemiesToFire = 10,
+                        maxFireCooldown = 0.25,
+                        returnState = "movement"
+                    }),
+                    randomFire(
+                    {
+                        enemiesToFire = 12,
+                        maxAngle = 30,
+                        returnState = "movement"
+                    }),
+                    rotationFire(
+                    {
+                        angleTurnSpeed = 2,
+                        maxFireCooldown = 0.2,
+                        returnState = "movement"
+                    }),
+                },
+
+                returnState = 
+                {
+                    phase = "phase3",
+                    state = "intro"
+                }
+            })
+        }
     },
 
-    phase3 =
+    phase3 = 
     {
-        shielded =
+        shielded = 
         {
-            intro = phase3shieldedintro(),
-
-            movement = phase3shieldedmovement(),
+            intro = shieldIntro(
+            {
+                orbsToSummon = 7,
+                returnState = "movement"
+            }),
+    
+            movement = shieldMovement(
+            {
+                attacks = 
+                {
+                    circularChargerFire(
+                    {
+                        numberOfEnemies = 9,
+                        timesToRepeat = 2,
+                        returnState = "movement"
+                    })
+                },
+                
+                returnState = "intro"
+            })
         },
+
         unshielded =
         {
-            intro = phase3unshieldedintro(),
-
-            movement = phase3unshieldedmovement(),
-
-            attacks =
+            intro = unshieldIntro(
             {
-                phase3unshieldedchargerfiredirected(),
-            }
-        },
-    },
+                returnState = "movement"
+            }),
 
+            movement = unshieldMovement(
+            {
+                attacks =
+                {
+                    directedFire(
+                    {
+                        enemiesToFire = 15,
+                        maxFireCooldown = 0.35,
+                        returnState = "movement"
+                    }),
+                    randomFire(
+                    {
+                        enemiesToFire = 15,
+                        maxAngle = 45,
+                        returnState = "movement"
+                    }),
+                    rotationFire(
+                    {
+                        angleTurnSpeed = 3,
+                        maxFireCooldown = 0.15,
+                        returnState = "movement"
+                    }),
+                },
+
+            })
+        }
+    },
 }
 
 return states
