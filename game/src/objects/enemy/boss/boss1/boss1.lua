@@ -75,6 +75,9 @@ function boss1:new(x, y)
             width = 12,
         },
     })
+
+    self:setPhase()
+    self:switchState("intro")
 end
 
 function boss1:update(dt)
