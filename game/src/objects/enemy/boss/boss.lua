@@ -10,14 +10,18 @@ function boss:new(x, y)
     self.contactDamage = 1
     self.shieldHealth = 100
     self.phaseHealth = 30
+
     self.isInvulnerable = false
     self.invulnerableTime = 0
     self.maxInvulnerableTime = 0.05
+
     self.colliders = {}
     self.colliderIndices = {}
+
     self.phaseIndex = ""
     self.phase = nil
     self.shieldState = {}
+    self.states = nil
 
     self.debugText = text("", "font main", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)

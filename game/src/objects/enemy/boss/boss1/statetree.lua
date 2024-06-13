@@ -140,6 +140,12 @@ local states =
                         maxFireCooldown = 0.2,
                         returnState = "movement"
                     }),
+                    laserFire(
+                    {
+                        angleTurnRate = 0.025,
+                        laserWindupTime = 0.025,
+                        returnState = "movement"
+                    }),
                 },
 
                 returnState = 
