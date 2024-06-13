@@ -9,6 +9,8 @@ function bossIntro:enter(bossInstance)
     -- Lerping variables
     self.lerpSpeed = 0.05
     self.lerpRadius = 5
+    self.returnState = self.parameters.returnState
+    self.phase = self.parameters.phase
 end
 
 function bossIntro:update(dt, bossInstance)
@@ -16,7 +18,9 @@ function bossIntro:update(dt, bossInstance)
     bossInstance.position.y = math.lerpDT(bossInstance.position.y, 0, self.lerpSpeed, dt)
 
     if (bossInstance.position - vec2:zero()):length() < self.lerpRadius then
-        bossInstance:switchState(bossInstance.states.phase1.unshielded.intro)
+        bossInstance:setPhase(self.phase)
+        bossInstance:setShielded(true)
+        bossInstance:switchState(self.returnState)
     end
 end
 
