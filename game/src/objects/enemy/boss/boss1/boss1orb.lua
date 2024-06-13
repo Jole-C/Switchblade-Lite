@@ -1,5 +1,6 @@
 local enemy = require "src.objects.enemy.enemy"
 local collider = require "src.collision.collider"
+local eye = require "src.objects.enemy.enemyeye"
 
 local bossOrb = class({name = "Boss 1 Orb", extends = enemy})
 
@@ -12,6 +13,9 @@ function bossOrb:new(x, y, bossReference, angle)
     self.angle = angle or 0
     self.turnRate = 0.5
 
+    self.spriteAngle = 0
+    self.spriteAngleTurnRate = 2
+
     self.isDamageable = false
     self.damageableShader = game.resourceManager:getResource("outline shader")
     self.maxDamageableCooldown = 3
@@ -19,6 +23,8 @@ function bossOrb:new(x, y, bossReference, angle)
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 32, 32)
+
+    self.eye = eye(x, y, 5, 5, true)
 end
 
 function bossOrb:update(dt)
@@ -28,7 +34,9 @@ function bossOrb:update(dt)
     self.position.x = math.cos(self.angle) * self.radius
     self.position.y = math.sin(self.angle) * self.radius
 
-    self.angle = self.angle + self.turnRate * dt
+    self.angle = self.angle + (self.turnRate * dt)
+
+    self.spriteAngle = self.spriteAngle + (self.spriteAngleTurnRate * dt)
 
     self.radius = math.lerpDT(self.radius, self.maxRadius, 0.02, dt)
     
@@ -51,22 +59,32 @@ function bossOrb:update(dt)
         
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
+
+    if self.eye then
+        self.eye.eyeBasePosition.x = self.position.x
+        self.eye.eyeBasePosition.y = self.position.y
+        
+        self.eye:update()
+    end
 end
 
 function bossOrb:draw()
+    if self.eye then
+        self.eye:draw()
+    end
+
     love.graphics.setColor(game.manager.currentPalette.enemyColour)
 
-    -- Draw the sprite
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
 
-    love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+    love.graphics.draw(self.sprite, self.position.x, self.position.y, self.spriteAngle, 1, 1, xOffset, yOffset)
 
     if self.isDamageable == true then
         love.graphics.setShader(self.damageableShader)
         self.damageableShader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
-        love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.spriteAngle, 1, 1, xOffset, yOffset)
         love.graphics.setShader()
     end
 end
