@@ -5,8 +5,12 @@ function unshieldMovement:enter(bossInstance)
     self.maxAttackCooldown = self.parameters.attackCooldown or 5
     self.attackCooldown = self.maxAttackCooldown
     self.attacks = self.parameters.attacks
-    self.returnState = self.parameters.returnState.state
-    self.phase = self.parameters.returnState.phase
+    self.returnState = nil
+
+    if self.parameters.returnState ~= nil then
+        self.phase = self.parameters.returnState.phase
+        self.returnState = self.parameters.returnState.state
+    end
 
     self.returnLerpSpeed = 0.05
     self.returnlerpRadius = 5

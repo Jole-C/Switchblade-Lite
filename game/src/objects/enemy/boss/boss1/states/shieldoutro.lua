@@ -26,6 +26,8 @@ function shieldOutro:update(dt, bossInstance)
         self.numberOfExplosions = self.numberOfExplosions - 1
         
         bossInstance.angle = angle
+
+        game.particleManager:burstEffect("Explosion", 300, bossInstance.position + offsetVector / 3)
     end
 
     if self.numberOfExplosions <= 0 then

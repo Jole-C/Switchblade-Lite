@@ -341,6 +341,9 @@ function game:setupResources()
     local boss1LaserInner = love.graphics.newImage("assets/sprites/enemy/boss1/laserinner.png")
     resourceManager:addResource(boss1LaserInner, "boss 1 laser inner")
 
+    local boss1Spike = love.graphics.newImage("assets/sprites/enemy/boss1/spike.png")
+    resourceManager:addResource(boss1Spike, "boss 1 spike")
+
     -- Global resources
     local particle = love.graphics.newImage("assets/sprites/particlesprite.png")
     resourceManager:addResource(particle, "particle sprite")
@@ -559,18 +562,18 @@ function game:setupParticles()
     
     self.particleManager:addEffect(self.particleManager:newEffect({explosionDust, explosionBoom, explosionRing}, self.canvases.foregroundCanvas.canvas, false), "Explosion")
 
-    local bossIntroBurst = love.graphics.newParticleSystem(circleFill, 9)
-    explosionDust:setColors(1, 1, 1, 1)
-    explosionDust:setDirection(-1.5707963705063)
-    explosionDust:setEmissionArea("none", 0, 0, 0, false)
-    explosionDust:setEmitterLifetime(-1)
-    explosionDust:setInsertMode("top")
-    explosionDust:setParticleLifetime(0.25)
-    explosionDust:setSizes(10, 0)
-    explosionDust:setSpeed(269.98336791992, 891.73107910156)
-    explosionDust:setSpread(6.2831854820251)
+    local bossIntroBurst = love.graphics.newParticleSystem(circleFill, 1000)
+    bossIntroBurst:setColors(1, 1, 1, 1)
+    bossIntroBurst:setDirection(-1.5707963705063)
+    bossIntroBurst:setEmissionArea("none", 0, 0, 0, false)
+    bossIntroBurst:setEmitterLifetime(-1)
+    bossIntroBurst:setInsertMode("top")
+    bossIntroBurst:setParticleLifetime(0.25)
+    bossIntroBurst:setSizes(3, 0)
+    bossIntroBurst:setSpeed(269.98336791992, 891.73107910156)
+    bossIntroBurst:setSpread(6.2831854820251)
     
-    self.particleManager:addEffect(self.particleManager:newEffect({bossIntroBurst}, self.canvases.lowerForegroundCanvas.canvas, false), "Boss Intro Burst")
+    self.particleManager:addEffect(self.particleManager:newEffect({bossIntroBurst}, self.canvases.foregroundCanvas.canvas, true), "Boss Intro Burst")
 end
 
 return game

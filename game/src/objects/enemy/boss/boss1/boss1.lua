@@ -35,6 +35,8 @@ function boss1:new(x, y)
     self.mandibleAngle = self.mandibleCloseAngle
     self.mandibleTargetAngle = self.mandibleCloseAngle
 
+    self.spikeSprite = game.resourceManager:getResource("boss 1 spike")
+
     self.enemySpawnPosition = vec2(0, 0)
 
     self.mesh = nil
@@ -143,6 +145,10 @@ function boss1:update(dt)
 end
 
 function boss1:draw()
+    if self.currentState.drawAbove == false then
+        self.currentState:draw()
+    end
+
     if self.isShielded == false then
         if self.eye then
             self.eye:draw()
@@ -173,9 +179,26 @@ function boss1:draw()
             love.graphics.draw(self.mesh, self.position.x, self.position.y, self.angle)
         end
 
+        local angleIncrement = 2 * math.pi / self.numberOfOrbs
+        local xOffset, yOffset = self.spikeSprite:getDimensions()
+        xOffset = xOffset/2
+        yOffset = yOffset/2
+
+        for i = 1, self.numberOfOrbs do
+            local offset = math.pi / 2
+            local angle = angleIncrement * i + self.angle - offset
+            local position = self.position + vec2(math.cos(angle) * 80, math.sin(angle) * 80)
+
+            love.graphics.draw(self.spikeSprite, position.x, position.y, angle, 1, 1, xOffset, yOffset)
+        end
+
         if self.eye then
             self.eye:draw()
         end
+    end
+
+    if self.currentState.drawAbove == true then
+        self.currentState:draw()
     end
 end
 
