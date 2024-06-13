@@ -33,6 +33,11 @@ function math.normalizeAngle(angle)
 	end
 end
 
+function applyFriction(val, friction, dt)
+    local frictionRatio = 1 / (1 + (dt * friction))
+    return val * frictionRatio
+end
+
 function math.lerpAngle(val, tar, perc, dt)
 	val = mathx.normalise_angle(val)
 	tar = mathx.normalise_angle(tar)
