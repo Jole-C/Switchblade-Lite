@@ -14,6 +14,7 @@ end
 
 function enemy:cleanup()
     enemyBase.cleanup(self)
+    game.particleManager:burstEffect("Explosion", 50, self.position)
 end
 
 return enemy

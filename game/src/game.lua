@@ -4,6 +4,7 @@ local resourceManager = require "src.resourcemanager"
 local interfaceRenderer = require "src.interface.interfacerenderer"
 local gameManager = require "src.gamemanager"
 local playerManager = require "src.objects.player.playermanager"
+local particleManager = require "src.particlemanager"
 colliderDefinitions = require "src.collision.colliderdefinitions"
 
 local game = class({name = "Game"})
@@ -26,6 +27,7 @@ function game:new()
     
     self.gameRenderer = gameRenderer()
     self.interfaceRenderer = interfaceRenderer()
+    self.particleManager = particleManager()
     self.resourceManager = resourceManager()
     self:setupResources()
 
@@ -71,10 +73,11 @@ function game:new()
         backgroundCanvas = self.gameRenderer:addRenderCanvas("backgroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         backgroundShadowCanvas = self.gameRenderer:addRenderCanvas("backgroundShadowCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         foregroundShadowCanvas = self.gameRenderer:addRenderCanvas("foregroundShadowCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
+        lowerForegroundCanvas = self.gameRenderer:addRenderCanvas("lowerForegroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         foregroundCanvas = self.gameRenderer:addRenderCanvas("foregroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
+        upperForegroundCanvas = self.gameRenderer:addRenderCanvas("upperForegroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         menuBackgroundCanvas = self.gameRenderer:addRenderCanvas("menuBackgroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
-        transitionCanvas = self.gameRenderer:addRenderCanvas("transitionCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
 
     self.tags = 
@@ -86,6 +89,60 @@ function game:new()
     local music = ripple.newSound(self.resourceManager:getResource("music"))
     music:play({loop = true, volume = 0.2})
     music:tag(self.tags.music)
+
+    self:setupParticles()
+    -- Temporary particle system
+    local bgCol = self.manager.currentPalette.backgroundColour
+    self.ps = love.graphics.newParticleSystem(self.resourceManager:getResource("particle sprite"), 1632)
+    
+    local ps = self.ps
+    --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
+    ps:setDirection(-1.5707963705063)
+    ps:setEmissionArea("uniform", screenWidth/2, screenHeight/2, 0, false)
+    ps:setEmissionRate(225.32614135742)
+    ps:setEmitterLifetime(-1)
+    ps:setInsertMode("top")
+    ps:setLinearAcceleration(158.52745056152, 671.95892333984, 7004.2802734375, 2611.5888671875)
+    ps:setLinearDamping(0, 0)
+    ps:setOffset(0, 0)
+    ps:setParticleLifetime(7.3186434747186e-005, 6.8977484703064)
+    ps:setRadialAcceleration(4082.21875, -799.76824951172)
+    ps:setRelativeRotation(false)
+    ps:setRotation(0, -0.1798534989357)
+    ps:setSizes(0.59753084182739)
+    ps:setSizeVariation(1)
+    ps:setSpeed(255.74447631836, 481.64227294922)
+    ps:setSpin(0, 0)
+    ps:setSpinVariation(0)
+    ps:setSpread(0.31415927410126)
+    ps:setTangentialAcceleration(0, 0)]]
+
+-------
+    ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
+    ps:setDirection(0.045423280447721)
+    ps:setEmissionArea("uniform", 480, 270, 0, false)
+    ps:setEmissionRate(4096)
+    ps:setEmitterLifetime(-1)
+    ps:setInsertMode("top")
+    ps:setLinearAcceleration(0, 0, 0, 0)
+    ps:setLinearDamping(0, 0)
+    ps:setOffset(50, 50)
+    ps:setParticleLifetime(1.7999999523163, 2.2000000476837)
+    ps:setRadialAcceleration(0, 0)
+    ps:setRelativeRotation(false)
+    ps:setRotation(0, 0)
+    ps:setSizes(0.095902815461159, 0.53716236352921)
+    ps:setSizeVariation(0.99361020326614)
+    ps:setSpeed(0.51036554574966, 0.51036554574966)
+    ps:setSpin(0, 0)
+    ps:setSpinVariation(0)
+    ps:setSpread(0.11967971920967)
+    ps:setTangentialAcceleration(379.81402587891, 405.12814331055)
+    
+    ps:start()  
+
+    local system = self.particleManager:newEffect({ps}, nil, true)
+    self.particleManager:addEffect(system, "Temp Background")
 end
 
 function game:start()
@@ -104,8 +161,9 @@ function game:update(dt)
     self.gameStateMachine:update(dt)
     self.playerManager:update(dt)
 
-    ps:setColors(self.manager.currentPalette.backgroundColour[1], self.manager.currentPalette.backgroundColour[2], self.manager.currentPalette.backgroundColour[3], self.manager.currentPalette.backgroundColour[4])
-    ps:update(dt/7 * self.manager:getOption("speedPercentage")/100)
+    local backgroundSystem = self.particleManager:getEffect("Temp Background")
+    backgroundSystem.systems[1]:setColors(self.manager.currentPalette.backgroundColour[1], self.manager.currentPalette.backgroundColour[2], self.manager.currentPalette.backgroundColour[3], self.manager.currentPalette.backgroundColour[4])
+    backgroundSystem:setUpdateRate(0.14 * self.manager:getOption("speedPercentage")/100)
 
     self.tags.music.volume = 1 * (self.manager:getOption("musicVolPercentage")/100)
     self.tags.sfx.volume = 1 * (self.manager:getOption("sfxVolPercentage")/100)
@@ -126,6 +184,7 @@ function game:update(dt)
         self.fullscreenMode = fullscreenSetting
     end
     
+    self.particleManager:update(dt)
 end
 
 function game:draw()
@@ -145,7 +204,7 @@ function game:drawBackground()
     love.graphics.setBlendMode("alpha")
     
     if self.manager:getOption("enableBackground") == true then
-        love.graphics.draw(ps)
+        self.particleManager:getEffect("Temp Background"):draw()
     else
         love.graphics.clear()
     end
@@ -184,7 +243,7 @@ function game:drawForeground()
         local currentGamestate = self.gameStateMachine:current_state()
         
         if currentGamestate.objects then
-            for key,object in ipairs(currentGamestate.objects) do
+            for key, object in ipairs(currentGamestate.objects) do
                 object:draw()
             end
         end
@@ -205,6 +264,8 @@ function game:drawForeground()
 
         love.graphics.setCanvas()
         love.graphics.setColor(1, 1, 1, 1)
+
+        self:drawParticles()
         love.graphics.setStencilTest()
     end)
 end
@@ -218,6 +279,10 @@ function game:drawInterface()
     love.graphics.setFont(self.resourceManager:getResource("font main"))
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function game:drawParticles()
+    self.particleManager:draw()
 end
 
 function game:setupResources()
@@ -447,6 +512,65 @@ function game:setupResources()
 
     local bossWarningSiren = love.audio.newSource("assets/audio/sfx/bosswarning.wav", "static")
     resourceManager:addResource(bossWarningSiren, "boss warning siren")
+end
+
+function game:setupParticles()
+    local circleFill = love.graphics.newCanvas(16, 16)
+    love.graphics.setCanvas(circleFill)
+    love.graphics.circle("fill", 8, 8, 8)
+    love.graphics.setCanvas()
+
+    local circleLine = love.graphics.newCanvas(16, 16)
+    love.graphics.setCanvas(circleLine)
+    love.graphics.circle("line", 8, 8, 8)
+    love.graphics.setCanvas()
+    
+    local explosionDust = love.graphics.newParticleSystem(circleFill, 9)
+    explosionDust:setColors(1, 1, 1, 1)
+    explosionDust:setDirection(-1.5707963705063)
+    explosionDust:setEmissionArea("none", 0, 0, 0, false)
+    explosionDust:setEmitterLifetime(-1)
+    explosionDust:setInsertMode("top")
+    explosionDust:setParticleLifetime(0.07, 0.2)
+    explosionDust:setSizes(2, 0)
+    explosionDust:setSpeed(269.98336791992, 891.73107910156)
+    explosionDust:setSpread(6.2831854820251)
+    
+    local explosionBoom = love.graphics.newParticleSystem(circleFill, 1)
+    explosionBoom:setColors(1, 1, 1, 1)
+    explosionBoom:setDirection(-1.5707963705063)
+    explosionBoom:setEmissionArea("none", 0, 0, 0, false)
+    explosionBoom:setEmitterLifetime(-1)
+    explosionBoom:setInsertMode("top")
+    explosionBoom:setParticleLifetime(0.3, 0.3)
+    explosionBoom:setSizes(3, 0)
+    explosionBoom:setSpin(0, 0.012826885096729)
+    explosionBoom:setSpread(6.2831854820251)
+    
+    local explosionRing = love.graphics.newParticleSystem(circleLine, 1)
+    explosionRing:setColors(1, 1, 1, 1, 1, 1, 1, 0)
+    explosionRing:setDirection(-1.5707963705063)
+    explosionRing:setEmissionArea("none", 0, 0, 0, false)
+    explosionRing:setEmitterLifetime(-1)
+    explosionRing:setInsertMode("top")
+    explosionRing:setParticleLifetime(0.31618165969849, 0.31618165969849)
+    explosionRing:setSizes(0, 4.8344612121582)
+    explosionRing:setSpread(6.2831854820251)
+    
+    self.particleManager:addEffect(self.particleManager:newEffect({explosionDust, explosionBoom, explosionRing}, self.canvases.foregroundCanvas.canvas, false), "Explosion")
+
+    local bossIntroBurst = love.graphics.newParticleSystem(circleFill, 9)
+    explosionDust:setColors(1, 1, 1, 1)
+    explosionDust:setDirection(-1.5707963705063)
+    explosionDust:setEmissionArea("none", 0, 0, 0, false)
+    explosionDust:setEmitterLifetime(-1)
+    explosionDust:setInsertMode("top")
+    explosionDust:setParticleLifetime(0.25)
+    explosionDust:setSizes(10, 0)
+    explosionDust:setSpeed(269.98336791992, 891.73107910156)
+    explosionDust:setSpread(6.2831854820251)
+    
+    self.particleManager:addEffect(self.particleManager:newEffect({bossIntroBurst}, self.canvases.lowerForegroundCanvas.canvas, false), "Boss Intro Burst")
 end
 
 return game
