@@ -81,6 +81,10 @@ function boss1:new(x, y)
         },
     })
 
+    self.spawnSound = ripple.newSound(game.resourceManager:getResource("boss 1 spawn"))
+    self.spawnSound.tag(game.tags.sfx)
+    self.spawnSound:play()
+
     self:setPhase()
     self:switchState("intro")
 end
