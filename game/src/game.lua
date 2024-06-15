@@ -515,6 +515,39 @@ function game:setupResources()
 
     local bossWarningSiren = love.audio.newSource("assets/audio/sfx/bosswarning.wav", "static")
     resourceManager:addResource(bossWarningSiren, "boss warning siren")
+
+    local enemyHit1 = love.audio.newSource("assets/audio/sfx/enemyhit1.wav", "static")
+    resourceManager:addResource(enemyHit1, "enemy hit 1")
+
+    local enemyHit2 = love.audio.newSource("assets/audio/sfx/enemyhit2.wav", "static")
+    resourceManager:addResource(enemyHit2, "enemy hit 2")
+
+    local enemyHit3 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
+    resourceManager:addResource(enemyHit3, "enemy hit 3")
+
+    local enemyHit4 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
+    resourceManager:addResource(enemyHit4, "enemy hit 4")
+
+    local enemyHit5 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
+    resourceManager:addResource(enemyHit5, "enemy hit 5")
+
+    local bossExplosion1 = love.audio.newSource("assets/audio/sfx/bossexplosion1.wav", "static")
+    resourceManager:addResource(bossExplosion1, "boss explosion 1")
+
+    local bossExplosion2 = love.audio.newSource("assets/audio/sfx/bossexplosion2.wav", "static")
+    resourceManager:addResource(bossExplosion2, "boss explosion 2")
+
+    local bossExplosion3 = love.audio.newSource("assets/audio/sfx/bossexplosion3.wav", "static")
+    resourceManager:addResource(bossExplosion3, "boss explosion 3")
+
+    local bossExplosion4 = love.audio.newSource("assets/audio/sfx/bossexplosion4.wav", "static")
+    resourceManager:addResource(bossExplosion4, "boss explosion 4")
+
+    local bossExplosionEnd = love.audio.newSource("assets/audio/sfx/bossexplosionend.wav", "static")
+    resourceManager:addResource(bossExplosionEnd, "boss explosion end")
+
+    local boss1spawn = love.audio.newSource("assets/audio/sfx/boss1spawn.wav", "static")
+    resourceManager:addResource(boss1spawn, "boss 1 spawn")
 end
 
 function game:setupParticles()
