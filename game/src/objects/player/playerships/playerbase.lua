@@ -83,7 +83,7 @@ function player:new(x, y)
     gameHelper:getWorld():add(self.collider, 0, 0, 6, 6)
 
     self.boostCollider = collider(colliderDefinitions.none, self)
-    gameHelper:getWorld():add(self.boostCollider, 0, 0, 16, 16)
+    gameHelper:getWorld():add(self.boostCollider, 0, 0, 32, 32)
 
     self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
