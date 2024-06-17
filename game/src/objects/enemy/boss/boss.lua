@@ -26,6 +26,16 @@ function boss:new(x, y)
     self.debugText = text("", "font main", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
 
+    self.explosionSounds = {}
+
+    for i = 1, 4 do
+        table.insert(self.explosionSounds, ripple.newSound(game.resourceManager:getResource("boss explosion "..i)))
+        self.explosionSounds[i]:tag(game.tags.sfx)
+    end
+
+    self.explosionSoundEnd = ripple.newSound(game.resourceManager:getResource("boss explosion end"))
+    self.explosionSoundEnd:tag(game.tags.sfx)
+
     gameHelper:getCurrentState().stageDirector:registerBoss(self)
 end
 
@@ -138,6 +148,15 @@ function boss:switchAttack(attacksTable)
     self.currentState:enter(self)
 end
 
+function boss:playExplosionSound()
+    local soundIndex = math.random(1, #self.explosionSounds)
+    local sound = self.explosionSounds[soundIndex]
+
+    if sound then
+        sound:play({pitch = math.random(1, 3)})
+    end
+end
+
 function boss:switchState(newState)
     if self.currentState ~= nil then
         self.currentState:exit(self)
@@ -157,6 +176,18 @@ function boss:switchState(newState)
 
     self.currentState = state
     self.currentState:enter(self)
+end
+
+function boss:cleanup()
+    self.explosionSoundEnd:play()
+
+    local world = gameHelper:getWorld()
+
+    for _, colliderParameter in pairs(self.colliders) do
+        if world:hasItem(colliderParameter.colliderReference) then
+            world:remove(colliderParameter.colliderReference)
+        end
+    end
 end
 
 return boss
