@@ -384,6 +384,8 @@ function stageDirector:draw()
             end
         end
     end
+
+    debugText = debugText.."Wave: "..self.currentWaveIndex
     
     if game.manager:getOption("enableDebugMode") == true and self.debugText then
         self.debugText.text = debugText
