@@ -279,11 +279,17 @@ function stageDirector:startWave()
             local numberOfPoints = currentDefinition.shapeDef.numberOfPoints
             local radius = currentDefinition.shapeDef.radius
             local angle = 2 * math.pi / numberOfPoints
-            local offset = math.pi / 2
+            local angleOffset = math.pi / 2
+
+            local pointOffset = vec2(0, 0)
+
+            if currentDefinition.shapeDef.offset then
+                pointOffset = currentDefinition.shapeDef.offset
+            end
 
             for i = 1, numberOfPoints do
-                local pointX = math.cos(i * angle - offset) * radius
-                local pointY = math.sin(i * angle - offset) * radius
+                local pointX = pointOffset.x + math.cos(i * angle - angleOffset) * radius
+                local pointY = pointOffset.y + math.sin(i * angle - angleOffset) * radius
 
                 table.insert(generatedShape.points, {x = pointX, y = pointY})
             end
