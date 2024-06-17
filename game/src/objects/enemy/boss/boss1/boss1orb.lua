@@ -15,6 +15,10 @@ function bossOrb:new(x, y, bossReference, angle)
 
     self.spriteAngle = 0
     self.spriteAngleTurnRate = 2
+    self.tentacleWiggleTime = 0
+    self.tentacleWiggleFrequency = 0.2
+    self.tentacleWiggleAmplitude = 5
+    self.tentacleWiggle = 0
 
     self.isDamageable = false
     self.damageableShader = game.resourceManager:getResource("outline shader")
@@ -66,6 +70,9 @@ function bossOrb:update(dt)
         
         self.eye:update()
     end
+
+    self.tentacleWiggleTime = self.tentacleWiggleTime + (self.tentacleWiggleFrequency * dt)
+    self.tentacleWiggle = math.sin(self.tentacleWiggleTime) * self.tentacleWiggleAmplitude
 end
 
 function bossOrb:draw()
