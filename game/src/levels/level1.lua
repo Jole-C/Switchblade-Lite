@@ -25,7 +25,7 @@ local levelDefinition =
                 x = 0, 
                 y = 0
             },
-            radius = 250
+            radius = 225
         },
         {
             name = "leftCircle",
@@ -33,7 +33,7 @@ local levelDefinition =
                 x = -200, 
                 y = 0
             },
-            radius = 200
+            radius = 175
         },
         {
             name = "rightCircle",
@@ -41,14 +41,17 @@ local levelDefinition =
                 x = 200, 
                 y = 0
             },
-            radius = 200
+            radius = 175
         },
     },
 
     playerStartSegment = "mainCircle",
-    
+
+    startingWave = 25,
+
     level = 
     {
+        -- line of wanderers (introduction)
         {
             spawnDefinitions = 
             {
@@ -85,6 +88,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- circle of wanderers
         {
             spawnDefinitions = 
             {
@@ -118,6 +123,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- three circles of wanderers, left and right circles are smaller, the left and right segments become bigger
         {
             spawnDefinitions = 
             {
@@ -133,7 +140,7 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 8,
-                        radius = 130,
+                        radius = 30,
                         origin = "leftCircle"
                     }
                 },
@@ -149,8 +156,24 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 8,
-                        radius = 130,
+                        radius = 30,
                         origin = "rightCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 150,
+                        origin = "mainCircle"
                     }
                 }
             },
@@ -160,13 +183,13 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newRadius = 250,
+                    newRadius = 200,
                     lerpSpeed = 0.015
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newRadius = 250,
+                    newRadius = 200,
                     lerpSpeed = 0.015
                 },
             },
@@ -175,7 +198,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 13
+                    minimumKills = 18
                 },
                 {
                     conditionType = "timer",
@@ -183,6 +206,8 @@ local levelDefinition =
                 }
             }
         },
+
+        --three circles of wanderers
         {
             spawnDefinitions = 
             {
@@ -191,7 +216,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
+                        enemyID = "wanderer",
                         spawnCount = 5,
                     },
 
@@ -214,7 +239,7 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 3,
-                        radius = 150,
+                        radius = 100,
                         origin = "leftCircle"
                     }
                 },
@@ -253,7 +278,7 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newRadius = 300,
+                    newRadius = 250,
                     lerpSpeed = 0.015
                 },
 
@@ -275,7 +300,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 8
+                    minimumKills = 13
                 },
                 {
                     conditionType = "timer",
@@ -283,22 +308,27 @@ local levelDefinition =
                 }
             }
         },
+
+        -- a line of chargers (introduction) and two small circles of wanderers
         {
             spawnDefinitions = 
             {
                 {
-                    spawnType = "predefined",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
-                        enemyID = "drone",
+                        enemyID = "charger",
+                        spawnCount = 10,
                     },
 
                     shapeDef =
                     {
                         origin = "mainCircle",
-                        points = {
-                            x = 0, y = 0
+                        points =
+                        {
+                            {x = -200, y = 0},
+                            {x = 200, y = 0}
                         }
                     }
                 },
@@ -308,175 +338,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 3,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 3,
-                        radius = 150,
-                        origin = "leftCircle"
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 3,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 3,
-                        radius = 150,
-                        origin = "rightCircle"
-                    }
-                }
-            },
-
-            nextWaveConditions = 
-            {
-                {
-                    conditionType = "minimumKills",
-                    minimumKills = 9
-                },
-                {
-                    conditionType = "timer",
-                    timeUntilNextWave = 30
-                }
-            }
-        },
-        {
-            spawnDefinitions = 
-            {
-                {
-                    spawnType = "predefined",
-
-                    enemyDef =
-                    {
-                        enemyID = "drone",
-                    },
-
-                    shapeDef =
-                    {
-                        origin = "mainCircle",
-                        points = {
-                            x = 0, y = 0
-                        }
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 3,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 3,
-                        radius = 150,
-                        origin = "mainCircle"
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "charger",
-                        spawnCount = 4,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 4,
-                        radius = 150,
-                        origin = "leftCircle"
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "charger",
-                        spawnCount = 4,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 4,
-                        radius = 150,
-                        origin = "rightCircle"
-                    }
-                }
-            },
-
-            nextWaveConditions = 
-            {
-                {
-                    conditionType = "minimumKills",
-                    minimumKills = 12
-                },
-                {
-                    conditionType = "timer",
-                    timeUntilNextWave = 30
-                }
-            }
-        },
-        {
-            spawnDefinitions = 
-            {
-                {
-                    spawnType = "predefined",
-
-                    enemyDef =
-                    {
-                        enemyID = "drone",
-                    },
-
-                    shapeDef =
-                    {
-                        origin = "mainCircle",
-                        points = {
-                            x = 0, y = 0
-                        }
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 5,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 5,
-                        radius = 150,
-                        origin = "mainCircle"
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "charger",
                         spawnCount = 5,
                     },
 
                     shapeDef =
                     {
                         origin = "rightCircle",
-                        numberOfPoints = 10,
+                        numberOfPoints = 5,
                         radius = 120
                     }
                 },
@@ -485,14 +353,14 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "charger",
+                        enemyID = "wanderer",
                         spawnCount = 5,
                     },
 
                     shapeDef =
                     {
                         origin = "leftCircle",
-                        numberOfPoints = 10,
+                        numberOfPoints = 5,
                         radius = 120
                     }
                 }
@@ -502,7 +370,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 15
+                    minimumKills = 14
                 },
                 {
                     conditionType = "timer",
@@ -510,25 +378,49 @@ local levelDefinition =
                 }
             }
         },
+
+        -- an x cross of chargers, the arena resets
         {
             spawnDefinitions = 
             {
                 {
-                    spawnType = "predefined",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
-                        enemyID = "drone",
+                        enemyID = "charger",
+                        spawnCount = 10,
                     },
 
                     shapeDef =
                     {
                         origin = "mainCircle",
-                        points = {
-                            x = 0, y = 0
+                        points =
+                        {
+                            {x = 100, y = -100},
+                            {x = -100, y = 100}
                         }
                     }
-                }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 10,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            {x = -100, y = -100},
+                            {x = 100, y = 100}
+                        }
+                    }
+                },
             },
 
             segmentChanges =
@@ -562,6 +454,145 @@ local levelDefinition =
                 }
             }
         },
+
+        --a triangle of chargers. two circles of wanderers to either side
+        {
+            spawnDefinitions = 
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 10
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            {x = 0, y = -100},
+                            {x = 100, y = 100},
+                            {x = -100, y = 100}
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 150,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 150,
+                        origin = "rightCircle"
+                    }
+                }
+            },
+
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 16
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 30
+                }
+            }
+        },
+
+        -- two large circles of wanderers and a small circle of chargers
+        {
+            spawnDefinitions = 
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 9,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 150,
+                        origin = "leftCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 9,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 150,
+                        origin = "rightCircle"
+                    }
+                },
+                {
+                    spawnType = "mainCircle",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 5,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 5,
+                        radius = 100,
+                        origin = "rightCircle"
+                    }
+                },
+            },
+
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 12
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 30
+                }
+            }
+        },
+
+        -- a circle of chargers
         {
             spawnDefinitions = 
             {
@@ -582,44 +613,12 @@ local levelDefinition =
                     }
                 }
             },
-            {
-                spawnType = "predefined",
-
-                enemyDef =
-                {
-                    enemyID = "drone",
-                },
-
-                shapeDef =
-                {
-                    origin = "leftCircle",
-                    points = {
-                        x = 0, y = 0
-                    }
-                }
-            },
-            {
-                spawnType = "predefined",
-
-                enemyDef =
-                {
-                    enemyID = "drone",
-                },
-
-                shapeDef =
-                {
-                    origin = "rightCircle",
-                    points = {
-                        x = 0, y = 0
-                    }
-                }
-            },
 
             nextWaveConditions = 
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 12
+                    minimumKills = 15
                 },
                 {
                     conditionType = "timer",
@@ -627,6 +626,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- 3 small circles of wanderers and a drone (introduction), the arena segments arrange into a sort of triangle formation
         {
             spawnDefinitions = 
             {
@@ -636,12 +637,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 5,
+                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 7,
+                        numberOfPoints = 3,
                         radius = 150,
                         origin = "leftCircle"
                     }
@@ -652,12 +653,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 5,
+                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 7,
+                        numberOfPoints = 3,
                         radius = 150,
                         origin = "rightCircle"
                     }
@@ -668,16 +669,32 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 5,
+                        spawnCount = 3,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
-                        radius = 100,
+                        numberOfPoints = 3,
+                        radius = 150,
                         origin = "mainCircle"
                     }
-                },
+                },   
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 120
+                        }
+                    }
+                },    
             },
 
             segmentChanges =
@@ -685,19 +702,19 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "rightCircle",
-                    newRadius = 250,
+                    newRadius = 225,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "leftCircle",
-                    newRadius = 250,
+                    newRadius = 225,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newRadius = 250,
+                    newRadius = 225,
                     lerpSpeed = 0.05
                 },
 
@@ -725,7 +742,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 15
+                    minimumKills = 8
                 },
                 {
                     conditionType = "timer",
@@ -733,25 +750,28 @@ local levelDefinition =
                 }
             }
         },
+
+        -- two drones and a circle of wanderers
         {
             spawnDefinitions = 
             {            
                 {
-                    spawnType = "predefined",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
-                        enemyID = "drone",
+                        enemyID = "wanderer",
+                        spawnCount = 7,
                     },
 
                     shapeDef =
                     {
+                        numberOfPoints = 7,
+                        radius = 150,
                         origin = "mainCircle",
-                        points = {
-                            x = 0, y = 0
-                        }
+                        offset = {x = 0, y = 112}
                     }
-                },          
+                },       
                 {
                     spawnType = "predefined",
 
@@ -767,7 +787,7 @@ local levelDefinition =
                             x = 0, y = 0
                         }
                     }
-                },          
+                },
                 {
                     spawnType = "predefined",
 
@@ -790,7 +810,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 6
+                    minimumKills = 10
                 },
                 {
                     conditionType = "timer",
@@ -798,9 +818,27 @@ local levelDefinition =
                 }
             }
         },
+
+        -- 3 circles of wanderers
         {
             spawnDefinitions = 
             {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 112
+                        }
+                    }
+                },
                 {
                     spawnType = "alongShapePerimeter",
 
@@ -885,6 +923,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- two drones and a vertical line of chargers        
         {
             spawnDefinitions = 
             {
@@ -893,13 +933,29 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "shielder",
-                        spawnCount = 1,
+                        enemyID = "drone",
                     },
 
                     shapeDef =
                     {
-                        origin = "mainCircle",
+                        origin = "leftCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "rightCircle",
                         points =
                         {
                             x = 0, y = 0
@@ -911,49 +967,20 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
-                        spawnCount = 4,
+                        enemyID = "charger",
+                        spawnCount = 10,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 4,
-                        radius = 120,
-                        origin = "leftCircle"
+                        origin = "mainCircle",
+                        points =
+                        {
+                            {x = 0, y = -200},
+                            {x = 0, y = 200}
+                        }
                     }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 4,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 4,
-                        radius = 120,
-                        origin = "rightCircle"
-                    }
-                },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "wanderer",
-                        spawnCount = 4,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 4,
-                        radius = 120,
-                        origin = "mainCircle"
-                    }
-                },
+                }
             },
 
             segmentChanges =
@@ -982,7 +1009,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 11
+                    minimumKills = 8
                 },
                 {
                     conditionType = "timer",
@@ -990,6 +1017,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- a shielder (introduction) and two circles of chargers
         {
             spawnDefinitions = 
             {
@@ -1003,7 +1032,7 @@ local levelDefinition =
 
                     shapeDef =
                     {
-                        origin = "rightCircle",
+                        origin = "mainCircle",
                         points =
                         {
                             x = 0, y = 0
@@ -1011,20 +1040,19 @@ local levelDefinition =
                     }
                 },
                 {
-                    spawnType = "predefined",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
-                        enemyID = "shielder",
+                        enemyID = "wanderer",
+                        spawnCount = 5,
                     },
 
                     shapeDef =
                     {
-                        origin = "leftCircle",
-                        points =
-                        {
-                            x = 0, y = 0
-                        }
+                        numberOfPoints = 5,
+                        radius = 30,
+                        origin = "mainCircle"
                     }
                 },
                 {
@@ -1059,22 +1087,6 @@ local levelDefinition =
                         origin = "rightCircle"
                     }
                 },
-                {
-                    spawnType = "alongShapePerimeter",
-
-                    enemyDef =
-                    {
-                        enemyID = "charger",
-                        spawnCount = 5,
-                    },
-
-                    shapeDef =
-                    {
-                        numberOfPoints = 5,
-                        radius = 120,
-                        origin = "mainCircle"
-                    }
-                },
             },
             
             nextWaveConditions = 
@@ -1089,6 +1101,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- a shielder and a drone
         {
             spawnDefinitions = 
             {
@@ -1119,13 +1133,30 @@ local levelDefinition =
 
                     shapeDef =
                     {
-                        origin = "mainCircle",
+                        origin = "leftCircle",
                         points =
                         {
                             x = 0, y = 0
                         }
                     }
-                }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "rightCircle",
+                        points =
+                        {
+                            x = 0, y = 0
+                        }
+                    }
+                },
             },
             
             nextWaveConditions = 
@@ -1140,6 +1171,8 @@ local levelDefinition =
                 }
             }
         },
+
+        --randomly spawned enemies and two shielders
         {
             spawnDefinitions =
             {
@@ -1149,7 +1182,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 5,
+                        spawnCount = 6,
                     },
 
                     shapeDef =
@@ -1165,13 +1198,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 7,
+                        spawnCount = 6,
                     },
 
                     shapeDef =
                     {
                         numberOfPoints = 10,
-                        radius = 120,
+                        radius = 30,
                         origin = "leftCircle"
                     }
                 },
@@ -1181,13 +1214,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 7,
+                        spawnCount = 6,
                     },
 
                     shapeDef =
                     {
                         numberOfPoints = 10,
-                        radius = 120,
+                        radius = 30,
                         origin = "rightCircle"
                     }
                 },
@@ -1197,7 +1230,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "shielder",
-                        spawnCount = 5,
+                        spawnCount = 1,
                     },
 
                     shapeDef =
@@ -1214,7 +1247,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "shielder",
-                        spawnCount = 5,
+                        spawnCount = 1,
                     },
 
                     shapeDef =
@@ -1258,48 +1291,49 @@ local levelDefinition =
                 }
             }
         },
+
         {
             spawnDefinitions =
             {
                 {
-                    spawnType = "predefined",
+                    spawnType = "alongShapePerimeter",
 
                     enemyDef =
                     {
-                        enemyID = "orbiter",
+                        enemyID = "wanderer",
+                        spawnCount = 8,
                     },
 
                     shapeDef =
                     {
-                        origin = "mainCircle",
-                        points = {
-                            {x = 0, y = 0}
-                        }
+                        numberOfPoints = 8,
+                        radius = 120,
+                        origin = "mainCircle"
                     }
                 },
-            },
-            
-            nextWaveConditions = 
-            {
                 {
-                    conditionType = "minimumKills",
-                    minimumKills = 1
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 80,
+                        origin = "mainCircle"
+                    }
                 },
-                {
-                    conditionType = "timer",
-                    timeUntilNextWave = 40
-                }
-            }
-        },
-        {
-            spawnDefinitions =
-            {
                 {
                     spawnType = "predefined",
 
                     enemyDef =
                     {
-                        enemyID = "orbiter",
+                        enemyID = "shielder",
+                        spawnCount = 1,
                     },
 
                     shapeDef =
@@ -1315,12 +1349,30 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "orbiter",
+                        enemyID = "shielder",
+                        spawnCount = 1,
                     },
 
                     shapeDef =
                     {
                         origin = "leftCircle",
+                        points = {
+                            {x = 0, y = 0}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
                         points = {
                             {x = 0, y = 0}
                         }
@@ -1332,7 +1384,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 1
+                    minimumKills = 12
                 },
                 {
                     conditionType = "timer",
@@ -1340,6 +1392,92 @@ local levelDefinition =
                 }
             }
         },
+
+        -- two drones a shielder and random wanderers
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "rightCircle",
+                        points = {
+                            {x = 0, y = 0}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "leftCircle",
+                        points = {
+                            {x = 0, y = 0}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            {x = 0, y = 0}
+                        }
+                    }
+                },
+
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 10,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 10,
+                        radius = 120,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+            
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 10
+                },
+                {
+                    conditionType = "timer",
+                    timeUntilNextWave = 40
+                }
+            }
+        },
+
+        -- an orbiter two circles of chargers and a drone
         {
             spawnDefinitions =
             {
@@ -1355,7 +1493,23 @@ local levelDefinition =
                     {
                         origin = "mainCircle",
                         points = {
-                            {x = 0, y = 0}
+                            {x = 0, y = 100}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            {x = 0, y = -100}
                         }
                     }
                 },
@@ -1365,12 +1519,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 5,
+                        spawnCount = 8,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
+                        numberOfPoints = 8,
                         radius = 120,
                         origin = "leftCircle"
                     }
@@ -1381,12 +1535,12 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 5,
+                        spawnCount = 8,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
+                        numberOfPoints = 8,
                         radius = 120,
                         origin = "rightCircle"
                     }
@@ -1405,6 +1559,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- an orbiter, a circle of chargers and two shielders
         {
             spawnDefinitions =
             {
@@ -1478,7 +1634,7 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 9
+                    minimumKills = 7
                 },
                 {
                     conditionType = "timer",
@@ -1486,6 +1642,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- the arena becomes a single circle. an orbiter, a drone, and a large circle of chargers
         {
             spawnDefinitions =
             {
@@ -1501,7 +1659,7 @@ local levelDefinition =
                     {
                         origin = "mainCircle",
                         points = {
-                            {x = 0, y = 0}
+                            {x = 0, y = -50}
                         }
                     }
                 },
@@ -1510,14 +1668,14 @@ local levelDefinition =
     
                     enemyDef =
                     {
-                        enemyID = "drone",
+                        enemyID = "orbiter",
                     },
     
                     shapeDef =
                     {
-                        origin = "leftCircle",
+                        origin = "mainCircle",
                         points = {
-                            {x = 0, y = 0}
+                            {x = 0, y = 50}
                         }
                     }
                 },
@@ -1527,13 +1685,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 15,
+                        spawnCount = 10,
                     },
     
                     shapeDef =
                     {
                         numberOfPoints = 10,
-                        radius = 120,
+                        radius = 150,
                         origin = "mainCircle"
                     }
                 },
@@ -1542,10 +1700,10 @@ local levelDefinition =
             segmentChanges =
             {
                 {
-                    changeType = "radius",
+                    changeType = "size",
                     arenaSegment = "mainCircle",
                     newRadius = 350,
-                    lerpSpeed = 0.01
+                    lerpSpeed = 0.05,
                 },
                 {
                     changeType = "position",
@@ -1573,6 +1731,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- a large circle of chargers, two circles of wanderers and an orbiter
         {
             spawnDefinitions =
             {
@@ -1582,7 +1742,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "charger",
-                        spawnCount = 15,
+                        spawnCount = 8,
                     },
     
                     shapeDef =
@@ -1604,7 +1764,7 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 7,
-                        radius = 120,
+                        radius = 15,
                         origin = "leftCircle"
                     }
                 },
@@ -1620,10 +1780,26 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 7,
-                        radius = 120,
+                        radius = 15,
                         origin = "rightCircle"
                     }
                 },
+                {
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "orbiter",
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            {x = 0, y = 0}
+                        }
+                    }
+                }
             },
             
             nextWaveConditions = 
@@ -1638,6 +1814,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- a huge circle of wanderers, two shielders and an orbiter
         {
             spawnDefinitions =
             {
@@ -1647,7 +1825,7 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 20,
+                        spawnCount = 15,
                     },
     
                     shapeDef =
@@ -1689,13 +1867,29 @@ local levelDefinition =
                         }
                     }
                 },
+                {
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "orbiter",
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            {x = 0, y = 0}
+                        }
+                    }
+                },
             },
             
             nextWaveConditions = 
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 20
+                    minimumKills = 17
                 },
                 {
                     conditionType = "timer",
@@ -1703,6 +1897,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- the circle becomes bigger, a large circle of chargers, two drones and an orbiter
         {
             spawnDefinitions =
             {
@@ -1734,6 +1930,38 @@ local levelDefinition =
                     {
                         origin = "mainCircle",
                         points = {
+                            {x = -100, y = 0}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            {x = 100, y = 0}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "orbiter",
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
                             {x = 0, y = 0}
                         }
                     }
@@ -1745,7 +1973,7 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "mainCircle",
-                    newRadius = 500,
+                    newRadius = 400,
                     lerpSpeed = 0.05
                 }
             },
@@ -1762,6 +1990,8 @@ local levelDefinition =
                 }
             }
         },
+
+        -- 3 drones and a large circle of wanderers
         {
             spawnDefinitions =
             {
@@ -1813,7 +2043,17 @@ local levelDefinition =
         },
         {
             waveType = "bossWave",
-            bossID = "boss"
+            bossID = "boss",
+            
+            segmentChanges =
+            {
+                {
+                    changeType = "size",
+                    arenaSegment = "mainCircle",
+                    newRadius = 350,
+                    lerpSpeed = 0.05,
+                }
+            }
         }
     },
 }
