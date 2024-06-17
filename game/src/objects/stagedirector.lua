@@ -15,6 +15,7 @@ function stageDirector:new(levelDefinition)
     self.secondsBetweenTextChange = 0.25
     self.enemySpawnTime = 2
     self.defaultTimeForNextWave = 15
+    self.outroTime = 3
 
     self.introText = {"Ready?", "Steady?", "GO!"}
     self.textChangeCooldown = self.secondsBetweenTextChange
@@ -85,7 +86,6 @@ function stageDirector:update(dt)
 
     -- Quit early if the intro is in progress
     if self.inIntro == true then
-        
         self.textChangeCooldown = self.textChangeCooldown - 1 * dt
 
         if self.textChangeCooldown <= 0 then
@@ -171,7 +171,23 @@ function stageDirector:update(dt)
         end
     else
         if self.bossReference and self.bossReference.markedForDelete then
-            game.gameStateMachine:set_state("gameOverState")
+            self.outroTime = self.outroTime - 1 * dt
+
+            if self.outroTime <= 0 then
+                local playerManager = game.playerManager
+                local playerReference = playerManager.playerReference
+
+                if playerReference then
+                    playerReference:setInvulnerable()
+                end
+
+                local arena = gameHelper:getArena()
+                arena:enableOutro()
+
+                if arena.outroComplete == true then
+                    game.gameStateMachine:set_state("gameOverState")
+                end
+            end
         end
     end
 end

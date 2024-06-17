@@ -20,6 +20,8 @@ function arenaController:new()
     self.numberOfSegments = 0
     self.arenaScale = 0
     self.doIntro = false
+    self.doOutro = false
+    self.outroComplete = false
 end
 
 function arenaController:update(dt)
@@ -34,6 +36,18 @@ function arenaController:update(dt)
     -- Scale the arena on intro
     if self.doIntro then
         self.arenaScale = math.lerpDT(self.arenaScale, 1, 0.01, dt)
+
+        if self.arenaScale > 0.99 then
+            self.doIntro = false
+        end
+    end
+
+    if self.doOutro then
+        self.arenaScale = math.lerpDT(self.arenaScale, 0, 0.05, dt)
+
+        if self.arenaScale < 0.01 then
+            self.outroComplete = true
+        end
     end
 end
 
@@ -48,12 +62,9 @@ function arenaController:draw()
     love.graphics.setColor(0.1, 0, 0.1, 1)
 
     self:drawSegments()
-    
-    love.graphics.stencil(function()
-        self:drawSegments()
-    end, "replace", 1, false)
 
-    love.graphics.setStencilTest("equal", 1)
+    self:setArenaStencil()
+    self:setArenaStencilTest()
 
     love.graphics.setColor(0.13, 0, 0.13, 1)
 
@@ -65,13 +76,25 @@ function arenaController:draw()
         end
     end
 
-    love.graphics.setStencilTest()
+    self:setArenaStencilTest()
+end
 
+function arenaController:setArenaStencil()
+    love.graphics.stencil(function()
+        self:drawSegments()
+    end, "replace", 1, false)
+end
+
+function arenaController:setArenaStencilTest()
     love.graphics.setStencilTest("equal", 1)
 end
 
 function arenaController:enableIntro()
     self.doIntro = true
+end
+
+function arenaController:enableOutro()
+    self.doOutro = true
 end
 
 function arenaController:getClampedPosition(position)
