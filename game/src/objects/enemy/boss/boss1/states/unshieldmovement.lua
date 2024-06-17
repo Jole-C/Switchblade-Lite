@@ -16,7 +16,6 @@ function unshieldMovement:enter(bossInstance)
     self.returnlerpRadius = 5
 
     bossInstance:setMandibleOpenAmount(0)
-    bossInstance:setFearLevel(self.parameters.fearLevel or 1)
 end
 
 function unshieldMovement:update(dt, bossInstance)

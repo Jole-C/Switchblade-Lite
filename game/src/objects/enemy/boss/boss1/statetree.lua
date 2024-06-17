@@ -61,6 +61,7 @@ local states =
         {
             intro = unshieldIntro(
             {
+                fearLevel = 1,
                 returnState = "movement"
             }),
 
@@ -70,19 +71,20 @@ local states =
                 {
                     directedFire(
                     {
-                        enemiesToFire = 5,
+                        enemiesToFire = 8,
+                        maxFireCooldown = 0.25,
                         returnState = "movement"
                     }),
                     randomFire(
                     {
-                        enemiesToFire = 7,
+                        enemiesToFire = 10,
                         maxAngle = 45,
                         returnState = "movement"
                     }),
                     rotationFire(
                     {
                         angleTurnSpeed = 3,
-                        maxFireCooldown = 0.25,
+                        maxFireCooldown = 0.15,
                         returnState = "movement"
                     }),
                 },
@@ -102,7 +104,7 @@ local states =
         {
             intro = shieldIntro(
             {
-                orbsToSummon = 4,
+                orbsToSummon = 5,
                 returnState = "movement"
             }),
     
@@ -112,8 +114,8 @@ local states =
                 {
                     circularChargerFire(
                     {
-                        numberOfEnemies = 6,
-                        timesToRepeat = 3,
+                        numberOfEnemies = 4,
+                        timesToRepeat = 5,
                         returnState = "movement"
                     })
                 },
@@ -134,6 +136,7 @@ local states =
         {
             intro = unshieldIntro(
             {
+                fearLevel = 2,
                 returnState = "movement"
             }),
 
@@ -143,20 +146,20 @@ local states =
                 {
                     directedFire(
                     {
-                        enemiesToFire = 10,
-                        maxFireCooldown = 0.25,
+                        enemiesToFire = 13,
+                        maxFireCooldown = 0.15,
                         returnState = "movement"
                     }),
                     randomFire(
                     {
-                        enemiesToFire = 12,
-                        maxAngle = 30,
+                        enemiesToFire = 15,
+                        maxAngle = 50,
                         returnState = "movement"
                     }),
                     rotationFire(
                     {
                         angleTurnSpeed = 2,
-                        maxFireCooldown = 0.2,
+                        maxFireCooldown = 0.15,
                         returnState = "movement"
                     }),
                     laserFire(
@@ -182,7 +185,7 @@ local states =
         {
             intro = shieldIntro(
             {
-                orbsToSummon = 5,
+                orbsToSummon = 7,
                 returnState = "movement"
             }),
     
@@ -192,8 +195,8 @@ local states =
                 {
                     circularChargerFire(
                     {
-                        numberOfEnemies = 9,
-                        timesToRepeat = 2,
+                        numberOfEnemies = 5,
+                        timesToRepeat = 6,
                         returnState = "movement"
                     })
                 },
@@ -214,6 +217,7 @@ local states =
         {
             intro = unshieldIntro(
             {
+                fearLevel = 3,
                 returnState = "movement"
             }),
 
@@ -223,20 +227,26 @@ local states =
                 {
                     directedFire(
                     {
-                        enemiesToFire = 15,
-                        maxFireCooldown = 0.35,
+                        enemiesToFire = 12,
+                        maxFireCooldown = 0.15,
                         returnState = "movement"
                     }),
                     randomFire(
                     {
                         enemiesToFire = 15,
-                        maxAngle = 45,
+                        maxAngle = 55,
                         returnState = "movement"
                     }),
                     rotationFire(
                     {
-                        angleTurnSpeed = 3,
-                        maxFireCooldown = 0.15,
+                        angleTurnSpeed = 2,
+                        maxFireCooldown = 0.1,
+                        returnState = "movement"
+                    }),
+                    laserFire(
+                    {
+                        angleTurnRate = 0.025,
+                        laserWindupTime = 0.025,
                         returnState = "movement"
                     }),
                 },
