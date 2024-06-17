@@ -348,7 +348,7 @@ function stageDirector:startWave()
                     end
                 else
                     if i == #generatedShape.points then
-                        return
+                        break
                     end
 
                     point2 = vec2(generatedShape.points[2].x, generatedShape.points[2].y)
