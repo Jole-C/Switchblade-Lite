@@ -530,6 +530,11 @@ function player:onHit(damage)
     self.hurtSound:play()
 end
 
+function player:setInvulnerable()
+    self.isInvulnerable = true
+    self.invulnerabilityCooldown = self.invulnerableGracePeriod
+end
+
 function player:cleanup()
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then
