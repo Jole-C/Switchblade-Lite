@@ -7,6 +7,8 @@ local shieldOutro = require "src.objects.enemy.boss.boss1.states.shieldoutro"
 local unshieldIntro = require "src.objects.enemy.boss.boss1.states.unshieldintro"
 local unshieldMovement = require "src.objects.enemy.boss.boss1.states.unshieldmovement"
 
+local death = require "src.objects.enemy.boss.boss1.states.death"
+
 local circularChargerFire = require "src.objects.enemy.boss.boss1.states.circularchargerfire"
 local directedFire = require "src.objects.enemy.boss.boss1.states.directedfire"
 local randomFire = require "src.objects.enemy.boss.boss1.states.randomfire"
@@ -100,7 +102,7 @@ local states =
         {
             intro = shieldIntro(
             {
-                orbsToSummon = 5,
+                orbsToSummon = 4,
                 returnState = "movement"
             }),
     
@@ -180,7 +182,7 @@ local states =
         {
             intro = shieldIntro(
             {
-                orbsToSummon = 7,
+                orbsToSummon = 5,
                 returnState = "movement"
             }),
     
@@ -238,7 +240,9 @@ local states =
                         returnState = "movement"
                     }),
                 },
-            })
+            }),
+
+            death = death()
         }
     },
 }

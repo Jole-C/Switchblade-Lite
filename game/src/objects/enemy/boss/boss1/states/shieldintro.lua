@@ -7,4 +7,5 @@ function shieldIntro:enter(bossInstance)
     bossInstance:summonOrbs(self.parameters.orbsToSummon)
     bossInstance:switchState(self.parameters.returnState) 
 end
+
 return shieldIntro

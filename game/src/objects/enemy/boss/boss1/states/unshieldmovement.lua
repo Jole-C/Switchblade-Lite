@@ -30,7 +30,7 @@ function unshieldMovement:update(dt, bossInstance)
         end
     else
         if self.returnState == nil then
-            bossInstance:destroy()
+            bossInstance:switchState("death")
             return
         end
 
