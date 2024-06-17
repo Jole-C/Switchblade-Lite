@@ -110,6 +110,13 @@ function bossWarning:new(x, y, bossClass)
 end
 
 function bossWarning:update(dt)
+    local player = game.playerManager.playerReference
+
+    if player then
+        player:setInvulnerable()
+    end
+
+
     if self.currentScaledSprite <= #self.warningQuads and self.stopWarning == false then
         local quad = self.warningQuads[self.currentScaledSprite]
         local sprite = quad.sprite
