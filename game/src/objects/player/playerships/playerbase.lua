@@ -371,11 +371,7 @@ end
 
 function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
     if colliderHit == self.collider then
-        if colliderDefinition == colliderDefinitions.enemy then
-            if self.isBoosting == false and collidedObject.onHit then
-                collidedObject:onHit("contact", collidedObject.health)
-            end
-        end
+        
     elseif colliderHit == self.boostCollider then
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting and collidedObject.onHit then
