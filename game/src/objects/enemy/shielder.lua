@@ -47,8 +47,20 @@ function shielder:update(dt)
     end
 
     self.direction:normalise_inplace()
-
     self.position = self.position + (self.direction * speed) * dt
+
+    local currentGamestate = gameHelper:getCurrentState()
+    local enemyManager = currentGamestate.enemyManager
+
+    for _, enemy in pairs(enemyManager.enemies) do
+        if enemy and enemy:type() ~= "Shielder Enemy" then
+            local distance = (self.position - enemy.position):length()
+
+            if distance < self.shieldDistance then
+                enemy:setInvulnerable()
+            end
+        end
+    end
 
     -- Update the collider
     local world = gameHelper:getWorld()
@@ -64,21 +76,6 @@ function shielder:update(dt)
     end
 
     self:checkColliders(self.collider)
-
-    local currentGamestate = gameHelper:getCurrentState()
-    local enemyManager = currentGamestate.enemyManager
-
-    if enemyManager then
-        for _, enemy in pairs(enemyManager.enemies) do
-            if enemy and enemy:type() ~= "Shielder Enemy" then
-                local distance = (self.position - enemy.position):length()
-
-                if distance < self.shieldDistance then
-                    enemy:setInvulnerable()
-                end
-            end
-        end
-    end
 end
 
 function shielder:draw()

@@ -30,7 +30,10 @@ function wanderer:new(x, y)
     self.tail = tail("wanderer tail sprite", x, y, 15, 1)
     self.eye = eye(x, y, 2, 2)
 
-    self.targetPlayer = math.random(0, 100) > self.chanceToAngleToPlayer
+    if math.random(0, 100) > self.chanceToAngleToPlayer then
+        self.speed = 30
+        self.targetPlayer = true
+    end
 end
 
 function wanderer:update(dt)
@@ -114,13 +117,7 @@ function wanderer:draw()
     xOffset = xOffset/2
     yOffset = yOffset/2
 
-    --love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
-
-    if self.isInvulnerable then
-        love.graphics.print(1, self.position.x, self.position.y)
-    else
-        love.graphics.print(0, self.position.x, self.position.y)
-    end
+    love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
 
     -- Draw the tail
     if self.tail then

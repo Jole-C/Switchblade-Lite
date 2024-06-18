@@ -25,6 +25,8 @@ function enemyBase:update(dt)
         self.enemyColour = game.manager.currentPalette.enemyColour
     end
     
+    self.invulnerableTime = self.invulnerableTime - 1 * dt
+
     if self.invulnerableTime <= 0 then
         self.isInvulnerable = false
     end
