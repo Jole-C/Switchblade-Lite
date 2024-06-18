@@ -19,16 +19,14 @@ function enemyBase:new(x, y)
 end
 
 function enemyBase:update(dt)
-    self.invulnerableTime = self.invulnerableTime - 1 * dt
-
-    if self.invulnerableTime <= 0 then
-        self.isInvulnerable = false
-    end
-
     if self.isInvulnerable == true then
         self.enemyColour = {1, 1, 1, 1}
     else
         self.enemyColour = game.manager.currentPalette.enemyColour
+    end
+    
+    if self.invulnerableTime <= 0 then
+        self.isInvulnerable = false
     end
 end
 
