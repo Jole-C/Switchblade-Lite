@@ -24,6 +24,11 @@ function boss1:new(x, y)
     self.angleTurnSpeed = 1
     self.angleFriction = 2
 
+    self.tentacleWiggle = 0
+    self.tentacleWiggleTime = 0
+    self.tentacleWiggleFrequency = 3
+    self.tentacleWiggleAmplitude = 7
+
     self.coreSprite = game.resourceManager:getResource("boss 1 core")
     self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
     self.tail2 = tail("boss 1 tail 2", 0, 0, 4, 1)
@@ -168,6 +173,9 @@ function boss1:update(dt)
     self.enemySpawnPosition.x = self.position.x + math.cos(self.angle - self.tail1.tailAngleWave) * 17
     self.enemySpawnPosition.y = self.position.y + math.sin(self.angle - self.tail1.tailAngleWave) * 17
 
+    self.tentacleWiggleTime = self.tentacleWiggleTime + (self.tentacleWiggleFrequency * dt)
+    self.tentacleWiggle = math.sin(self.tentacleWiggleTime) * self.tentacleWiggleAmplitude
+
     boss.update(self, dt)
 end
 
@@ -202,16 +210,25 @@ function boss1:draw()
     else
         love.graphics.setColor(game.manager.currentPalette.enemyColour)
 
+        local quarterAngle = math.pi / 2
+        
         for _, orb in pairs(self.orbs) do
             local vectorToOrb = (orb.position - self.position)
             local distanceToOrb = vectorToOrb:length()
             local angleToOrb = vectorToOrb:angle()
-            local numberOfSegments = 7
+            local numberOfSegments = 15
             local increment = distanceToOrb/numberOfSegments
 
             for i = 1, numberOfSegments do
                 local segmentPosition = vec2(math.cos(angleToOrb), math.sin(angleToOrb)) * (increment * i)
-                love.graphics.circle("fill", segmentPosition.x, segmentPosition.y, 15)
+                local wiggleAngle = angleToOrb + quarterAngle + (0.2 * (1 - (i / numberOfSegments)))
+                local wiggleAmount = self.tentacleWiggle * (math.cos((i / numberOfSegments) * math.pi / 2))
+
+                local x = segmentPosition.x + math.cos(wiggleAngle) * wiggleAmount
+                local y = segmentPosition.y + math.sin(wiggleAngle) * wiggleAmount
+                local radius = 12 + 5 * (1 - (i / numberOfSegments))
+
+                love.graphics.circle("fill", x, y, radius)
             end
         end
 

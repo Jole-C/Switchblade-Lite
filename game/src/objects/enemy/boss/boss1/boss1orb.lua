@@ -64,22 +64,11 @@ function bossOrb:update(dt)
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
 
-    if self.eye then
-        self.eye.eyeBasePosition.x = self.position.x
-        self.eye.eyeBasePosition.y = self.position.y
-        
-        self.eye:update()
-    end
-
     self.tentacleWiggleTime = self.tentacleWiggleTime + (self.tentacleWiggleFrequency * dt)
     self.tentacleWiggle = math.sin(self.tentacleWiggleTime) * self.tentacleWiggleAmplitude
 end
 
 function bossOrb:draw()
-    if self.eye then
-        self.eye:draw()
-    end
-
     love.graphics.setColor(game.manager.currentPalette.enemyColour)
 
     local xOffset, yOffset = self.sprite:getDimensions()
