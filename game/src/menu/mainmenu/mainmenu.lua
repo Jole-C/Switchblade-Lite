@@ -17,7 +17,7 @@ function mainMenu:new()
 
     -- Menu box scroll
     self.backgroundScrollY = 0
-    self.backgroundScrollSpeed = 10
+    self.backgroundScrollSpeed = 20
 
     -- Offset for the menu box sliding
     self.maxMenuBoxOffset = game.arenaValues.screenWidth
@@ -277,7 +277,7 @@ function mainMenu:update(dt)
 
         self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
 
-        if self.backgroundScrollY > game.arenaValues.screenHeight - 20 then
+        if self.backgroundScrollY > game.arenaValues.screenHeight then
             self.backgroundScrollY = 0
         end
     end
@@ -304,13 +304,13 @@ function mainMenu:draw()
         self:drawOverlay()
 
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, math.floor(self.backgroundScrollY))
-        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight))
+        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, self.backgroundScrollY)
+        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, self.backgroundScrollY - game.arenaValues.screenHeight)
 
         -- Use the menu background as a stencil
         love.graphics.stencil(function()
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY))
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, math.floor(self.backgroundScrollY - game.arenaValues.screenHeight))
+            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, self.backgroundScrollY)
+            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, self.backgroundScrollY - game.arenaValues.screenHeight)
         end, "replace", 1, false)
 
         love.graphics.setStencilTest("greater", 0)
