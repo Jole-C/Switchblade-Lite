@@ -21,6 +21,7 @@ function wanderer:new(x, y)
     self.angleChangeCooldown = self.secondsBetweenAngleChange
     self.eyeOffset = vec2(0, 0)
     self.angle = 0
+    self.targetPlayer = false
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -28,6 +29,8 @@ function wanderer:new(x, y)
 
     self.tail = tail("wanderer tail sprite", x, y, 15, 1)
     self.eye = eye(x, y, 2, 2)
+
+    self.targetPlayer = math.random(0, 100) > self.chanceToAngleToPlayer
 end
 
 function wanderer:update(dt)
@@ -47,7 +50,7 @@ function wanderer:update(dt)
     self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
 
     if self.angleChangeCooldown <= 0 then
-        if math.random(0, 100) > self.chanceToAngleToPlayer then
+        if self.targetPlayer == true then
             local player = game.playerManager.playerReference
             local angle = math.random(0, 2 * math.pi)
             local targetPosition = vec2(math.cos(angle), math.sin(angle)) * math.random(-self.maxDistanceFromPlayer, self.maxDistanceFromPlayer)
