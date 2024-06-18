@@ -228,7 +228,11 @@ function player:playOverheatSound(dt)
 
         if self.shipTemperature > self.maxShipTemperature then
             self.overheatSound:play()
+            game.particleManager:burstEffect("Explosion Burst", 15, self.position)
+            gameHelper:screenShake(0.2)
         end
+
+        game.particleManager:burstEffect("Player Smoke", 5, self.position)
     end
 end
 
@@ -248,6 +252,8 @@ function player:updateOverheating(dt)
         if self.shipTemperature <= 0 then
             self.isOverheating = false
         end
+
+        game.particleManager:burstEffect("Player Smoke", 5, self.position)
     end
 
     if self.isBoosting == false then
@@ -265,14 +271,15 @@ function player:spawnTrail()
     end
 
     local newTrailSegment
-    local x = self.position.x + math.cos(self.angle) * -10
-    local y = self.position.y + math.sin(self.angle) * -10
+    local angle = self.angle + math.pi + math.rad(math.random(-15, 15))
+    local x = self.position.x + math.cos(angle) * 10
+    local y = self.position.y + math.sin(angle) * 10
 
     if self.velocity:length() > 0 then
         if self.isBoosting == true then
-            newTrailSegment = trailEffect(x, y, 10, self.velocity:length()/2, math.pi + self.velocity:angle())
+            newTrailSegment = trailEffect(x, y, 10, self.velocity:length()/2, angle)
         else
-            newTrailSegment = trailEffect(x, y, 3)
+            newTrailSegment = trailEffect(x, y, 3, self.velocity:length()/2, angle)
         end
     end
 
@@ -384,7 +391,7 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
 
                     local newEffect = boostAmmoEffect(self.position.x, self.position.y)
                     gameHelper:addGameObject(newEffect)
-                    game.manager:setFreezeFrames(5)
+                    game.manager:setFreezeFrames(2)
 
                     game.manager:swapPalette()
 
