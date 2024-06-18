@@ -1,11 +1,12 @@
 local enemyEye = class({name = "EnemyEye"})
 
-function enemyEye:new(baseX, baseY, eyeDistance, eyeRadius, drawPupil)
+function enemyEye:new(baseX, baseY, eyeDistance, eyeRadius, drawPupil, eyeAngle)
     self.eyeDistance = eyeDistance
     self.eyeRadius = eyeRadius
     self.eyeBasePosition = vec2(baseX or 0, baseY or 0)
     self.eyePosition = vec2(baseX or 0, baseY or 0)
     self.drawPupil = drawPupil or false
+    self.eyeAngle = eyeAngle
 end
 
 function enemyEye:update()
@@ -14,8 +15,8 @@ function enemyEye:update()
     end
 
     local eyeAngle = self.eyeBasePosition:angle_between(game.playerManager.playerReference.position)
-    self.eyePosition.x = self.eyeBasePosition.x + math.cos(eyeAngle) * self.eyeDistance
-    self.eyePosition.y = self.eyeBasePosition.y + math.sin(eyeAngle) * self.eyeDistance
+    self.eyePosition.x = self.eyeBasePosition.x + math.cos(self.eyeAngle or eyeAngle) * self.eyeDistance
+    self.eyePosition.y = self.eyeBasePosition.y + math.sin(self.eyeAngle or eyeAngle) * self.eyeDistance
 end
 
 function enemyEye:draw()
