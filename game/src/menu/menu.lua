@@ -43,7 +43,7 @@ function menu:update(dt)
     self:wrapSelectionIndex()
 
     -- If the element cannot be highlighted, skip it
-    local selectedElement = self:checkForSelectableElement(direction)
+    local selectedElement = self:getNextSelectableElement(direction)
 
     if selectedElement == nil then
         return
@@ -110,15 +110,21 @@ function menu:cleanup()
     self:clearMenuSubElements()
 end
 
-function menu:checkForSelectableElement(direction)
+function menu:getNextSelectableElement(direction)
     local selectedElement = self.elements[self.selectionIndex]
 
-    if selectedElement.execute == nil then
-        self.selectionIndex = self.selectionIndex + (1 * direction)
+    if selectedElement == nil then
         return
-    else
-        return selectedElement
     end
+
+    while selectedElement.execute == nil do
+        self.selectionIndex = self.selectionIndex + (1 * direction)
+        self:wrapSelectionIndex()
+
+        selectedElement = self.elements[self.selectionIndex]
+    end
+
+    return selectedElement
 end
 
 return menu
