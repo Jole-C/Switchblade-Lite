@@ -319,6 +319,9 @@ function game:setupResources()
     local stickerEnemy = love.graphics.newImage("assets/sprites/enemy/sticker.png")
     resourceManager:addResource(stickerEnemy, "sticker sprite")
 
+    local orbiterEnemy = love.graphics.newImage("assets/sprites/enemy/orbiter.png")
+    resourceManager:addResource(orbiterEnemy, "orbiter sprite")
+
     -- Boss 1
     local boss1Orb = love.graphics.newImage("assets/sprites/enemy/boss1/orb.png")
     resourceManager:addResource(boss1Orb, "boss 1 orb")
