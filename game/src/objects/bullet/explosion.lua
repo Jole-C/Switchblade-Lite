@@ -1,12 +1,14 @@
 local gameObject = require "src.objects.gameobject"
 local explosion = class({name = "Explosion", extends = gameObject})
 
-function explosion:new(x, y, radius, damage)
+function explosion:new(x, y, radius, damage, drawType, drawColour)
     self:super(x, y)
     self.radius = 0
     self.maxRadius = radius
     self.damage = damage
     self.lifetime = 1.5
+    self.drawType = drawType or "fill"
+    self.drawColour = drawColour or {1, 1, 1, 1}
 
     gameHelper:screenShake(0.2)
 end
@@ -28,8 +30,8 @@ function explosion:handleExplosion()
 end
 
 function explosion:draw()
-    love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.circle("fill", self.position.x, self.position.y, self.radius)
+    love.graphics.setColor(self.drawColour)
+    love.graphics.circle(self.drawType, self.position.x, self.position.y, self.radius)
 end
 
 return explosion

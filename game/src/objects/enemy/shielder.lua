@@ -69,9 +69,7 @@ function shielder:update(dt)
     local enemyManager = currentGamestate.enemyManager
 
     if enemyManager then
-        for i = 1, #enemyManager.enemies do
-            local enemy = enemyManager.enemies[i]
-
+        for _, enemy in pairs(enemyManager.enemies) do
             if enemy and enemy:type() ~= "Shielder Enemy" then
                 local distance = (self.position - enemy.position):length()
 
@@ -113,14 +111,17 @@ function shielder:handleDamage(damageType, amount)
         self.health = self.health - amount
         return true
     end
+
+    return false
 end
 
 function shielder:cleanup()
     enemy.cleanup(self)
     
     local world = gameHelper:getWorld()
+
     if world and world:hasItem(self.collider) then
-        gameHelper:getWorld():remove(self.collider)
+        world:remove(self.collider)
     end
 end
 
