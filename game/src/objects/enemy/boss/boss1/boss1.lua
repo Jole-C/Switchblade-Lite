@@ -133,6 +133,20 @@ function boss1:update(dt)
         self.angle = self.angle + (self.angleTurnSpeed * dt)
         self.angleTurnSpeed = applyFriction(self.angleTurnSpeed, self.angleFriction, dt)
         self.angleTurnSpeed = math.clamp(self.angleTurnSpeed, 1, math.huge)
+
+        for _, orb in pairs(self.orbs) do
+            local x1 = self.position.x
+            local y1 = self.position.y
+            local x2 = orb.position.x
+            local y2 = orb.position.y
+
+            local world = gameHelper:getWorld()
+            local items, len = world:querySegment(x1, y1, x2, y2)
+
+            for _, item in pairs(items) do
+                self:handleCollision(nil, item.owner, item.colliderDefinition)
+            end
+        end
     end
 
     if self.eye then
@@ -187,6 +201,19 @@ function boss1:draw()
         end
     else
         love.graphics.setColor(game.manager.currentPalette.enemyColour)
+
+        for _, orb in pairs(self.orbs) do
+            local vectorToOrb = (orb.position - self.position)
+            local distanceToOrb = vectorToOrb:length()
+            local angleToOrb = vectorToOrb:angle()
+            local numberOfSegments = 7
+            local increment = distanceToOrb/numberOfSegments
+
+            for i = 1, numberOfSegments do
+                local segmentPosition = vec2(math.cos(angleToOrb), math.sin(angleToOrb)) * (increment * i)
+                love.graphics.circle("fill", segmentPosition.x, segmentPosition.y, 15)
+            end
+        end
 
         if self.mesh then
             love.graphics.draw(self.mesh, self.position.x, self.position.y, self.angle)
