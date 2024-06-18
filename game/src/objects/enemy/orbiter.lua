@@ -1,74 +1,70 @@
 local enemy = require "src.objects.enemy.enemy"
 local collider = require "src.collision.collider"
 local laser = require "src.objects.enemy.enemybullets.overheatlaser"
+local eye = require "src.objects.enemy.enemyeye"
 local orbiter = class({name = "Orbiter", extends = enemy})
 
 function orbiter:new(x, y)
-    self:super(x, y, "wanderer sprite")
+    self:super(x, y, "orbiter sprite")
 
     -- Parameters of the enemy
-    self.offsetAngleLerpRate = 0.2
+    self.positionOffsetAngleLerpRate = 0.2
     self.distanceFromPlayer = 70
     self.secondsBetweenAngleChange = 3
-    self.maxFireCooldown = 3
+    self.maxFireCooldown = 6
     self.health = 3
 
     -- Variables
-    self.offsetAngleChangeCooldown = self.secondsBetweenAngleChange
+    self.positionOffsetAngleChangeCooldown = self.secondsBetweenAngleChange
     self.lerpChangeCooldown = self.secondsBetweenAngleChange
-    self.offsetAngle = 0
+    self.positionOffsetAngle = 0
     self.angle = 0
-    self.positionOffset = vec2(math.cos(self.offsetAngle) * self.distanceFromPlayer, math.sin(self.offsetAngle) * self.distanceFromPlayer)
+    self.positionOffset = vec2(math.cos(self.positionOffsetAngle) * self.distanceFromPlayer, math.sin(self.positionOffsetAngle) * self.distanceFromPlayer)
     self.fireCooldown = self.maxFireCooldown
-    self.drawLine = false
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
 
+    self.eye = eye(x, y, 3, 2)
+
     -- Set the angle
     local playerPosition = game.playerManager.playerPosition
-    self.offsetAngle = (self.position - playerPosition):angle()
+    self.positionOffsetAngle = (self.position - playerPosition):angle()
 end
 
 function orbiter:update(dt)
     enemy.update(self, dt)
 
-    local playerReference = game.playerManager.playerReference
-
-    if not playerReference then
-        return
-    end
-
     self.lerpChangeCooldown = self.lerpChangeCooldown - (1 * dt)
 
     if self.lerpChangeCooldown <= 0 then
         self.lerpChangeCooldown = self.secondsBetweenAngleChange
-
-        self.offsetAngle = math.random(0, 2 * math.pi)
+        self.positionOffsetAngle = math.random(0, 2 * math.pi)
     end
 
-    local targetPosition = vec2(math.cos(self.offsetAngle) * self.distanceFromPlayer, math.sin(self.offsetAngle) * self.distanceFromPlayer)
-    self.positionOffset:lerp_direction_inplace(targetPosition, self.offsetAngleLerpRate)
-
-    self.position:lerpDT_inplace(playerReference.position + self.positionOffset, 0.05, dt)
-    self.position = gameHelper:getArena():getClampedPosition(self.position)
-
-    self.angle = (playerReference.position - self.position):angle()
+    local playerPosition = game.playerManager.playerPosition
+    local targetPosition = vec2(math.cos(self.positionOffsetAngle), math.sin(self.positionOffsetAngle)) * self.distanceFromPlayer
     
-    if playerReference.isOverheating == false and playerReference.isBoosting == false then
-        self.drawLine = true
+    self.positionOffset:lerp_direction_inplace(targetPosition, self.positionOffsetAngleLerpRate)
+    self.position:lerpDT_inplace(playerPosition + self.positionOffset, 0.05, dt)
+    self.position = gameHelper:getArena():getClampedPosition(self.position)
+    
+    if self.eye then
+        self.eye.eyeBasePosition.x = self.position.x
+        self.eye.eyeBasePosition.y = self.position.y
+        self.eye:update()
+    end
 
-        self.fireCooldown = self.fireCooldown - (1 * dt)
+    self.angle = (playerPosition - self.position):angle()
 
-        if self.fireCooldown <= 0 then
-            self.fireCooldown = self.maxFireCooldown
-            local newLaser = laser(self.position.x, self.position.y, self.angle, 0, 500, 0.05)
-            gameHelper:addGameObject(newLaser)
-        end
-    else
+    self.fireCooldown = self.fireCooldown - (1 * dt)
+
+    if self.fireCooldown <= 0 then
         self.fireCooldown = self.maxFireCooldown
-        self.drawLine = false
+
+        local newLaser = laser(self.position.x, self.position.y, self.angle, 0, 500, 0.05)
+        gameHelper:addGameObject(newLaser)
     end
 
     local world = gameHelper:getWorld()
@@ -89,23 +85,25 @@ function orbiter:draw()
         return
     end
 
+    if self.eye then
+        self.eye:draw()
+    end
+
     love.graphics.setColor(self.enemyColour)
 
     -- Draw the sprite
     local xOffset, yOffset = self.sprite:getDimensions()
-    xOffset = xOffset/2
+    xOffset = 11
     yOffset = yOffset/2
 
-    local x1 = self.position.x
-    local y1 = self.position.y
+    local x1 = self.position.x + math.cos(self.angle) * 32
+    local y1 = self.position.y + math.sin(self.angle) * 32
     local x2 = x1 + math.cos(self.angle) * 400
     local y2 = y1 + math.sin(self.angle) * 400
 
-    if self.drawLine == true then
-        love.graphics.line(x1, y1, x2, y2)
-    end
+    love.graphics.line(x1, y1, x2, y2)
 
-    love.graphics.draw(self.sprite, self.position.x, self.position.y, self.offsetAngle, 1, 1, xOffset, yOffset)
+    love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     
     love.graphics.setColor(1, 1, 1, 1)
 end
