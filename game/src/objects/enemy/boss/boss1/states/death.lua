@@ -4,7 +4,7 @@ local shieldOutro = class({name = "Shield Outro", extends = bossState})
 function shieldOutro:enter(bossInstance)
     self.numberOfExplosions = 25
     self.timeBetweenExplosions = 0
-    self.maxTimeBetweenExplosions = 1
+    self.maxTimeBetweenExplosions = 0.7
     self.maxExplosionDistanceOffset = 50
 end
 

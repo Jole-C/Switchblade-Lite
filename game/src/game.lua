@@ -278,7 +278,7 @@ function game:drawInterface()
     self.interfaceRenderer:draw()
 
     if self.manager:getOption("enableDebugMode") then
-        love.graphics.print(love.timer.getFPS(), 10, 250)
+        love.graphics.print(tostring(love.timer.getFPS()), 10, 250)
     end
 
     love.graphics.setFont(self.resourceManager:getResource("font main"))
@@ -384,6 +384,15 @@ function game:setupResources()
     local cautionStrip = love.graphics.newImage("assets/sprites/interface/warning/cautionstrip.png")
     cautionStrip:setWrap("repeat", "repeat")
     resourceManager:addResource(cautionStrip, "caution strip")
+
+    local bossHealth = love.graphics.newImage("assets/sprites/interface/bosshealth.png")
+    resourceManager:addResource(bossHealth, "boss health bar")
+
+    local bossHealthOutline = love.graphics.newImage("assets/sprites/interface/bosshealthoutline.png")
+    resourceManager:addResource(bossHealthOutline, "boss health outline")
+
+    local bossEyeOutline = love.graphics.newImage("assets/sprites/interface/bosseyeoutline.png")
+    resourceManager:addResource(bossEyeOutline, "boss eye outline")
 
     -- Set up the mesh with given parameters
     local numberOfVertices = 10

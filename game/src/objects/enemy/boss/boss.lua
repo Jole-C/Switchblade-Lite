@@ -1,6 +1,7 @@
 local enemyBase = require "src.objects.enemy.enemybase"
 local text = require "src.interface.text"
 local collider = require "src.collision.collider"
+local bossHealthBar = require "src.objects.enemy.boss.bosshealthbar"
 
 local boss = class({name = "Boss", extends = enemyBase})
 
@@ -10,6 +11,8 @@ function boss:new(x, y)
     self.contactDamage = 1
     self.shieldHealth = 100
     self.phaseHealth = 30
+    self.maxShieldHealth = 100
+    self.maxPhaseHealth = 30
 
     self.isInvulnerable = false
     self.invulnerableTime = 0
@@ -35,6 +38,9 @@ function boss:new(x, y)
 
     self.explosionSoundEnd = ripple.newSound(game.resourceManager:getResource("boss explosion end"))
     self.explosionSoundEnd:tag(game.tags.sfx)
+
+    self.healthElement = bossHealthBar(self)
+    game.interfaceRenderer:addHudElement(self.healthElement)
 
     gameHelper:getCurrentState().stageDirector:registerBoss(self)
 end
@@ -63,6 +69,12 @@ function boss:update(dt)
     if self.debugText and game.manager:getOption("enableDebugMode") == true then
         self.debugText.text = "Current Phase: "..self.phaseIndex.."\n".."Current State: "..self.currentState:type().."\n".."Health: "..self.phaseHealth.."\n".."Shield: "..self.shieldHealth
     end
+
+    self.healthElement.shieldHealth = self.shieldHealth
+    self.healthElement.phaseHealth = self.phaseHealth
+    self.healthElement.maxShieldHealth = self.maxShieldHealth
+    self.healthElement.maxPhaseHealth = self.maxPhaseHealth
+    self.healthElement:update(dt)
 end
 
 function boss:setShielded(isShielded)
@@ -78,8 +90,11 @@ function boss:setShielded(isShielded)
 
     self.shieldState = self.phase[shieldIndex]
 
+    if self.isShielded then
+        self.shieldHealth = 100
+    end
+
     self.phaseHealth = 30
-    self.shieldHealth = 100
 end
 
 function boss:setPhase(phase)
@@ -90,6 +105,8 @@ function boss:setPhase(phase)
         self.phase = self.states[phase]
         assert(self.phase ~= nil, "Current Phase is nil! Does it exist in the States?")
         self.phaseIndex = phase
+        
+        self.healthElement:setPhase(phase)
     end
 end
 
@@ -188,6 +205,8 @@ function boss:cleanup()
             world:remove(colliderParameter.colliderReference)
         end
     end
+
+    game.interfaceRenderer:removeHudElement(self.healthElement)
 end
 
 return boss

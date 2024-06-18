@@ -40,6 +40,7 @@ function unshieldMovement:update(dt, bossInstance)
         
         if (bossInstance.position - vec2:zero()):length() < 5 then
             bossInstance:setPhase(self.phase)
+            bossInstance.healthElement:setPhase(self.phase)
             bossInstance:setShielded(true)
             bossInstance:switchState(self.returnState)
         end
