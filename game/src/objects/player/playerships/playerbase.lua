@@ -13,7 +13,7 @@ function player:new(x, y)
     self:super(x, y)
 
     -- Generic parameters of the ship
-    self.maxHealth = 10
+    self.maxHealth = 5
     self.maxHealthRechargeCooldown = 3
     self.healthCircleRadius = 260
     self.spriteName = self.spriteName or "player default"
@@ -243,6 +243,12 @@ function player:updateOverheating(dt)
     self:playOverheatSound(dt)
 
     if self.shipTemperature >= self.maxShipTemperature then
+        self.isBoosting = false
+
+        if self.isOverheating == false then
+            self:onHit(2)
+        end
+
         self.isOverheating = true
     end
 
@@ -450,6 +456,10 @@ function player:wrapShipPosition()
 end
 
 function player:rechargeHealth(dt)
+    if self.isBoosting or self.isOverheating then
+        self.healthRechargeCooldown = self.maxHealthRechargeCooldown
+    end
+
     self.healthRechargeCooldown = self.healthRechargeCooldown - (1 * dt)
 
     if self.healthRechargeCooldown <= 0 then

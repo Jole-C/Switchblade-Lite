@@ -3,7 +3,7 @@ local playerDefault = class({name = "Player Default", extends = playerBase})
 
 function playerDefault:new(x, y)
     -- Generic parameters of the ship
-    self.maxHealth = 10
+    self.maxHealth = 5
     self.spriteName = "player default"
     self.invulnerableGracePeriod = 0.5
 
