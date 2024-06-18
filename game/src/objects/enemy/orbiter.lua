@@ -13,6 +13,7 @@ function orbiter:new(x, y)
     self.secondsBetweenAngleChange = 3
     self.maxFireCooldown = 6
     self.health = 3
+    self.maxLineFlashCooldown = 1
 
     -- Variables
     self.positionOffsetAngleChangeCooldown = self.secondsBetweenAngleChange
@@ -21,6 +22,8 @@ function orbiter:new(x, y)
     self.angle = 0
     self.positionOffset = vec2(math.cos(self.positionOffsetAngle) * self.distanceFromPlayer, math.sin(self.positionOffsetAngle) * self.distanceFromPlayer)
     self.fireCooldown = self.maxFireCooldown
+    self.lineFlashCooldown = self.maxLineFlashCooldown
+    self.flashLine = false
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -69,6 +72,15 @@ function orbiter:update(dt)
             local newLaser = laser(self.position.x, self.position.y, self.angle, 0, 500, 0.05)
             gameHelper:addGameObject(newLaser)
         end
+
+        self.lineFlashCooldown = self.lineFlashCooldown - (1 * dt)
+
+        if self.lineFlashCooldown <= 0 then
+            local maxCooldown = math.clamp(self.maxLineFlashCooldown * (self.fireCooldown / self.maxFireCooldown), 0.05, self.maxLineFlashCooldown)
+            self.lineFlashCooldown = maxCooldown
+
+            self.flashLine = not self.flashLine
+        end
     else
         self.fireCooldown = self.maxFireCooldown
     end
@@ -95,7 +107,6 @@ function orbiter:draw()
         self.eye:draw()
     end
 
-    love.graphics.setColor(self.enemyColour)
 
     -- Draw the sprite
     local xOffset, yOffset = self.sprite:getDimensions()
@@ -107,8 +118,16 @@ function orbiter:draw()
     local x2 = x1 + math.cos(self.angle) * 400
     local y2 = y1 + math.sin(self.angle) * 400
 
+    love.graphics.setColor(self.enemyColour)
+
+    if self.flashLine then
+        love.graphics.setColor({1, 1, 1, 1})
+    end
+
     love.graphics.line(x1, y1, x2, y2)
 
+
+    love.graphics.setColor(self.enemyColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     
     love.graphics.setColor(1, 1, 1, 1)
