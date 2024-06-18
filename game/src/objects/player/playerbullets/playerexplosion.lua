@@ -3,9 +3,6 @@ local playerExplosion = class({name = "Player Explosion", extends = explosion})
 
 function playerExplosion:new(x, y, radius, damage)
     self:super(x, y, radius, damage, "line", game.manager.currentPalette.playerColour)
-
-    local explosionBurst = game.particleManager:getEffect("Explosion Burst")
-    explosionBurst.systems[1]:setColors(game.manager.currentPalette.playerColour[1], game.manager.currentPalette.playerColour[2], game.manager.currentPalette.playerColour[3], 1)
 end
 
 function playerExplosion:handleExplosion()
@@ -38,6 +35,10 @@ function playerExplosion:update(dt)
     end
 
     game.particleManager:burstEffect("Explosion Burst", 5, self.position)
+    
+    local explosionBurst = game.particleManager:getEffect("Explosion Burst")
+    explosionBurst.systems[1]:setColors(game.manager.currentPalette.playerColour[1], game.manager.currentPalette.playerColour[2], game.manager.currentPalette.playerColour[3], 1)
+    
     self.drawColour = game.manager.currentPalette.playerColour
 end
 
