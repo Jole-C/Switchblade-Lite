@@ -134,7 +134,7 @@ function player:updateShipMovement(dt, movementDirection)
             self.velocity = self.velocity * 0.7
         end
 
-        if game.input:down("boost") then
+        if game.input:down("boost") and game.input:down("thrust") then
             self.isBoosting = true
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
@@ -147,7 +147,7 @@ function player:updateShipMovement(dt, movementDirection)
             self.isBoosting = false
         end
 
-        if game.input:pressed("boost") and not game.input:down("shoot") then
+        if game.input:pressed("boost") and game.input:down("thrust") then
             self.boostSound:play()
         end
     end
