@@ -129,11 +129,9 @@ function player:updateShipMovement(dt, movementDirection)
             self.maxSteeringSpeed = self.steeringSpeedMoving
         end
 
-        if game.input:down("reverseThrust") then
-            self.velocity = self.velocity - movementDirection * (self.accelerationSpeed/1.5 * dt)
-
-            self.steeringAccelerationSpeed = self.steeringAccelerationStationary
-            self.maxSteeringSpeed = self.steeringSpeedStationary
+        if game.input:pressed("reverseThrust") then
+            self.angle = self.angle + math.pi
+            self.velocity = self.velocity * 0.7
         end
 
         if game.input:down("boost") then
