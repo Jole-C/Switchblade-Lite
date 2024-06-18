@@ -118,7 +118,7 @@ function enemyBase:cleanup()
     currentGamestate.cameraManager:screenShake(0.1)
 
     if game.manager then
-        game.manager:setFreezeFrames(2)
+        game.manager:setFreezeFrames(1)
     end
 
     if currentGamestate.stageDirector then
