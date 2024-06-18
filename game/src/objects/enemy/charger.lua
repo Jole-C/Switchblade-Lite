@@ -11,11 +11,14 @@ function charger:new(x, y)
     self.health = 1
     self.speed = 80
     self.checkDistance = 2
+    self.chanceToAngleToPlayer = 50
+    self.angleLerpSpeed = 0.008
 
     -- Variables
     self.angle = love.math.random(0, 6)
     self.wallBounceCheckPosition = vec2(0, 0)
     self.eyeOffset = vec2(0, 0)
+    self.targetPlayer = false
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -23,6 +26,8 @@ function charger:new(x, y)
 
     self.tail = tail("charger tail sprite", self.position.x, self.position.y, 15, 1)
     self.eye = eye(x, y, 2, 2)
+
+    self.targetPlayer = math.random(0, 100) > self.chanceToAngleToPlayer
 end
 
 function charger:update(dt)
@@ -44,6 +49,13 @@ function charger:update(dt)
 
     if currentGamestate.arena:isPositionWithinArena(self.wallBounceCheckPosition) == false then
         self.angle = self.angle + math.pi / 2
+    end
+
+    local playerPosition = game.playerManager.playerPosition
+
+    if self.targetPlayer then
+        local angle = (playerPosition - self.position):angle()
+        self.angle = math.lerpAngle(self.angle, angle, self.angleLerpSpeed, dt)
     end
 
     -- Update the tail
