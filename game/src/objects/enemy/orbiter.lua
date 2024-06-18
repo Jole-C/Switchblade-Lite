@@ -58,13 +58,19 @@ function orbiter:update(dt)
 
     self.angle = (playerPosition - self.position):angle()
 
-    self.fireCooldown = self.fireCooldown - (1 * dt)
+    local player = game.playerManager.playerReference
 
-    if self.fireCooldown <= 0 then
+    if player.isOverheating == false then
+        self.fireCooldown = self.fireCooldown - (1 * dt)
+
+        if self.fireCooldown <= 0 then
+            self.fireCooldown = self.maxFireCooldown
+
+            local newLaser = laser(self.position.x, self.position.y, self.angle, 0, 500, 0.05)
+            gameHelper:addGameObject(newLaser)
+        end
+    else
         self.fireCooldown = self.maxFireCooldown
-
-        local newLaser = laser(self.position.x, self.position.y, self.angle, 0, 500, 0.05)
-        gameHelper:addGameObject(newLaser)
     end
 
     local world = gameHelper:getWorld()
@@ -96,8 +102,8 @@ function orbiter:draw()
     xOffset = 11
     yOffset = yOffset/2
 
-    local x1 = self.position.x + math.cos(self.angle) * 32
-    local y1 = self.position.y + math.sin(self.angle) * 32
+    local x1 = self.position.x + math.cos(self.angle) * 21
+    local y1 = self.position.y + math.sin(self.angle) * 21
     local x2 = x1 + math.cos(self.angle) * 400
     local y2 = y1 + math.sin(self.angle) * 400
 
