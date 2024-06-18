@@ -623,6 +623,19 @@ function game:setupParticles()
     explosionBurst:setSpread(6.2831854820251)
     
     self.particleManager:addEffect(self.particleManager:newEffect({explosionBurst}, self.canvases.foregroundCanvas.canvas, false), "Explosion Burst")
+
+    local playerSmoke = love.graphics.newParticleSystem(circleFill, 5)
+    playerSmoke:setColors(1, 1, 1, 1)
+    playerSmoke:setDirection(-1.5707963705063)
+    playerSmoke:setEmissionArea("none", 0, 0, 0, false)
+    playerSmoke:setEmitterLifetime(-1)
+    playerSmoke:setInsertMode("top")
+    playerSmoke:setParticleLifetime(0.1, 0.25)
+    playerSmoke:setSizes(1, 0)
+    playerSmoke:setSpeed(50, 100)
+    playerSmoke:setSpread(6.2831854820251)
+    
+    self.particleManager:addEffect(self.particleManager:newEffect({playerSmoke}, self.canvases.foregroundCanvas.canvas, false), "Player Smoke")
 end
 
 return game
