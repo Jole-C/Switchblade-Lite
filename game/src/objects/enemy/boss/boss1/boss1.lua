@@ -42,6 +42,7 @@ function boss1:new(x, y)
     self.mesh = nil
     self:generateMesh()
 
+    self.fearLevel = 1
     self.fearValues = 
     {
         movementSpeed =
@@ -138,6 +139,14 @@ function boss1:update(dt)
         self.eye.eyeBasePosition.x = self.position.x
         self.eye.eyeBasePosition.y = self.position.y
         self.eye:update()
+
+        local eyeRadius = self:getFearLevel().eyeRadius
+        
+        if self.isInvulnerable == true then
+            eyeRadius = eyeRadius * 1.3
+        end
+
+        self.eye.eyeRadius = eyeRadius
     end
 
     self.mandibleAngle = math.lerp(self.mandibleAngle, self.mandibleTargetAngle, 0.1)
@@ -158,7 +167,7 @@ function boss1:draw()
             self.eye:draw()
         end
 
-        love.graphics.setColor(game.manager.currentPalette.enemyColour)
+        love.graphics.setColor(self.enemyColour)
     
         local xOffset, yOffset = self.coreSprite:getDimensions()
         xOffset = xOffset/2
@@ -243,6 +252,16 @@ function boss1:setFearLevel(fearLevel)
     self.tail1.tailAngleWaveFrequency = self.fearValues.wiggleSpeed[fearLevel]
     self.tail2.tailAngleWaveFrequency = self.fearValues.wiggleSpeed[fearLevel]
     self.eye.eyeRadius = self.fearValues.eyeRadius[fearLevel]
+
+    self.fearLevel = fearLevel
+end
+
+function boss1:getFearLevel()
+    return {
+        movementSpeed = self.fearValues.movementSpeed[self.fearLevel],
+        wiggleSpeed = self.fearValues.wiggleSpeed[self.fearLevel],
+        eyeRadius = self.fearValues.eyeRadius[self.fearLevel],
+    }
 end
 
 function boss1:summonOrbs(numberOfOrbs)
