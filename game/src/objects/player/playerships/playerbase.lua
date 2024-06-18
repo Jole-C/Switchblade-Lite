@@ -13,12 +13,15 @@ function player:new(x, y)
     self:super(x, y)
 
     -- Generic parameters of the ship
-    self.maxHealth = 3
+    self.maxHealth = 10
+    self.maxHealthRechargeCooldown = 3
+    self.healthCircleRadius = 260
     self.spriteName = self.spriteName or "player default"
     self.maxOverheatPlayRate = 0.5
-    self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 5
+    self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 8
     self.boostExplosionDistance = self.boostExplosionDistance or 100
     self.maxBoostHeatDividend = self.maxBoostHeatDividend or 5
+    self.invulnerableGracePeriod = self.invulnerableGracePeriod or 0.5
     
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 60
@@ -42,7 +45,6 @@ function player:new(x, y)
     self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
-    self.invulnerableGracePeriod = self.invulnerableGracePeriod or 3
     self.bounceDampening = self.bounceDampening or 0.5    
     self.boostLineCount = 5
     self.boostLineSpawnRange = 500
@@ -77,10 +79,11 @@ function player:new(x, y)
     self.overheatPlayCooldown = 0
     self.boostHeatDividend = 1
     self.boostHitEnemies = 0
+    self.healthRechargeCooldown = self.maxHealthRechargeCooldown
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    gameHelper:getWorld():add(self.collider, 0, 0, 6, 6)
+    gameHelper:getWorld():add(self.collider, 0, 0, 10, 10)
 
     self.boostCollider = collider(colliderDefinitions.none, self)
     gameHelper:getWorld():add(self.boostCollider, 0, 0, 32, 32)
@@ -446,6 +449,15 @@ function player:wrapShipPosition()
 
 end
 
+function player:rechargeHealth(dt)
+    self.healthRechargeCooldown = self.healthRechargeCooldown - (1 * dt)
+
+    if self.healthRechargeCooldown <= 0 then
+        self.health = self.health + (3 * dt)
+        self.health = math.clamp(self.health, 0, self.maxHealth)
+    end
+end
+
 function player:update(dt)
     -- Update the hud
     self:updateHud()
@@ -472,12 +484,17 @@ function player:update(dt)
 
     -- Check collision
     self:checkCollision()
+
+    self:rechargeHealth(dt)
 end
 
 function player:draw()
     if not self.sprite then
         return
     end
+
+    love.graphics.setColor(1, 1, 1, 0.25)
+    love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 1 - (self.health/self.maxHealth)))
 
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
@@ -512,6 +529,8 @@ function player:spawnBoostLines()
 end
 
 function player:onHit(damage)
+    self.healthRechargeCooldown = self.maxHealthRechargeCooldown
+
     if self.isInvulnerable or self.isBoosting then
         return
     end
