@@ -18,6 +18,7 @@ function shielder:new(x, y)
     -- Variables
     self.direction = vec2(30, 30)
     self.shader = game.resourceManager:getResource("outline shader")
+    self.shieldedEnemies = {}
 
     -- Components
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -51,6 +52,7 @@ function shielder:update(dt)
 
     local currentGamestate = gameHelper:getCurrentState()
     local enemyManager = currentGamestate.enemyManager
+    self.shieldedEnemies = {}
 
     for _, enemy in pairs(enemyManager.enemies) do
         if enemy and enemy:type() ~= "Shielder Enemy" then
@@ -58,6 +60,7 @@ function shielder:update(dt)
 
             if distance < self.shieldDistance then
                 enemy:setInvulnerable()
+                table.insert(self.shieldedEnemies, enemy)
             end
         end
     end
@@ -84,6 +87,18 @@ function shielder:draw()
     end
 
     love.graphics.setColor(self.enemyColour)
+
+    for _, enemy in pairs(self.shieldedEnemies) do
+
+        if enemy then
+            local x1 = self.position.x
+            local y1 = self.position.y
+            local x2 = enemy.position.x
+            local y2 = enemy.position.y
+
+            love.graphics.line(x1, y1, x2, y2)
+        end
+    end
 
     -- Draw the sprite
     local xOffset, yOffset = self.sprite:getDimensions()
