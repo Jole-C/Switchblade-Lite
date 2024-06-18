@@ -109,7 +109,7 @@ end
 function menu:cleanup()
     self:clearMenuSubElements()
 end
-
+ 
 function menu:getNextSelectableElement(direction)
     local selectedElement = self.elements[self.selectionIndex]
 
