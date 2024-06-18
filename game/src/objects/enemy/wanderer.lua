@@ -12,9 +12,12 @@ function wanderer:new(x, y)
     self.randomChangeOffset = 0.5
     self.speed = 16
     self.health = 1
+    self.maxAngleOffset = 30
+    self.maxDistanceFromPlayer = 50
+    self.chanceToAngleToPlayer = 50
 
     -- Variables
-    self.targetAngle = love.math.random(0, math.pi * 2)
+    self.targetAngle = math.random(0, 2 * math.pi)
     self.angleChangeCooldown = self.secondsBetweenAngleChange
     self.eyeOffset = vec2(0, 0)
     self.angle = 0
@@ -44,8 +47,21 @@ function wanderer:update(dt)
     self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
 
     if self.angleChangeCooldown <= 0 then
-        self.angleChangeCooldown = self.secondsBetweenAngleChange + math.random(-self.randomChangeOffset, self.randomChangeOffset)
-        self.targetAngle = love.math.random(0, math.pi * 2)
+        if math.random(0, 100) > self.chanceToAngleToPlayer then
+            local player = game.playerManager.playerReference
+            local angle = math.random(0, 2 * math.pi)
+            local targetPosition = vec2(math.cos(angle), math.sin(angle)) * math.random(-self.maxDistanceFromPlayer, self.maxDistanceFromPlayer)
+    
+            if player then
+                targetPosition = player.position + targetPosition
+            end
+
+            self.targetAngle = (player.position - self.position):angle() + math.rad(math.random(-self.maxAngleOffset, self.maxAngleOffset))
+        else
+            self.targetAngle = math.random(0, 2 * math.pi)
+        end
+
+        self.angleChangeCooldown = self.secondsBetweenAngleChange
     end
 
     -- Update the tail
@@ -95,7 +111,13 @@ function wanderer:draw()
     xOffset = xOffset/2
     yOffset = yOffset/2
 
-    love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
+    --love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle - self.tail.tailAngleWave/4, 1, 1, xOffset, yOffset)
+
+    if self.isInvulnerable then
+        love.graphics.print(1, self.position.x, self.position.y)
+    else
+        love.graphics.print(0, self.position.x, self.position.y)
+    end
 
     -- Draw the tail
     if self.tail then
