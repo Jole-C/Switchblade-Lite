@@ -26,8 +26,8 @@ function boss1:new(x, y)
 
     self.tentacleWiggle = 0
     self.tentacleWiggleTime = 0
-    self.tentacleWiggleFrequency = 3
-    self.tentacleWiggleAmplitude = 7
+    self.tentacleWiggleFrequency = 5
+    self.tentacleWiggleAmplitude = 25
 
     self.coreSprite = game.resourceManager:getResource("boss 1 core")
     self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
@@ -216,7 +216,7 @@ function boss1:draw()
             local vectorToOrb = (orb.position - self.position)
             local distanceToOrb = vectorToOrb:length()
             local angleToOrb = vectorToOrb:angle()
-            local numberOfSegments = 15
+            local numberOfSegments = 8
             local increment = distanceToOrb/numberOfSegments
 
             for i = 1, numberOfSegments do
@@ -226,7 +226,7 @@ function boss1:draw()
 
                 local x = segmentPosition.x + math.cos(wiggleAngle) * wiggleAmount
                 local y = segmentPosition.y + math.sin(wiggleAngle) * wiggleAmount
-                local radius = 12 + 5 * (1 - (i / numberOfSegments))
+                local radius = 12 + (10 * (1 - (i / numberOfSegments)))
 
                 love.graphics.circle("fill", x, y, radius)
             end
