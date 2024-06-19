@@ -17,9 +17,9 @@ function enemyManager:update(dt)
     end
 end
 
-function enemyManager:destroyAllEnemies()
+function enemyManager:destroyAllEnemies(whiteList)
     for index, enemy in pairs(self.enemies) do
-        if enemy.markedForDelete == false then
+        if enemy.markedForDelete == false and table.contains(whiteList, enemy) == false then
             enemy:destroy()
         end
     end
