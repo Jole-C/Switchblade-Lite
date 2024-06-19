@@ -104,7 +104,7 @@ local states =
         {
             intro = shieldIntro(
             {
-                orbsToSummon = 5,
+                orbsToSummon = 4,
                 returnState = "movement"
             }),
     
@@ -185,7 +185,7 @@ local states =
         {
             intro = shieldIntro(
             {
-                orbsToSummon = 7,
+                orbsToSummon = 5,
                 returnState = "movement"
             }),
     
