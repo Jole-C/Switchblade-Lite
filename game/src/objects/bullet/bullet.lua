@@ -43,8 +43,8 @@ function bullet:update(dt)
 end
 
 function bullet:updateBullet(dt)
-    self.position.x = self.position.x + math.cos(self.angle) * self.speed
-    self.position.y = self.position.y + math.sin(self.angle) * self.speed
+    self.position.x = self.position.x + math.cos(self.angle) * self.speed * dt
+    self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
 end
 
 function bullet:checkCollision(x, y)
