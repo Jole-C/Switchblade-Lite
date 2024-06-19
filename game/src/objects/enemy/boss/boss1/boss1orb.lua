@@ -1,6 +1,6 @@
 local enemy = require "src.objects.enemy.enemy"
 local collider = require "src.collision.collider"
-local eye = require "src.objects.enemy.enemyeye"
+local charger = require "src.objects.enemy.charger"
 
 local bossOrb = class({name = "Boss 1 Orb", extends = enemy})
 
@@ -9,16 +9,15 @@ function bossOrb:new(x, y, bossReference, angle)
     
     self.bossReference = bossReference
     self.radius = 0
-    self.maxRadius = 200
+    self.maxRadius = 300
     self.angle = angle or 0
-    self.turnRate = 0.5
+    self.turnRate = 0.25
+
+    self.maxEnemySpawnCooldown = 3
+    self.enemySpawnCooldown = self.maxEnemySpawnCooldown
 
     self.spriteAngle = 0
     self.spriteAngleTurnRate = 2
-    self.tentacleWiggleTime = 0
-    self.tentacleWiggleFrequency = 0.2
-    self.tentacleWiggleAmplitude = 5
-    self.tentacleWiggle = 0
 
     self.isDamageable = false
     self.damageableShader = game.resourceManager:getResource("outline shader")
@@ -27,24 +26,18 @@ function bossOrb:new(x, y, bossReference, angle)
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 32, 32)
-
-    self.eye = eye(x, y, 5, 5, true)
 end
 
 function bossOrb:update(dt)
     enemy.update(self, dt)
     
-    -- Update the position of the orb
     self.position.x = math.cos(self.angle) * self.radius
     self.position.y = math.sin(self.angle) * self.radius
 
     self.angle = self.angle + (self.turnRate * dt)
-
     self.spriteAngle = self.spriteAngle + (self.spriteAngleTurnRate * dt)
-
     self.radius = math.lerpDT(self.radius, self.maxRadius, 0.02, dt)
     
-    -- Toggle the enemy between being damageable or not
     self.damageableCooldown = self.damageableCooldown - (1 * dt)
     
     if self.damageableCooldown <= 0 then
@@ -53,19 +46,25 @@ function bossOrb:update(dt)
         self.isDamageable = not self.isDamageable
     end
 
-    -- Move enemy collider
     local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
         local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
-        colliderPositionX = self.position.x - colliderWidth/2
-        colliderPositionY = self.position.y - colliderHeight/2
+        colliderPositionX = self.position.x - colliderWidth / 2
+        colliderPositionY = self.position.y - colliderHeight / 2
         
         world:update(self.collider, colliderPositionX, colliderPositionY)
     end
 
-    self.tentacleWiggleTime = self.tentacleWiggleTime + (self.tentacleWiggleFrequency * dt)
-    self.tentacleWiggle = math.sin(self.tentacleWiggleTime) * self.tentacleWiggleAmplitude
+    self.enemySpawnCooldown = self.enemySpawnCooldown - (1 * dt)
+
+    if self.enemySpawnCooldown <= 0 then
+        local newCharger = charger(self.position.x, self.position.y)
+        newCharger.angle = (game.playerManager.playerPosition - self.position):angle()
+        gameHelper:addGameObject(newCharger)
+
+        self.enemySpawnCooldown = self.maxEnemySpawnCooldown
+    end
 end
 
 function bossOrb:draw()
