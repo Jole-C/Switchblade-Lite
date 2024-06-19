@@ -1,4 +1,5 @@
 require "src.misc.mathhelpers"
+require "src.misc.tablehelpers"
 local gameRenderer = require "src.render.renderer"
 local resourceManager = require "src.resourcemanager"
 local interfaceRenderer = require "src.interface.interfacerenderer"
