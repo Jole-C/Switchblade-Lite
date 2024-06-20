@@ -27,12 +27,11 @@ function bullet:update(dt)
         colliderPositionX = self.position.x - colliderWidth/2
         colliderPositionY = self.position.y - colliderHeight/2
 
-        self:checkCollision(colliderPositionX, colliderPositionY)
+        world:update(self.collider, colliderPositionX, colliderPositionY)
 
-        if world:hasItem(self.collider) then
-            world:update(self.collider, colliderPositionX, colliderPositionY)
-        end
     end
+
+    self:checkCollision(self.collider)
 
     -- Destroy the bullet if it's not in the arena
     if currentGamestate.arena then
@@ -47,8 +46,33 @@ function bullet:updateBullet(dt)
     self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
 end
 
-function bullet:checkCollision(x, y)
+function bullet:checkCollision(collider)
+    local world = gameHelper:getWorld()
 
+    if world:hasItem(collider) then
+        local colliderPositionX, colliderPositionY = world:getRect(collider)
+        local x, y, cols, len = world:check(collider, colliderPositionX, colliderPositionY)
+
+        for i = 1, len do
+            local collidedObject = cols[i].other.owner
+            local colliderDefinition = cols[i].other.colliderDefinition
+
+            if not collidedObject or not colliderDefinition then
+                goto continue
+            end
+
+            local returnEarly = self:handleCollision(collider, collidedObject, colliderDefinition)
+
+            if returnEarly then
+                return
+            end
+
+            ::continue::
+        end
+    end
+end
+
+function bullet:handleCollision(collider, collidedObject, colliderDefinition)
 end
 
 function bullet:draw()
