@@ -34,7 +34,7 @@ function playerDefault:new(x, y)
 
     -- Firing parameters of the ship
     self.maxFireCooldown = 0.08
-    self.bulletSpeed = 10
+    self.bulletSpeed = 625
     self.bulletDamage = 1
     self.maxAmmo = 14
     self.shipKnockbackForce = 10
