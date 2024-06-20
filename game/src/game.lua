@@ -249,7 +249,7 @@ function game:drawForeground()
             end
         end
 
-        if currentGamestate.world and self.manager:getOption("enableDebugMode") == true then
+        if currentGamestate.world and self.manager:getOption("enableDebugMode") then
             local items = currentGamestate.world:getItems()
 
             for i = 1, #items do
