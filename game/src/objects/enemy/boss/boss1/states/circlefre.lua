@@ -1,10 +1,9 @@
-local bossState = require "src.objects.enemy.boss.bossstate"
-local charger = require "src.objects.enemy.charger"
-local sticker = require "src.objects.enemy.sticker"
+local bossAttack = require "src.objects.enemy.boss.bossattack"
+local circleFire = class({name = "Circle Fire", extends = bossAttack})
 
-local circularChargerFire = class({name = "Circle Fire", extends = bossState})
-
-function circularChargerFire:enter(bossInstance)
+function circleFire:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
+    
     self.timesToRepeat = self.parameters.timesToRepeat or 5
     self.numberOfEnemies = self.parameters.numberOfEnemiesInCircle or 3
     self.maxFireCooldown = 0.5
@@ -15,18 +14,18 @@ function circularChargerFire:enter(bossInstance)
     bossInstance:setMandibleOpenAmount(1)
 end
 
-function circularChargerFire:update(dt, bossInstance)
+function circleFire:update(dt, bossInstance)
     self.fireCooldown = self.fireCooldown - (1 * dt)
 
     if self.fireCooldown <= 0 then
-        local newEnemy = nil
-
         local angleIncrement = 2 * math.pi / self.numberOfEnemies
 
         for i = 1, self.numberOfEnemies do
-            newEnemy = charger(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
+            local angle = self.baseAngleIncrement + angleIncrement * i
+            local spawnFunction = self:chooseEnemy(self.enemyFunctions)
 
-            newEnemy.angle = self.baseAngleIncrement + angleIncrement * i
+            local newEnemy = spawnFunction(angle, bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
+
             gameHelper:addGameObject(newEnemy)
         end
 
@@ -41,4 +40,4 @@ function circularChargerFire:update(dt, bossInstance)
     end
 end
 
-return circularChargerFire
+return circleFire
