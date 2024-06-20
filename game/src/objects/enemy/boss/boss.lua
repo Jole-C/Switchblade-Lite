@@ -10,9 +10,9 @@ function boss:new(x, y)
 
     self.contactDamage = 1
     self.shieldHealth = 100
-    self.phaseHealth = 30
+    self.phaseHealth = 50
     self.maxShieldHealth = 100
-    self.maxPhaseHealth = 30
+    self.maxPhaseHealth = 50
 
     self.isInvulnerable = false
     self.invulnerableTime = 0
