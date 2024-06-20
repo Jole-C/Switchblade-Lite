@@ -27,7 +27,7 @@ function boss1:new(x, y)
     self.tentacleWiggle = 0
     self.tentacleWiggleTime = 0
     self.tentacleWiggleFrequency = 5
-    self.tentacleWiggleAmplitude = 25
+    self.tentacleWiggleAmplitude = 18
 
     self.coreSprite = game.resourceManager:getResource("boss 1 core")
     self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
