@@ -45,7 +45,6 @@ function bossLaser:handleCollision(items, len, dt)
 
         if colliderDefinition == colliderDefinitions.player then
             collidedObject:accumulateTemperature(dt, 3)
-            print("hit")
             return true
         end
 
