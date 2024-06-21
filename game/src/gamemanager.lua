@@ -7,6 +7,7 @@ local gameManager = class({name = "Game Manager"})
 
 function gameManager:new()
     self.palettes = {}
+    self.currentPaletteGroup = {}
     self.currentPalette = {}
 
     self.isTransitioning = false
@@ -94,18 +95,63 @@ function gameManager:togglePausing()
     self.isPaused = not self.isPaused
 end
 
-function gameManager:addPalette(palette)
-    table.insert(self.palettes, palette)
+function gameManager:addPalette(groupName, palette)
+    local group = self.palettes[groupName]
+
+    assert(group ~= nil, "Group is nil! Did you add it?")
+
+    table.insert(self.palettes[groupName], palette)
+end
+
+function gameManager:swapPaletteGroup(newPaletteGroup)
+    local group = self.palettes[newPaletteGroup]
+    assert(group ~= nil, "Group is nil! Did you add it?")
+
+    self.currentPaletteGroup = group
 end
 
 function gameManager:swapPalette()
-    local paletteIndex = love.math.random(1, #self.palettes)
-    self.currentPalette = self.palettes[paletteIndex]
+    local paletteIndex = love.math.random(1, #self.currentPaletteGroup)
+    self.currentPalette = self.currentPaletteGroup[paletteIndex]
 end
 
-function gameManager:setPalette(paletteIndex)
-    local paletteIndex = math.clamp(paletteIndex, 1, #self.palettes)
-    self.currentPalette = self.palettes[paletteIndex]
+function gameManager:addPaletteGroup(name)
+    self.palettes[name] = {}
+end
+
+function gameManager:setupPalettes(paletteImages)
+    for name, paletteImage in pairs(paletteImages) do
+        local width, height = paletteImage:getDimensions()
+        self:addPaletteGroup(name)
+
+        for y = 0, height - 1 do
+            local grabbedColours = {}
+
+            for x = 0, width - 1 do
+                local r, g, b, a = paletteImage:getPixel(x, y)
+                table.insert(grabbedColours, {r, g, b, a})
+            end
+            
+            self:addPalette(name,
+            {
+                playerColour = grabbedColours[1],
+                enemyColour = grabbedColours[2],
+                backgroundColour = {
+                    grabbedColours[3],
+                    grabbedColours[4],
+                    grabbedColours[5],
+                    grabbedColours[6],
+                    grabbedColours[7],
+                },
+                uiColour = grabbedColours[8],
+                enemySpawnColour = grabbedColours[9],
+                uiSelectedColour = grabbedColours[10],
+            })
+        end
+    end
+    
+    -- Swap to a random palette
+    self:swapPalette()
 end
 
 function gameManager:saveOptions()
@@ -193,46 +239,6 @@ end
 
 function gameManager:draw()
 
-end
-
-function gameManager:setupPalettes()
-    local paletteImage = love.image.newImageData("assets/sprites/palettes.png")
-
-    local width,height = paletteImage:getDimensions()
-
-    -- For each y level of the palette image
-    -- (a different palette)
-    for y = 0, height - 1 do
-        local grabbedColours = {}
-
-        -- Grab each pixel on the x axis
-        -- (a different colour)
-        for x = 0, width - 1 do
-            local r, g, b, a = paletteImage:getPixel(x, y)
-            table.insert(grabbedColours, {r, g, b, a})
-        end
-        
-        -- Add a palette with these values
-        self:addPalette(
-            {
-                playerColour = grabbedColours[1],
-                enemyColour = grabbedColours[2],
-                backgroundColour = {
-                    grabbedColours[3],
-                    grabbedColours[4],
-                    grabbedColours[5],
-                    grabbedColours[6],
-                    grabbedColours[7],
-                },
-                uiColour = grabbedColours[8],
-                enemySpawnColour = grabbedColours[9],
-                uiSelectedColour = grabbedColours[10],
-            }
-        )
-    end
-    
-    -- Swap to a random palette
-    self:swapPalette()
 end
 
 return gameManager

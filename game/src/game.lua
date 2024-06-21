@@ -24,7 +24,13 @@ function game:new()
 
     -- Load all services
     self.manager = gameManager()
-    self.manager:setupPalettes()
+    self.manager:setupPalettes(
+    {
+        main = love.image.newImageData("assets/sprites/mainpalettes.png"),
+        boss = love.image.newImageData("assets/sprites/bosspalettes.png")
+    })
+    self.manager:swapPaletteGroup("main")
+    self.manager:swapPalette()
     
     self.gameRenderer = gameRenderer()
     self.interfaceRenderer = interfaceRenderer()
