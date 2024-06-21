@@ -21,14 +21,8 @@ function fireDirected:update(dt, bossInstance)
     if self.fireCooldown <= 0 then
         self.fireCooldown = self.maxFireCooldown
 
-        local newEnemy = nil
-
-        if math.random(0, 1) == 0 then
-            newEnemy = charger(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
-        else
-            newEnemy = sticker(bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
-        end
-
+        local newEnemy = self.chosenEnemyFunction(bossInstance.angle, bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
+        
         if newEnemy ~= nil then
             newEnemy.angle = bossInstance.angle + math.rad(math.random(-5, 5))
             gameHelper:addGameObject(newEnemy)
