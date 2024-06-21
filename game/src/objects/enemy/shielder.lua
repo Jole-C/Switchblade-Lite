@@ -127,8 +127,8 @@ function shielder:handleDamage(damageType, amount)
     return false
 end
 
-function shielder:cleanup()
-    enemy.cleanup(self)
+function shielder:cleanup(destroyReason)
+    enemy.cleanup(self, destroyReason)
     
     local world = gameHelper:getWorld()
 

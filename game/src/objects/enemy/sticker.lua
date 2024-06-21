@@ -162,8 +162,8 @@ function sticker:draw()
     end
 end
 
-function sticker:cleanup()
-    enemy.cleanup(self)
+function sticker:cleanup(destroyReason)
+    enemy.cleanup(self, destroyReason)
     
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then

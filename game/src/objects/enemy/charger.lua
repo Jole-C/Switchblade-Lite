@@ -115,8 +115,8 @@ function charger:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function charger:cleanup()
-    enemy.cleanup(self)
+function charger:cleanup(destroyReason)
+    enemy.cleanup(self, destroyReason)
     
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then

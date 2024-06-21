@@ -152,8 +152,8 @@ function drone:applyFriction(dt)
     self.velocity = self.velocity * frictionRatio
 end
 
-function drone:cleanup()
-    enemy.cleanup(self)
+function drone:cleanup(destroyReason)
+    enemy.cleanup(self, destroyReason)
     
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then

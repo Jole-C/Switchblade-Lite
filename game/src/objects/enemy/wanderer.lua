@@ -127,8 +127,8 @@ function wanderer:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function wanderer:cleanup()
-    enemy.cleanup(self)
+function wanderer:cleanup(destroyReason)
+    enemy.cleanup(self, destroyReason)
     
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then

@@ -133,8 +133,8 @@ function orbiter:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-function orbiter:cleanup()
-    enemy.cleanup(self)
+function orbiter:cleanup(destroyReason)
+    enemy.cleanup(self, destroyReason)
     
     local world = gameHelper:getWorld()
     if world and world:hasItem(self.collider) then

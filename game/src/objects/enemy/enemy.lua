@@ -30,12 +30,12 @@ function enemy:update(dt)
 end
 
 function enemy:cleanup(destroyReason)
-    enemyBase.cleanup(self)
+    enemyBase.cleanup(self, destroyReason)
 
     if destroyReason ~= "autoDestruction" then
         self:playDeathSound()
     end
-    
+
     game.particleManager:burstEffect("Explosion", 50, self.position)
 end
 

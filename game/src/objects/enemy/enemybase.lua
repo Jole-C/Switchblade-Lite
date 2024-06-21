@@ -113,7 +113,7 @@ function enemyBase:setInvulnerable()
     self.invulnerableTime = self.maxInvulnerableTime
 end
 
-function enemyBase:cleanup()
+function enemyBase:cleanup(destroyReason)
     local currentGamestate = gameHelper:getCurrentState()
     currentGamestate.cameraManager:screenShake(0.1)
 
