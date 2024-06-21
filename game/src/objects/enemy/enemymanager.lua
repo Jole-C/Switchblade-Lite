@@ -20,7 +20,7 @@ end
 function enemyManager:destroyAllEnemies(whiteList)
     for index, enemy in pairs(self.enemies) do
         if enemy.markedForDelete == false and table.contains(whiteList, enemy) == false then
-            enemy:destroy()
+            enemy:destroy("autoDestruction")
         end
     end
 end
