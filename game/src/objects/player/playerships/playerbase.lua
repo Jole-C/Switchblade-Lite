@@ -567,9 +567,12 @@ end
 
 function player:cleanup()
     local world = gameHelper:getWorld()
+
     if world and world:hasItem(self.collider) then
         gameHelper:getWorld():remove(self.collider)
     end
+
+    game.playerManager:setPlayerDeathReason("You died!")
 end
 
 return player

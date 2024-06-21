@@ -126,6 +126,7 @@ function stageDirector:update(dt)
     if self.currentWaveType ~= "bossWave" then
         if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
             player:destroy()
+            game.playerManager:setPlayerDeathReason("You ran out of time!")
         end
 
         -- Transition to the next wave
