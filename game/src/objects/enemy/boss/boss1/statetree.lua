@@ -34,7 +34,7 @@ local spawnSticker = function(angle, x, y)
 end
 
 local spawnBullet = function(angle, x, y)
-    local enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemy, 32, 32)
+    local enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemy, 16, 16)
 
     return enemy
 end
@@ -61,16 +61,23 @@ local states =
             {
                 attacks = 
                 {
-                    circleFire(
+                    attackList =
                     {
-                        numberOfEnemiesInCircle = 3,
-                        timesToRepeat = 3,
-                        enemyFunctions =
+                        circleFire(
                         {
-                            spawnCharger,
-                        },
-                        returnState = "movement"
-                    })
+                            numberOfEnemiesInCircle = 3,
+                            timesToRepeat = 3,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                            },
+                            returnState = "movement"
+                        })
+                    },
+                    attackWeights =
+                    {
+                        1
+                    }
                 },
                 
                 returnState = "outro"
@@ -97,46 +104,56 @@ local states =
             {
                 attacks =
                 {
-                    directedFire(
+                    attackList =
                     {
-                        enemiesToFire = 12,
-                        maxFireCooldown = 0.15,
-                        enemyFunctions =
+                        directedFire(
                         {
-                            spawnCharger,
-                        },
-                        returnState = "movement"
-                    }),
-                    randomFire(
+                            enemiesToFire = 15,
+                            maxFireCooldown = 0.1,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
+                        randomFire(
+                        {
+                            enemiesToFire = 15,
+                            maxAngle = 55,
+                            enemyFunctions =
+                            {
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        rotationFire(
+                        {
+                            angleTurnSpeed = 2,
+                            maxFireCooldown = 0.15,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 8,
+                            timesToRepeat = 3,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                            },
+                            returnState = "movement"
+                        })
+                    },
+                    attackWeights =
                     {
-                        enemiesToFire = 10,
-                        maxAngle = 55,
-                        enemyFunctions =
-                        {
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    rotationFire(
-                    {
-                        angleTurnSpeed = 2,
-                        maxFireCooldown = 0.25,
-                        enemyFunctions =
-                        {
-                            spawnCharger,
-                        },
-                        returnState = "movement"
-                    }),
-                    circleFire(
-                    {
-                        numberOfEnemiesInCircle = 8,
-                        timesToRepeat = 3,
-                        enemyFunctions =
-                        {
-                            spawnCharger,
-                        },
-                        returnState = "movement"
-                    })
+                        2,
+                        1,
+                        1,
+                        2,
+                    }
                 },
 
                 returnState = 
@@ -162,16 +179,23 @@ local states =
             {
                 attacks = 
                 {
-                    circleFire(
+                    attackList =
                     {
-                        numberOfEnemiesInCircle = 4,
-                        timesToRepeat = 5,
-                        enemyFunctions =
+                        circleFire(
                         {
-                            spawnCharger
-                        },
-                        returnState = "movement"
-                    })
+                            numberOfEnemiesInCircle = 4,
+                            timesToRepeat = 5,
+                            enemyFunctions =
+                            {
+                                spawnCharger
+                            },
+                            returnState = "movement"
+                        })
+                    },
+                    attackWeights =
+                    {
+                        1
+                    }
                 },
                 
                 returnState = "outro"
@@ -180,7 +204,7 @@ local states =
             outro = shieldOutro(
             {
                 numberOfExplosions = 12,
-                timeBetweenExplosions = 0.1,
+                timeBetweenExplosions = 0.17,
                 maxExplosionDistanceOffset = 50,
                 returnState = "intro"
             })
@@ -198,55 +222,66 @@ local states =
             {
                 attacks =
                 {
-                    directedFire(
+                    attackList =
                     {
-                        enemiesToFire = 12,
-                        maxFireCooldown = 0.15,
-                        enemyFunctions =
+                        directedFire(
                         {
-                            spawnCharger,
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    randomFire(
-                    {
-                        enemiesToFire = 15,
-                        maxAngle = 55,
-                        enemyFunctions =
+                            enemiesToFire = 12,
+                            maxFireCooldown = 0.15,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        randomFire(
                         {
-                            spawnCharger,
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    rotationFire(
-                    {
-                        angleTurnSpeed = 2,
-                        maxFireCooldown = 0.1,
-                        enemyFunctions =
+                            enemiesToFire = 15,
+                            maxAngle = 55,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        rotationFire(
                         {
-                            spawnCharger,
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    laserFire(
-                    {
-                        angleTurnRate = 0.025,
-                        laserWindupTime = 0.025,
-                        returnState = "movement"
-                    }),
-                    circleFire(
-                    {
-                        numberOfEnemiesInCircle = 12,
-                        timesToRepeat = 5,
-                        enemyFunctions =
+                            angleTurnSpeed = 2,
+                            maxFireCooldown = 0.1,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        laserFire(
                         {
-                            spawnBullet,
-                        },
-                        returnState = "movement"
-                    })
+                            angleTurnRate = 0.025,
+                            laserWindupTime = 0.025,
+                            returnState = "movement"
+                        }),
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 12,
+                            timesToRepeat = 5,
+                            enemyFunctions =
+                            {
+                                spawnBullet,
+                            },
+                            returnState = "movement"
+                        })
+                    },
+                    attackWeights =
+                    {
+                        2,
+                        1,
+                        1,
+                        3,
+                        2,
+                    }
                 },
 
                 returnState = 
@@ -272,16 +307,23 @@ local states =
             {
                 attacks = 
                 {
-                    circleFire(
+                    attackList =
                     {
-                        numberOfEnemiesInCircle = 5,
-                        timesToRepeat = 6,
-                        enemyFunctions =
+                        circleFire(
                         {
-                            spawnCharger
-                        },
-                        returnState = "movement"
-                    })
+                            numberOfEnemiesInCircle = 5,
+                            timesToRepeat = 6,
+                            enemyFunctions =
+                            {
+                                spawnCharger
+                            },
+                            returnState = "movement"
+                        })
+                    },
+                    attackWeights =
+                    {
+                        1
+                    }
                 },
                 
                 returnState = "outro"
@@ -308,55 +350,66 @@ local states =
             {
                 attacks =
                 {
-                    directedFire(
+                    attackList =
                     {
-                        enemiesToFire = 12,
-                        maxFireCooldown = 0.15,
-                        enemyFunctions =
+                        directedFire(
                         {
-                            spawnCharger,
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    randomFire(
-                    {
-                        enemiesToFire = 15,
-                        maxAngle = 55,
-                        enemyFunctions =
+                            enemiesToFire = 12,
+                            maxFireCooldown = 0.15,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        randomFire(
                         {
-                            spawnCharger,
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    rotationFire(
-                    {
-                        angleTurnSpeed = 2,
-                        maxFireCooldown = 0.1,
-                        enemyFunctions =
+                            enemiesToFire = 15,
+                            maxAngle = 55,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        rotationFire(
                         {
-                            spawnCharger,
-                            spawnSticker,
-                        },
-                        returnState = "movement"
-                    }),
-                    laserFire(
-                    {
-                        angleTurnRate = 0.025,
-                        laserWindupTime = 0.025,
-                        returnState = "movement"
-                    }),
-                    circleFire(
-                    {
-                        numberOfEnemiesInCircle = 12,
-                        timesToRepeat = 5,
-                        enemyFunctions =
+                            angleTurnSpeed = 2,
+                            maxFireCooldown = 0.1,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
+                        laserFire(
                         {
-                            spawnBullet,
-                        },
-                        returnState = "movement"
-                    })
+                            angleTurnRate = 0.025,
+                            laserWindupTime = 0.025,
+                            returnState = "movement"
+                        }),
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 12,
+                            timesToRepeat = 5,
+                            enemyFunctions =
+                            {
+                                spawnBullet,
+                            },
+                            returnState = "movement"
+                        })
+                    },
+                    attackWeights =
+                    {
+                        2,
+                        1,
+                        1,
+                        3,
+                        2,
+                    }
                 },
             }),
 

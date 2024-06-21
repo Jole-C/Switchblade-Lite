@@ -156,8 +156,11 @@ end
 function boss:switchAttack(attacksTable)
     assert(attacksTable ~= nil, "Attacks table is nil! Did you specify an attacks table in the state parameters?")
 
-    local index = math.random(1, #attacksTable)
-    local state = attacksTable[index]
+    if #gameHelper:getCurrentState().enemyManager.enemies > 50 then
+        return
+    end
+
+    local state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
 
     self.currentState:exit(self)
     self.currentState = state
