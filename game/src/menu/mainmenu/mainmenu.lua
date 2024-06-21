@@ -217,19 +217,15 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("level 1", "font ui", 10, 10, 15, 10, function()
+                textButton("arena 1", "font ui", 10, 10, 15, 10, function()
                     game.manager:changePlayerDefinition("default definition")
                     game.gameStateMachine:set_state("gameLevelState")
                 end),
 
-                textButton("level 2", "font ui", 10, 25, 15, 25, function()
-                    game.manager:changePlayerDefinition("light definition")
-                    game.gameStateMachine:set_state("gameLevelState")
+                textButton("WIP", "font ui", 10, 25, 15, 25, function()
                 end),
 
-                textButton("level 3", "font ui", 10, 40, 15, 40, function()
-                    game.manager:changePlayerDefinition("heavy definition")
-                    game.gameStateMachine:set_state("gameLevelState")
+                textButton("WIPPITY WIP", "font ui", 10, 40, 15, 40, function()
                 end),
 
                 textButton("back", "font ui", 10, 65, 15, 65, function(self)
