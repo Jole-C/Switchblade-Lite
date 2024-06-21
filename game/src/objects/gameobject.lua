@@ -13,12 +13,12 @@ function gameObject:draw()
 
 end
 
-function gameObject:destroy()
-    self:cleanup()
+function gameObject:destroy(destroyReason)
+    self:cleanup(destroyReason)
     self.markedForDelete = true
 end
 
-function gameObject:cleanup()
+function gameObject:cleanup(destroyReason)
 
 end
 
