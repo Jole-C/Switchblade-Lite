@@ -156,7 +156,7 @@ end
 function boss:switchAttack(attacksTable)
     assert(attacksTable ~= nil, "Attacks table is nil! Did you specify an attacks table in the state parameters?")
 
-    if #gameHelper:getCurrentState().enemyManager.enemies > 50 then
+    if #gameHelper:getCurrentState().enemyManager.enemies > 30 then
         return
     end
 
