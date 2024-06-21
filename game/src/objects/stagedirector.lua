@@ -111,19 +111,17 @@ function stageDirector:update(dt)
     -- Handle gameover state switching
     local player = game.playerManager.playerReference
 
-    if game.playerManager and game.playerManager:doesPlayerExist() == false then
+    if game.playerManager:doesPlayerExist() == false then
         game.gameStateMachine:set_state("gameOverState")
     end
 
-    -- Handle level timer
-    if self.timeSeconds <= 0 then
-        self.timeSeconds = 59
-        self.timeMinutes = self.timeMinutes - 1
-    end
-
-    self.timeSeconds = self.timeSeconds - 1 * dt
-
     if self.currentWaveType ~= "bossWave" then
+        if self.timeSeconds <= 0 then
+            self.timeSeconds = 59
+            self.timeMinutes = self.timeMinutes - 1
+        end
+    
+        self.timeSeconds = self.timeSeconds - 1 * dt
         if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
             player:destroy()
             game.playerManager:setPlayerDeathReason("You ran out of time!")
