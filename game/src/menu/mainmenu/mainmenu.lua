@@ -63,7 +63,7 @@ function mainMenu:new()
             elements =
             {
                 rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
-                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now (and it has no\nwin condition).\nThe other levels are just level 1 with\nthe other ships.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer\n\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nSome enemies can only be killed by boosting.\nThere is no visual indicator for this yet.\n2/5 of the 5 enemies in the game are using\ndev art, but they have other visual differences.\nHave fun!", "font main", "left", 130, 10, 1000),
+                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "font main", "left", 110, 18, 1000),
 
                 textButton("start", "font ui", 10, 10, 15, 10, function(self)
                     if self.owner then
