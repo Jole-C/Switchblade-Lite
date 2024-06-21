@@ -3,6 +3,7 @@ local playerManager = class({name = "Player Manager"})
 function playerManager:new()
     self.playerPosition = vec2(0, 0)
     self.playerReference = nil
+    self.deathReason = ""
 end
 
 function playerManager:spawnPlayer(x, y)
@@ -10,6 +11,10 @@ function playerManager:spawnPlayer(x, y)
     self.playerReference = newPlayer
 
     return newPlayer
+end
+
+function playerManager:setPlayerDeathReason(deathReason)
+    self.deathReason = deathReason
 end
 
 function playerManager:destroyPlayer(x, y)

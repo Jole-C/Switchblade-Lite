@@ -68,8 +68,6 @@ function stageDirector:new(levelDefinition)
         assert(false, "No player segment specified!")
     end
 
-    -- Initialise variables
-
     -- Set up the hud
     self.hud = stageTimeHud()
     game.interfaceRenderer:addHudElement(self.hud)
@@ -126,6 +124,10 @@ function stageDirector:update(dt)
     self.timeSeconds = self.timeSeconds - 1 * dt
 
     if self.currentWaveType ~= "bossWave" then
+        if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
+            player:destroy()
+        end
+
         -- Transition to the next wave
         if self.inWaveTransition == true then
             self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
