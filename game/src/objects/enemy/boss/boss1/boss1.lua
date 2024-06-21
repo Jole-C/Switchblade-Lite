@@ -7,6 +7,9 @@ local eye = require "src.objects.enemy.enemyeye"
 local boss1 = class({name = "Boss 1", extends = boss})
 
 function boss1:new(x, y)
+    self.bossName = "Some Name"
+    self.bossSubtitle = "Idk some subtitle"
+    
     self:super(x, y)
     self.states = states
 

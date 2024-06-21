@@ -3,7 +3,10 @@ local eye = require "src.objects.enemy.enemyeye"
 
 local bossHealthBar = class({name = "Boss Health Bar", extends = hudElement})
 
-function bossHealthBar:new(bossInstance)
+function bossHealthBar:new(bossInstance, name, subtitle)
+    self.bossName = name or "NAME"
+    self.bossSubtitle = subtitle or "Subtitle"
+
     self.barSprite = game.resourceManager:getResource("boss health bar")
     self.barOutlineSprite = game.resourceManager:getResource("boss health outline")
     self.eyeOutlineSprite = game.resourceManager:getResource("boss eye outline")
@@ -45,6 +48,12 @@ function bossHealthBar:new(bossInstance)
     self.phaseHealth = 0
     self.maxPhaseHealth = 0
 
+    self.inIntro = false
+    self.positionYoffset = 60
+    self.targetPositionYoffset = 10
+    self.bossTitleScissorWidth = 0
+    self.targetBossTitleScissorWidth = 100
+
     self.eyeAngleChangeCooldown = 0
     self.eyeAngle = math.rad(math.random(0, 360))
     self.targetEyeAngle = self.eyeAngle
@@ -74,7 +83,21 @@ function bossHealthBar:update(dt)
         end
 
         self.eye.eyeAngle = self.eyeAngle
+
+        self.eye.eyeBasePosition.y = 240 + self.positionYoffset
     end
+
+    if self.inIntro then
+        self.positionYoffset = math.lerpDT(self.positionYoffset, self.targetPositionYoffset, 0.05, dt)
+
+        if math.abs(self.targetPositionYoffset - self.positionYoffset) < 5 then
+            self.bossTitleScissorWidth = math.lerpDT(self.bossTitleScissorWidth, self.targetBossTitleScissorWidth, 0.05, dt)
+        end
+    end
+end
+
+function bossHealthBar:doIntro()
+    self.inIntro = true
 end
 
 function bossHealthBar:setPhase(phase)
@@ -97,20 +120,27 @@ function bossHealthBar:draw()
     end
 
     local width = math.lerp(222, 0, 1 - self.shieldHealth / self.maxShieldHealth)
-    love.graphics.setScissor(129 + xOffset, 224 + yOffset, width, self.scissorState.height)
-    love.graphics.draw(self.barSprite, 129 + xOffset, 224 + yOffset)
+    love.graphics.setScissor(129 + xOffset, 224 + yOffset + self.positionYoffset, width, self.scissorState.height)
+    love.graphics.draw(self.barSprite, 129 + xOffset, 224 + yOffset + self.positionYoffset)
 
     width = math.lerp(self.scissorState.maxWidth, self.scissorState.minWidth, 1 - self.phaseHealth / self.maxPhaseHealth)
-    love.graphics.setScissor(129 + xOffset, 243 + yOffset, width, self.scissorState.height)
-    love.graphics.draw(self.barSprite, 129 + xOffset, 224 + yOffset)
+    love.graphics.setScissor(129 + xOffset, 243 + yOffset + self.positionYoffset, width, self.scissorState.height)
+    love.graphics.draw(self.barSprite, 129 + xOffset, 224 + yOffset + self.positionYoffset)
     love.graphics.setScissor()
 
     if self.eye then
         self.eye:draw()
     end
 
-    love.graphics.draw(self.eyeOutlineSprite, 129 + xOffset, 224 + yOffset)
-    love.graphics.draw(self.barOutlineSprite, 128 + xOffset, 223 + yOffset)
+    love.graphics.setFont(game.resourceManager:getResource("font main"))
+
+    love.graphics.setScissor(240 - self.bossTitleScissorWidth, 0, self.bossTitleScissorWidth * 2, 270)
+    love.graphics.printf(self.bossName, 240 - 300/2, 210 + self.positionYoffset, 300, "center")
+    love.graphics.printf(self.bossSubtitle, 240 - 300/2, 220 + self.positionYoffset, 300, "center")
+    love.graphics.setScissor()
+
+    love.graphics.draw(self.eyeOutlineSprite, 129 + xOffset, 224 + yOffset + self.positionYoffset)
+    love.graphics.draw(self.barOutlineSprite, 128 + xOffset, 223 + yOffset + self.positionYoffset)
 end
 
 return bossHealthBar

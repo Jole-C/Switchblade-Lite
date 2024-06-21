@@ -30,6 +30,7 @@ function bossIntro:update(dt, bossInstance)
         bossInstance:setPhase(self.phase)
         bossInstance:setShielded(true)
         bossInstance:switchState(self.returnState)
+        bossInstance.healthElement:doIntro()
         bossInstance.position = vec2:zero()
     end
 end

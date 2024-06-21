@@ -39,7 +39,7 @@ function boss:new(x, y)
     self.explosionSoundEnd = ripple.newSound(game.resourceManager:getResource("boss explosion end"))
     self.explosionSoundEnd:tag(game.tags.sfx)
 
-    self.healthElement = bossHealthBar(self)
+    self.healthElement = bossHealthBar(self, self.bossName, self.bossSubtitle)
     game.interfaceRenderer:addHudElement(self.healthElement)
 
     gameHelper:getCurrentState().stageDirector:registerBoss(self)
@@ -94,7 +94,7 @@ function boss:setShielded(isShielded)
         self.shieldHealth = 100
     end
 
-    self.phaseHealth = 30
+    self.phaseHealth = 50
 end
 
 function boss:setPhase(phase)
