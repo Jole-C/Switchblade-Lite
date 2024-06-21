@@ -200,6 +200,7 @@ end
 
 function boss:cleanup()
     self.explosionSoundEnd:play()
+    game.manager:swapPaletteGroup("main")
 
     local world = gameHelper:getWorld()
 

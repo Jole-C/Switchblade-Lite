@@ -216,7 +216,8 @@ end
 
 function bossWarning:spawnBoss()
     self:destroy()
-    game.manager:setPalette(1)
+    game.manager:swapPaletteGroup("boss")
+    game.manager:swapPalette()
     gameHelper:addGameObject(self.bossClass.enemyClass(0, 0))
 end
 
