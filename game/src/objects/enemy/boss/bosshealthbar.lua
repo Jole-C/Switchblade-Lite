@@ -135,8 +135,7 @@ function bossHealthBar:draw()
     love.graphics.setFont(game.resourceManager:getResource("font main"))
 
     love.graphics.setScissor(240 - self.bossTitleScissorWidth, 0, self.bossTitleScissorWidth * 2, 270)
-    love.graphics.printf(self.bossName, 240 - 300/2, 210 + self.positionYoffset, 300, "center")
-    love.graphics.printf(self.bossSubtitle, 240 - 300/2, 220 + self.positionYoffset, 300, "center")
+    love.graphics.printf(self.bossName, 240 - 300/2 + xOffset, 220 + self.positionYoffset + yOffset, 300, "center")
     love.graphics.setScissor()
 
     love.graphics.draw(self.eyeOutlineSprite, 129 + xOffset, 224 + yOffset + self.positionYoffset)
