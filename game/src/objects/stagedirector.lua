@@ -115,18 +115,19 @@ function stageDirector:update(dt)
         game.gameStateMachine:set_state("gameOverState")
     end
 
-    if self.currentWaveType ~= "bossWave" then
-        if self.timeSeconds <= 0 then
-            self.timeSeconds = 59
-            self.timeMinutes = self.timeMinutes - 1
-        end
-    
-        self.timeSeconds = self.timeSeconds - 1 * dt
-        if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
-            player:destroy()
-            game.playerManager:setPlayerDeathReason("You ran out of time!")
-        end
+    if self.timeSeconds <= 0 then
+        self.timeSeconds = 59
+        self.timeMinutes = self.timeMinutes - 1
+    end
 
+    self.timeSeconds = self.timeSeconds - 1 * dt
+    if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
+        player:destroy()
+        game.playerManager:setPlayerDeathReason("You ran out of time!")
+    end
+
+
+    if self.currentWaveType ~= "bossWave" then
         -- Transition to the next wave
         if self.inWaveTransition == true then
             self.waveTransitionTime = self.waveTransitionTime - (1 * dt)
@@ -191,6 +192,11 @@ function stageDirector:update(dt)
             end
         end
     end
+end
+
+function stageDirector:setTime(minutes, seconds)
+    self.timeMinutes = minutes or 1
+    self.timeSeconds = seconds or 59
 end
 
 function stageDirector:registerBoss(boss)
