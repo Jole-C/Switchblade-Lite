@@ -5,7 +5,8 @@ function shieldIntro:enter(bossInstance)
     gameHelper:screenShake(0.3)
     bossInstance:setShielded(true)
     bossInstance:summonOrbs(self.parameters.orbsToSummon)
-    bossInstance:switchState(self.parameters.returnState) 
+    bossInstance:switchState(self.parameters.returnState)
+    bossInstance:setPhaseTime()
 end
 
 return shieldIntro

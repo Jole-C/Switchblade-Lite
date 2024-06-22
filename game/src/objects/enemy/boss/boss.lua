@@ -148,6 +148,10 @@ function boss:handleDamage(damageType, amount)
     end
 end
 
+function boss:setPhaseTime()
+    gameHelper:getCurrentState().stageDirector:setTime(1, 20)
+end
+
 function boss:setInvulnerable()
     self.isInvulnerable = true
     self.invulnerableTime = self.maxInvulnerableTime

@@ -10,6 +10,8 @@ function shieldOutro:enter(bossInstance)
 end
 
 function shieldOutro:update(dt, bossInstance)
+    bossInstance:setPhaseTime()
+    
     self.timeBetweenExplosions = self.timeBetweenExplosions - (1 * dt)
 
     if self.timeBetweenExplosions <= 0 then

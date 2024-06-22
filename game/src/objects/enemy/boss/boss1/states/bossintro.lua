@@ -20,6 +20,8 @@ function bossIntro:enter(bossInstance)
 end
 
 function bossIntro:update(dt, bossInstance)
+    bossInstance:setPhaseTime()
+    
     game.particleManager:burstEffect("Boss Intro Burst", 20, bossInstance.position)
 
     local colour = game.manager.currentPalette.enemySpawnColour
