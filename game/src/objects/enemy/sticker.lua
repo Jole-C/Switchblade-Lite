@@ -48,31 +48,33 @@ function sticker:update(dt)
         return
     end
 
-    self.stickGracePeriod = self.maxStickGracePeriod - (1 * dt)
+    self.stickGracePeriod = self.stickGracePeriod - (1 * dt)
 
     self.startingSpeed = math.lerpDT(self.startingSpeed, 0, 0.025, dt)
 
     if self.startingSpeed <= 0.1 then
         self.startingSpeed = 0
+
+        if self.isSticking == false then
+            self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
+    
+            if self.angleChangeCooldown <= 0 then
+                self.angleChangeCooldown = self.secondsBetweenAngleChange + math.random(-self.randomChangeOffset, self.randomChangeOffset)
+                self.targetAngle = love.math.random(0, math.pi * 2)
+            end
+            
+            self.angle = math.lerpAngle(self.angle, self.targetAngle, self.angleTurnRate, dt)
+            
+            self.position.x = self.position.x + math.cos(self.angle) * self.speed / 3 * dt
+            self.position.y = self.position.y + math.sin(self.angle) * self.speed / 3 * dt
+        end
     else
         self.position.x = self.position.x + math.cos(self.angle) * self.startingSpeed * dt
         self.position.y = self.position.y + math.sin(self.angle) * self.startingSpeed * dt
     end
 
-    if self.startingSpeed <= 0 and self.isSticking == false then
-        self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
-
-        if self.angleChangeCooldown <= 0 then
-            self.angleChangeCooldown = self.secondsBetweenAngleChange + math.random(-self.randomChangeOffset, self.randomChangeOffset)
-            self.targetAngle = love.math.random(0, math.pi * 2)
-        end
-        
-        self.angle = math.lerpAngle(self.angle, self.targetAngle, self.angleTurnRate, dt)
-        
-        self.position.x = self.position.x + math.cos(self.angle) * self.speed / 3 * dt
-        self.position.y = self.position.y + math.sin(self.angle) * self.speed / 3 * dt
-
-        if (playerPosition - self.position):length() < 25 then
+    if self.isSticking == false then
+        if (playerPosition - self.position):length() < 25 and self.stickGracePeriod <= 0 then
             self.isSticking = true
 
             self.stickOffset = (self.position - playerPosition):normalise_inplace()
@@ -80,9 +82,7 @@ function sticker:update(dt)
 
             self.position = playerPosition + self.stickOffset
         end
-    end
-
-    if self.isSticking == true then
+    else
         self.position = playerPosition + self.stickOffset
 
         if playerReference then
