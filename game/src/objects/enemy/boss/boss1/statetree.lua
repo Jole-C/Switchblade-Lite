@@ -108,13 +108,23 @@ local states =
                 {
                     attackList =
                     {
-                        directedFire(
+                        randomFire(
                         {
                             enemiesToFire = 8,
-                            maxFireCooldown = 0.1,
+                            maxAngle = 55,
                             enemyFunctions =
                             {
                                 spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
+                        directedFire(
+                        {
+                            enemiesToFire = 25,
+                            maxFireCooldown = 0.1,
+                            enemyFunctions =
+                            {
+                                spawnBullet,
                             },
                             returnState = "movement"
                         }),
@@ -138,23 +148,13 @@ local states =
                             },
                             returnState = "movement"
                         }),
-                        circleFire(
-                        {
-                            numberOfEnemiesInCircle = 8,
-                            timesToRepeat = 3,
-                            enemyFunctions =
-                            {
-                                spawnBullet,
-                            },
-                            returnState = "movement"
-                        }),
                     },
                     attackWeights =
                     {
+                        4,
+                        3,
+                        3,
                         2,
-                        2,
-                        1.5,
-                        1,
                     }
                 },
 
@@ -226,6 +226,16 @@ local states =
                 {
                     attackList =
                     {
+                        randomFire(
+                        {
+                            enemiesToFire = 8,
+                            maxAngle = 55,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
                         circleFire(
                         {
                             numberOfEnemiesInCircle = 12,
@@ -242,7 +252,7 @@ local states =
                             timesToRepeat = 3,
                             enemyFunctions =
                             {
-                                spawnCharger,
+                                spawnSticker,
                             },
                             returnState = "movement"
                         }),
@@ -258,7 +268,6 @@ local states =
                             maxFireCooldown = 0.15,
                             enemyFunctions =
                             {
-                                spawnCharger,
                                 spawnSticker,
                             },
                             returnState = "movement"
@@ -286,6 +295,7 @@ local states =
                     },
                     attackWeights =
                     {
+                        4,
                         3,
                         3,
                         3,
@@ -365,6 +375,16 @@ local states =
                 {
                     attackList =
                     {
+                        randomFire(
+                        {
+                            enemiesToFire = 8,
+                            maxAngle = 55,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
                         laserFire(
                         {
                             angleTurnRate = 0.025,
@@ -378,6 +398,15 @@ local states =
                             enemyFunctions =
                             {
                                 spawnBullet,
+                            },
+                            returnState = "movement"
+                        }),
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 12,
+                            timesToRepeat = 5,
+                            enemyFunctions =
+                            {
                                 spawnSticker,
                             },
                             returnState = "movement"
@@ -388,7 +417,6 @@ local states =
                             maxFireCooldown = 0.15,
                             enemyFunctions =
                             {
-                                spawnCharger,
                                 spawnSticker,
                             },
                             returnState = "movement"
@@ -399,7 +427,6 @@ local states =
                             maxAngle = 55,
                             enemyFunctions =
                             {
-                                spawnCharger,
                                 spawnSticker,
                             },
                             returnState = "movement"
@@ -410,7 +437,6 @@ local states =
                             maxFireCooldown = 0.1,
                             enemyFunctions =
                             {
-                                spawnCharger,
                                 spawnSticker,
                             },
                             returnState = "movement"
@@ -418,11 +444,12 @@ local states =
                     },
                     attackWeights =
                     {
-                        3,
-                        1,
-                        1,
+                        4,
                         3,
                         2,
+                        2,
+                        2,
+                        1,
                     }
                 },
             }),
