@@ -22,6 +22,7 @@ local bullet = require "src.objects.enemy.enemybullet"
 local spawnCharger = function(angle, x, y)
     local enemy = charger(x, y)
     enemy.angle = angle
+    enemy.targetPlayer = false
     
     return enemy
 end
