@@ -7,8 +7,11 @@ local sticker = class({name = "Sticker", extends = enemy})
 function sticker:new(x, y)
     self:super(x, y, "sticker sprite")
 
+    self.startingSpeed = 0
+
     self.health = 1
     self.speed = 85
+    self.restoreAmmo = false
     self.angleTurnRate = 0.05
     self.secondsBetweenAngleChange = 1
     self.randomChangeOffset = 0.5
@@ -47,42 +50,16 @@ function sticker:update(dt)
 
     self.stickGracePeriod = self.maxStickGracePeriod - (1 * dt)
 
-    if playerReference.isOverheating == false then
-        if self.isSticking == false then
-            local angleToPlayer = (playerPosition - self.position):angle()
+    self.startingSpeed = math.lerpDT(self.startingSpeed, 0, 0.025, dt)
 
-            self.angle = math.lerpAngle(self.angle, angleToPlayer, self.angleTurnRate, dt)
-            
-            self.position.x = self.position.x + math.cos(self.angle) * self.speed * dt
-            self.position.y = self.position.y + math.sin(self.angle) * self.speed * dt
-
-            if (playerPosition - self.position):length() < 25 then
-                self.isSticking = true
-
-                self.stickOffset = (self.position - playerPosition):normalise_inplace()
-                self.stickOffset = self.stickOffset * 10
-
-                self.position = playerPosition + self.stickOffset
-            end
-        else
-            self.position = playerPosition + self.stickOffset
-
-            if playerReference then
-                playerReference:accumulateTemperature(dt, 1.35)
-
-                if playerReference.isOverheating == true then
-                    self:destroy()
-                end
-
-                if playerReference.isBoosting == true then
-                    self.isSticking = false
-                    self.stickGracePeriod = self.maxStickGracePeriod
-                end
-            end
-        end
+    if self.startingSpeed <= 0.1 then
+        self.startingSpeed = 0
     else
-        self.isSticking = false
-        
+        self.position.x = self.position.x + math.cos(self.angle) * self.startingSpeed * dt
+        self.position.y = self.position.y + math.sin(self.angle) * self.startingSpeed * dt
+    end
+
+    if self.startingSpeed <= 0 and self.isSticking == false then
         self.angleChangeCooldown = self.angleChangeCooldown - 1 * dt
 
         if self.angleChangeCooldown <= 0 then
@@ -94,6 +71,32 @@ function sticker:update(dt)
         
         self.position.x = self.position.x + math.cos(self.angle) * self.speed / 3 * dt
         self.position.y = self.position.y + math.sin(self.angle) * self.speed / 3 * dt
+
+        if (playerPosition - self.position):length() < 25 then
+            self.isSticking = true
+
+            self.stickOffset = (self.position - playerPosition):normalise_inplace()
+            self.stickOffset = self.stickOffset * 10
+
+            self.position = playerPosition + self.stickOffset
+        end
+    end
+
+    if self.isSticking == true then
+        self.position = playerPosition + self.stickOffset
+
+        if playerReference then
+            playerReference:accumulateTemperature(dt, 1.35)
+
+            if playerReference.isOverheating == true then
+                self:destroy()
+            end
+
+            if playerReference.isBoosting == true then
+                self.isSticking = false
+                self.stickGracePeriod = self.maxStickGracePeriod
+            end
+        end
     end
 
     self.circleSine = self.circleSine + self.circleFrequency * dt

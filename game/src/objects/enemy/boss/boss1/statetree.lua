@@ -30,6 +30,7 @@ end
 local spawnSticker = function(angle, x, y)
     local enemy = sticker(x, y)
     enemy.angle = angle
+    enemy.startingSpeed = math.random(150, 300)
     
     return enemy
 end
@@ -109,11 +110,21 @@ local states =
                     {
                         directedFire(
                         {
-                            enemiesToFire = 20,
+                            enemiesToFire = 8,
                             maxFireCooldown = 0.1,
                             enemyFunctions =
                             {
                                 spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
+                        randomFire(
+                        {
+                            enemiesToFire = 15,
+                            maxAngle = 55,
+                            enemyFunctions =
+                            {
+                                spawnSticker,
                             },
                             returnState = "movement"
                         }),
@@ -129,7 +140,7 @@ local states =
                         }),
                         circleFire(
                         {
-                            numberOfEnemiesInCircle = 16,
+                            numberOfEnemiesInCircle = 8,
                             timesToRepeat = 3,
                             enemyFunctions =
                             {
@@ -137,22 +148,12 @@ local states =
                             },
                             returnState = "movement"
                         }),
-                        randomFire(
-                        {
-                            enemiesToFire = 15,
-                            maxAngle = 55,
-                            enemyFunctions =
-                            {
-                                spawnSticker,
-                            },
-                            returnState = "movement"
-                        }),
                     },
                     attackWeights =
                     {
-                        2.5,
                         2,
-                        1.25,
+                        2,
+                        1.5,
                         1,
                     }
                 },
