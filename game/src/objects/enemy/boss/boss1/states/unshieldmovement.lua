@@ -2,7 +2,7 @@ local bossState = require "src.objects.enemy.boss.bossstate"
 local unshieldMovement = class({name = "Unshield Movement", extends = bossState})
 
 function unshieldMovement:enter(bossInstance)
-    self.maxAttackCooldown = self.parameters.attackCooldown or 5
+    self.maxAttackCooldown = self.parameters.attackCooldown or 3
     self.attackCooldown = self.maxAttackCooldown
     self.attacks = self.parameters.attacks
     self.returnState = nil
