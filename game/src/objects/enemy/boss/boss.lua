@@ -149,7 +149,7 @@ function boss:handleDamage(damageType, amount)
 end
 
 function boss:setPhaseTime()
-    gameHelper:getCurrentState().stageDirector:setTime(1, 20)
+    gameHelper:getCurrentState().stageDirector:setTime(1, 0)
 end
 
 function boss:setInvulnerable()
