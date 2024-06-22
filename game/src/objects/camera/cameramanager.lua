@@ -14,7 +14,7 @@ function cameraManager:new()
         self.cameraPosition.x, self.cameraPosition.y = game.camera:getPosition()
     end
 
-    self.cameraLerpSpeed = 0.1
+    self.cameraLerpSpeed = 1
 
     self.screenShakeAmount = 0
     self.cameraShakeOffset = vec2(0, 0)
@@ -24,23 +24,22 @@ function cameraManager:new()
 end
 
 function cameraManager:update(dt)
-    local numeratorX, denominatorX = 0, 0
-    local numeratorY, denominatorY = 0, 0
+    local numeratorX, numeratorY = 0, 0
+    local denominator = 0
 
-    for i = 1, #self.cameraTargets do
-        local target = self.cameraTargets[i]
-
-        if target then
+    for _, target in pairs(self.cameraTargets) do
+        if target.weight > 0 then
             numeratorX = numeratorX + target.position.x * target.weight
             numeratorY = numeratorY + target.position.y * target.weight
 
-            denominatorX = denominatorX + target.weight
-            denominatorY = denominatorY + target.weight
+            denominator = denominator + target.weight
         end
     end
 
-    self.cameraTargetPosition.x = numeratorX / denominatorX
-    self.cameraTargetPosition.y = numeratorY / denominatorY
+    if denominator > 0 then
+        self.cameraTargetPosition.x = numeratorX / denominator
+        self.cameraTargetPosition.y = numeratorY / denominator
+    end
 
     self.cameraShakeOffset.x = math.random(-self.cameraShakeRange, self.cameraShakeRange)
     self.cameraShakeOffset.y = math.random(-self.cameraShakeRange, self.cameraShakeRange)
