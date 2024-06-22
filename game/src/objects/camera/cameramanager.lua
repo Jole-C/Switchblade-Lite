@@ -57,6 +57,9 @@ function cameraManager:update(dt)
 end
 
 function cameraManager:addTarget(newTarget)
+    assert(newTarget.type ~= nil, "Object added is not a Camera Target!")
+    assert(newTarget:type() == "Camera Target", "Object added is not a Camera Target!")
+
     table.insert(self.cameraTargets, newTarget)
 end
 
