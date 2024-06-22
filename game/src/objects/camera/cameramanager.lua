@@ -6,6 +6,7 @@ function cameraManager:new()
 
     self.cameraReference = game.camera
     self.cameraTargets = {}
+    self.overrideTarget = nil
 
     self.cameraTargetPosition = vec2(0, 0)
     self.cameraPosition = vec2(0, 0)
@@ -14,7 +15,7 @@ function cameraManager:new()
         self.cameraPosition.x, self.cameraPosition.y = game.camera:getPosition()
     end
 
-    self.cameraLerpSpeed = 1
+    self.cameraLerpSpeed = 0.1
 
     self.screenShakeAmount = 0
     self.cameraShakeOffset = vec2(0, 0)
@@ -26,8 +27,13 @@ end
 function cameraManager:update(dt)
     local numeratorX, numeratorY = 0, 0
     local denominator = 0
+    local targets = self.cameraTargets
 
-    for _, target in pairs(self.cameraTargets) do
+    if self.overrideTarget ~= nil then
+        targets = {self.overrideTarget}
+    end
+
+    for _, target in pairs(targets) do
         if target.weight > 0 then
             numeratorX = numeratorX + target.position.x * target.weight
             numeratorY = numeratorY + target.position.y * target.weight
@@ -60,6 +66,14 @@ function cameraManager:addTarget(newTarget)
     assert(newTarget:type() == "Camera Target", "Object added is not a Camera Target!")
 
     table.insert(self.cameraTargets, newTarget)
+end
+
+function cameraManager:setOverrideTarget(overrideTarget)
+    self.overrideTarget = overrideTarget
+end
+
+function cameraManager:removeOverrideTarget()
+    self.overrideTarget = nil
 end
 
 function cameraManager:removeTarget(targetToRemove)
