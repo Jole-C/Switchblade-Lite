@@ -120,7 +120,7 @@ function bossHealthBar:draw()
     end
 
     local width = math.lerp(222, 0, 1 - self.shieldHealth / self.maxShieldHealth)
-    love.graphics.setScissor(129 + xOffset, 224 + yOffset + self.positionYoffset, width, self.scissorState.height)
+    love.graphics.setScissor(129 + xOffset, 224 + yOffset + self.positionYoffset, width, self.scissorState.height + 1)
     love.graphics.draw(self.barSprite, 129 + xOffset, 224 + yOffset + self.positionYoffset)
 
     width = math.lerp(self.scissorState.maxWidth, self.scissorState.minWidth, 1 - self.phaseHealth / self.maxPhaseHealth)
