@@ -33,6 +33,8 @@ function circleFire:update(dt, bossInstance)
         self.baseAngleIncrement = self.baseAngleIncrement + 2
         
         self.fireCooldown = self.maxFireCooldown
+
+        bossInstance.fireSound:play()
     end
 
     if self.timesToRepeat <= 0 then

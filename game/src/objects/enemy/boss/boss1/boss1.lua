@@ -100,6 +100,9 @@ function boss1:new(x, y)
     self.sound1 = ripple.newSound(game.resourceManager:getResource("boss 1 sound 1"))
     self.sound1.tag(game.tags.sfx)
 
+    self.fireSound = ripple.newSound(game.resourceManager:getResource("boss 1 fire"))
+    self.fireSound.tag(game.tags.sfx)
+
     self:setPhase()
     self:switchState("intro")
 end

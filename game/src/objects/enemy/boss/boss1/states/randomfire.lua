@@ -23,6 +23,8 @@ function randomFire:update(dt, bossInstance)
         gameHelper:addGameObject(newEnemy)
     end
 
+    bossInstance.fireSound:play()
+
     bossInstance:switchState(self.returnState)
 end
 

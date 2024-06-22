@@ -24,6 +24,8 @@ function rotationFire:update(dt, bossInstance)
         
         local newEnemy = self.chosenEnemyFunction(bossInstance.angle, bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
         gameHelper:addGameObject(newEnemy)
+
+        bossInstance.fireSound:play()
     end
 
     bossInstance.angle = bossInstance.angle + (self.angleTurnSpeed * dt)

@@ -33,6 +33,8 @@ function fireDirected:update(dt, bossInstance)
         end
 
         self.enemiesToFire = self.enemiesToFire - 1
+
+        bossInstance.fireSound:play()
     end
 
     if self.enemiesToFire <= 0 then
