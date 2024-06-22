@@ -572,6 +572,12 @@ function game:setupResources()
 
     local boss1spawn = love.audio.newSource("assets/audio/sfx/boss1spawn.wav", "static")
     resourceManager:addResource(boss1spawn, "boss 1 spawn")
+
+    local boss1hurt = love.audio.newSource("assets/audio/sfx/boss1hurt.wav", "static")
+    resourceManager:addResource(boss1hurt, "boss 1 hurt")
+
+    local boss1sound1 = love.audio.newSource("assets/audio/sfx/boss1sound1.wav", "static")
+    resourceManager:addResource(boss1sound1, "boss 1 sound 1")
 end
 
 function game:setupParticles()

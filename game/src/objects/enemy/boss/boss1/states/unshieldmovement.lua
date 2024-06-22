@@ -21,6 +21,7 @@ end
 function unshieldMovement:update(dt, bossInstance)
     if bossInstance.phaseHealth > 0 then
         bossInstance:moveRandomly(dt)
+
         self.attackCooldown = self.attackCooldown - (1 * dt)
 
         if self.attackCooldown <= 0 then
@@ -43,6 +44,7 @@ function unshieldMovement:update(dt, bossInstance)
             bossInstance.healthElement:setPhase(self.phase)
             bossInstance:setShielded(true)
             bossInstance:switchState(self.returnState)
+            bossInstance.hurtSound:play()
         end
     end
 end

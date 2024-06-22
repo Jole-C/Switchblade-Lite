@@ -10,6 +10,8 @@ function unshieldIntro:enter(bossInstance)
     if enemyManager then
         enemyManager:destroyAllEnemies({bossInstance})
     end
+    
+    bossInstance.sound1:play()
 end
 
 return unshieldIntro
