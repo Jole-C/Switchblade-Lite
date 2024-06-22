@@ -7,6 +7,8 @@ function enemyBase:new(x, y)
     self.health = 1
     self.maxInvulnerableTime = 0.15
 
+    self.restoreAmmo = true
+
     self.invulnerableTime = 0
     self.isInvulnerable = false
     self.enemyColour = game.manager.currentPalette.enemyColour
