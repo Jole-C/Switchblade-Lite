@@ -9,7 +9,7 @@ local unshieldMovement = require "src.objects.enemy.boss.boss1.states.unshieldmo
 
 local death = require "src.objects.enemy.boss.boss1.states.death"
 
-local circleFire = require "src.objects.enemy.boss.boss1.states.circlefre"
+local circleFire = require "src.objects.enemy.boss.boss1.states.circlefire"
 local directedFire = require "src.objects.enemy.boss.boss1.states.directedfire"
 local randomFire = require "src.objects.enemy.boss.boss1.states.randomfire"
 local rotationFire = require "src.objects.enemy.boss.boss1.states.rotationfire"
@@ -65,11 +65,11 @@ local states =
                     {
                         circleFire(
                         {
-                            numberOfEnemiesInCircle = 3,
-                            timesToRepeat = 3,
+                            numberOfEnemiesInCircle = 8,
+                            timesToRepeat = 5,
                             enemyFunctions =
                             {
-                                spawnCharger,
+                                spawnBullet,
                             },
                             returnState = "movement"
                         })
@@ -108,11 +108,31 @@ local states =
                     {
                         directedFire(
                         {
-                            enemiesToFire = 15,
+                            enemiesToFire = 20,
                             maxFireCooldown = 0.1,
                             enemyFunctions =
                             {
                                 spawnCharger,
+                            },
+                            returnState = "movement"
+                        }),
+                        rotationFire(
+                        {
+                            angleTurnSpeed = 3,
+                            maxFireCooldown = 0.07,
+                            enemyFunctions =
+                            {
+                                spawnBullet,
+                            },
+                            returnState = "movement"
+                        }),
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 16,
+                            timesToRepeat = 3,
+                            enemyFunctions =
+                            {
+                                spawnBullet,
                             },
                             returnState = "movement"
                         }),
@@ -126,33 +146,13 @@ local states =
                             },
                             returnState = "movement"
                         }),
-                        rotationFire(
-                        {
-                            angleTurnSpeed = 2,
-                            maxFireCooldown = 0.15,
-                            enemyFunctions =
-                            {
-                                spawnCharger,
-                            },
-                            returnState = "movement"
-                        }),
-                        circleFire(
-                        {
-                            numberOfEnemiesInCircle = 8,
-                            timesToRepeat = 3,
-                            enemyFunctions =
-                            {
-                                spawnCharger,
-                            },
-                            returnState = "movement"
-                        })
                     },
                     attackWeights =
                     {
+                        2.5,
                         2,
+                        1.25,
                         1,
-                        1,
-                        2,
                     }
                 },
 
@@ -183,11 +183,11 @@ local states =
                     {
                         circleFire(
                         {
-                            numberOfEnemiesInCircle = 4,
-                            timesToRepeat = 5,
+                            numberOfEnemiesInCircle = 12,
+                            timesToRepeat = 3,
                             enemyFunctions =
                             {
-                                spawnCharger
+                                spawnBullet
                             },
                             returnState = "movement"
                         })
@@ -224,9 +224,26 @@ local states =
                 {
                     attackList =
                     {
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 12,
+                            timesToRepeat = 5,
+                            enemyFunctions =
+                            {
+                                spawnCharger,
+                                spawnBullet,
+                            },
+                            returnState = "movement"
+                        }),
+                        laserFire(
+                        {
+                            angleTurnRate = 0.025,
+                            laserWindupTime = 0.025,
+                            returnState = "movement"
+                        }),
                         directedFire(
                         {
-                            enemiesToFire = 12,
+                            enemiesToFire = 30,
                             maxFireCooldown = 0.15,
                             enemyFunctions =
                             {
@@ -241,8 +258,7 @@ local states =
                             maxAngle = 55,
                             enemyFunctions =
                             {
-                                spawnCharger,
-                                spawnSticker,
+                                spawnBullet,
                             },
                             returnState = "movement"
                         }),
@@ -252,37 +268,22 @@ local states =
                             maxFireCooldown = 0.1,
                             enemyFunctions =
                             {
-                                spawnCharger,
                                 spawnSticker,
                             },
                             returnState = "movement"
                         }),
-                        laserFire(
-                        {
-                            angleTurnRate = 0.025,
-                            laserWindupTime = 0.025,
-                            returnState = "movement"
-                        }),
-                        circleFire(
-                        {
-                            numberOfEnemiesInCircle = 12,
-                            timesToRepeat = 5,
-                            enemyFunctions =
-                            {
-                                spawnBullet,
-                            },
-                            returnState = "movement"
-                        })
                     },
                     attackWeights =
                     {
-                        2,
-                        1,
-                        1,
+                        3,
                         3,
                         2,
+                        2,
+                        1,
                     }
                 },
+
+                attackCooldown = 2.3,
 
                 returnState = 
                 {
@@ -311,11 +312,11 @@ local states =
                     {
                         circleFire(
                         {
-                            numberOfEnemiesInCircle = 5,
-                            timesToRepeat = 6,
+                            numberOfEnemiesInCircle = 16,
+                            timesToRepeat = 3,
                             enemyFunctions =
                             {
-                                spawnCharger
+                                spawnBullet
                             },
                             returnState = "movement"
                         })
@@ -352,9 +353,26 @@ local states =
                 {
                     attackList =
                     {
+                        laserFire(
+                        {
+                            angleTurnRate = 0.025,
+                            laserWindupTime = 0.025,
+                            returnState = "movement"
+                        }),
+                        circleFire(
+                        {
+                            numberOfEnemiesInCircle = 12,
+                            timesToRepeat = 5,
+                            enemyFunctions =
+                            {
+                                spawnBullet,
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
                         directedFire(
                         {
-                            enemiesToFire = 12,
+                            enemiesToFire = 35,
                             maxFireCooldown = 0.15,
                             enemyFunctions =
                             {
@@ -385,26 +403,10 @@ local states =
                             },
                             returnState = "movement"
                         }),
-                        laserFire(
-                        {
-                            angleTurnRate = 0.025,
-                            laserWindupTime = 0.025,
-                            returnState = "movement"
-                        }),
-                        circleFire(
-                        {
-                            numberOfEnemiesInCircle = 12,
-                            timesToRepeat = 5,
-                            enemyFunctions =
-                            {
-                                spawnBullet,
-                            },
-                            returnState = "movement"
-                        })
                     },
                     attackWeights =
                     {
-                        2,
+                        3,
                         1,
                         1,
                         3,
@@ -412,6 +414,8 @@ local states =
                     }
                 },
             }),
+
+            attackCooldown = 1.7,
 
             death = death()
         }
