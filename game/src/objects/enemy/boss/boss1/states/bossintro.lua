@@ -1,9 +1,10 @@
 local bossState = require "src.objects.enemy.boss.bossstate"
 local bossIntro = class({name = "Boss 1 Intro", extends = bossState})
+local cameraTarget = require "src.objects.camera.cameratarget"
 
 function bossIntro:enter(bossInstance)
     local randomAngle = math.random(0, 2 * math.pi)
-    bossInstance.position = vec2(math.cos(randomAngle), math.sin(randomAngle)) * 500
+    bossInstance.position = vec2(math.cos(randomAngle), math.sin(randomAngle)) * 300
 
     self.lerpSpeed = 0.0125
     self.lerpRadius = 5
@@ -15,6 +16,7 @@ function bossIntro:enter(bossInstance)
     bossInstance:addAngleSpeed(50)
 
     self.introEffect = game.particleManager:getEffect("Boss Intro Burst")
+    gameHelper:getCurrentState().cameraManager:setOverrideTarget(cameraTarget(bossInstance.position, 1))
 end
 
 function bossIntro:update(dt, bossInstance)
@@ -32,6 +34,7 @@ function bossIntro:update(dt, bossInstance)
         bossInstance:switchState(self.returnState)
         bossInstance.healthElement:doIntro()
         bossInstance.position = vec2:zero()
+        gameHelper:getCurrentState().cameraManager:removeOverrideTarget()
     end
 end
 
