@@ -1,7 +1,8 @@
 local gamestate = require "src.gamestates.gamestate"
 local stageDirector = require "src.objects.stagedirector"
 local enemyManager = require "src.objects.enemy.enemymanager"
-local cameraManager = require "src.objects.cameramanager"
+local cameraManager = require "src.objects.camera.cameramanager"
+local cameraTarget = require "src.objects.camera.cameratarget"
 local level = require "src.levels.level1"
 local arena = require "src.objects.arena"
 
@@ -20,7 +21,7 @@ function gameLevelState:enter()
 
     self.cameraManager = cameraManager()
     self:addObject(self.cameraManager)
-    self.cameraManager:addTarget({position = vec2(0, 0), weight = 3})
+    self.cameraManager:addTarget(cameraTarget(vec2(0, 0), 3))
 
     self.stageDirector = stageDirector(level, 0, 0)
     self:addObject(self.stageDirector)

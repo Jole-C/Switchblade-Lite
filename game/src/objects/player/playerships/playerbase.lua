@@ -6,6 +6,7 @@ local playerHud = require "src.objects.player.playerhuddisplay"
 local boostAmmoEffect = require "src.objects.effects.boostammorestore"
 local boostLineEffect = require "src.objects.effects.boostline"
 local trailEffect = require "src.objects.effects.playertrail"
+local cameraTarget = require "src.objects.camera.cameratarget"
 
 local player = class({name = "Player", extends = gameObject})
 
@@ -95,7 +96,7 @@ function player:new(x, y)
     game.interfaceRenderer:addHudElement(self.hud)
 
     self.ammoFont = game.resourceManager:getResource("font main")
-    self.cameraWeight = {position = self.position, weight = 50}
+    self.cameraTarget = cameraTarget(self.position, 50)
 
     self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
     self.fireSound:tag(game.tags.sfx)
@@ -110,7 +111,7 @@ function player:new(x, y)
     self.boostHitSound = ripple.newSound(game.resourceManager:getResource("boost hit"))
     self.boostHitSound:tag(game.tags.sfx)
 
-    gameHelper:getCurrentState().cameraManager:addTarget(self.cameraWeight)
+    gameHelper:getCurrentState().cameraManager:addTarget(self.cameraTarget)
 end
 
 -- Update the player hud
@@ -331,8 +332,6 @@ function player:updatePosition(dt)
     self.position = arena:getClampedPosition(self.position)
 
     self.velocity = self:applyFriction(dt, self.velocity, self.friction)
-
-    self.cameraWeight.position = self.position
 end
 
 function player:checkCollision()
