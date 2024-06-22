@@ -11,10 +11,10 @@ function bossWarning:new(x, y, bossClass)
     -- Create a sprite to hold the caution strip
     self.cautionSprites = {}
 
-    for i = 1, 10 do
-        local y = 27 * (i - 1)
+    for i = 1, 20 do
+        local y = 15 * (i - 1)
 
-        local newQuad = love.graphics.newQuad(0, 0, 480, 27, 480, 27)
+        local newQuad = love.graphics.newQuad(0, 0, 480, 15, 480, 15)
         
         local direction = 1
 
@@ -30,16 +30,16 @@ function bossWarning:new(x, y, bossClass)
         })
     end
 
-    for i = 1, 10 do
+    for i = 1, 20 do
         game.interfaceRenderer:addHudElement(self.cautionSprites[i].sprite)
     end
 
     -- Create the background rectangle
     self.warningBackground = rect(0, 135, 480, 0, "fill", game.manager.currentPalette.enemySpawnColour, "darken", "premultiplied")
     self.backgroundY = 135
-    self.backgroundMaxY = 54
+    self.backgroundMaxY = 60
     self.backgroundHeight = 0
-    self.backgroundMaxHeight = 162
+    self.backgroundMaxHeight = 165
     self.backgroundLerpSpeed = 0.2
 
     game.interfaceRenderer:addHudElement(self.warningBackground)
@@ -67,6 +67,8 @@ function bossWarning:new(x, y, bossClass)
         {
             quad = newQuad,
             scale = 0,
+            x = spriteX,
+            y = spriteY,
             sprite = quad("boss warning", newQuad, spriteX, spriteY, 0, 0, 0, 67/2, 270/2, false)
         })
     end
@@ -82,6 +84,11 @@ function bossWarning:new(x, y, bossClass)
     -- Variable used to scale each letter of the WARNING text over time
     self.spriteScaleSpeed = 0.15
     self.currentScaledSprite = 1
+
+    -- After all letters appear they shake by this value
+    self.maxShakeIntensity = 6
+    self.shakeIntensity = 0
+    self.shakeFadeRate = 0.05
 
     -- The rectangle to display as the warning flash before the full warning appears
     self.warningFlash = rect(0, 0, 480, 270, "fill", {1, 1, 1, 0})
@@ -116,7 +123,6 @@ function bossWarning:update(dt)
         player:setInvulnerable()
     end
 
-
     if self.currentScaledSprite <= #self.warningQuads and self.stopWarning == false then
         local quad = self.warningQuads[self.currentScaledSprite]
         local sprite = quad.sprite
@@ -127,6 +133,8 @@ function bossWarning:update(dt)
         -- If the current letter is scaled to an acceptable amount, then move on to the next letter
         if math.abs(1 - quad.scale) < 0.1 then
             self.currentScaledSprite = self.currentScaledSprite + 1
+            sprite.scale.x = 1
+            sprite.scale.y = 1
             
             self.warningBoom:play()
             gameHelper:screenShake(0.2)
@@ -160,7 +168,11 @@ function bossWarning:update(dt)
 
             self.warningSiren:play()
             gameHelper:screenShake(0.2)
+
+            self.shakeIntensity = self.maxShakeIntensity
         end
+
+        self.shakeIntensity = math.lerpDT(self.shakeIntensity, 0, self.shakeFadeRate, dt)
 
         -- Fade out the background flash
         self.warningFlash.colour = {1, 1, 1, self.screenFlashAlpha}
@@ -175,12 +187,16 @@ function bossWarning:update(dt)
 
             local sin = (math.sin(self.warningColourSine + (0.2 * i)) + 1) / 2
             local overrideDrawColour = {}
+
             overrideDrawColour[1] = math.lerp(1, game.manager.currentPalette.enemyColour[1], sin)
             overrideDrawColour[2] = math.lerp(1, game.manager.currentPalette.enemyColour[2], sin)
             overrideDrawColour[3] = math.lerp(1, game.manager.currentPalette.enemyColour[3], sin)
             overrideDrawColour[4] = 1
     
             sprite.overrideDrawColour = overrideDrawColour
+
+            sprite.position.x = quad.x + math.random(-self.shakeIntensity, self.shakeIntensity)
+            sprite.position.y = quad.y + math.random(-self.shakeIntensity, self.shakeIntensity)
         end
 
         -- After an amount of time, stop the warning, do a second flash and destroy the object
