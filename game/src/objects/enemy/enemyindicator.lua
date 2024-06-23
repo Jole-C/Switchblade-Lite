@@ -8,7 +8,7 @@ function enemyIndicator:new(x, y, enemy)
     assert(enemy ~= nil, "Enemy reference is nil!")
 
     self.circleRadiusFrequency = 3
-    self.circleRadiusAmplitude = 5
+    self.circleRadiusAmplitude = 8
     self.circleRadius = 5
 
     self.circleRadiusTime = 0
