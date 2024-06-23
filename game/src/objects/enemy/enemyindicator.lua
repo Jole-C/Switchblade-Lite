@@ -10,6 +10,7 @@ function enemyIndicator:new(x, y, enemy)
     self.circleRadiusFrequency = 3
     self.circleRadiusAmplitude = 8
     self.circleRadius = 5
+    self.lineWidth = 3
 
     self.circleRadiusTime = 0
     self.circleRadiusOffset = 0
@@ -30,7 +31,9 @@ function enemyIndicator:draw()
     end
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.circle("fill", self.enemy.position.x, self.enemy.position.y, self.circleRadius + self.circleRadiusOffset)
+    love.graphics.setLineWidth(self.lineWidth)
+    love.graphics.circle("line", self.enemy.position.x, self.enemy.position.y, self.circleRadius + self.circleRadiusOffset)
+    love.graphics.setLineWidth(1)
 end
 
 return enemyIndicator
