@@ -495,6 +495,10 @@ function player:draw()
     love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius)
     love.graphics.setLineWidth(1)
 
+    if self.health < self.maxHealth then
+        love.graphics.circle("line", self.position.x, self.position.y, math.lerp(self.healthCircleRadius, 0, math.clamp((self.healthRechargeCooldown/self.maxHealthRechargeCooldown), 0, 1)))
+    end
+
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
