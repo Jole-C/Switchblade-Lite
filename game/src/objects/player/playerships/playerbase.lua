@@ -3,6 +3,7 @@ local playerBullet = require "src.objects.player.playerbullets.playerbullet"
 local playerExplosion = require "src.objects.player.playerbullets.playerexplosion"
 local collider = require "src.collision.collider"
 local ammoDisplay = require "src.objects.player.playerammodisplay"
+local temperatureDisplay = require "src.objects.player.playertemperaturedisplay"
 local boostAmmoEffect = require "src.objects.effects.boostammorestore"
 local boostLineEffect = require "src.objects.effects.boostline"
 local trailEffect = require "src.objects.effects.playertrail"
@@ -46,7 +47,7 @@ function player:new(x, y)
     self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
-    self.bounceDampening = self.bounceDampening or 0.5    
+    self.bounceDampening = self.bounceDampening or 0.5
     self.boostLineCount = 5
     self.boostLineSpawnRange = 500
     
@@ -92,6 +93,9 @@ function player:new(x, y)
 
     self.ammoDisplay = ammoDisplay(0, 0)
     gameHelper:addGameObject(self.ammoDisplay)
+
+    self.temperatureDisplay = temperatureDisplay(0, 0)
+    gameHelper:addGameObject(self.temperatureDisplay)
 
     self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
     self.fireSound:tag(game.tags.sfx)
@@ -259,6 +263,9 @@ function player:updateOverheating(dt)
     end
 
     self.shipTemperature = math.clamp(self.shipTemperature, 0, self.maxShipTemperature)
+
+    self.temperatureDisplay.temperature = self.shipTemperature
+    self.temperatureDisplay.maxTemperature = self.maxShipTemperature
 end
 
 function player:spawnTrail()
@@ -321,6 +328,7 @@ function player:updatePosition(dt)
 
     self.cameraTarget.position = self.position
     self.ammoDisplay.position = self.position
+    self.temperatureDisplay.position = self.position
 end
 
 function player:checkCollision()
