@@ -63,7 +63,7 @@ function orbiter:update(dt)
 
     local player = game.playerManager.playerReference
 
-    if player.isOverheating == false then
+    if player and player.isOverheating == false then
         self.fireCooldown = self.fireCooldown - (1 * dt)
 
         if self.fireCooldown <= 0 then
