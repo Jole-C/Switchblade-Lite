@@ -53,16 +53,15 @@ end
 
 function arenaController:draw()
     love.graphics.setColor(1, 1, 1, 1)
+
     love.graphics.setLineWidth(3)
-
     self:drawSegments("line")
-
     love.graphics.setLineWidth(1)
 
     love.graphics.setColor(0.1, 0, 0.1, 1)
 
-    self:drawSegments()
-
+    self:drawSegments("fill")
+    
     self:setArenaStencil()
     self:setArenaStencilTest()
 
@@ -75,8 +74,6 @@ function arenaController:draw()
             love.graphics.circle("fill", -backgroundSize/2 + x * self.circleSpacing, -backgroundSize/2 + y * self.circleSpacing, self.circleSize, 10)
         end
     end
-
-    self:setArenaStencilTest()
 end
 
 function arenaController:setArenaStencil()
