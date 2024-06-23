@@ -240,6 +240,12 @@ local states =
                             },
                             returnState = "movement"
                         }),
+                        laserFire(
+                        {
+                            angleTurnRate = 0.025,
+                            laserWindupTime = 0.025,
+                            returnState = "movement"
+                        }),
                         circleFire(
                         {
                             numberOfEnemiesInCircle = 12,
@@ -258,12 +264,6 @@ local states =
                             {
                                 spawnSticker,
                             },
-                            returnState = "movement"
-                        }),
-                        laserFire(
-                        {
-                            angleTurnRate = 0.025,
-                            laserWindupTime = 0.025,
                             returnState = "movement"
                         }),
                         directedFire(
@@ -300,10 +300,10 @@ local states =
                     attackWeights =
                     {
                         4,
+                        4,
                         3,
                         3,
                         3,
-                        2,
                         2,
                         1,
                     }
@@ -449,6 +449,7 @@ local states =
                     attackWeights =
                     {
                         4,
+                        3,
                         3,
                         2,
                         2,
