@@ -13,7 +13,7 @@ local levelDefinition =
         ["charger"] = {enemyClass = charger, spriteName = "charger sprite"},
         ["drone"] = {enemyClass = drone, spriteName = "drone sprite"},
         ["shielder"] = {enemyClass = shielder, spriteName = "wanderer sprite"},
-        ["orbiter"] = {enemyClass = orbiter, spriteName = "wanderer sprite"},
+        ["orbiter"] = {enemyClass = orbiter, spriteName = "orbiter sprite"},
         ["boss"] = {enemyClass = boss}
     },
     
