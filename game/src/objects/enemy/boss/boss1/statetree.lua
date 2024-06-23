@@ -18,11 +18,15 @@ local laserFire = require "src.objects.enemy.boss.boss1.states.laserfire"
 local charger = require "src.objects.enemy.charger"
 local sticker = require "src.objects.enemy.sticker"
 local bullet = require "src.objects.enemy.enemybullet"
+local enemyIndicator = require "src.objects.enemy.enemyindicator"
 
 local spawnCharger = function(angle, x, y)
     local enemy = charger(x, y)
     enemy.angle = angle
     enemy.targetPlayer = false
+
+    local indicator = enemyIndicator(x, y, enemy)
+    gameHelper:addGameObject(indicator)
     
     return enemy
 end
