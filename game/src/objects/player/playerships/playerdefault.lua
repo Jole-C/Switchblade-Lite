@@ -48,39 +48,4 @@ function playerDefault:new(x, y)
     self:super(x, y)
 end
 
-function playerDefault:update(dt)
-    -- Update the hud
-    self:updateHud()
-
-    local currentGamestate = gameHelper:getCurrentState()
-    if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
-        return
-    end
-    
-    -- Create a vector holding the direction the ship is expected to move in
-    local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
-
-    -- Handle ship functionality, moving boosting and firing
-    self:updateShipMovement(dt, movementDirection)
-    self:updateShipShooting(dt, movementDirection)
-    self:updateShipSteering(dt)
-    
-    -- Handle game timers
-    self:updatePlayerTimers(dt)
-
-    -- Handle overheating
-    self:updateOverheating(dt)
-
-    -- Apply the velocity to the ship and then apply friction
-    self:updatePosition(dt)
-
-    -- Wrap the ship's position
-    self:wrapShipPosition()
-
-    -- Check collision
-    self:checkCollision()
-
-    self:rechargeHealth(dt)
-end
-
 return playerDefault
