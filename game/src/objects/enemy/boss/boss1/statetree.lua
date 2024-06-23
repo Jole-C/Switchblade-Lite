@@ -40,6 +40,9 @@ local spawnSticker = function(angle, x, y)
         enemy.restoreAmmo = false
     else
         enemy.restoreAmmo = true
+        
+        local indicator = enemyIndicator(x, y, enemy)
+        gameHelper:addGameObject(indicator)
     end
     
     return enemy
