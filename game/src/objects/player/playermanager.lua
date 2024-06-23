@@ -32,7 +32,7 @@ function playerManager:update()
     if self.playerReference then
         self.playerPosition = self.playerReference.position
 
-        if self.playerReference.health <= 0 then
+        if self.playerReference.health <= 0 or self.playerReference.markedForDelete then
             self.playerReference = nil
         end
     end
