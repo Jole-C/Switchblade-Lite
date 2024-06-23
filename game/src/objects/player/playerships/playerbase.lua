@@ -16,7 +16,7 @@ function player:new(x, y)
 
     -- Generic parameters of the ship
     self.maxHealth = 5
-    self.maxHealthRechargeCooldown = 3
+    self.maxHealthRechargeCooldown = 2
     self.healthCircleRadius = 200
     self.spriteName = self.spriteName or "player default"
     self.maxOverheatPlayRate = 0.5
