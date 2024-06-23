@@ -2,7 +2,7 @@ local gameObject = require "src.objects.gameobject"
 local playerBullet = require "src.objects.player.playerbullets.playerbullet"
 local playerExplosion = require "src.objects.player.playerbullets.playerexplosion"
 local collider = require "src.collision.collider"
-local playerHud = require "src.objects.player.playerhuddisplay"
+local ammoDisplay = require "src.objects.player.playerammodisplay"
 local boostAmmoEffect = require "src.objects.effects.boostammorestore"
 local boostLineEffect = require "src.objects.effects.boostline"
 local trailEffect = require "src.objects.effects.playertrail"
@@ -58,7 +58,6 @@ function player:new(x, y)
     self.shipKnockbackForce = self.shipKnockbackForce or 10
     self.fireOffset = self.fireOffset or 10
     self.boostAmmoIncrement = self.boostAmmoIncrement or 5
-    self.maxAmmoDisplayTime = 1
     
     -- Ship variables
     self.health = self.maxHealth
@@ -76,7 +75,6 @@ function player:new(x, y)
     self.maxSteeringSpeed = self.steeringSpeedStationary
     self.steeringAccelerationSpeed = self.steeringAccelerationStationary
     self.displayAmmo = false
-    self.ammoDisplayTime = self.maxAmmoDisplayTime
     self.overheatPlayCooldown = 0
     self.boostHeatDividend = 1
     self.boostHitEnemies = 0
@@ -92,10 +90,8 @@ function player:new(x, y)
     self.sprite = game.resourceManager:getResource(self.spriteName)
     self.sprite:setFilter("nearest")
 
-    self.hud = playerHud()
-    game.interfaceRenderer:addHudElement(self.hud)
-
-    self.ammoFont = game.resourceManager:getResource("font main")
+    self.ammoDisplay = ammoDisplay(0, 0)
+    gameHelper:addGameObject(self.ammoDisplay)
 
     self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
     self.fireSound:tag(game.tags.sfx)
@@ -112,13 +108,6 @@ function player:new(x, y)
 
     self.cameraTarget = cameraTarget(self.position, 100)
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraTarget)
-end
-
--- Update the player hud
-function player:updateHud(dt)
-    if self.hud then
-        self.hud:update(dt)
-    end
 end
 
 function player:updateShipMovement(dt, movementDirection)
@@ -172,6 +161,8 @@ function player:updateShipSteering(dt)
 end
 
 function player:updateShipShooting(dt, movementDirection)
+    self.ammoDisplay.ammo = self.ammo
+
     if self.isBoosting == true or self.ammo <= 0 then
         self.canFire = false
     end
@@ -189,7 +180,7 @@ function player:updateShipShooting(dt, movementDirection)
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
 
         self:setFireCooldown()
-        self:setDisplayAmmo()
+        self.ammoDisplay:setDisplayAmmo()
 
         self.fireSound:play({pitch = 1 + (2 * (1 - (self.ammo / self.maxAmmo)))})
         gameHelper:getCurrentState().cameraManager:screenShake(0.05)
@@ -201,7 +192,6 @@ end
 function player:updatePlayerTimers(dt)
     self.fireCooldown = self.fireCooldown - 1 * dt
     self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
-    self.ammoDisplayTime = self.ammoDisplayTime - 1 * dt
 
     if self.invulnerabilityCooldown <= 0 then
         self.isInvulnerable = false
@@ -209,10 +199,6 @@ function player:updatePlayerTimers(dt)
 
     if self.fireCooldown <= 0 then
         self.canFire = true
-    end
-
-    if self.ammoDisplayTime <= 0 then
-        self.displayAmmo = false
     end
 end
 
@@ -334,6 +320,7 @@ function player:updatePosition(dt)
     self.velocity = self:applyFriction(dt, self.velocity, self.friction)
 
     self.cameraTarget.position = self.position
+    self.ammoDisplay.position = self.position
 end
 
 function player:checkCollision()
@@ -431,15 +418,10 @@ function player:handleBoostExplosion()
     end
 end
 
-function player:setDisplayAmmo()
-    self.displayAmmo = true
-    self.ammoDisplayTime = self.maxAmmoDisplayTime
-end
-
 function player:incrementAmmo()
     self.ammo = self.ammo + self.boostAmmoIncrement
     self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
-    self:setDisplayAmmo()
+    self.ammoDisplay:setDisplayAmmo()
 end
 
 function player:setFireCooldown()
@@ -470,9 +452,11 @@ function player:rechargeHealth(dt)
 end
 
 function player:update(dt)
-    -- Update the hud
-    self:updateHud()
-    
+    local currentGamestate = gameHelper:getCurrentState()
+    if currentGamestate.stageDirector and currentGamestate.stageDirector.inIntro == true then
+        return
+    end
+
     -- Create a vector holding the direction the ship is expected to move in
     local movementDirection = vec2(math.cos(self.angle), math.sin(self.angle))
 
@@ -514,14 +498,6 @@ function player:draw()
     love.graphics.setColor(game.manager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
-
-    -- Draw the ammo count if the player is firing
-    if self.displayAmmo == true then
-        love.graphics.setFont(self.ammoFont)
-        local width = self.ammoFont:getWidth(self.ammo)
-
-        love.graphics.printf(tostring(self.ammo), self.position.x - width/2, self.position.y + 10, width, "center")
-    end
 
     if self.isInvulnerable == true then
         love.graphics.circle("line", self.position.x, self.position.y, 10)
