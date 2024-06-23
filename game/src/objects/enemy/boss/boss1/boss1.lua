@@ -56,22 +56,22 @@ function boss1:new(x, y)
         movementSpeed =
         {
             16,
-            20,
-            25,
+            30,
+            50,
         },
         
         wiggleSpeed =
         {
             4,
-            6,
-            8
+            8,
+            12
         },
         
         eyeRadius =
         {
+            14,
             10,
-            12,
-            14
+            8
         }
     }
 
