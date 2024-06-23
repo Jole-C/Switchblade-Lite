@@ -37,7 +37,7 @@ local spawnSticker = function(angle, x, y)
     enemy.startingSpeed = math.random(150, 300)
     enemy.restoreAmmo = false
 
-    if math.random(0, 100) < 20 then
+    if math.random(0, 100) < 15 then
         enemy.restoreAmmo = true
 
         local indicator = enemyIndicator(x, y, enemy)
@@ -163,8 +163,8 @@ local states =
                     },
                     attackWeights =
                     {
-                        4,
                         3,
+                        4,
                         3,
                         2,
                     }
@@ -254,6 +254,16 @@ local states =
                             laserWindupTime = 0.025,
                             returnState = "movement"
                         }),
+                        directedFire(
+                        {
+                            enemiesToFire = 15,
+                            maxFireCooldown = 0.15,
+                            enemyFunctions =
+                            {
+                                spawnSticker,
+                            },
+                            returnState = "movement"
+                        }),
                         circleFire(
                         {
                             numberOfEnemiesInCircle = 12,
@@ -268,16 +278,6 @@ local states =
                         {
                             numberOfEnemiesInCircle = 8,
                             timesToRepeat = 3,
-                            enemyFunctions =
-                            {
-                                spawnSticker,
-                            },
-                            returnState = "movement"
-                        }),
-                        directedFire(
-                        {
-                            enemiesToFire = 15,
-                            maxFireCooldown = 0.15,
                             enemyFunctions =
                             {
                                 spawnSticker,
@@ -309,11 +309,11 @@ local states =
                     {
                         4,
                         4,
-                        3,
+                        4,
                         3,
                         3,
                         2,
-                        1,
+                        2,
                     }
                 },
 
@@ -457,10 +457,10 @@ local states =
                     attackWeights =
                     {
                         4,
+                        4,
+                        4,
                         3,
                         3,
-                        2,
-                        2,
                         2,
                         1,
                     }
