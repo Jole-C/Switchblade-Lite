@@ -46,7 +46,7 @@ function game:new()
     self.input = baton.new{
         controls = {
             thrust = {'key:w', 'key:up', 'button:a'},
-            reverseThrust = {'key:s', 'key:down', 'button:x'},
+            reverseThrust = {'key:s', 'key:down', 'button:b'},
             steerLeft = {'key:a', 'key:left', 'axis:leftx-'},
             steerRight = {'key:d', 'key:right', 'axis:leftx+'},
             boost = {'key:lshift', 'key:rshift', 'button:leftshoulder'},
