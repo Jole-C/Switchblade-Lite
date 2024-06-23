@@ -7,6 +7,7 @@ function gameOverState:enter()
     game.camera:setWorld(0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
     game.camera:setPosition(game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2)
     game.interfaceRenderer:clearElements()
+    game.manager:swapPaletteGroup("main")
 
     self.objects = {}
     
