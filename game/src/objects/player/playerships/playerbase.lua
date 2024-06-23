@@ -17,7 +17,7 @@ function player:new(x, y)
     -- Generic parameters of the ship
     self.maxHealth = 5
     self.maxHealthRechargeCooldown = 3
-    self.healthCircleRadius = 260
+    self.healthCircleRadius = 200
     self.spriteName = self.spriteName or "player default"
     self.maxOverheatPlayRate = 0.5
     self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 8
@@ -442,10 +442,6 @@ function player:applyFriction(dt, value, frictionValue)
     return value * frictionRatio
 end
 
-function player:wrapShipPosition()
-
-end
-
 function player:rechargeHealth(dt)
     if self.isBoosting or self.isOverheating then
         self.healthRechargeCooldown = self.maxHealthRechargeCooldown
@@ -482,9 +478,6 @@ function player:update(dt)
     -- Apply the velocity to the ship and then apply friction
     self:updatePosition(dt)
 
-    -- Wrap the ship's position
-    self:wrapShipPosition()
-
     -- Check collision
     self:checkCollision()
 
@@ -496,8 +489,11 @@ function player:draw()
         return
     end
 
-    love.graphics.setColor(1, 1, 1, 0.25)
+    love.graphics.setColor(1, 1, 1, 0.17)
     love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 1 - (self.health/self.maxHealth)))
+    love.graphics.setLineWidth(3)
+    love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius)
+    love.graphics.setLineWidth(1)
 
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
