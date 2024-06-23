@@ -1,4 +1,4 @@
-local gameObject = require "src.objects.gameObject"
+local gameObject = require "src.objects.gameobject"
 local enemyIndicator = class({name = "Enemy Indicator", extends = gameObject})
 
 function enemyIndicator:new(x, y, enemy)
