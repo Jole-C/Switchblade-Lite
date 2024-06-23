@@ -14,9 +14,9 @@ function sticker:new(x, y)
     self.angleTurnRate = 0.05
     self.secondsBetweenAngleChange = 1
     self.randomChangeOffset = 0.5
-    self.circleFrequency = 3
-    self.circleAmplitude = 5
-    self.circleRadius = 5
+    self.circleFrequency = 2
+    self.circleAmplitude = 3
+    self.circleRadius = 2
     self.maxStickGracePeriod = 3
 
     self.circleSine = 0
