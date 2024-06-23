@@ -10,7 +10,7 @@ function bossIntro:enter(bossInstance)
     self.lerpRadius = 5
     self.returnState = self.parameters.returnState
     self.phase = self.parameters.phase
-    self.drawAbove = false
+    
 
     gameHelper:screenShake(0.6)
     bossInstance:addAngleSpeed(50)
