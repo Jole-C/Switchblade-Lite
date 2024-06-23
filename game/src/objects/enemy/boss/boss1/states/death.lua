@@ -6,11 +6,12 @@ function shieldOutro:enter(bossInstance)
     self.timeBetweenExplosions = 0
     self.maxTimeBetweenExplosions = 0.7
     self.maxExplosionDistanceOffset = 50
+    self.startingPosition = bossInstance.position
 end
 
 function shieldOutro:update(dt, bossInstance)
     bossInstance:setPhaseTime()
-    
+
     self.timeBetweenExplosions = self.timeBetweenExplosions - (1 * dt)
 
     if self.timeBetweenExplosions <= 0 then
@@ -24,7 +25,7 @@ function shieldOutro:update(dt, bossInstance)
         local offset = math.random(-self.maxExplosionDistanceOffset, self.maxExplosionDistanceOffset)
         local offsetVector = vec2(math.cos(angle) * offset, math.sin(angle) * offset)
 
-        bossInstance.position = offsetVector
+        bossInstance.position = self.startingPosition + offsetVector
 
         self.numberOfExplosions = self.numberOfExplosions - 1
         
