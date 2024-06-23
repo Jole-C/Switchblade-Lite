@@ -391,7 +391,7 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
                     self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
                 end
                 
-                if collidedObject.markedForDelete then
+                if collidedObject.markedForDelete and collidedObject.restoreAmmo then
                     self:incrementAmmo()
 
                     local newEffect = boostAmmoEffect(self.position.x, self.position.y)
