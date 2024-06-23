@@ -35,12 +35,11 @@ local spawnSticker = function(angle, x, y)
     local enemy = sticker(x, y)
     enemy.angle = angle
     enemy.startingSpeed = math.random(150, 300)
+    enemy.restoreAmmo = false
 
-    if math.random(0, 100) > 10 then
-        enemy.restoreAmmo = false
-    else
+    if math.random(0, 100) < 20 then
         enemy.restoreAmmo = true
-        
+
         local indicator = enemyIndicator(x, y, enemy)
         gameHelper:addGameObject(indicator)
     end
