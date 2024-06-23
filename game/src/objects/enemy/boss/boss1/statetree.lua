@@ -35,6 +35,12 @@ local spawnSticker = function(angle, x, y)
     local enemy = sticker(x, y)
     enemy.angle = angle
     enemy.startingSpeed = math.random(150, 300)
+
+    if math.random(0, 100) > 10 then
+        enemy.restoreAmmo = false
+    else
+        enemy.restoreAmmo = true
+    end
     
     return enemy
 end

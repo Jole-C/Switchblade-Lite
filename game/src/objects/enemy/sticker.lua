@@ -11,7 +11,6 @@ function sticker:new(x, y)
 
     self.health = 1
     self.speed = 85
-    self.restoreAmmo = false
     self.angleTurnRate = 0.05
     self.secondsBetweenAngleChange = 1
     self.randomChangeOffset = 0.5
