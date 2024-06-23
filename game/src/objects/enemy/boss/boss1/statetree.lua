@@ -40,7 +40,7 @@ local spawnSticker = function(angle, x, y)
 end
 
 local spawnBullet = function(angle, x, y)
-    local enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemy, 16, 16)
+    local enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemybullet, 16, 16)
 
     return enemy
 end
