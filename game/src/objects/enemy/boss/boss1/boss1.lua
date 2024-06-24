@@ -69,9 +69,9 @@ function boss1:new(x, y)
         
         eyeRadius =
         {
-            14,
-            10,
-            8
+            12,
+            8,
+            6
         }
     }
 
