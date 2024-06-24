@@ -14,7 +14,7 @@ function enemyEye:update()
         return
     end
 
-    local eyeAngle = self.eyeBasePosition:angle_between(game.playerManager.playerReference.position)
+    local eyeAngle = self.eyeBasePosition:angle_between(game.playerManager.playerPosition)
     self.eyePosition.x = self.eyeBasePosition.x + math.cos(self.eyeAngle or eyeAngle) * self.eyeDistance
     self.eyePosition.y = self.eyeBasePosition.y + math.sin(self.eyeAngle or eyeAngle) * self.eyeDistance
 end

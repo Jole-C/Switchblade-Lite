@@ -54,15 +54,12 @@ function wanderer:update(dt)
 
     if self.angleChangeCooldown <= 0 then
         if self.targetPlayer == true then
-            local player = game.playerManager.playerReference
+            local playerPosition = game.playerManager.playerPosition
             local angle = math.random(0, 2 * math.pi)
             local targetPosition = vec2(math.cos(angle), math.sin(angle)) * math.random(-self.maxDistanceFromPlayer, self.maxDistanceFromPlayer)
     
-            if player then
-                targetPosition = player.position + targetPosition
-            end
-
-            self.targetAngle = (player.position - self.position):angle() + math.rad(math.random(-self.maxAngleOffset, self.maxAngleOffset))
+            targetPosition = playerPosition + targetPosition
+            self.targetAngle = (playerPosition - self.position):angle() + math.rad(math.random(-self.maxAngleOffset, self.maxAngleOffset))
         else
             self.targetAngle = math.random(0, 2 * math.pi)
         end

@@ -30,16 +30,17 @@ function shielder:update(dt)
 
     -- Move the enemy to the player
     local playerReference = game.playerManager.playerReference
+    local playerPosition = game.playerManager.playerPosition
 
     local speed = self.speed
     local lerpDirection = self.position
     local lerpRate = self.turnRate
 
     if playerReference then
-        lerpDirection = (playerReference.position - self.position)
+        lerpDirection = (playerPosition - self.position)
 
-        if playerReference.isBoosting and (self.position - playerReference.position):length() < self.fleeDistance then
-            lerpDirection = (self.position - playerReference.position)
+        if playerReference.isBoosting and (self.position - playerPosition):length() < self.fleeDistance then
+            lerpDirection = (self.position - playerPosition)
             speed = self.fleeSpeed
             lerpRate = self.fleeTurnRate
         end
