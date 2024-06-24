@@ -187,7 +187,7 @@ function player:updateShipShooting(dt, movementDirection)
         self.ammoDisplay:setDisplayAmmo()
 
         self.fireSound:play({pitch = 1 + (2 * (1 - (self.ammo / self.maxAmmo)))})
-        gameHelper:getCurrentState().cameraManager:screenShake(0.05)
+        gameHelper:screenShake(0.05)
         
         self.ammo = self.ammo - 1
     end
@@ -517,7 +517,7 @@ function player:draw()
 end
 
 function player:spawnBoostLines()
-    gameHelper:getCurrentState().cameraManager:screenShake(0.05)
+    gameHelper:screenShake(0.05)
 
     for i = 1, self.boostLineCount do
         local x = self.position.x + math.random(-self.boostLineSpawnRange, self.boostLineSpawnRange)

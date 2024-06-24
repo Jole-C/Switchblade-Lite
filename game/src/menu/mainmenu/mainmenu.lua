@@ -123,7 +123,7 @@ function mainMenu:new()
 
                 toggleButton("Limit Palette Swaps", "font ui", 10, 40, 20, 40, "limitPaletteSwaps", 260),
 
-                toggleButton("Toggle Screenshake", "font ui", 10, 55, 20, 55, "toggleScreenshake", 260),
+                toggleButton("Disable Screenshake", "font ui", 10, 55, 20, 55, "disableScreenshake", 260),
 
                 toggleButton("Center Camera", "font ui", 10, 70, 20, 70, "centerCamera", 260),
 

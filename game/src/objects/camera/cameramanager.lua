@@ -81,6 +81,10 @@ function cameraManager:removeTarget(targetToRemove)
 end
 
 function cameraManager:screenShake(amount)
+    if game.manager:getOption("disableScreenshake") == true then
+        return
+    end
+    
     self.screenShakeAmount = amount
 end
 
