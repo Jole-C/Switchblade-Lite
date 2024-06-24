@@ -21,7 +21,10 @@ function gameLevelState:enter()
 
     self.cameraManager = cameraManager()
     self:addObject(self.cameraManager)
-    self.cameraManager:addTarget(cameraTarget(vec2(0, 0), 3))
+
+    if game.manager:getOption("centerCamera") == false then
+        self.cameraManager:addTarget(cameraTarget(vec2(0, 0), 3))
+    end
 
     self.stageDirector = stageDirector(level, 0, 0)
     self:addObject(self.stageDirector)
