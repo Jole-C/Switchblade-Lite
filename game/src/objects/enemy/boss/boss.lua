@@ -2,6 +2,7 @@ local enemyBase = require "src.objects.enemy.enemybase"
 local text = require "src.interface.text"
 local collider = require "src.collision.collider"
 local bossHealthBar = require "src.objects.enemy.boss.bosshealthbar"
+local bossIntroCard = require "src.objects.enemy.boss.bossintrocard"
 
 local boss = class({name = "Boss", extends = enemyBase})
 
@@ -42,6 +43,9 @@ function boss:new(x, y)
     self.healthElement = bossHealthBar(self, self.bossName, self.bossSubtitle)
     game.interfaceRenderer:addHudElement(self.healthElement)
 
+    self.introCard = bossIntroCard(self.bossName, self.bossSubtitle)
+    game.interfaceRenderer:addHudElement(self.introCard)
+
     gameHelper:getCurrentState().stageDirector:registerBoss(self)
 end
 
@@ -75,6 +79,8 @@ function boss:update(dt)
     self.healthElement.maxShieldHealth = self.maxShieldHealth
     self.healthElement.maxPhaseHealth = self.maxPhaseHealth
     self.healthElement:update(dt)
+
+    self.introCard:update(dt)
 end
 
 function boss:setShielded(isShielded)
