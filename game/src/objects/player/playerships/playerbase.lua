@@ -493,8 +493,12 @@ function player:draw()
     love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 1 - (self.health/self.maxHealth)))
     love.graphics.setLineWidth(3)
     love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius)
+    love.graphics.setColor(1, 1, 1, 0.08)
+    love.graphics.setLineWidth(2)
+    love.graphics.circle("line", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 0.6))
     love.graphics.setLineWidth(1)
 
+    love.graphics.setColor(1, 1, 1, 0.17)
     if self.health < self.maxHealth then
         love.graphics.circle("line", self.position.x, self.position.y, math.lerp(self.healthCircleRadius, 0, math.clamp((self.healthRechargeCooldown/self.maxHealthRechargeCooldown), 0, 1)))
     end
