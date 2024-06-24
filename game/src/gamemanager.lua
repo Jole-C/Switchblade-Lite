@@ -9,6 +9,8 @@ function gameManager:new()
     self.palettes = {}
     self.currentPaletteGroup = {}
     self.currentPalette = {}
+    self.maxPaletteSwapCooldown = 3
+    self.paletteSwapCooldown = -1
 
     self.isTransitioning = false
     self.isPaused = false
@@ -73,8 +75,11 @@ function gameManager:update(dt)
     end
 
     self.freezeFrames = self.freezeFrames - 1 * dt
-
     self.gameFrozen = self.freezeFrames > 0
+
+    if self:getOption("limitPaletteSwaps") then
+        self.paletteSwapCooldown = self.paletteSwapCooldown - (1 * dt)
+    end
 end
 
 function gameManager:changePlayerDefinition(definitionName)
@@ -111,8 +116,14 @@ function gameManager:swapPaletteGroup(newPaletteGroup)
 end
 
 function gameManager:swapPalette()
+    if self:getOption("limitPaletteSwaps") and self.paletteSwapCooldown > 0 then
+        return
+    end
+
     local paletteIndex = love.math.random(1, #self.currentPaletteGroup)
     self.currentPalette = self.currentPaletteGroup[paletteIndex]
+
+    self.paletteSwapCooldown = self.maxPaletteSwapCooldown
 end
 
 function gameManager:addPaletteGroup(name)
@@ -151,7 +162,8 @@ function gameManager:setupPalettes(paletteImages)
     end
     
     -- Swap to a random palette
-    self:swapPalette()
+    local paletteIndex = love.math.random(1, #self.currentPaletteGroup)
+    self.currentPalette = self.currentPaletteGroup[paletteIndex]
 end
 
 function gameManager:saveOptions()
