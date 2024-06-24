@@ -284,7 +284,7 @@ function game:drawInterface()
     self.manager:draw()
     self.interfaceRenderer:draw()
 
-    if self.manager:getOption("enableDebugMode") then
+    if self.manager:getOption("enableDebugMode") or self.manager:getOption("showFPS") then
         love.graphics.print(tostring(love.timer.getFPS()), 10, 250)
     end
 

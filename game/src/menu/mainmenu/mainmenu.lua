@@ -121,13 +121,15 @@ function mainMenu:new()
 
                 toggleButton("Enable Debug", "font ui", 10, 25, 20, 25, "enableDebugMode", 260),
 
-                toggleButton("Limit Palette Swaps", "font ui", 10, 40, 20, 40, "limitPaletteSwaps", 260),
+                toggleButton("Show FPS", "font ui", 10, 40, 20, 40, "showFPS", 260),
 
-                toggleButton("Disable Screenshake", "font ui", 10, 55, 20, 55, "disableScreenshake", 260),
+                toggleButton("Limit Palette Swaps", "font ui", 10, 55, 20, 55, "limitPaletteSwaps", 260),
 
-                toggleButton("Center Camera", "font ui", 10, 70, 20, 70, "centerCamera", 260),
+                toggleButton("Disable Screenshake", "font ui", 10, 70, 20, 70, "disableScreenshake", 260),
 
-                textButton("back", "font ui", 10, 95, 15, 95, function(self)
+                toggleButton("Center Camera", "font ui", 10, 85, 20, 85, "centerCamera", 260),
+
+                textButton("back", "font ui", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
