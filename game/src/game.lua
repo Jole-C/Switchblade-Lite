@@ -385,6 +385,15 @@ function game:setupResources()
     local logo = love.graphics.newImage("assets/sprites/interface/logo.png")
     resourceManager:addResource(logo, "logo sprite")
 
+    local logoTextSwitch = love.graphics.newImage("assets/sprites/interface/logotext_switch.png")
+    resourceManager:addResource(logoTextSwitch, "logo text switch")
+
+    local logoTextBlade = love.graphics.newImage("assets/sprites/interface/logotext_blade.png")
+    resourceManager:addResource(logoTextBlade, "logo text blade")
+
+    local logoShip = love.graphics.newImage("assets/sprites/interface/logoship.png")
+    resourceManager:addResource(logoShip, "logo ship")
+
     local warning = love.graphics.newImage("assets/sprites/interface/warning/warning.png")
     resourceManager:addResource(warning, "boss warning")
 

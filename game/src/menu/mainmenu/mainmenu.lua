@@ -4,6 +4,7 @@ local text = require "src.interface.text"
 local toggleButton = require "src.interface.togglebutton"
 local slider = require "src.interface.slider"
 local sprite = require "src.interface.sprite"
+local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
 local mainMenu = class({name = "Main Menu", extends = menu})
 
@@ -45,8 +46,8 @@ function mainMenu:new()
             displayMenuName = false,
             elements =
             {
-                sprite("logo sprite", game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2 - 8, 0, 1, 1, 0, 0, true, game.manager.currentPalette.playerColour),
-
+                logo(),
+                
                 textButton("press space", "font ui", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
@@ -56,7 +57,7 @@ function mainMenu:new()
             }
         },
 
-        ["main"] = 
+        ["main"] =
         {
             displayMenuName = false,
             
