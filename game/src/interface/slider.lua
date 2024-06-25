@@ -12,20 +12,51 @@ function slider:new(text, font, minValue, maxValue, x, y, option)
     self.text = text
     self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get(font)
     self.lineLength = 75
+
+    self.minSliderCooldownTime = 0
+    self.maxSliderCooldownTime = 0.8
+    self.sliderCooldownTime = self.maxSliderCooldownTime
+    self.sliderHeldTime = 0
+    self.maxSliderHeldTime = 3
+    self.buttonHeld = false
 end
 
 function slider:checkForInteractions()
+    self.buttonHeld = false
     self.value = math.clamp(self.value, self.minValue, self.maxValue)
 
+
+    local maxSliderCooldown = math.lerp(self.minSliderCooldownTime, self.maxSliderCooldownTime, 1 - (self.sliderHeldTime/self.maxSliderHeldTime))
+
     if game.input:down("menuLeft") and self.value > self.minValue then
-        self.value = self.value - 1
+        if self.sliderCooldownTime <= 0 then
+            self.value = self.value - 1
+            self.sliderCooldownTime = maxSliderCooldown
+        end
+
+        self.buttonHeld = true
     end
 
     if game.input:down("menuRight") and self.value < self.maxValue then
-        self.value = self.value + 1
+        if self.sliderCooldownTime <= 0 then
+            self.value = self.value + 1
+            self.sliderCooldownTime = maxSliderCooldown
+        end
+
+        self.buttonHeld = true
     end
 
     game.manager:setOption(self.option, self.value)
+end
+
+function slider:updateHudElement(dt)
+    if self.buttonHeld then
+        self.sliderHeldTime = self.sliderHeldTime + (1 * dt)
+        self.sliderCooldownTime = self.sliderCooldownTime - (1 * dt)
+    else
+        self.sliderHeldTime = 0
+        self.sliderCooldownTime = 0
+    end
 end
 
 function slider:draw()
