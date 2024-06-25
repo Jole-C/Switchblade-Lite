@@ -18,7 +18,6 @@ function player:new(x, y)
     self.maxHealth = 5
     self.maxHealthRechargeCooldown = 2
     self.healthCircleRadius = 200
-    self.spriteName = self.spriteName or "player default"
     self.maxOverheatPlayRate = 0.5
     self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 8
     self.boostExplosionDistance = self.boostExplosionDistance or 100
@@ -88,27 +87,20 @@ function player:new(x, y)
     self.boostCollider = collider(colliderDefinitions.none, self)
     gameHelper:getWorld():add(self.boostCollider, 0, 0, 32, 32)
 
-    self.sprite = game.resourceManager:getResource(self.spriteName)
-    self.sprite:setFilter("nearest")
-
     self.ammoDisplay = ammoDisplay(0, 0)
     gameHelper:addGameObject(self.ammoDisplay)
 
     self.temperatureDisplay = temperatureDisplay(0, 0)
     gameHelper:addGameObject(self.temperatureDisplay)
 
-    self.fireSound = self.fireSound or ripple.newSound(game.resourceManager:getResource("default fire"))
-    self.fireSound:tag(game.tags.sfx)
-    self.boostSound = self.boostSound or ripple.newSound(game.resourceManager:getResource("default boost"))
-    self.boostSound:tag(game.tags.sfx)
-    self.hurtSound = ripple.newSound(game.resourceManager:getResource("ship hurt"))
-    self.hurtSound:tag(game.tags.sfx)
-    self.overheatWarningSound = ripple.newSound(game.resourceManager:getResource("ship overheat warning"))
-    self.overheatWarningSound:tag(game.tags.sfx)
-    self.overheatSound = ripple.newSound(game.resourceManager:getResource("ship overheat"))
-    self.overheatSound:tag(game.tags.sfx)
-    self.boostHitSound = ripple.newSound(game.resourceManager:getResource("boost hit"))
-    self.boostHitSound:tag(game.tags.sfx)
+    local assets = game.resourceManager_REPLACESEARCH:getAsset("Player Assets")
+    self.sprite = assets:get("sprites"):get("playerSprite")
+    self.fireSound = assets:get("sounds"):get("fire")
+    self.boostSound = assets:get("sounds"):get("boost")
+    self.hurtSound = assets:get("sounds"):get("shipHurt")
+    self.overheatWarningSound = assets:get("sounds"):get("overheatWarning")
+    self.overheatSound = assets:get("sounds"):get("shipOverheat")
+    self.boostHitSound = assets:get("sounds"):get("boostHit")
 
     self.cameraTarget = cameraTarget(self.position, 100)
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraTarget)
