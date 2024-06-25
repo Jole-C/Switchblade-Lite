@@ -5,7 +5,7 @@ function playerHud:new()
     self:super()
 
     self.playerReference = nil
-    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain")
+    self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain")
 end
 
 function playerHud:update(dt)

@@ -24,8 +24,8 @@ function wanderer:new(x, y)
     self.targetPlayer = false
 
     -- Components
-    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("wanderer"):get("bodySprite")
-    self.tailSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("wanderer"):get("tailSprite")
+    self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("wanderer"):get("bodySprite")
+    self.tailSprite = game.resourceManager:getAsset("Enemy Assets"):get("wanderer"):get("tailSprite")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)

@@ -28,8 +28,8 @@ function drone:new(x, y)
     self.velocity = self.velocity * self.maxSpeed
 
     -- Components
-    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("drone"):get("bodySprite")
-    self.tailSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("drone"):get("tailSprite")
+    self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("drone"):get("bodySprite")
+    self.tailSprite = game.resourceManager:getAsset("Enemy Assets"):get("drone"):get("tailSprite")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)

@@ -26,17 +26,17 @@ function mainMenu:new()
     self.targetMenuBoxOffset = 0
 
     -- Initialise background rendering
-    self.menuBackgroundSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("menuBackgroundMesh")
+    self.menuBackgroundSprite = game.resourceManager:getAsset("Interface Assets"):get("menuBackgroundMesh")
     game.canvases.menuBackgroundCanvas.enabled = true
 
     -- Initialise the box shader
-    self.menuBoxShader = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("shaders"):get("menuBoxShader")
+    self.menuBoxShader = game.resourceManager:getAsset("Interface Assets"):get("shaders"):get("menuBoxShader")
 
     -- Initialise the box offset
     self.menuBoxOffset = self.minMenuBoxOffset
 
     -- Initialise the background shader
-    self.menuBackgroundShader = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("shaders"):get("menuBackgroundShader")
+    self.menuBackgroundShader = game.resourceManager:getAsset("Interface Assets"):get("shaders"):get("menuBackgroundShader")
 
     -- Initialise menu elements
     self.menus =

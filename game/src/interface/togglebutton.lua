@@ -5,9 +5,9 @@ function toggleButton:new(text, font, restX, restY, selectedX, selectedY, option
     self:super(restX, restY, selectedX, selectedY)
 
     self.text = text
-    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get(font)
-    self.selectedSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("selectedBox")
-    self.unselectedSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("unselectedBox")
+    self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get(font)
+    self.selectedSprite = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("selectedBox")
+    self.unselectedSprite = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("unselectedBox")
     self.spritePosition = vec2(restX + (overrideSpriteX or 205), restY)
     self.option = option
     self.bool = game.manager:getOption(option)

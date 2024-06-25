@@ -24,8 +24,8 @@ function bossOrb:new(x, y, bossReference, angle)
     self.maxDamageableCooldown = 3
     self.damageableCooldown = self.maxDamageableCooldown
 
-    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("orb")
-    self.damageableShader = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("enemyOutlineShader")
+    self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("orb")
+    self.damageableShader = game.resourceManager:getAsset("Enemy Assets"):get("enemyOutlineShader")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 32, 32)

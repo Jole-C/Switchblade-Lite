@@ -1,7 +1,7 @@
 require "src.misc.mathhelpers"
 require "src.misc.tablehelpers"
 local gameRenderer = require "src.render.renderer"
-local resourceManager_REPLACESEARCH = require "src.resource.resourcemanager"
+local resourceManager = require "src.resource.resourcemanager"
 local interfaceRenderer = require "src.interface.interfacerenderer"
 local gameManager = require "src.gamemanager"
 local playerManager = require "src.objects.player.playermanager"
@@ -35,7 +35,7 @@ function game:new()
     self.gameRenderer = gameRenderer()
     self.interfaceRenderer = interfaceRenderer()
     self.particleManager = particleManager()
-    self.resourceManager_REPLACESEARCH = resourceManager_REPLACESEARCH()
+    self.resourceManager = resourceManager()
 
     self.tags = 
     {
@@ -94,7 +94,7 @@ function game:new()
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
     
-    local music = self.resourceManager_REPLACESEARCH:getAsset("Music"):get("mainMusic")
+    local music = self.resourceManager:getAsset("Music"):get("mainMusic")
     music:play({loop = true, volume = 0.2})
     music:tag(self.tags.music)
 
@@ -102,7 +102,7 @@ function game:new()
 
     -- Temporary particle system
     local bgCol = self.manager.currentPalette.backgroundColour
-    self.ps = love.graphics.newParticleSystem(self.resourceManager_REPLACESEARCH:getAsset("Temp Assets"):get("particleSprite"), 1632)
+    self.ps = love.graphics.newParticleSystem(self.resourceManager:getAsset("Temp Assets"):get("particleSprite"), 1632)
     
     local ps = self.ps
     --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
@@ -290,7 +290,7 @@ function game:drawInterface()
         love.graphics.print(tostring(love.timer.getFPS()), 10, 250)
     end
 
-    love.graphics.setFont(self.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
+    love.graphics.setFont(self.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 end
@@ -302,7 +302,7 @@ end
 function game:setupResources()
     local assetGroup = require "src.resource.assetgroup"
     local randomAssetGroup = require "src.resource.randomAssetGroup"
-    local resourceManager = self.resourceManager_REPLACESEARCH
+    local resourceManager = self.resourceManager
 
     resourceManager:addAsset(assetGroup(
     {

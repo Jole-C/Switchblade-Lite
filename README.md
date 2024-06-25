@@ -8,5 +8,5 @@ This code is licensed all rights reserved, but if you want to do anything with i
 ## Switchblade was made possible thanks to the following libraries:
 - LÖVE2D - The framework used to create this project! https://love2d.org/
 - bump - An awesome AABB collision library for LÖVE https://github.com/kikito/bump.lua
-- hump - A barebones library for LÖVE including Gamestates, class, vector support, and more https://github.com/HDictus/hump
+- batteries - A super useful library with lots of helpful additions https://github.com/1bardesign/batteries/tree/master
 - baton - A very useful and flexible library for gamepad and keyboard support https://github.com/tesselode/baton

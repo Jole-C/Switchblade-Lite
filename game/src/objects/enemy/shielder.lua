@@ -20,8 +20,8 @@ function shielder:new(x, y)
     self.shieldedEnemies = {}
 
     -- Components
-    self.shader = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("enemyOutlineShader")
-    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("shielder"):get("bodySprite")
+    self.shader = game.resourceManager:getAsset("Enemy Assets"):get("enemyOutlineShader")
+    self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("bodySprite")
     
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 12, 12)
