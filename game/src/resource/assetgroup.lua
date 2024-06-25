@@ -11,7 +11,7 @@ end
 function assetGroup:parseAsset(asset)
     assert(asset.type ~= nil, "Asset type is nil!")
 
-    if type(asset.type) == "function" and asset:type() == "Asset Group" then
+    if type(asset.type) == "function" then
         return asset
     end
     
