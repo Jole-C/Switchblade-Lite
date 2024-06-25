@@ -20,7 +20,14 @@ function assetGroup:parseAsset(asset)
 
     if assetType == "Source" then
         if asset.parameters then
-            return ripple.newSound(love.audio.newSource(asset.path, asset.parameters.type))
+            local type = asset.parameters.type or "static"
+            local sound = ripple.newSound(love.audio.newSource(asset.path, type))
+
+            if asset.parameters.tag then
+                sound:tag(asset.parameters.tag)
+            end
+
+            return sound
         else
             return ripple.newSound(love.audio.newSource(asset.path, "static"))
         end
