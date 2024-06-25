@@ -9,11 +9,11 @@ local levelDefinition =
 {
     enemyDefinitions =
     {
-        ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer sprite"},
-        ["charger"] = {enemyClass = charger, spriteName = "charger sprite"},
-        ["drone"] = {enemyClass = drone, spriteName = "drone sprite"},
-        ["shielder"] = {enemyClass = shielder, spriteName = "wanderer sprite"},
-        ["orbiter"] = {enemyClass = orbiter, spriteName = "orbiter sprite"},
+        ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer"},
+        ["charger"] = {enemyClass = charger, spriteName = "charger"},
+        ["drone"] = {enemyClass = drone, spriteName = "drone"},
+        ["shielder"] = {enemyClass = shielder, spriteName = "wanderer"},
+        ["orbiter"] = {enemyClass = orbiter, spriteName = "orbiter"},
         ["boss"] = {enemyClass = boss}
     },
     

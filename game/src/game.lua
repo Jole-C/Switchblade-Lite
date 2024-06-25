@@ -303,28 +303,6 @@ end
 function game:setupResources()
     local resourceManager = self.resourceManager
 
-    -- In game resources
-    local chargerEnemy = love.graphics.newImage("assets/sprites/enemy/charger.png")
-    resourceManager:addResource(chargerEnemy, "charger sprite")
-
-    local chargerTail = love.graphics.newImage("assets/sprites/enemy/chargerenemytail.png")
-    resourceManager:addResource(chargerTail, "charger tail sprite")
-
-    local droneEnemy = love.graphics.newImage("assets/sprites/enemy/drone.png")
-    resourceManager:addResource(droneEnemy, "drone sprite")
-
-    local wandererEnemy = love.graphics.newImage("assets/sprites/enemy/wanderer.png")
-    resourceManager:addResource(wandererEnemy, "wanderer sprite")
-
-    local wandererTail = love.graphics.newImage("assets/sprites/enemy/wanderertail.png")
-    resourceManager:addResource(wandererTail, "wanderer tail sprite")
-
-    local stickerEnemy = love.graphics.newImage("assets/sprites/enemy/sticker.png")
-    resourceManager:addResource(stickerEnemy, "sticker sprite")
-
-    local orbiterEnemy = love.graphics.newImage("assets/sprites/enemy/orbiter.png")
-    resourceManager:addResource(orbiterEnemy, "orbiter sprite")
-
     -- Boss 1
     local boss1Orb = love.graphics.newImage("assets/sprites/enemy/boss1/orb.png")
     resourceManager:addResource(boss1Orb, "boss 1 orb")
@@ -621,7 +599,7 @@ function game:setupResources()
         charger = assetGroup(
         {
             bodySprite = {path = "assets/sprites/enemy/charger.png", type = "Image"},
-            tailSprite = {path = "assets/sprites/enemy/wanderertail.png", type = "Image"}
+            tailSprite = {path = "assets/sprites/enemy/chargertail.png", type = "Image"}
         }),
 
         drone = assetGroup(
@@ -650,6 +628,7 @@ function game:setupResources()
         {
             sprites = assetGroup(
             {
+                orb = {path = "assets/sprites/enemy/boss1/orb.png", type = "Image"},
                 coreSprite = {path = "assets/sprites/enemy/boss1/core.png", type = "Image"},
                 mandible = {path = "assets/sprites/enemy/boss1/mandible.png", type = "Image"},
                 tail1 = {path = "assets/sprites/enemy/boss1/tail1.png", type = "Image"},
