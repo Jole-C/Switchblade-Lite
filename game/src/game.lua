@@ -38,6 +38,13 @@ function game:new()
     self.particleManager = particleManager()
     self.resourceManager = resourceManager()
     self.resourceManager_REPLACESEARCH = resourceManager_REPLACESEARCH()
+
+    self.tags = 
+    {
+        music = ripple.newTag(),
+        sfx = ripple.newTag()
+    }
+
     self:setupResources()
 
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
@@ -87,12 +94,6 @@ function game:new()
         upperForegroundCanvas = self.gameRenderer:addRenderCanvas("upperForegroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         menuBackgroundCanvas = self.gameRenderer:addRenderCanvas("menuBackgroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
-    }
-
-    self.tags = 
-    {
-        music = ripple.newTag(),
-        sfx = ripple.newTag()
     }
     
     local music = ripple.newSound(self.resourceManager:getResource("music"))
@@ -303,18 +304,6 @@ function game:setupResources()
     local resourceManager = self.resourceManager
 
     -- In game resources
-    local playerSprite = love.graphics.newImage("assets/sprites/player/player.png")
-    resourceManager:addResource(playerSprite, "player default")
-
-    local playerSpriteHeavy = love.graphics.newImage("assets/sprites/player/player2.png")
-    resourceManager:addResource(playerSpriteHeavy, "player heavy")
-
-    local playerSpriteLight = love.graphics.newImage("assets/sprites/player/player3.png")
-    resourceManager:addResource(playerSpriteLight, "player light")
-
-    local playerLaserSprite = love.graphics.newImage("assets/sprites/player/playerlaser.png")
-    resourceManager:addResource(playerLaserSprite, "player laser sprite")
-
     local chargerEnemy = love.graphics.newImage("assets/sprites/enemy/charger.png")
     resourceManager:addResource(chargerEnemy, "charger sprite")
 
@@ -612,12 +601,12 @@ function game:setupResources()
 
         sounds = assetGroup(
         {
-            boost = {path = "assets/audio/sfx/defaultboost.wav", type = "Source"},
-            fire = {path = "assets/audio/sfx/defaultfire.wav", type = "Source"},
-            shipHurt = {path = "assets/audio/sfx/shiphurt.wav", type = "Source"},
-            overheatWarning = {path = "assets/audio/sfx/overheatwarning.wav", type = "Source"},
-            shipOverheat = {path = "assets/audio/sfx/overheat.wav", type = "Source"},
-            boostHit = {path = "assets/audio/sfx/boosthit.wav", type = "Source"},
+            boost = {path = "assets/audio/sfx/defaultboost.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            fire = {path = "assets/audio/sfx/defaultfire.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            shipHurt = {path = "assets/audio/sfx/shiphurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            overheatWarning = {path = "assets/audio/sfx/overheatwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            shipOverheat = {path = "assets/audio/sfx/overheat.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            boostHit = {path = "assets/audio/sfx/boosthit.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         })
     }), "Player Assets")
 
@@ -672,13 +661,13 @@ function game:setupResources()
 
             sounds = assetGroup(
             {
-                spawn = {path = "assets/audio/sfx/boss1spawn.wav", type = "Source"},
-                hurt = {path = "assets/audio/sfx/boss1hurt.wav", type = "Source"},
-                fire = {path = "assets/audio/sfx/heavyfire.wav", type = "Source"},
+                spawn = {path = "assets/audio/sfx/boss1spawn.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                hurt = {path = "assets/audio/sfx/boss1hurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                fire = {path = "assets/audio/sfx/heavyfire.wav", type = "Source", parameters = {tag = self.tags.sfx}},
 
                 randomSounds = randomAssetGroup(
                 {
-                    sound1 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source"},
+                    sound1 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
                 })
             })
         }),
@@ -686,23 +675,23 @@ function game:setupResources()
         --
         deathSounds = randomAssetGroup(
         {
-            enemyHit1 = {path = "assets/audio/sfx/enemyhit1.wav", type = "Source"},
-            enemyHit2 = {path = "assets/audio/sfx/enemyhit2.wav", type = "Source"},
-            enemyHit3 = {path = "assets/audio/sfx/enemyhit3.wav", type = "Source"},
-            enemyHit4 = {path = "assets/audio/sfx/enemyhit4.wav", type = "Source"},
-            enemyHit5 = {path = "assets/audio/sfx/enemyhit5.wav", type = "Source"},
+            enemyHit1 = {path = "assets/audio/sfx/enemyhit1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit2 = {path = "assets/audio/sfx/enemyhit2.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit3 = {path = "assets/audio/sfx/enemyhit3.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit4 = {path = "assets/audio/sfx/enemyhit4.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit5 = {path = "assets/audio/sfx/enemyhit5.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         bossExplosionSounds = assetGroup(
         {
-            endExplosion = {path = "assets/audio/sfx/bossexplosionend.wav", type = "Source"},
+            endExplosion = {path = "assets/audio/sfx/bossexplosionend.wav", type = "Source", parameters = {tag = self.tags.sfx}},
 
             midExplosion = randomAssetGroup(
             {
-                explosion1 = {path = "assets/audio/sfx/bossexplosion1.wav", type = "Source"},
-                explosion2 = {path = "assets/audio/sfx/bossexplosion2.wav", type = "Source"},
-                explosion3 = {path = "assets/audio/sfx/bossexplosion3.wav", type = "Source"},
-                explosion4 = {path = "assets/audio/sfx/bossexplosion4.wav", type = "Source"},
+                explosion1 = {path = "assets/audio/sfx/bossexplosion1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                explosion2 = {path = "assets/audio/sfx/bossexplosion2.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                explosion3 = {path = "assets/audio/sfx/bossexplosion3.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                explosion4 = {path = "assets/audio/sfx/bossexplosion4.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             })
         }),
 
