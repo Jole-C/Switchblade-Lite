@@ -69,7 +69,7 @@ function bossWarning:new(x, y, bossClass)
             scale = 0,
             x = spriteX,
             y = spriteY,
-            sprite = quad("boss warning", newQuad, spriteX, spriteY, 0, 0, 0, 67/2, 270/2, false)
+            sprite = quad(game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("warning"), newQuad, spriteX, spriteY, 0, 0, 0, 67/2, 270/2, false)
         })
     end
 

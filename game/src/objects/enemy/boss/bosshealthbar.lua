@@ -9,7 +9,7 @@ function bossHealthBar:new(bossInstance, name, subtitle)
 
     self.barSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("bossHealth")
     self.barOutlineSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("bossHealthOutline")
-    self.eyeOutlineSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("interface"):get("bossEyeOutline")
+    self.eyeOutlineSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("bossEyeOutline")
 
     self.scissorStates =
     {
