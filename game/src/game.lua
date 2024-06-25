@@ -172,11 +172,17 @@ function game:update(dt)
 
     local backgroundSystem = self.particleManager:getEffect("Temp Background")
     backgroundSystem.systems[1]:setColors(self.manager.currentPalette.backgroundColour[1], self.manager.currentPalette.backgroundColour[2], self.manager.currentPalette.backgroundColour[3], self.manager.currentPalette.backgroundColour[4])
-    backgroundSystem:setUpdateRate(0.14 * self.manager:getOption("speedPercentage")/100)
+    backgroundSystem:setUpdateRate(0.14 * self.manager:getOption("speedPercentage") / 100)
 
-    self.tags.music.volume = 1 * (self.manager:getOption("musicVolPercentage")/100)
-    self.tags.sfx.volume = 1 * (self.manager:getOption("sfxVolPercentage")/100)
-
+    if self.manager:getOption("muteAudio") == false then
+        local masterVol = self.manager:getOption("masterVolPercentage") / 100
+        self.tags.music.volume = 1 * (self.manager:getOption("musicVolPercentage") / 100) * masterVol
+        self.tags.sfx.volume = 1 * (self.manager:getOption("sfxVolPercentage") / 100) * masterVol
+    else
+        self.tags.music.volume = 0
+        self.tags.sfx.volume = 0
+    end
+    
     local fullscreenSetting = self.manager:getOption("enableFullscreen")
 
     if self.fullscreenMode ~= fullscreenSetting then

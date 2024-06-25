@@ -30,20 +30,23 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.43"
+    self.expectedOptionsVersion = "0.46"
     
     self.options = {
-        OPTIONS_VERSION = "0.43",
+        OPTIONS_VERSION = "0.46",
         enableFullscreen = true,
         enableBackground = true,
         fadingPercentage = 10,
         speedPercentage = 100,
         musicVolPercentage = 70,
         sfxVolPercentage = 100,
+        masterVolPercentage = 100,
+        muteAudio = false,
         enableDebugMode = false,
         showFPS = false,
         limitPaletteSwaps = false,
         disableScreenshake = false,
+        screenshakeIntensity = 150,
         disableFreeze = false,
         centerCamera = false,
         playerHealthRingSizePercentage = 100,

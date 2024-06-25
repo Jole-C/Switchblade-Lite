@@ -102,7 +102,7 @@ function mainMenu:new()
 
                 textButton("Accessibility", "fontUI", 10, 40, 15, 40, function(self)
                     self.owner:switchMenu("optionsAccessibility")
-                    self.owner:setBackgroundSlideAmount(0.7)
+                    self.owner:setBackgroundSlideAmount(0.8)
                 end),
 
                 textButton("back", "fontUI", 10, 65, 15, 65, function(self)
@@ -120,7 +120,7 @@ function mainMenu:new()
             {
                 text("Accessibility", "fontUI", "left", 10, 10, 1000),
 
-                toggleButton("Enable Debug", "fontUI", 10, 25, 20, 25, "enableDebugMode", 260),
+                toggleButton("Enable Debug Mode", "fontUI", 10, 25, 20, 25, "enableDebugMode", 260),
 
                 toggleButton("Show FPS", "fontUI", 10, 40, 20, 40, "showFPS", 260),
 
@@ -128,13 +128,15 @@ function mainMenu:new()
 
                 toggleButton("Disable Screenshake", "fontUI", 10, 70, 20, 70, "disableScreenshake", 260),
 
-                toggleButton("Center Camera", "fontUI", 10, 85, 20, 85, "centerCamera", 260),
+                slider("Shake Intensity", "fontUI",  50, 9999, 10, 85, "screenshakeIntensity"),
 
-                slider("Health Ring Size", "fontUI",  50, 150, 10, 100, "playerHealthRingSizePercentage"),
+                toggleButton("Center Camera", "fontUI", 10, 100, 20, 100, "centerCamera", 260),
 
-                toggleButton("Show Player Health", "fontUI", 10, 115, 20, 115, "showPlayerHealth", 260),
+                slider("Health Ring Size", "fontUI",  50, 150, 10, 115, "playerHealthRingSizePercentage"),
 
-                textButton("back", "fontUI", 10, 140, 15, 140, function(self)
+                toggleButton("Show Player Health", "fontUI", 10, 130, 20, 130, "showPlayerHealth", 260),
+
+                textButton("back", "fontUI", 10, 155, 15, 155, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -178,11 +180,15 @@ function mainMenu:new()
             {
                 text("audio", "fontUI", "left", 10, 10, 1000),
 
-                slider("music vol.", "fontUI",  0, 100, 10, 25, "musicVolPercentage"),
+                slider("master vol.", "fontUI",  0, 100, 10, 25, "masterVolPercentage"),
 
-                slider("sfx vol.", "fontUI",  0, 100, 10, 40, "sfxVolPercentage"),
+                slider("music vol.", "fontUI",  0, 100, 10, 40, "musicVolPercentage"),
 
-                textButton("back", "fontUI", 10, 65, 15, 65, function(self)
+                slider("sfx vol.", "fontUI",  0, 100, 10, 55, "sfxVolPercentage"),
+
+                toggleButton("mute", "fontUI", 10, 70, 20, 70, "muteAudio"),
+
+                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)

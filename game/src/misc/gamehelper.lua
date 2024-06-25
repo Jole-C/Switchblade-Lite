@@ -37,7 +37,7 @@ function gameHelper:screenShake(amount)
 
     assert(currentGamestate.cameraManager ~= nil, "Gamestate's camera manager is nil!")
 
-    currentGamestate.cameraManager:screenShake(amount)
+    currentGamestate.cameraManager:screenShake(amount * game.manager:getOption("screenshakeIntensity")/100)
 end
 
 return gameHelper
