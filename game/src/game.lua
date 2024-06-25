@@ -96,12 +96,12 @@ function game:new()
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
     
-    local music = ripple.newSound(self.resourceManager:getResource("music"))
+    local music = self.resourceManager_REPLACESEARCH:getAsset("Music"):get("mainMusic")
     music:play({loop = true, volume = 0.2})
     music:tag(self.tags.music)
 
     self:setupParticles()
-    
+
     -- Temporary particle system
     local bgCol = self.manager.currentPalette.backgroundColour
     self.ps = love.graphics.newParticleSystem(self.resourceManager_REPLACESEARCH:getAsset("Temp Assets"):get("particleSprite"), 1632)
@@ -467,27 +467,6 @@ function game:setupResources()
     resourceManager:addResource(outlineShader, "outline shader")
 
     -- Audio
-    local song = love.audio.newSource("assets/audio/music/song.wav", "stream")
-    resourceManager:addResource(song, "music")
-
-    local defaultBoost = love.audio.newSource("assets/audio/sfx/defaultboost.wav", "static")
-    resourceManager:addResource(defaultBoost, "default boost")
-    
-    local defaultFire = love.audio.newSource("assets/audio/sfx/defaultfire.wav", "static")
-    resourceManager:addResource(defaultFire, "default fire")
-
-    local shipHurt = love.audio.newSource("assets/audio/sfx/shiphurt.wav", "static")
-    resourceManager:addResource(shipHurt, "ship hurt")
-
-    local overheatWarning = love.audio.newSource("assets/audio/sfx/overheatwarning.wav", "static")
-    resourceManager:addResource(overheatWarning, "ship overheat warning")
-
-    local shipOverheat = love.audio.newSource("assets/audio/sfx/overheat.wav", "static")
-    resourceManager:addResource(shipOverheat, "ship overheat")
-
-    local boostHit = love.audio.newSource("assets/audio/sfx/boosthit.wav", "static")
-    resourceManager:addResource(boostHit, "boost hit")
-    
     local bossWarningBoom = love.audio.newSource("assets/audio/sfx/bosswarningboom.wav", "static")
     resourceManager:addResource(bossWarningBoom, "boss warning boom")
 

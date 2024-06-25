@@ -40,11 +40,7 @@ function playerDefault:new(x, y)
     self.shipKnockbackForce = 10
     self.fireOffset = 10
     self.boostAmmoIncrement = 7
-
-    -- Components
-    self.fireSound = ripple.newSound(game.resourceManager:getResource("default fire"))
-    self.boostSound = ripple.newSound(game.resourceManager:getResource("default boost"))
-
+    
     self:super(x, y)
 end
 
