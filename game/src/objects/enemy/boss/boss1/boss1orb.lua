@@ -6,7 +6,7 @@ local enemyIndicator = require "src.objects.enemy.enemyindicator"
 local bossOrb = class({name = "Boss 1 Orb", extends = enemy})
 
 function bossOrb:new(x, y, bossReference, angle)
-    self:super(x, y, "boss 1 orb")
+    self:super(x, y)
     
     self.bossReference = bossReference
     self.radius = 0
@@ -21,9 +21,11 @@ function bossOrb:new(x, y, bossReference, angle)
     self.spriteAngleTurnRate = 2
 
     self.isDamageable = false
-    self.damageableShader = game.resourceManager:getResource("outline shader")
     self.maxDamageableCooldown = 3
     self.damageableCooldown = self.maxDamageableCooldown
+
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("orb")
+    self.damageableShader = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("enemyOutlineShader")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 32, 32)

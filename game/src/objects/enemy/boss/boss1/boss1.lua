@@ -32,19 +32,20 @@ function boss1:new(x, y)
     self.tentacleWiggleFrequency = 5
     self.tentacleWiggleAmplitude = 18
 
-    self.coreSprite = game.resourceManager:getResource("boss 1 core")
-    self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
-    self.tail2 = tail("boss 1 tail 2", 0, 0, 4, 1)
+    self.coreSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("core")
+    self.tail1sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("tail1")
+    self.tail2sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("tail2")
+    self.mandibleSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("mandible")
+    self.spikeSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("spike")
+    
+    self.tail1 = tail(self.tail1sprite, 0, 0, 4, 0.5)
+    self.tail2 = tail(self.tail2sprite, 0, 0, 4, 1)
     self.eye = eye(x, y, 10, 10, true)
 
-    self.mandibleSprite = game.resourceManager:getResource("boss 1 mandible")
     self.mandibleOpenAngle = 1
     self.mandibleCloseAngle = 0
     self.mandibleAngle = self.mandibleCloseAngle
     self.mandibleTargetAngle = self.mandibleCloseAngle
-
-    self.spikeSprite = game.resourceManager:getResource("boss 1 spike")
-
     self.enemySpawnPosition = vec2(0, 0)
 
     self.mesh = nil

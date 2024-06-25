@@ -101,9 +101,10 @@ function game:new()
     music:tag(self.tags.music)
 
     self:setupParticles()
+    
     -- Temporary particle system
     local bgCol = self.manager.currentPalette.backgroundColour
-    self.ps = love.graphics.newParticleSystem(self.resourceManager:getResource("particle sprite"), 1632)
+    self.ps = love.graphics.newParticleSystem(self.resourceManager_REPLACESEARCH:getAsset("Temp Assets"):get("particleSprite"), 1632)
     
     local ps = self.ps
     --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
@@ -302,31 +303,6 @@ end
 
 function game:setupResources()
     local resourceManager = self.resourceManager
-
-    -- Boss 1
-    local boss1Orb = love.graphics.newImage("assets/sprites/enemy/boss1/orb.png")
-    resourceManager:addResource(boss1Orb, "boss 1 orb")
-
-    local boss1Core = love.graphics.newImage("assets/sprites/enemy/boss1/core.png")
-    resourceManager:addResource(boss1Core, "boss 1 core")
-
-    local boss1tail1 = love.graphics.newImage("assets/sprites/enemy/boss1/tail1.png")
-    resourceManager:addResource(boss1tail1, "boss 1 tail 1")
-
-    local boss1tail2 = love.graphics.newImage("assets/sprites/enemy/boss1/tail2.png")
-    resourceManager:addResource(boss1tail2, "boss 1 tail 2")
-
-    local boss1mandible = love.graphics.newImage("assets/sprites/enemy/boss1/mandible.png")
-    resourceManager:addResource(boss1mandible, "boss 1 mandible")
-
-    local boss1LaserOuter = love.graphics.newImage("assets/sprites/enemy/boss1/laserouter.png")
-    resourceManager:addResource(boss1LaserOuter, "boss 1 laser outer")
-
-    local boss1LaserInner = love.graphics.newImage("assets/sprites/enemy/boss1/laserinner.png")
-    resourceManager:addResource(boss1LaserInner, "boss 1 laser inner")
-
-    local boss1Spike = love.graphics.newImage("assets/sprites/enemy/boss1/spike.png")
-    resourceManager:addResource(boss1Spike, "boss 1 spike")
 
     -- Global resources
     local particle = love.graphics.newImage("assets/sprites/particlesprite.png")
@@ -629,7 +605,7 @@ function game:setupResources()
             sprites = assetGroup(
             {
                 orb = {path = "assets/sprites/enemy/boss1/orb.png", type = "Image"},
-                coreSprite = {path = "assets/sprites/enemy/boss1/core.png", type = "Image"},
+                core = {path = "assets/sprites/enemy/boss1/core.png", type = "Image"},
                 mandible = {path = "assets/sprites/enemy/boss1/mandible.png", type = "Image"},
                 tail1 = {path = "assets/sprites/enemy/boss1/tail1.png", type = "Image"},
                 tail2 = {path = "assets/sprites/enemy/boss1/tail2.png", type = "Image"},
@@ -689,6 +665,11 @@ function game:setupResources()
             }
         ]])
     }), "Enemy Assets")
+
+    resourceManager:addAsset(assetGroup(
+    {
+        particleSprite = {path = "assets/sprites/particlesprite.png", type = "Image"}
+    }), "Temp Assets")
 
     resourceManager:addAsset(assetGroup(
     {
