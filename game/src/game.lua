@@ -1,7 +1,6 @@
 require "src.misc.mathhelpers"
 require "src.misc.tablehelpers"
 local gameRenderer = require "src.render.renderer"
-local resourceManager = require "src.resourcemanager"
 local resourceManager_REPLACESEARCH = require "src.resource.resourcemanager"
 local interfaceRenderer = require "src.interface.interfacerenderer"
 local gameManager = require "src.gamemanager"
@@ -36,7 +35,6 @@ function game:new()
     self.gameRenderer = gameRenderer()
     self.interfaceRenderer = interfaceRenderer()
     self.particleManager = particleManager()
-    self.resourceManager = resourceManager()
     self.resourceManager_REPLACESEARCH = resourceManager_REPLACESEARCH()
 
     self.tags = 
@@ -302,170 +300,8 @@ function game:drawParticles()
 end
 
 function game:setupResources()
-    local resourceManager = self.resourceManager
-    -- Set up the mesh with given parameters
-    local numberOfVertices = 10
-    local baseVertexX = 100
-    local mesh = love.graphics.newMesh(2 + numberOfVertices + 1, "fan")
-
-    -- Create a table to hold the vertices, and insert the top left vertex
-    local vertices = {
-        {-self.arenaValues.screenWidth, 0, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
-    }
-    
-    -- Generate the zigzag vertex pattern
-    local generateInnerVertex = false
-
-    for i = 0, numberOfVertices do
-        generateInnerVertex = not generateInnerVertex
-
-        local vertexXoffset = 0
-        
-        if generateInnerVertex == false then
-            vertexXoffset = 27
-        end
-
-        local vertexX = baseVertexX + vertexXoffset
-        local vertexY = (self.arenaValues.screenHeight / numberOfVertices) * i
-        
-        table.insert(vertices, {vertexX, vertexY, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1})
-    end
-
-    -- Insert a vertex at the bottom left position
-    table.insert(vertices, {-self.arenaValues.screenWidth, self.arenaValues.screenHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1})
-
-    -- Set the vertices and register the resource with the resource manager
-    mesh:setVertices(vertices)
-    resourceManager:addResource(mesh, "menu background mesh")
-
-    -- Shader resources
-    local menuBackgroundShader = love.graphics.newShader([[
-        extern vec2 resolution;
-        extern float time;
-        extern vec3 colour;
-        vec4 effect(vec4 screenColour, Image texture, vec2 texCoord, vec2 screenCoord)
-        {
-            vec2 center = vec2(resolution.x, resolution.y) / 2.0;
-            vec2 pos = screenCoord / center;
-            
-            float radius = length(pos);
-            float angle = atan(pos.y, pos.x);
-            
-            vec2 uv = vec2(radius, angle);
-            vec3 col = 0.5 + 0.5*cos(time+uv.xyy+vec3(0,2,4));
-            
-            float intensity = dot(col.xyz, vec3(0.3, 0.3, 0.3));
-            float levels = 32.0;
-            float quantized = floor(intensity * levels) / levels;
-            
-            col = col * quantized * 5.0;
-            
-            float gray = dot(col, vec3(0.3, 0.3, 0.3)) * 1.5;
-            
-            return vec4(colour * gray, 1.0);
-        }
-    ]])
-    resourceManager:addResource(menuBackgroundShader, "menu background shader")
-
-    local menuBoxShader = love.graphics.newShader([[
-        extern number angle;
-        extern number warpScale;
-        extern number warpTiling;
-        extern number tiling;
-        extern vec2 position;
-        extern vec2 resolution;
-
-        vec4 effect(vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
-        {
-            const float PI = 3.14159;
-            
-            vec2 uv = (screenCoords - position) / resolution;
-            
-            vec2 pos = vec2(0, 0);
-            pos.x = mix(uv.x, uv.y, angle);
-            pos.y = mix(uv.y, 1.0 - uv.x, angle);
-            pos.x += sin(pos.y * warpTiling * PI * 2.0) * warpScale;
-            pos.x *= tiling;
-
-            vec3 col1 = vec3(0.1, 0.1, 0.1);
-            vec3 col2 = vec3(0.13, 0.13, 0.13);
-            
-            float val = floor(fract(pos.x) + 0.5);
-            vec4 fragColour = vec4(mix(col1, col2, val), 1);
-
-            return fragColour;
-        }
-    ]])
-    resourceManager:addResource(menuBoxShader, "menu box shader")
-
-    local outlineShader = love.graphics.newShader([[
-        extern vec2 stepSize;
-
-        vec4 effect(vec4 colour, Image texture, vec2 texturePos, vec2 screenPos)
-        {
-            float alpha = 4 * texture2D(texture, texturePos).a;
-            alpha -= texture2D(texture, texturePos + (stepSize.x, 0.0)).a;
-            alpha -= texture2D(texture, texturePos + (-stepSize.x, 0.0)).a;
-            alpha -= texture2D(texture, texturePos + (0, stepSize.y)).a;
-            alpha -= texture2D(texture, texturePos + (0, -stepSize.y)).a;
-            
-            return vec4(1, 1, 1, alpha);
-        }
-    ]])
-    resourceManager:addResource(outlineShader, "outline shader")
-
-    -- Audio
-    local bossWarningBoom = love.audio.newSource("assets/audio/sfx/bosswarningboom.wav", "static")
-    resourceManager:addResource(bossWarningBoom, "boss warning boom")
-
-    local bossWarningSiren = love.audio.newSource("assets/audio/sfx/bosswarning.wav", "static")
-    resourceManager:addResource(bossWarningSiren, "boss warning siren")
-
-    local enemyHit1 = love.audio.newSource("assets/audio/sfx/enemyhit1.wav", "static")
-    resourceManager:addResource(enemyHit1, "enemy hit 1")
-
-    local enemyHit2 = love.audio.newSource("assets/audio/sfx/enemyhit2.wav", "static")
-    resourceManager:addResource(enemyHit2, "enemy hit 2")
-
-    local enemyHit3 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
-    resourceManager:addResource(enemyHit3, "enemy hit 3")
-
-    local enemyHit4 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
-    resourceManager:addResource(enemyHit4, "enemy hit 4")
-
-    local enemyHit5 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
-    resourceManager:addResource(enemyHit5, "enemy hit 5")
-
-    local bossExplosion1 = love.audio.newSource("assets/audio/sfx/bossexplosion1.wav", "static")
-    resourceManager:addResource(bossExplosion1, "boss explosion 1")
-
-    local bossExplosion2 = love.audio.newSource("assets/audio/sfx/bossexplosion2.wav", "static")
-    resourceManager:addResource(bossExplosion2, "boss explosion 2")
-
-    local bossExplosion3 = love.audio.newSource("assets/audio/sfx/bossexplosion3.wav", "static")
-    resourceManager:addResource(bossExplosion3, "boss explosion 3")
-
-    local bossExplosion4 = love.audio.newSource("assets/audio/sfx/bossexplosion4.wav", "static")
-    resourceManager:addResource(bossExplosion4, "boss explosion 4")
-
-    local bossExplosionEnd = love.audio.newSource("assets/audio/sfx/bossexplosionend.wav", "static")
-    resourceManager:addResource(bossExplosionEnd, "boss explosion end")
-
-    local boss1spawn = love.audio.newSource("assets/audio/sfx/boss1spawn.wav", "static")
-    resourceManager:addResource(boss1spawn, "boss 1 spawn")
-
-    local boss1hurt = love.audio.newSource("assets/audio/sfx/boss1hurt.wav", "static")
-    resourceManager:addResource(boss1hurt, "boss 1 hurt")
-
-    local boss1sound1 = love.audio.newSource("assets/audio/sfx/boss1sound1.wav", "static")
-    resourceManager:addResource(boss1sound1, "boss 1 sound 1")
-
-    local boss1fire = love.audio.newSource("assets/audio/sfx/heavyfire.wav", "static")
-    resourceManager:addResource(boss1fire, "boss 1 fire")
-
     local assetGroup = require "src.resource.assetgroup"
     local randomAssetGroup = require "src.resource.randomAssetGroup"
-
     local resourceManager = self.resourceManager_REPLACESEARCH
 
     resourceManager:addAsset(assetGroup(
@@ -520,6 +356,7 @@ function game:setupResources()
         orbiter = assetGroup(
         {
             bodySprite = {path = "assets/sprites/enemy/orbiter.png", type = "Image"},
+            laserSprite = {path = "assets/sprites/player/playerlaser.png", type = "Image"}
         }),
 
         sticker = assetGroup(
@@ -550,6 +387,8 @@ function game:setupResources()
                 randomSounds = randomAssetGroup(
                 {
                     sound1 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                    sound2 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                    sound3 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
                 })
             })
         }),
@@ -621,6 +460,12 @@ function game:setupResources()
             bossEyeOutline = {path = "assets/sprites/interface/bosseyeoutline.png", type = "Image"},
         }),
 
+        sounds = assetGroup(
+        {
+            bossWarningBoom = {path = "assets/audio/sfx/bosswarningboom.wav", type = "Source"},
+            bossWarningSiren = {path = "assets/audio/sfx/bosswarningsiren.wav", type = "Source"}
+        }),
+
         shaders = assetGroup(
         {
             menuBoxShader = love.graphics.newShader([[
@@ -682,7 +527,6 @@ function game:setupResources()
         })
     }), "Interface Assets")
 
-    
     -- Set up the mesh with given parameters
     local numberOfVertices = 10
     local baseVertexX = 100

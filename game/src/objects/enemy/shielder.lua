@@ -17,7 +17,7 @@ function shielder:new(x, y)
 
     -- Variables
     self.direction = vec2(30, 30)
-    self.shader = game.resourceManager:getResource("outline shader")
+    self.shader = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("enemyOutlineShader")
     self.shieldedEnemies = {}
 
     -- Components

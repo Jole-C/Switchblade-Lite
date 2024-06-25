@@ -2,7 +2,7 @@ local laser = require "src.objects.bullet.laser"
 local overheatLaser = class({name = "Overheat Laser", extends = laser})
 
 function overheatLaser:new(x, y, angle, damage, length, lifetime)
-    self.sprite = game.resourceManager:getResource("player laser sprite")
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("orbiter"):get("laserSprite")
     
     self:super(x, y, angle, damage, length, lifetime)
 end

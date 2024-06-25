@@ -11,7 +11,7 @@ function unshieldIntro:enter(bossInstance)
         enemyManager:destroyAllEnemies({bossInstance})
     end
     
-    bossInstance.sound1:play()
+    bossInstance:playSound()
 end
 
 return unshieldIntro

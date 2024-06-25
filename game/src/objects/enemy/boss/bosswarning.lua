@@ -106,10 +106,8 @@ function bossWarning:new(x, y, bossClass)
     self.warningTime = 5
 
     -- Load the sounds
-    self.warningBoom = ripple.newSound(game.resourceManager:getResource("boss warning boom"))
-    self.warningBoom:tag(game.tags.sfx)
-    self.warningSiren = ripple.newSound(game.resourceManager:getResource("boss warning siren"))
-    self.warningSiren:tag(game.tags.sfx)
+    self.warningBoom = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sounds"):get("bossWarningBoom")
+    self.warningSiren = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sounds"):get("bossWarningSiren")
 
     if game.manager:getOption("enableDebugMode") == true then
         self:spawnBoss()
