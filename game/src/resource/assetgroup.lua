@@ -19,11 +19,36 @@ function assetGroup:parseAsset(asset)
     local assetType = asset.type
 
     if assetType == "Source" then
-        return ripple.newSound(love.audio.newSource(asset.path, asset.parameters.type or "static"))
+        if asset.parameters then
+            return ripple.newSound(love.audio.newSource(asset.path, asset.parameters.type))
+        else
+            return ripple.newSound(love.audio.newSource(asset.path, "static"))
+        end
     elseif assetType == "Image" then
-        return love.graphics.newImage(asset.path)
+        local image = love.graphics.newImage(asset.path)
+        image:setFilter("nearest", "nearest", 0)
+
+        if asset.parameters then
+            if asset.parameters.wrapX or asset.parameters.wrapY then
+                image:setWrap(asset.parameters.wrapX or "clampzero", asset.parameters.wrapY or "clampzero")
+            end
+        end
+
+        return image
     elseif assetType == "Font" then
-        return love.graphics.newFont(asset.path)
+        assert(asset.parameters ~= nil, "Image font needs parameters set for font size!")
+
+        local font = love.graphics.newFont(asset.path, asset.parameters.size)
+        font:setFilter("nearest", "nearest", 0)
+
+        return font
+    elseif assetType ==  "Image Font" then
+        assert(asset.parameters ~= nil, "Image font needs parameters set for glyphs!")
+        
+        local font = love.graphics.newImageFont(asset.path, asset.parameters.glyphs, asset.parameters.spacing)
+        font:setFilter("nearest", "nearest", 0)
+
+        return font
     elseif assetType == "table" then
         local assets = {}
 
