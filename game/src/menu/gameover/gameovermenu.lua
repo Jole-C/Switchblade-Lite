@@ -12,13 +12,13 @@ function gameoverMenu:new()
             displayMenuName = false,
             elements =
                 {
-                text(game.playerManager.deathReason, "font ui", "left", 10, 10, 1000),
+                text(game.playerManager.deathReason, "fontUI", "left", 10, 10, 1000),
     
-                textButton("retry", "font ui", 10, 25, 15, 25, function(self)
+                textButton("retry", "fontUI", 10, 25, 15, 25, function(self)
                     game.gameStateMachine:set_state("gameLevelState")
                 end),
 
-                textButton("quit to menu", "font ui", 10, 40, 15, 40, function()
+                textButton("quit to menu", "fontUI", 10, 40, 15, 40, function()
                     game.gameStateMachine:set_state("menuState")
                 end),
             }

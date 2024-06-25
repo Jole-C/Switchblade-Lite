@@ -26,17 +26,17 @@ function mainMenu:new()
     self.targetMenuBoxOffset = 0
 
     -- Initialise background rendering
-    self.menuBackgroundSprite = game.resourceManager:getResource("menu background mesh")
+    self.menuBackgroundSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("menuBackgroundMesh")
     game.canvases.menuBackgroundCanvas.enabled = true
 
     -- Initialise the box shader
-    self.menuBoxShader = game.resourceManager:getResource("menu box shader")
+    self.menuBoxShader = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("shaders"):get("menuBoxShader")
 
     -- Initialise the box offset
     self.menuBoxOffset = self.minMenuBoxOffset
 
     -- Initialise the background shader
-    self.menuBackgroundShader = game.resourceManager:getResource("menu background shader")
+    self.menuBackgroundShader = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("shaders"):get("menuBackgroundShader")
 
     -- Initialise menu elements
     self.menus =
@@ -48,7 +48,7 @@ function mainMenu:new()
             {
                 logo(),
                 
-                textButton("press space", "font ui", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
+                textButton("press space", "fontUI", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -64,23 +64,23 @@ function mainMenu:new()
             elements =
             {
                 rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
-                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "font main", "left", 110, 18, 1000),
+                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
 
-                textButton("start", "font ui", 10, 10, 15, 10, function(self)
+                textButton("start", "fontUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
                         self.owner:setBackgroundSlideAmount(0.35)
                     end
                 end),
 
-                textButton("options", "font ui", 10, 25, 15, 25, function(self)
+                textButton("options", "fontUI", 10, 25, 15, 25, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.35)
                     end
                 end),
 
-                textButton("quit", "font ui", 10, 50, 15, 50, function()
+                textButton("quit", "fontUI", 10, 50, 15, 50, function()
                     love.event.quit()
                 end)
             }
@@ -90,22 +90,22 @@ function mainMenu:new()
         {
             elements =
             {
-                textButton("Visual", "font ui", 10, 10, 15, 10, function(self)
+                textButton("Visual", "fontUI", 10, 10, 15, 10, function(self)
                     self.owner:switchMenu("optionsVisual")
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("Audio", "font ui", 10, 25, 15, 25, function(self)
+                textButton("Audio", "fontUI", 10, 25, 15, 25, function(self)
                     self.owner:switchMenu("optionsAudio")
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("Accessibility", "font ui", 10, 40, 15, 40, function(self)
+                textButton("Accessibility", "fontUI", 10, 40, 15, 40, function(self)
                     self.owner:switchMenu("optionsAccessibility")
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("back", "font ui", 10, 65, 15, 65, function(self)
+                textButton("back", "fontUI", 10, 65, 15, 65, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -118,19 +118,19 @@ function mainMenu:new()
         {
             elements =
             {
-                text("Accessibility", "font ui", "left", 10, 10, 1000),
+                text("Accessibility", "fontUI", "left", 10, 10, 1000),
 
-                toggleButton("Enable Debug", "font ui", 10, 25, 20, 25, "enableDebugMode", 260),
+                toggleButton("Enable Debug", "fontUI", 10, 25, 20, 25, "enableDebugMode", 260),
 
-                toggleButton("Show FPS", "font ui", 10, 40, 20, 40, "showFPS", 260),
+                toggleButton("Show FPS", "fontUI", 10, 40, 20, 40, "showFPS", 260),
 
-                toggleButton("Limit Palette Swaps", "font ui", 10, 55, 20, 55, "limitPaletteSwaps", 260),
+                toggleButton("Limit Palette Swaps", "fontUI", 10, 55, 20, 55, "limitPaletteSwaps", 260),
 
-                toggleButton("Disable Screenshake", "font ui", 10, 70, 20, 70, "disableScreenshake", 260),
+                toggleButton("Disable Screenshake", "fontUI", 10, 70, 20, 70, "disableScreenshake", 260),
 
-                toggleButton("Center Camera", "font ui", 10, 85, 20, 85, "centerCamera", 260),
+                toggleButton("Center Camera", "fontUI", 10, 85, 20, 85, "centerCamera", 260),
 
-                textButton("back", "font ui", 10, 110, 15, 110, function(self)
+                textButton("back", "fontUI", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -145,17 +145,17 @@ function mainMenu:new()
         {
             elements =
             {
-                text("visual", "font ui", "left", 10, 10, 1000),
+                text("visual", "fontUI", "left", 10, 10, 1000),
 
-                toggleButton("fullscreen.", "font ui", 10, 25, 20, 25, "enableFullscreen"),
+                toggleButton("fullscreen.", "fontUI", 10, 25, 20, 25, "enableFullscreen"),
 
-                toggleButton("toggle bg.", "font ui", 10, 40, 20, 40, "enableBackground"),
+                toggleButton("toggle bg.", "fontUI", 10, 40, 20, 40, "enableBackground"),
 
-                slider("bg. fading", "font ui", 0, 100, 10, 55, "fadingPercentage"),
+                slider("bg. fading", "fontUI", 0, 100, 10, 55, "fadingPercentage"),
 
-                slider("bg. speed", "font ui", 0, 100, 10, 70, "speedPercentage"),
+                slider("bg. speed", "fontUI", 0, 100, 10, 70, "speedPercentage"),
                 
-                textButton("back", "font ui", 10, 95, 15, 95, function(self)
+                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -172,13 +172,13 @@ function mainMenu:new()
 
             elements =
             {
-                text("audio", "font ui", "left", 10, 10, 1000),
+                text("audio", "fontUI", "left", 10, 10, 1000),
 
-                slider("music vol.", "font ui",  0, 100, 10, 25, "musicVolPercentage"),
+                slider("music vol.", "fontUI",  0, 100, 10, 25, "musicVolPercentage"),
 
-                slider("sfx vol.", "font ui",  0, 100, 10, 40, "sfxVolPercentage"),
+                slider("sfx vol.", "fontUI",  0, 100, 10, 40, "sfxVolPercentage"),
 
-                textButton("back", "font ui", 10, 65, 15, 65, function(self)
+                textButton("back", "fontUI", 10, 65, 15, 65, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -195,17 +195,17 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena", "font ui", 10, 10, 15, 10, function(self)
+                textButton("arena", "fontUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("levelselect")
                         self.owner:setBackgroundSlideAmount(0.5)
                     end
                 end),
 
-                textButton("endless", "font ui", 10, 25, 15, 25, function()
+                textButton("endless", "fontUI", 10, 25, 15, 25, function()
                 end),
 
-                textButton("back", "font ui", 10, 50, 15, 50, function(self)
+                textButton("back", "fontUI", 10, 50, 15, 50, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -220,18 +220,18 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena 1", "font ui", 10, 10, 15, 10, function()
+                textButton("arena 1", "fontUI", 10, 10, 15, 10, function()
                     game.manager:changePlayerDefinition("default definition")
                     game.gameStateMachine:set_state("gameLevelState")
                 end),
 
-                textButton("WIP", "font ui", 10, 25, 15, 25, function()
+                textButton("WIP", "fontUI", 10, 25, 15, 25, function()
                 end),
 
-                textButton("WIPPITY WIP", "font ui", 10, 40, 15, 40, function()
+                textButton("WIPPITY WIP", "fontUI", 10, 40, 15, 40, function()
                 end),
 
-                textButton("back", "font ui", 10, 65, 15, 65, function(self)
+                textButton("back", "fontUI", 10, 65, 15, 65, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
                         self.owner:setBackgroundSlideAmount(0.35)

@@ -7,9 +7,9 @@ function bossHealthBar:new(bossInstance, name, subtitle)
     self.bossName = name or "NAME"
     self.bossSubtitle = subtitle or "Subtitle"
 
-    self.barSprite = game.resourceManager:getResource("boss health bar")
-    self.barOutlineSprite = game.resourceManager:getResource("boss health outline")
-    self.eyeOutlineSprite = game.resourceManager:getResource("boss eye outline")
+    self.barSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("bossHealth")
+    self.barOutlineSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("bossHealthOutline")
+    self.eyeOutlineSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("bossEyeOutline")
 
     self.scissorStates =
     {
@@ -132,7 +132,7 @@ function bossHealthBar:draw()
         self.eye:draw()
     end
 
-    love.graphics.setFont(game.resourceManager:getResource("font main"))
+    love.graphics.setFont(game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
 
     love.graphics.setScissor(240 - self.bossTitleScissorWidth, 0, self.bossTitleScissorWidth * 2, 270)
     love.graphics.printf(self.bossName, 240 - 300/2 + xOffset, 220 + self.positionYoffset + yOffset, 300, "center")

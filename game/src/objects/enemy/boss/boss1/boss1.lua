@@ -32,19 +32,21 @@ function boss1:new(x, y)
     self.tentacleWiggleFrequency = 5
     self.tentacleWiggleAmplitude = 18
 
-    self.coreSprite = game.resourceManager:getResource("boss 1 core")
-    self.tail1 = tail("boss 1 tail 1", 0, 0, 4, 0.5)
-    self.tail2 = tail("boss 1 tail 2", 0, 0, 4, 1)
+    local assets = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1")
+    self.coreSprite = assets:get("sprites"):get("core")
+    self.tail1sprite = assets:get("sprites"):get("tail1")
+    self.tail2sprite = assets:get("sprites"):get("tail2")
+    self.mandibleSprite = assets:get("sprites"):get("mandible")
+    self.spikeSprite = assets:get("sprites"):get("spike")
+    
+    self.tail1 = tail(self.tail1sprite, 0, 0, 4, 0.5)
+    self.tail2 = tail(self.tail2sprite, 0, 0, 4, 1)
     self.eye = eye(x, y, 10, 10, true)
 
-    self.mandibleSprite = game.resourceManager:getResource("boss 1 mandible")
     self.mandibleOpenAngle = 1
     self.mandibleCloseAngle = 0
     self.mandibleAngle = self.mandibleCloseAngle
     self.mandibleTargetAngle = self.mandibleCloseAngle
-
-    self.spikeSprite = game.resourceManager:getResource("boss 1 spike")
-
     self.enemySpawnPosition = vec2(0, 0)
 
     self.mesh = nil
@@ -90,18 +92,12 @@ function boss1:new(x, y)
         },
     })
 
-    self.spawnSound = ripple.newSound(game.resourceManager:getResource("boss 1 spawn"))
-    self.spawnSound.tag(game.tags.sfx)
+    local assets = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1")
+    self.spawnSound = assets:get("sounds"):get("spawn")
+    self.hurtSound = assets:get("sounds"):get("hurt")
+    self.fireSound = assets:get("sounds"):get("fire")
+    self.sounds = assets:get("sounds"):get("randomSounds")
     self.spawnSound:play()
-
-    self.hurtSound = ripple.newSound(game.resourceManager:getResource("boss 1 hurt"))
-    self.hurtSound.tag(game.tags.sfx)
-
-    self.sound1 = ripple.newSound(game.resourceManager:getResource("boss 1 sound 1"))
-    self.sound1.tag(game.tags.sfx)
-
-    self.fireSound = ripple.newSound(game.resourceManager:getResource("boss 1 fire"))
-    self.fireSound.tag(game.tags.sfx)
 
     self:setPhase()
     self:switchState("intro")
@@ -269,6 +265,11 @@ function boss1:draw()
     if self.currentState.drawAbove == true then
         self.currentState:draw()
     end
+end
+
+function boss1:playSound()
+    local sound = self.sounds:get()
+    sound:play()
 end
 
 function boss1:addAngleSpeed(speedAddition)

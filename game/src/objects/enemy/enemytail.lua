@@ -1,6 +1,6 @@
 local enemyTail = class({name = "Enemy Tail"})
 
-function enemyTail:new(spriteName, spriteX, spriteY, waveFrequency, waveAmplitude)
+function enemyTail:new(sprite, spriteX, spriteY, waveFrequency, waveAmplitude)
     self.tailAngleWaveFrequency = waveFrequency
     self.tailAngleWaveAmplitude = waveAmplitude
 
@@ -9,7 +9,7 @@ function enemyTail:new(spriteName, spriteX, spriteY, waveFrequency, waveAmplitud
     self.tailAngleWaveAmount = 0
     self.baseTailAngle = 0
 
-    self.sprite = game.resourceManager:getResource(spriteName)
+    self.sprite = sprite
 end
 
 function enemyTail:update(dt)

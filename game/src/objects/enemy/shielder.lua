@@ -4,7 +4,7 @@ local collider = require "src.collision.collider"
 local shielder = class({name = "Shielder Enemy", extends = enemy})
 
 function shielder:new(x, y)
-    self:super(x, y, "wanderer sprite")
+    self:super(x, y)
 
     -- Parameters of the enemey
     self.health = 3
@@ -17,10 +17,12 @@ function shielder:new(x, y)
 
     -- Variables
     self.direction = vec2(30, 30)
-    self.shader = game.resourceManager:getResource("outline shader")
     self.shieldedEnemies = {}
 
     -- Components
+    self.shader = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("enemyOutlineShader")
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("shielder"):get("bodySprite")
+    
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 12, 12)
 end

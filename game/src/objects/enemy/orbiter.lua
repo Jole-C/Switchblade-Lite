@@ -26,6 +26,8 @@ function orbiter:new(x, y)
     self.flashLine = false
 
     -- Components
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("orbiter"):get("bodySprite")
+
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
 

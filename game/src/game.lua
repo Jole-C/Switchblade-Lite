@@ -1,7 +1,7 @@
 require "src.misc.mathhelpers"
 require "src.misc.tablehelpers"
 local gameRenderer = require "src.render.renderer"
-local resourceManager = require "src.resourcemanager"
+local resourceManager_REPLACESEARCH = require "src.resource.resourcemanager"
 local interfaceRenderer = require "src.interface.interfacerenderer"
 local gameManager = require "src.gamemanager"
 local playerManager = require "src.objects.player.playermanager"
@@ -35,7 +35,14 @@ function game:new()
     self.gameRenderer = gameRenderer()
     self.interfaceRenderer = interfaceRenderer()
     self.particleManager = particleManager()
-    self.resourceManager = resourceManager()
+    self.resourceManager_REPLACESEARCH = resourceManager_REPLACESEARCH()
+
+    self.tags = 
+    {
+        music = ripple.newTag(),
+        sfx = ripple.newTag()
+    }
+
     self:setupResources()
 
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
@@ -86,21 +93,16 @@ function game:new()
         menuBackgroundCanvas = self.gameRenderer:addRenderCanvas("menuBackgroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
-
-    self.tags = 
-    {
-        music = ripple.newTag(),
-        sfx = ripple.newTag()
-    }
     
-    local music = ripple.newSound(self.resourceManager:getResource("music"))
+    local music = self.resourceManager_REPLACESEARCH:getAsset("Music"):get("mainMusic")
     music:play({loop = true, volume = 0.2})
     music:tag(self.tags.music)
 
     self:setupParticles()
+
     -- Temporary particle system
     local bgCol = self.manager.currentPalette.backgroundColour
-    self.ps = love.graphics.newParticleSystem(self.resourceManager:getResource("particle sprite"), 1632)
+    self.ps = love.graphics.newParticleSystem(self.resourceManager_REPLACESEARCH:getAsset("Temp Assets"):get("particleSprite"), 1632)
     
     local ps = self.ps
     --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
@@ -288,7 +290,7 @@ function game:drawInterface()
         love.graphics.print(tostring(love.timer.getFPS()), 10, 250)
     end
 
-    love.graphics.setFont(self.resourceManager:getResource("font main"))
+    love.graphics.setFont(self.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 end
@@ -298,117 +300,232 @@ function game:drawParticles()
 end
 
 function game:setupResources()
-    local resourceManager = self.resourceManager
+    local assetGroup = require "src.resource.assetgroup"
+    local randomAssetGroup = require "src.resource.randomAssetGroup"
+    local resourceManager = self.resourceManager_REPLACESEARCH
 
-    -- In game resources
-    local playerSprite = love.graphics.newImage("assets/sprites/player/player.png")
-    resourceManager:addResource(playerSprite, "player default")
+    resourceManager:addAsset(assetGroup(
+    {
+        mainMusic = {path = "assets/audio/music/song.wav", type = "Source", parameters = {type = "stream"}}
+    }), "Music")
 
-    local playerSpriteHeavy = love.graphics.newImage("assets/sprites/player/player2.png")
-    resourceManager:addResource(playerSpriteHeavy, "player heavy")
+    resourceManager:addAsset(assetGroup(
+    {
+        sprites = assetGroup(
+        {
+            playerSprite = {path = "assets/sprites/player/player.png", type = "Image"}
+        }),
 
-    local playerSpriteLight = love.graphics.newImage("assets/sprites/player/player3.png")
-    resourceManager:addResource(playerSpriteLight, "player light")
+        sounds = assetGroup(
+        {
+            boost = {path = "assets/audio/sfx/defaultboost.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            fire = {path = "assets/audio/sfx/defaultfire.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            shipHurt = {path = "assets/audio/sfx/shiphurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            overheatWarning = {path = "assets/audio/sfx/overheatwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            shipOverheat = {path = "assets/audio/sfx/overheat.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            boostHit = {path = "assets/audio/sfx/boosthit.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+        })
+    }), "Player Assets")
 
-    local playerLaserSprite = love.graphics.newImage("assets/sprites/player/playerlaser.png")
-    resourceManager:addResource(playerLaserSprite, "player laser sprite")
+    resourceManager:addAsset(assetGroup(
+    {
+        wanderer = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/wanderer.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/wanderertail.png", type = "Image"}
+        }),
 
-    local chargerEnemy = love.graphics.newImage("assets/sprites/enemy/charger.png")
-    resourceManager:addResource(chargerEnemy, "charger sprite")
+        charger = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/charger.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/chargertail.png", type = "Image"}
+        }),
 
-    local chargerTail = love.graphics.newImage("assets/sprites/enemy/chargerenemytail.png")
-    resourceManager:addResource(chargerTail, "charger tail sprite")
+        drone = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/drone.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/wanderertail.png", type = "Image"}
+        }),
 
-    local droneEnemy = love.graphics.newImage("assets/sprites/enemy/drone.png")
-    resourceManager:addResource(droneEnemy, "drone sprite")
+        shielder = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/wanderer.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/wanderertail.png", type = "Image"}
+        }),
 
-    local wandererEnemy = love.graphics.newImage("assets/sprites/enemy/wanderer.png")
-    resourceManager:addResource(wandererEnemy, "wanderer sprite")
+        orbiter = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/orbiter.png", type = "Image"},
+            laserSprite = {path = "assets/sprites/player/playerlaser.png", type = "Image"}
+        }),
 
-    local wandererTail = love.graphics.newImage("assets/sprites/enemy/wanderertail.png")
-    resourceManager:addResource(wandererTail, "wanderer tail sprite")
+        sticker = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/sticker.png", type = "Image"},
+        }),
 
-    local stickerEnemy = love.graphics.newImage("assets/sprites/enemy/sticker.png")
-    resourceManager:addResource(stickerEnemy, "sticker sprite")
+        boss1 = assetGroup(
+        {
+            sprites = assetGroup(
+            {
+                orb = {path = "assets/sprites/enemy/boss1/orb.png", type = "Image"},
+                core = {path = "assets/sprites/enemy/boss1/core.png", type = "Image"},
+                mandible = {path = "assets/sprites/enemy/boss1/mandible.png", type = "Image"},
+                tail1 = {path = "assets/sprites/enemy/boss1/tail1.png", type = "Image"},
+                tail2 = {path = "assets/sprites/enemy/boss1/tail2.png", type = "Image"},
+                spike = {path = "assets/sprites/enemy/boss1/spike.png", type = "Image"},
+                laserOuter = {path = "assets/sprites/enemy/boss1/laserouter.png", type = "Image"},
+                laserInner = {path = "assets/sprites/enemy/boss1/laserinner.png", type = "Image"},
+            }),
 
-    local orbiterEnemy = love.graphics.newImage("assets/sprites/enemy/orbiter.png")
-    resourceManager:addResource(orbiterEnemy, "orbiter sprite")
+            sounds = assetGroup(
+            {
+                spawn = {path = "assets/audio/sfx/boss1spawn.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                hurt = {path = "assets/audio/sfx/boss1hurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                fire = {path = "assets/audio/sfx/heavyfire.wav", type = "Source", parameters = {tag = self.tags.sfx}},
 
-    -- Boss 1
-    local boss1Orb = love.graphics.newImage("assets/sprites/enemy/boss1/orb.png")
-    resourceManager:addResource(boss1Orb, "boss 1 orb")
+                randomSounds = randomAssetGroup(
+                {
+                    sound1 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                    sound2 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                    sound3 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                })
+            })
+        }),
 
-    local boss1Core = love.graphics.newImage("assets/sprites/enemy/boss1/core.png")
-    resourceManager:addResource(boss1Core, "boss 1 core")
+        --
+        deathSounds = randomAssetGroup(
+        {
+            enemyHit1 = {path = "assets/audio/sfx/enemyhit1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit2 = {path = "assets/audio/sfx/enemyhit2.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit3 = {path = "assets/audio/sfx/enemyhit3.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit4 = {path = "assets/audio/sfx/enemyhit4.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            enemyHit5 = {path = "assets/audio/sfx/enemyhit5.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+        }),
 
-    local boss1tail1 = love.graphics.newImage("assets/sprites/enemy/boss1/tail1.png")
-    resourceManager:addResource(boss1tail1, "boss 1 tail 1")
+        bossExplosionSounds = assetGroup(
+        {
+            endExplosion = {path = "assets/audio/sfx/bossexplosionend.wav", type = "Source", parameters = {tag = self.tags.sfx}},
 
-    local boss1tail2 = love.graphics.newImage("assets/sprites/enemy/boss1/tail2.png")
-    resourceManager:addResource(boss1tail2, "boss 1 tail 2")
+            midExplosion = randomAssetGroup(
+            {
+                explosion1 = {path = "assets/audio/sfx/bossexplosion1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                explosion2 = {path = "assets/audio/sfx/bossexplosion2.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                explosion3 = {path = "assets/audio/sfx/bossexplosion3.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                explosion4 = {path = "assets/audio/sfx/bossexplosion4.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            })
+        }),
 
-    local boss1mandible = love.graphics.newImage("assets/sprites/enemy/boss1/mandible.png")
-    resourceManager:addResource(boss1mandible, "boss 1 mandible")
+        enemyOutlineShader = love.graphics.newShader([[
+            extern vec2 stepSize;
+    
+            vec4 effect(vec4 colour, Image texture, vec2 texturePos, vec2 screenPos)
+            {
+                float alpha = 4 * texture2D(texture, texturePos).a;
+                alpha -= texture2D(texture, texturePos + (stepSize.x, 0.0)).a;
+                alpha -= texture2D(texture, texturePos + (-stepSize.x, 0.0)).a;
+                alpha -= texture2D(texture, texturePos + (0, stepSize.y)).a;
+                alpha -= texture2D(texture, texturePos + (0, -stepSize.y)).a;
+                
+                return vec4(1, 1, 1, alpha);
+            }
+        ]])
+    }), "Enemy Assets")
 
-    local boss1LaserOuter = love.graphics.newImage("assets/sprites/enemy/boss1/laserouter.png")
-    resourceManager:addResource(boss1LaserOuter, "boss 1 laser outer")
+    resourceManager:addAsset(assetGroup(
+    {
+        particleSprite = {path = "assets/sprites/particlesprite.png", type = "Image"}
+    }), "Temp Assets")
 
-    local boss1LaserInner = love.graphics.newImage("assets/sprites/enemy/boss1/laserinner.png")
-    resourceManager:addResource(boss1LaserInner, "boss 1 laser inner")
+    resourceManager:addAsset(assetGroup(
+    {
+        fonts = assetGroup(
+        {
+            fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-", spacing = 1}},
+            fontUI = {path = "assets/fonts/kenneyfuture.ttf", type = "Font", parameters = {size = 16}},
+            fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 48}}
+        }),
 
-    local boss1Spike = love.graphics.newImage("assets/sprites/enemy/boss1/spike.png")
-    resourceManager:addResource(boss1Spike, "boss 1 spike")
+        sprites = assetGroup(
+        {
+            selectedBox = {path = "assets/sprites/interface/selectedbox.png", type = "Image"},
+            unselectedBox = {path = "assets/sprites/interface/unselectedbox.png", type = "Image"},
+            logoTextSwitch = {path = "assets/sprites/interface/logotext_switch.png", type = "Image"},
+            logoTextBlade = {path = "assets/sprites/interface/logotext_blade.png", type = "Image"},
+            logoShip = {path = "assets/sprites/interface/logoship.png", type = "Image"},
+            warning = {path = "assets/sprites/interface/warning/warning.png", type = "Image"},
+            cautionStrip = {path = "assets/sprites/interface/warning/cautionstrip.png", type = "Image", parameters = {wrapX = "repeat", wrapY = "repeat"}},
+            bossHealth = {path = "assets/sprites/interface/bosshealth.png", type = "Image"},
+            bossHealthOutline = {path = "assets/sprites/interface/bosshealthoutline.png", type = "Image"},
+            bossEyeOutline = {path = "assets/sprites/interface/bosseyeoutline.png", type = "Image"},
+        }),
 
-    -- Global resources
-    local particle = love.graphics.newImage("assets/sprites/particlesprite.png")
-    resourceManager:addResource(particle, "particle sprite")
+        sounds = assetGroup(
+        {
+            bossWarningBoom = {path = "assets/audio/sfx/bosswarningboom.wav", type = "Source"},
+            bossWarningSiren = {path = "assets/audio/sfx/bosswarningsiren.wav", type = "Source"}
+        }),
 
-    local font = love.graphics.newImageFont("assets/fonts/font.png", "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-", 1)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font main")
+        shaders = assetGroup(
+        {
+            menuBoxShader = love.graphics.newShader([[
+                extern number angle;
+                extern number warpScale;
+                extern number warpTiling;
+                extern number tiling;
+                extern vec2 position;
+                extern vec2 resolution;
+        
+                vec4 effect(vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
+                {
+                    const float PI = 3.14159;
+                    
+                    vec2 uv = (screenCoords - position) / resolution;
+                    
+                    vec2 pos = vec2(0, 0);
+                    pos.x = mix(uv.x, uv.y, angle);
+                    pos.y = mix(uv.y, 1.0 - uv.x, angle);
+                    pos.x += sin(pos.y * warpTiling * PI * 2.0) * warpScale;
+                    pos.x *= tiling;
+        
+                    vec3 col1 = vec3(0.1, 0.1, 0.1);
+                    vec3 col2 = vec3(0.13, 0.13, 0.13);
+                    
+                    float val = floor(fract(pos.x) + 0.5);
+                    vec4 fragColour = vec4(mix(col1, col2, val), 1);
+        
+                    return fragColour;
+                }
+            ]]),
 
-    local font = love.graphics.newFont("assets/fonts/kenneyfuture.ttf", 16)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font ui")
-
-    local font = love.graphics.newFont("assets/fonts/kenneyrocketsquare.ttf", 32)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font alert")
-
-    -- Interface resources
-    local selectedBox = love.graphics.newImage("assets/sprites/interface/selectedbox.png")
-    resourceManager:addResource(selectedBox, "selected box")
-
-    local unselectedBox = love.graphics.newImage("assets/sprites/interface/unselectedbox.png")
-    resourceManager:addResource(unselectedBox, "unselected box")
-
-    local logo = love.graphics.newImage("assets/sprites/interface/logo.png")
-    resourceManager:addResource(logo, "logo sprite")
-
-    local logoTextSwitch = love.graphics.newImage("assets/sprites/interface/logotext_switch.png")
-    resourceManager:addResource(logoTextSwitch, "logo text switch")
-
-    local logoTextBlade = love.graphics.newImage("assets/sprites/interface/logotext_blade.png")
-    resourceManager:addResource(logoTextBlade, "logo text blade")
-
-    local logoShip = love.graphics.newImage("assets/sprites/interface/logoship.png")
-    resourceManager:addResource(logoShip, "logo ship")
-
-    local warning = love.graphics.newImage("assets/sprites/interface/warning/warning.png")
-    resourceManager:addResource(warning, "boss warning")
-
-    local cautionStrip = love.graphics.newImage("assets/sprites/interface/warning/cautionstrip.png")
-    cautionStrip:setWrap("repeat", "repeat")
-    resourceManager:addResource(cautionStrip, "caution strip")
-
-    local bossHealth = love.graphics.newImage("assets/sprites/interface/bosshealth.png")
-    resourceManager:addResource(bossHealth, "boss health bar")
-
-    local bossHealthOutline = love.graphics.newImage("assets/sprites/interface/bosshealthoutline.png")
-    resourceManager:addResource(bossHealthOutline, "boss health outline")
-
-    local bossEyeOutline = love.graphics.newImage("assets/sprites/interface/bosseyeoutline.png")
-    resourceManager:addResource(bossEyeOutline, "boss eye outline")
+            menuBackgroundShader = love.graphics.newShader([[
+                extern vec2 resolution;
+                extern float time;
+                extern vec3 colour;
+                vec4 effect(vec4 screenColour, Image texture, vec2 texCoord, vec2 screenCoord)
+                {
+                    vec2 center = vec2(resolution.x, resolution.y) / 2.0;
+                    vec2 pos = screenCoord / center;
+                    
+                    float radius = length(pos);
+                    float angle = atan(pos.y, pos.x);
+                    
+                    vec2 uv = vec2(radius, angle);
+                    vec3 col = 0.5 + 0.5*cos(time+uv.xyy+vec3(0,2,4));
+                    
+                    float intensity = dot(col.xyz, vec3(0.3, 0.3, 0.3));
+                    float levels = 32.0;
+                    float quantized = floor(intensity * levels) / levels;
+                    
+                    col = col * quantized * 5.0;
+                    
+                    float gray = dot(col, vec3(0.3, 0.3, 0.3)) * 1.5;
+                    
+                    return vec4(colour * gray, 1.0);
+                }
+            ]])
+        })
+    }), "Interface Assets")
 
     -- Set up the mesh with given parameters
     local numberOfVertices = 10
@@ -443,153 +560,7 @@ function game:setupResources()
 
     -- Set the vertices and register the resource with the resource manager
     mesh:setVertices(vertices)
-    resourceManager:addResource(mesh, "menu background mesh")
-
-    -- Shader resources
-    local menuBackgroundShader = love.graphics.newShader([[
-        extern vec2 resolution;
-        extern float time;
-        extern vec3 colour;
-        vec4 effect(vec4 screenColour, Image texture, vec2 texCoord, vec2 screenCoord)
-        {
-            vec2 center = vec2(resolution.x, resolution.y) / 2.0;
-            vec2 pos = screenCoord / center;
-            
-            float radius = length(pos);
-            float angle = atan(pos.y, pos.x);
-            
-            vec2 uv = vec2(radius, angle);
-            vec3 col = 0.5 + 0.5*cos(time+uv.xyy+vec3(0,2,4));
-            
-            float intensity = dot(col.xyz, vec3(0.3, 0.3, 0.3));
-            float levels = 32.0;
-            float quantized = floor(intensity * levels) / levels;
-            
-            col = col * quantized * 5.0;
-            
-            float gray = dot(col, vec3(0.3, 0.3, 0.3)) * 1.5;
-            
-            return vec4(colour * gray, 1.0);
-        }
-    ]])
-    resourceManager:addResource(menuBackgroundShader, "menu background shader")
-
-    local menuBoxShader = love.graphics.newShader([[
-        extern number angle;
-        extern number warpScale;
-        extern number warpTiling;
-        extern number tiling;
-        extern vec2 position;
-        extern vec2 resolution;
-
-        vec4 effect(vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
-        {
-            const float PI = 3.14159;
-            
-            vec2 uv = (screenCoords - position) / resolution;
-            
-            vec2 pos = vec2(0, 0);
-            pos.x = mix(uv.x, uv.y, angle);
-            pos.y = mix(uv.y, 1.0 - uv.x, angle);
-            pos.x += sin(pos.y * warpTiling * PI * 2.0) * warpScale;
-            pos.x *= tiling;
-
-            vec3 col1 = vec3(0.1, 0.1, 0.1);
-            vec3 col2 = vec3(0.13, 0.13, 0.13);
-            
-            float val = floor(fract(pos.x) + 0.5);
-            vec4 fragColour = vec4(mix(col1, col2, val), 1);
-
-            return fragColour;
-        }
-    ]])
-    resourceManager:addResource(menuBoxShader, "menu box shader")
-
-    local outlineShader = love.graphics.newShader([[
-        extern vec2 stepSize;
-
-        vec4 effect(vec4 colour, Image texture, vec2 texturePos, vec2 screenPos)
-        {
-            float alpha = 4 * texture2D(texture, texturePos).a;
-            alpha -= texture2D(texture, texturePos + (stepSize.x, 0.0)).a;
-            alpha -= texture2D(texture, texturePos + (-stepSize.x, 0.0)).a;
-            alpha -= texture2D(texture, texturePos + (0, stepSize.y)).a;
-            alpha -= texture2D(texture, texturePos + (0, -stepSize.y)).a;
-            
-            return vec4(1, 1, 1, alpha);
-        }
-    ]])
-    resourceManager:addResource(outlineShader, "outline shader")
-
-    -- Audio
-    local song = love.audio.newSource("assets/audio/music/song.wav", "stream")
-    resourceManager:addResource(song, "music")
-
-    local defaultBoost = love.audio.newSource("assets/audio/sfx/defaultboost.wav", "static")
-    resourceManager:addResource(defaultBoost, "default boost")
-    
-    local defaultFire = love.audio.newSource("assets/audio/sfx/defaultfire.wav", "static")
-    resourceManager:addResource(defaultFire, "default fire")
-
-    local shipHurt = love.audio.newSource("assets/audio/sfx/shiphurt.wav", "static")
-    resourceManager:addResource(shipHurt, "ship hurt")
-
-    local overheatWarning = love.audio.newSource("assets/audio/sfx/overheatwarning.wav", "static")
-    resourceManager:addResource(overheatWarning, "ship overheat warning")
-
-    local shipOverheat = love.audio.newSource("assets/audio/sfx/overheat.wav", "static")
-    resourceManager:addResource(shipOverheat, "ship overheat")
-
-    local boostHit = love.audio.newSource("assets/audio/sfx/boosthit.wav", "static")
-    resourceManager:addResource(boostHit, "boost hit")
-    
-    local bossWarningBoom = love.audio.newSource("assets/audio/sfx/bosswarningboom.wav", "static")
-    resourceManager:addResource(bossWarningBoom, "boss warning boom")
-
-    local bossWarningSiren = love.audio.newSource("assets/audio/sfx/bosswarning.wav", "static")
-    resourceManager:addResource(bossWarningSiren, "boss warning siren")
-
-    local enemyHit1 = love.audio.newSource("assets/audio/sfx/enemyhit1.wav", "static")
-    resourceManager:addResource(enemyHit1, "enemy hit 1")
-
-    local enemyHit2 = love.audio.newSource("assets/audio/sfx/enemyhit2.wav", "static")
-    resourceManager:addResource(enemyHit2, "enemy hit 2")
-
-    local enemyHit3 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
-    resourceManager:addResource(enemyHit3, "enemy hit 3")
-
-    local enemyHit4 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
-    resourceManager:addResource(enemyHit4, "enemy hit 4")
-
-    local enemyHit5 = love.audio.newSource("assets/audio/sfx/enemyhit3.wav", "static")
-    resourceManager:addResource(enemyHit5, "enemy hit 5")
-
-    local bossExplosion1 = love.audio.newSource("assets/audio/sfx/bossexplosion1.wav", "static")
-    resourceManager:addResource(bossExplosion1, "boss explosion 1")
-
-    local bossExplosion2 = love.audio.newSource("assets/audio/sfx/bossexplosion2.wav", "static")
-    resourceManager:addResource(bossExplosion2, "boss explosion 2")
-
-    local bossExplosion3 = love.audio.newSource("assets/audio/sfx/bossexplosion3.wav", "static")
-    resourceManager:addResource(bossExplosion3, "boss explosion 3")
-
-    local bossExplosion4 = love.audio.newSource("assets/audio/sfx/bossexplosion4.wav", "static")
-    resourceManager:addResource(bossExplosion4, "boss explosion 4")
-
-    local bossExplosionEnd = love.audio.newSource("assets/audio/sfx/bossexplosionend.wav", "static")
-    resourceManager:addResource(bossExplosionEnd, "boss explosion end")
-
-    local boss1spawn = love.audio.newSource("assets/audio/sfx/boss1spawn.wav", "static")
-    resourceManager:addResource(boss1spawn, "boss 1 spawn")
-
-    local boss1hurt = love.audio.newSource("assets/audio/sfx/boss1hurt.wav", "static")
-    resourceManager:addResource(boss1hurt, "boss 1 hurt")
-
-    local boss1sound1 = love.audio.newSource("assets/audio/sfx/boss1sound1.wav", "static")
-    resourceManager:addResource(boss1sound1, "boss 1 sound 1")
-
-    local boss1fire = love.audio.newSource("assets/audio/sfx/heavyfire.wav", "static")
-    resourceManager:addResource(boss1fire, "boss 1 fire")
+    resourceManager:getAsset("Interface Assets"):add(mesh, "menuBackgroundMesh")
 end
 
 function game:setupParticles()

@@ -2,7 +2,7 @@ local laser = require "src.objects.bullet.laser"
 local playerLaser = class({name = "Player Laser", extends = laser})
 
 function playerLaser:new(x, y, angle, damage, length, lifetime)
-    self.sprite = game.resourceManager:getResource("player laser sprite")
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("orbiter"):get("laserSprite")
     
     self:super(x, y, angle, damage, length, lifetime)
 end

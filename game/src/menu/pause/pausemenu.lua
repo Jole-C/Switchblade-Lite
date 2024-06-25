@@ -13,19 +13,19 @@ function pauseMenu:new()
             displayMenuName = false,
             elements =
                 {
-                text("pause", "font ui", "left", 10, 10, 1000),
+                text("pause", "fontUI", "left", 10, 10, 1000),
 
-                textButton("resume", "font ui", 10, 25, 15, 25, function()
+                textButton("resume", "fontUI", 10, 25, 15, 25, function()
                     game.manager:togglePausing()
                 end),
 
-                textButton("restart", "font ui", 10, 40, 15, 40, function(self)
+                textButton("restart", "fontUI", 10, 40, 15, 40, function(self)
                     if self.owner then
                         self.owner:switchMenu("restart")
                     end
                 end),
 
-                textButton("quit", "font ui", 10, 65, 15, 65, function()
+                textButton("quit", "fontUI", 10, 65, 15, 65, function()
                     game.gameStateMachine:set_state("menuState")
                     game.manager:togglePausing()
                 end),
@@ -36,16 +36,16 @@ function pauseMenu:new()
             displayMenuName = false,
             elements =
                 {
-                text("are you sure?", "font ui", "left", 10, 10, 1000),
+                text("are you sure?", "fontUI", "left", 10, 10, 1000),
 
-                textButton("yes", "font ui", 10, 25, 15, 25, function()
+                textButton("yes", "fontUI", 10, 25, 15, 25, function()
                     -- I think this sucks but it works for now
                     game.gameStateMachine:set_state("menuState")
                     game.gameStateMachine:set_state("gameLevelState")
                     game.manager:togglePausing()
                 end),
 
-                textButton("no!", "font ui", 10, 40, 15, 40, function(self)
+                textButton("no!", "fontUI", 10, 40, 15, 40, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                     end

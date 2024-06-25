@@ -27,18 +27,11 @@ function boss:new(x, y)
     self.shieldState = {}
     self.states = nil
 
-    self.debugText = text("", "font main", "left", 380, 200, 100)
+    self.debugText = text("", "fontMain", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
 
-    self.explosionSounds = {}
-
-    for i = 1, 4 do
-        table.insert(self.explosionSounds, ripple.newSound(game.resourceManager:getResource("boss explosion "..i)))
-        self.explosionSounds[i]:tag(game.tags.sfx)
-    end
-
-    self.explosionSoundEnd = ripple.newSound(game.resourceManager:getResource("boss explosion end"))
-    self.explosionSoundEnd:tag(game.tags.sfx)
+    self.explosionSounds = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("midExplosion")
+    self.explosionSoundEnd = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("endExplosion")
 
     self.healthElement = bossHealthBar(self, self.bossName, self.bossSubtitle)
     game.interfaceRenderer:addHudElement(self.healthElement)
@@ -179,12 +172,8 @@ function boss:switchAttack(attacksTable)
 end
 
 function boss:playExplosionSound()
-    local soundIndex = math.random(1, #self.explosionSounds)
-    local sound = self.explosionSounds[soundIndex]
-
-    if sound then
-        sound:play({pitch = math.random(1, 3)})
-    end
+    local sound = self.explosionSounds:get()
+    sound:play()
 end
 
 function boss:switchState(newState)

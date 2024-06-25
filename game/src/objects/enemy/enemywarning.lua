@@ -18,7 +18,7 @@ function enemyWarning:new(x, y, originSegment, enemyDefinition, spawnTime)
     self.spriteScaleFrequency = 0
     self.angle = math.random(0, 2 * math.pi)
 
-    self.sprite = game.resourceManager:getResource(enemyDefinition.spriteName)
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get(enemyDefinition.spriteName):get("bodySprite")
 
     if self.originSegment then
         self.position.x = self.originSegment.position.x + self.segmentOffset.x

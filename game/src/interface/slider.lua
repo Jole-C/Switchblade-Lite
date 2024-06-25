@@ -10,7 +10,7 @@ function slider:new(text, font, minValue, maxValue, x, y, option)
     self.minValue = minValue
     self.maxValue = maxValue
     self.text = text
-    self.font = game.resourceManager:getResource(font)
+    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get(font)
     self.lineLength = 75
 end
 

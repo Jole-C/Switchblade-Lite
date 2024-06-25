@@ -23,7 +23,7 @@ function bossWarning:new(x, y, bossClass)
         end
 
         table.insert(self.cautionSprites, {
-            sprite = quad("caution strip", newQuad, 0, y, 0, 0, 0, 0, 0, false),
+            sprite = quad(game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("cautionStrip"), newQuad, 0, y, 0, 0, 0, 0, 0, false),
             x = 0,
             direction = direction,
             quad = newQuad
@@ -46,7 +46,7 @@ function bossWarning:new(x, y, bossClass)
 
     -- Create quads to hold the warning text
     self.warningQuads = {}
-    self.warningSprite = game.resourceManager:getResource("boss warning")
+    self.warningSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("warning")
     local warningLength = #"warning"
     local spriteWidth, spriteHeight = self.warningSprite:getDimensions()
     
@@ -69,7 +69,7 @@ function bossWarning:new(x, y, bossClass)
             scale = 0,
             x = spriteX,
             y = spriteY,
-            sprite = quad("boss warning", newQuad, spriteX, spriteY, 0, 0, 0, 67/2, 270/2, false)
+            sprite = quad(game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("warning"), newQuad, spriteX, spriteY, 0, 0, 0, 67/2, 270/2, false)
         })
     end
 
@@ -106,10 +106,8 @@ function bossWarning:new(x, y, bossClass)
     self.warningTime = 5
 
     -- Load the sounds
-    self.warningBoom = ripple.newSound(game.resourceManager:getResource("boss warning boom"))
-    self.warningBoom:tag(game.tags.sfx)
-    self.warningSiren = ripple.newSound(game.resourceManager:getResource("boss warning siren"))
-    self.warningSiren:tag(game.tags.sfx)
+    self.warningBoom = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sounds"):get("bossWarningBoom")
+    self.warningSiren = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sounds"):get("bossWarningSiren")
 
     if game.manager:getOption("enableDebugMode") == true then
         self:spawnBoss()

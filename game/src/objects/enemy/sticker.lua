@@ -5,7 +5,7 @@ local collider = require "src.collision.collider"
 local sticker = class({name = "Sticker", extends = enemy})
 
 function sticker:new(x, y)
-    self:super(x, y, "sticker sprite")
+    self:super(x, y)
 
     self.startingSpeed = 0
 
@@ -30,6 +30,8 @@ function sticker:new(x, y)
 
     self.isSticking = false
     self.stickGracePeriod = 0
+
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("sticker"):get("bodySprite")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)

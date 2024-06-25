@@ -5,7 +5,7 @@ local eye = require "src.objects.enemy.enemyeye"
 local charger = class({name = "Charger Enemy", extends = enemy})
 
 function charger:new(x, y)
-    self:super(x, y, "charger sprite")
+    self:super(x, y)
 
     -- Parameters of the enemey
     self.health = 1
@@ -21,10 +21,13 @@ function charger:new(x, y)
     self.targetPlayer = false
 
     -- Components
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("charger"):get("bodySprite")
+    self.tailSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("charger"):get("tailSprite")
+    
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, x, y, 12, 12)
 
-    self.tail = tail("charger tail sprite", self.position.x, self.position.y, 15, 1)
+    self.tail = tail(self.tailSprite, self.position.x, self.position.y, 15, 1)
     self.eye = eye(x, y, 2, 2)
 
     self.targetPlayer = math.random(0, 100) > self.chanceToAngleToPlayer

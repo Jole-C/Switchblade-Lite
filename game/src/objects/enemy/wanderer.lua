@@ -5,7 +5,7 @@ local eye = require "src.objects.enemy.enemyeye"
 local wanderer = class({name = "Wanderer Enemy", extends = enemy})
 
 function wanderer:new(x, y)
-    self:super(x, y, "wanderer sprite")
+    self:super(x, y)
 
     -- Parameters of the enemy
     self.secondsBetweenAngleChange = 1
@@ -24,10 +24,13 @@ function wanderer:new(x, y)
     self.targetPlayer = false
 
     -- Components
+    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("wanderer"):get("bodySprite")
+    self.tailSprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("wanderer"):get("tailSprite")
+
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
 
-    self.tail = tail("wanderer tail sprite", x, y, 15, 1)
+    self.tail = tail(self.tailSprite, x, y, 15, 1)
     self.eye = eye(x, y, 2, 2)
 
     if math.random(0, 100) > self.chanceToAngleToPlayer then
