@@ -17,7 +17,7 @@ function player:new(x, y)
     -- Generic parameters of the ship
     self.maxHealth = 5
     self.maxHealthRechargeCooldown = 2
-    self.healthCircleRadius = 200
+    self.healthCircleRadius = 200 * game.manager:getOption("playerHealthRingSizePercentage") / 100
     self.maxOverheatPlayRate = 0.5
     self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 8
     self.boostExplosionDistance = self.boostExplosionDistance or 100

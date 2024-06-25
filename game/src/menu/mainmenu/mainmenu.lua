@@ -130,7 +130,9 @@ function mainMenu:new()
 
                 toggleButton("Center Camera", "fontUI", 10, 85, 20, 85, "centerCamera", 260),
 
-                textButton("back", "fontUI", 10, 110, 15, 110, function(self)
+                slider("Health Ring Size", "fontUI",  50, 150, 10, 100, "playerHealthRingSizePercentage"),
+
+                textButton("back", "fontUI", 10, 125, 15, 125, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
