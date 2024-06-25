@@ -36,16 +36,17 @@ function slider:draw()
     love.graphics.print(self.text, self.position.x, self.position.y)
 
     -- Print the text for the slider's percentage
-    love.graphics.print(tostring(self.value/self.maxValue * 100).."%", self.position.x + 200, self.position.y)
+    love.graphics.print(tostring(self.value).."%", self.position.x + 200, self.position.y)
     
     -- Print the slider
     local textHeight = self.font:getHeight(self.text)
     local lineX = self.position.x + 270
     local lineY = self.position.y + textHeight/2 + 1
+    local circleX = math.lerp(lineX, lineX + self.lineLength, mathx.inverse_lerp(self.value, self.minValue, self.maxValue))
 
     love.graphics.setLineWidth(2)
     love.graphics.line(lineX, lineY, lineX + self.lineLength, lineY)
-    love.graphics.circle("fill", math.floor(lineX + (self.value/self.maxValue) * self.lineLength), lineY, 6)
+    love.graphics.circle("fill", circleX, lineY, 6)
     love.graphics.setLineWidth(1)
 
     love.graphics.setColor(1, 1, 1, 1)
