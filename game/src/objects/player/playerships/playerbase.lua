@@ -3,6 +3,7 @@ local playerBullet = require "src.objects.player.playerbullets.playerbullet"
 local playerExplosion = require "src.objects.player.playerbullets.playerexplosion"
 local collider = require "src.collision.collider"
 local ammoDisplay = require "src.objects.player.playerammodisplay"
+local healthDisplay = require "src.objects.player.playerhealthdisplay"
 local temperatureDisplay = require "src.objects.player.playertemperaturedisplay"
 local boostAmmoEffect = require "src.objects.effects.boostammorestore"
 local boostLineEffect = require "src.objects.effects.boostline"
@@ -92,6 +93,11 @@ function player:new(x, y)
 
     self.temperatureDisplay = temperatureDisplay(0, 0)
     gameHelper:addGameObject(self.temperatureDisplay)
+
+    if game.manager:getOption("showPlayerHealth") then
+        self.healthDisplay = healthDisplay(0, 0)
+        gameHelper:addGameObject(self.healthDisplay)
+    end
 
     local assets = game.resourceManager:getAsset("Player Assets")
     self.sprite = assets:get("sprites"):get("playerSprite")
@@ -321,6 +327,10 @@ function player:updatePosition(dt)
     self.cameraTarget.position = self.position
     self.ammoDisplay.position = self.position
     self.temperatureDisplay.position = self.position
+
+    if self.healthDisplay then
+        self.healthDisplay.position = self.position
+    end
 end
 
 function player:checkCollision()
@@ -474,6 +484,11 @@ function player:update(dt)
     self:checkCollision()
 
     self:rechargeHealth(dt)
+
+    if self.healthDisplay then
+        self.healthDisplay.health = self.health
+        self.healthDisplay.maxHealth = self.maxHealth
+    end
 end
 
 function player:draw()

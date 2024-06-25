@@ -30,10 +30,10 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.42"
+    self.expectedOptionsVersion = "0.43"
     
     self.options = {
-        OPTIONS_VERSION = "0.42",
+        OPTIONS_VERSION = "0.43",
         enableFullscreen = true,
         enableBackground = true,
         fadingPercentage = 10,
@@ -47,6 +47,7 @@ function gameManager:new()
         disableFreeze = false,
         centerCamera = false,
         playerHealthRingSizePercentage = 100,
+        showPlayerHealth = false,
     }
 
     self.unlocks = {

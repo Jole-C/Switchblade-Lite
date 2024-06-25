@@ -132,7 +132,9 @@ function mainMenu:new()
 
                 slider("Health Ring Size", "fontUI",  50, 150, 10, 100, "playerHealthRingSizePercentage"),
 
-                textButton("back", "fontUI", 10, 125, 15, 125, function(self)
+                toggleButton("Show Player Health", "fontUI", 10, 115, 20, 115, "showPlayerHealth", 260),
+
+                textButton("back", "fontUI", 10, 140, 15, 140, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
