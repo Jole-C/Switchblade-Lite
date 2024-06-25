@@ -441,7 +441,7 @@ function game:setupResources()
     {
         fonts = assetGroup(
         {
-            fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-", spacing = 1}},
+            fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-/", spacing = 1}},
             fontUI = {path = "assets/fonts/kenneyfuture.ttf", type = "Font", parameters = {size = 16}},
             fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 48}}
         }),
