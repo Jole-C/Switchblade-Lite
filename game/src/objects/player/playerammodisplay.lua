@@ -8,7 +8,7 @@ function playerAmmoDisplay:new(x, y)
     self.ammoDisplayTime = self.maxAmmoDisplayTime
     self.displayAmmo = true
 
-    self.ammoFont = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain")
+    self.ammoFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain")
     self.ammo = 0
 end
 

@@ -93,7 +93,7 @@ function player:new(x, y)
     self.temperatureDisplay = temperatureDisplay(0, 0)
     gameHelper:addGameObject(self.temperatureDisplay)
 
-    local assets = game.resourceManager_REPLACESEARCH:getAsset("Player Assets")
+    local assets = game.resourceManager:getAsset("Player Assets")
     self.sprite = assets:get("sprites"):get("playerSprite")
     self.fireSound = assets:get("sounds"):get("fire")
     self.boostSound = assets:get("sounds"):get("boost")

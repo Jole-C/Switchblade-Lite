@@ -8,7 +8,7 @@ function textElement:new(text, font, textAlign, x, y, width)
     self.position = vec2(x, y)
     self.textAlign = textAlign
     self.width = width
-    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get(font)
+    self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get(font)
 end
 
 function textElement:draw()
