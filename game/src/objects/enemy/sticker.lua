@@ -31,7 +31,7 @@ function sticker:new(x, y)
     self.isSticking = false
     self.stickGracePeriod = 0
 
-    self.sprite = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("sticker"):get("bodySprite")
+    self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("sticker"):get("bodySprite")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)

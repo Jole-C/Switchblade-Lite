@@ -6,7 +6,7 @@ function stageTimeHud:new()
 
     self.timeSeconds = 0
     self.timeMinutes = 0
-    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain")
+    self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain")
 end
 
 function stageTimeHud:draw()

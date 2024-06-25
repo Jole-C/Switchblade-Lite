@@ -4,7 +4,7 @@ local enemy = class({name = "Enemy", extends = enemyBase})
 function enemy:new(x, y, spriteName)
     self:super(x, y)
     -- Sounds
-    self.deathSounds = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("deathSounds")
+    self.deathSounds = game.resourceManager:getAsset("Enemy Assets"):get("deathSounds")
 end
 
 function enemy:update(dt)

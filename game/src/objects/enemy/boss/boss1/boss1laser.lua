@@ -2,8 +2,8 @@ local laser = require "src.objects.bullet.laser"
 local bossLaser = class({name = "Boss 1 Laser", extends = laser})
 
 function bossLaser:new(x, y, angle, length, lifetime)
-    self.spriteOuter = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("laserOuter")
-    self.spriteInner = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("laserInner")
+    self.spriteOuter = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("laserOuter")
+    self.spriteInner = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sprites"):get("laserInner")
 
     self:super(x, y, angle, 0, length, lifetime, 8)
 end

@@ -30,8 +30,8 @@ function boss:new(x, y)
     self.debugText = text("", "fontMain", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
 
-    self.explosionSounds = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("midExplosion")
-    self.explosionSoundEnd = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("endExplosion")
+    self.explosionSounds = game.resourceManager:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("midExplosion")
+    self.explosionSoundEnd = game.resourceManager:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("endExplosion")
 
     self.healthElement = bossHealthBar(self, self.bossName, self.bossSubtitle)
     game.interfaceRenderer:addHudElement(self.healthElement)

@@ -32,7 +32,7 @@ function boss1:new(x, y)
     self.tentacleWiggleFrequency = 5
     self.tentacleWiggleAmplitude = 18
 
-    local assets = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1")
+    local assets = game.resourceManager:getAsset("Enemy Assets"):get("boss1")
     self.coreSprite = assets:get("sprites"):get("core")
     self.tail1sprite = assets:get("sprites"):get("tail1")
     self.tail2sprite = assets:get("sprites"):get("tail2")
@@ -92,7 +92,7 @@ function boss1:new(x, y)
         },
     })
 
-    local assets = game.resourceManager_REPLACESEARCH:getAsset("Enemy Assets"):get("boss1")
+    local assets = game.resourceManager:getAsset("Enemy Assets"):get("boss1")
     self.spawnSound = assets:get("sounds"):get("spawn")
     self.hurtSound = assets:get("sounds"):get("hurt")
     self.fireSound = assets:get("sounds"):get("fire")
