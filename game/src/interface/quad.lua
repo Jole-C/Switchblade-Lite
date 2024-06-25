@@ -4,7 +4,7 @@ local quadHudElement = class({name = "Quad", extends = hudElement})
 function quadHudElement:new(sprite, quad, x, y, angle, scaleX, scaleY, offsetX, offsetY, centerSprite, quadWidth, quadHeight, overrideDrawColour)
     self:super()
 
-    self.sprite = game.resourceManager:getResource(sprite)
+    self.sprite = sprite
     self.quad = quad
 
     self.position = vec2(x, y)

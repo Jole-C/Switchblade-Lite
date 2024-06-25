@@ -5,6 +5,7 @@ function playerHud:new()
     self:super()
 
     self.playerReference = nil
+    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain")
 end
 
 function playerHud:update(dt)
@@ -20,7 +21,7 @@ function playerHud:draw()
         return
     end
 
-    love.graphics.setFont(game.resourceManager:getResource("font main"))
+    love.graphics.setFont(self.font)
     love.graphics.print(math.floor(self.playerReference.shipTemperature), 10, 10)
     love.graphics.print(self.playerReference.health, 10, 20)
     love.graphics.print(math.abs(math.ceil(self.playerReference.ammo)), 10, 30)

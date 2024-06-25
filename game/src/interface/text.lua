@@ -1,14 +1,14 @@
 local hudElement require "src.interface.hudelement"
 local textElement = class({name = "Text", extends = hudElement})
 
-function textElement:new(text, fontName, textAlign, x, y, width)
+function textElement:new(text, font, textAlign, x, y, width)
     self:super()
 
     self.text = text
     self.position = vec2(x, y)
     self.textAlign = textAlign
     self.width = width
-    self.font = game.resourceManager:getResource(fontName)
+    self.font = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get(font)
 end
 
 function textElement:draw()

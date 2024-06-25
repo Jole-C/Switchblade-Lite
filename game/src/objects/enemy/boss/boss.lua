@@ -27,7 +27,7 @@ function boss:new(x, y)
     self.shieldState = {}
     self.states = nil
 
-    self.debugText = text("", "font main", "left", 380, 200, 100)
+    self.debugText = text("", "fontMain", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
 
     self.explosionSounds = {}

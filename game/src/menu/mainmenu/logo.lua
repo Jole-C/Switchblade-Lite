@@ -4,9 +4,9 @@ local logoParticle = require "src.menu.mainmenu.logoparticle"
 local logo = class({name = "logo", extends = hudElement})
 
 function logo:new()
-    self.logoSpriteSwitch = game.resourceManager:getResource("logo text switch")
-    self.logoSpriteBlade = game.resourceManager:getResource("logo text blade")
-    self.shipSprite = game.resourceManager:getResource("logo ship")
+    self.logoSpriteSwitch = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("logoTextSwitch")
+    self.logoSpriteBlade = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("logoTextBlade")
+    self.shipSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("logoShip")
 
     self.inShipIntro = true
 

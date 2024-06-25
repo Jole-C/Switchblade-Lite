@@ -23,7 +23,7 @@ function bossWarning:new(x, y, bossClass)
         end
 
         table.insert(self.cautionSprites, {
-            sprite = quad("caution strip", newQuad, 0, y, 0, 0, 0, 0, 0, false),
+            sprite = quad(game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("cautionStrip"), newQuad, 0, y, 0, 0, 0, 0, 0, false),
             x = 0,
             direction = direction,
             quad = newQuad
@@ -46,7 +46,7 @@ function bossWarning:new(x, y, bossClass)
 
     -- Create quads to hold the warning text
     self.warningQuads = {}
-    self.warningSprite = game.resourceManager:getResource("boss warning")
+    self.warningSprite = game.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("sprites"):get("warning")
     local warningLength = #"warning"
     local spriteWidth, spriteHeight = self.warningSprite:getDimensions()
     

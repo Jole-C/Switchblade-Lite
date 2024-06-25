@@ -292,7 +292,7 @@ function game:drawInterface()
         love.graphics.print(tostring(love.timer.getFPS()), 10, 250)
     end
 
-    love.graphics.setFont(self.resourceManager:getResource("font main"))
+    love.graphics.setFont(self.resourceManager_REPLACESEARCH:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 end
@@ -303,58 +303,6 @@ end
 
 function game:setupResources()
     local resourceManager = self.resourceManager
-
-    -- Global resources
-    local particle = love.graphics.newImage("assets/sprites/particlesprite.png")
-    resourceManager:addResource(particle, "particle sprite")
-
-    local font = love.graphics.newImageFont("assets/fonts/font.png", "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-", 1)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font main")
-
-    local font = love.graphics.newFont("assets/fonts/kenneyfuture.ttf", 16)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font ui")
-
-    local font = love.graphics.newFont("assets/fonts/kenneyrocketsquare.ttf", 32)
-    font:setFilter("nearest", "nearest", 0)
-    resourceManager:addResource(font, "font alert")
-
-    -- Interface resources
-    local selectedBox = love.graphics.newImage("assets/sprites/interface/selectedbox.png")
-    resourceManager:addResource(selectedBox, "selected box")
-
-    local unselectedBox = love.graphics.newImage("assets/sprites/interface/unselectedbox.png")
-    resourceManager:addResource(unselectedBox, "unselected box")
-
-    local logo = love.graphics.newImage("assets/sprites/interface/logo.png")
-    resourceManager:addResource(logo, "logo sprite")
-
-    local logoTextSwitch = love.graphics.newImage("assets/sprites/interface/logotext_switch.png")
-    resourceManager:addResource(logoTextSwitch, "logo text switch")
-
-    local logoTextBlade = love.graphics.newImage("assets/sprites/interface/logotext_blade.png")
-    resourceManager:addResource(logoTextBlade, "logo text blade")
-
-    local logoShip = love.graphics.newImage("assets/sprites/interface/logoship.png")
-    resourceManager:addResource(logoShip, "logo ship")
-
-    local warning = love.graphics.newImage("assets/sprites/interface/warning/warning.png")
-    resourceManager:addResource(warning, "boss warning")
-
-    local cautionStrip = love.graphics.newImage("assets/sprites/interface/warning/cautionstrip.png")
-    cautionStrip:setWrap("repeat", "repeat")
-    resourceManager:addResource(cautionStrip, "caution strip")
-
-    local bossHealth = love.graphics.newImage("assets/sprites/interface/bosshealth.png")
-    resourceManager:addResource(bossHealth, "boss health bar")
-
-    local bossHealthOutline = love.graphics.newImage("assets/sprites/interface/bosshealthoutline.png")
-    resourceManager:addResource(bossHealthOutline, "boss health outline")
-
-    local bossEyeOutline = love.graphics.newImage("assets/sprites/interface/bosseyeoutline.png")
-    resourceManager:addResource(bossEyeOutline, "boss eye outline")
-
     -- Set up the mesh with given parameters
     local numberOfVertices = 10
     local baseVertexX = 100
@@ -656,14 +604,13 @@ function game:setupResources()
         {
             fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-", spacing = 1}},
             fontUI = {path = "assets/fonts/kenneyfuture.ttf", type = "Font", parameters = {size = 16}},
-            fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 16}}
+            fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 48}}
         }),
 
         sprites = assetGroup(
         {
             selectedBox = {path = "assets/sprites/interface/selectedbox.png", type = "Image"},
             unselectedBox = {path = "assets/sprites/interface/unselectedbox.png", type = "Image"},
-            logo = {path = "assets/sprites/interface/logo.png", type = "Image"},
             logoTextSwitch = {path = "assets/sprites/interface/logotext_switch.png", type = "Image"},
             logoTextBlade = {path = "assets/sprites/interface/logotext_blade.png", type = "Image"},
             logoShip = {path = "assets/sprites/interface/logoship.png", type = "Image"},

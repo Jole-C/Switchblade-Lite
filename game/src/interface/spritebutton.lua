@@ -1,10 +1,9 @@
 local menuButton = require "src.interface.menubutton"
 local spriteButton = class({name = "Sprite Button", extends = menuButton})
 
-function spriteButton:new(spriteName, restX, restY, selectedX, selectedY, execute)
+function spriteButton:new(sprite, restX, restY, selectedX, selectedY, execute)
     self:super(restX, restY, selectedX, selectedY, execute)
-
-    self.sprite = game.resourceManager:getResource(spriteName)
+    self.sprite = sprite
 end
 
 function spriteButton:draw()
