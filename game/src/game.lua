@@ -307,7 +307,7 @@ end
 
 function game:setupResources()
     local assetGroup = require "src.resource.assetgroup"
-    local randomAssetGroup = require "src.resource.randomAssetGroup"
+    local randomAssetGroup = require "src.resource.randomassetgroup"
     local resourceManager = self.resourceManager
 
     resourceManager:addAsset(assetGroup(
