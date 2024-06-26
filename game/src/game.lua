@@ -652,6 +652,20 @@ function game:setupParticles()
     playerSmoke:setSpread(6.2831854820251)
     
     self.particleManager:addEffect(self.particleManager:newEffect({playerSmoke}, self.canvases.foregroundCanvas.canvas, false), "Player Smoke")
+    
+    local playerDeath = love.graphics.newParticleSystem(circleFill, 1000)
+    playerDeath:setColors(1, 1, 1, 1)
+    playerDeath:setDirection(-1.5707963705063)
+    playerDeath:setEmissionArea("none", 0, 0, 0, false)
+    playerDeath:setEmitterLifetime(-1)
+    playerDeath:setInsertMode("top")
+    playerDeath:setParticleLifetime(0.25)
+    playerDeath:setSizes(3, 0)
+    playerDeath:setSpeed(269.98336791992, 891.73107910156)
+    playerDeath:setSpread(6.2831854820251)
+    
+    self.particleManager:addEffect(self.particleManager:newEffect({playerDeath}, self.canvases.foregroundCanvas.canvas, false), "Player Death")
+
 end
 
 return game
