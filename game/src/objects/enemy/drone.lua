@@ -35,7 +35,7 @@ function drone:new(x, y)
     gameHelper:addCollider(self.collider, self.position.x, self.position.y, 12, 12)
 
     self.tail = tail(self.tailSprite, x, y, 15, 1)
-    self.eye = eye(x, y, 3, 2)
+    self.eye = eye(x, y, 2, 2)
 end
 
 function drone:update(dt)
@@ -104,8 +104,9 @@ function drone:update(dt)
 
     -- Update the eye
     if self.eye then
-        self.eye.eyeBasePosition.x = self.position.x + math.cos(self.angle - self.tail.tailAngleWave/8) * 4
-        self.eye.eyeBasePosition.y = self.position.y + math.sin(self.angle - self.tail.tailAngleWave/8) * 4
+        self.eye.eyeBasePosition.x = self.position.x + math.cos(self.angle - self.tail.tailAngleWave/8) * 5
+        self.eye.eyeBasePosition.y = self.position.y + math.sin(self.angle - self.tail.tailAngleWave/8) * 5
+
         self.eye:update()
     end
 
