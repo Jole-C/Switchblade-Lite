@@ -20,6 +20,14 @@ function gameHelper:getArena()
     return currentGamestate.arena
 end
 
+function gameHelper:addCollider(collider, x, y, width, height)
+    local world = self:getWorld()
+
+    if world then
+        world:add(collider, x, y, width, height)
+    end
+end
+
 function gameHelper:screenShake(amount)
     local currentGamestate = self:getCurrentState()
     currentGamestate.cameraManager:screenShake(amount * game.manager:getOption("screenshakeIntensity")/100)

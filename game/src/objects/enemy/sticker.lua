@@ -34,7 +34,7 @@ function sticker:new(x, y)
     self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("sticker"):get("bodySprite")
 
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
+    gameHelper:addCollider(self.collider, self.position.x, self.position.y, 12, 12)
 
     self.eye = eye(x, y, 2, 5, true)
 end

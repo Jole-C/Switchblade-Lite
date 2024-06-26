@@ -25,7 +25,7 @@ function charger:new(x, y)
     self.tailSprite = game.resourceManager:getAsset("Enemy Assets"):get("charger"):get("tailSprite")
     
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameHelper:getWorld():add(self.collider, x, y, 12, 12)
+    gameHelper:addCollider(self.collider, x, y, 12, 12)
 
     self.tail = tail(self.tailSprite, self.position.x, self.position.y, 15, 1)
     self.eye = eye(x, y, 2, 2)

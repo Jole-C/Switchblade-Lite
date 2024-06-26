@@ -11,6 +11,7 @@ function bullet:new(x, y, speed, angle, damage, colliderDefinition, width, heigh
     self.radius = width
 
     self.collider = collider(colliderDefinition, self)
+    
     gameHelper:getWorld():add(self.collider, x, y, width, height)
 end
 

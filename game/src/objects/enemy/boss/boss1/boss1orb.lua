@@ -28,7 +28,7 @@ function bossOrb:new(x, y, bossReference, angle)
     self.damageableShader = game.resourceManager:getAsset("Enemy Assets"):get("enemyOutlineShader")
 
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameHelper:getWorld():add(self.collider, x, y, 32, 32)
+    gameHelper:addCollider(self.collider, x, y, 32, 32)
 end
 
 function bossOrb:update(dt)

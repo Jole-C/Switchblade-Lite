@@ -28,7 +28,7 @@ function wanderer:new(x, y)
     self.tailSprite = game.resourceManager:getAsset("Enemy Assets"):get("wanderer"):get("tailSprite")
 
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameHelper:getWorld():add(self.collider, self.position.x, self.position.y, 12, 12)
+    gameHelper:addCollider(self.collider, self.position.x, self.position.y, 12, 12)
 
     self.tail = tail(self.tailSprite, x, y, 15, 1)
     self.eye = eye(x, y, 2, 2)
