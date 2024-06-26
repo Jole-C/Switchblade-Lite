@@ -7,33 +7,15 @@ function gameOverState:enter()
     game.camera:setWorld(0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
     game.camera:setPosition(game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2)
     game.manager:swapPaletteGroup("main")
-
-    self.objects = {}
-    
-    local menu = gameoverMenu()
-    self:addObject(menu)
+    self.menu = gameoverMenu()
 end
 
 function gameOverState:exit()
-    for i = 1, #self.objects do
-        local object = self.objects[i]
-
-        if object.markedForDelete == false then
-            object:destroy()
-        end
-    end
-    
-    self.objects = {}
+    self.menu:destroy()
 end
 
 function gameOverState:update(dt)
-    for index,object in ipairs(self.objects) do
-        if object.markedForDelete == true then
-            self:removeObject(index)
-        else
-            object:update(dt)
-        end
-    end
+    self.menu:update(dt)
 end
 
 function gameOverState:draw()

@@ -21,7 +21,8 @@ local gameStateMachine = state_machine(
         update = gameLevel.update,
         draw = gameLevel.draw,
         addObject = gameLevel.addObject,
-        removeObject = gameLevel.removeObject
+        removeObject = gameLevel.removeObject,
+        reset = gameLevel.reset
     },
 
     gameOverState = {

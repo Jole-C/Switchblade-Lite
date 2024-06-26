@@ -64,7 +64,7 @@ function gameLevelState:removeObject(index)
     table.remove(self.objects, index)
 end
 
-function gameLevelState:leave()
+function gameLevelState:exit()
     for i = 1, #self.objects do
         local object = self.objects[i]
 
