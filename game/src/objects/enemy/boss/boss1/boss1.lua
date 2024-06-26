@@ -8,7 +8,7 @@ local boss1 = class({name = "Boss 1", extends = boss})
 
 function boss1:new(x, y)
     self.bossName = "Ocellatus"
-    self.bossSubtitle = "insert funny caption here (todo lol)"
+    self.bossSubtitle = "Not as sharp as its edges"
     
     self:super(x, y)
     self.states = states
