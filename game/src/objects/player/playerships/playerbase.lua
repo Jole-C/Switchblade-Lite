@@ -1,13 +1,18 @@
 local gameObject = require "src.objects.gameobject"
+local collider = require "src.collision.collider"
+
 local playerBullet = require "src.objects.player.playerbullets.playerbullet"
 local playerExplosion = require "src.objects.player.playerbullets.playerexplosion"
-local collider = require "src.collision.collider"
+
 local ammoDisplay = require "src.objects.player.playerammodisplay"
 local healthDisplay = require "src.objects.player.playerhealthdisplay"
 local temperatureDisplay = require "src.objects.player.playertemperaturedisplay"
+
 local boostAmmoEffect = require "src.objects.effects.boostammorestore"
 local boostLineEffect = require "src.objects.effects.boostline"
 local trailEffect = require "src.objects.effects.playertrail"
+local gameoverEffect = require "src.objects.player.playergameovereffect"
+
 local cameraTarget = require "src.objects.camera.cameratarget"
 
 local player = class({name = "Player", extends = gameObject})
@@ -569,6 +574,8 @@ function player:cleanup()
     end
 
     game.playerManager:setPlayerDeathReason("You died!")
+
+    gameHelper:addGameObject(gameoverEffect(self.position.x, self.position.y, self.angle))
 end
 
 return player
