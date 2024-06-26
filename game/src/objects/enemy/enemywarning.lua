@@ -29,7 +29,7 @@ end
 function enemyWarning:update(dt)
     self.spawnTime = self.spawnTime - (1 * dt)
 
-    if self.spawnTime <= 0 then
+    if self.spawnTime <= 0 and game.playerManager:doesPlayerExist() then
         self:spawnEnemy()
         self:destroy()
     end
