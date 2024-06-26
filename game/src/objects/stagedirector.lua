@@ -108,12 +108,11 @@ function stageDirector:update(dt)
         self.alertElement.text = ""
     end
 
-    -- Handle gameover state switching
-    local player = game.playerManager.playerReference
-
     if game.playerManager:doesPlayerExist() == false then
-        game.gameStateMachine:set_state("gameOverState")
+        return
     end
+
+    local player = game.playerManager.playerReference
 
     if self.timeSeconds <= 0 then
         self.timeSeconds = 59
@@ -125,7 +124,6 @@ function stageDirector:update(dt)
         player:destroy()
         game.playerManager:setPlayerDeathReason("You ran out of time!")
     end
-
 
     if self.currentWaveType ~= "bossWave" then
         -- Transition to the next wave
