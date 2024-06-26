@@ -38,11 +38,13 @@ function laser:update(dt)
         local y2 = y1 + math.sin(self.angle) * self.length
         
         local world = gameHelper:getWorld()
+        local returnEarly =nil
 
-        local items, len = world:querySegment(x1, y1, x2, y2)
+        if world then
+            local items, len = world:querySegment(x1, y1, x2, y2)
+            returnEarly = self:handleCollision(items, len, dt)
+        end
         
-        local returnEarly = self:handleCollision(items, len, dt)
-
         if returnEarly == true then
             return
         end

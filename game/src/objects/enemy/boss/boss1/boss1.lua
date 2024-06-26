@@ -147,17 +147,20 @@ function boss1:update(dt)
         self.angleTurnSpeed = applyFriction(self.angleTurnSpeed, self.angleFriction, dt)
         self.angleTurnSpeed = math.clamp(self.angleTurnSpeed, 1, math.huge)
 
-        for _, orb in pairs(self.orbs) do
-            local x1 = self.position.x
-            local y1 = self.position.y
-            local x2 = orb.position.x
-            local y2 = orb.position.y
+        local world = gameHelper:getWorld()
+        
+        if world then
+            for _, orb in pairs(self.orbs) do
+                local x1 = self.position.x
+                local y1 = self.position.y
+                local x2 = orb.position.x
+                local y2 = orb.position.y
 
-            local world = gameHelper:getWorld()
-            local items, len = world:querySegment(x1, y1, x2, y2)
+                local items, len = world:querySegment(x1, y1, x2, y2)
 
-            for _, item in pairs(items) do
-                self:handleCollision(nil, item.owner, item.colliderDefinition)
+                for _, item in pairs(items) do
+                    self:handleCollision(nil, item.owner, item.colliderDefinition)
+                end
             end
         end
     end

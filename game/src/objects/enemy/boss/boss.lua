@@ -47,13 +47,15 @@ function boss:update(dt)
 
     local world = gameHelper:getWorld()
 
-    for _, colliderParameter in pairs(self.colliders) do
-        if world:hasItem(colliderParameter.colliderReference) then
-            local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(colliderParameter.colliderReference)
-            colliderPositionX = colliderParameter.position.x - colliderWidth/2
-            colliderPositionY = colliderParameter.position.y - colliderHeight/2
-            
-            world:update(colliderParameter.colliderReference, colliderPositionX, colliderPositionY)
+    if world then
+        for _, colliderParameter in pairs(self.colliders) do
+            if world:hasItem(colliderParameter.colliderReference) then
+                local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(colliderParameter.colliderReference)
+                colliderPositionX = colliderParameter.position.x - colliderWidth/2
+                colliderPositionY = colliderParameter.position.y - colliderHeight/2
+                
+                world:update(colliderParameter.colliderReference, colliderPositionX, colliderPositionY)
+            end
         end
     end
 
@@ -112,17 +114,19 @@ end
 function boss:initialiseColliders(colliderParameters)
     local world = gameHelper:getWorld()
 
-    for colliderName, colliderParameter in pairs(colliderParameters) do
-        local newCollider = collider(colliderDefinitions.enemy, self)
+    if world then
+        for colliderName, colliderParameter in pairs(colliderParameters) do
+            local newCollider = collider(colliderDefinitions.enemy, self)
 
-        self.colliders[colliderName] = {
-            colliderReference = newCollider,
-            position = self.position:copy(),
-            width = colliderParameter.width
-        }
+            self.colliders[colliderName] = {
+                colliderReference = newCollider,
+                position = self.position:copy(),
+                width = colliderParameter.width
+            }
 
-        world:add(newCollider, self.position.x, self.position.y, colliderParameter.width, colliderParameter.width)
-        table.insert(self.colliderIndices, newCollider)
+            world:add(newCollider, self.position.x, self.position.y, colliderParameter.width, colliderParameter.width)
+            table.insert(self.colliderIndices, newCollider)
+        end
     end
 end
 
@@ -203,9 +207,11 @@ function boss:cleanup()
 
     local world = gameHelper:getWorld()
 
-    for _, colliderParameter in pairs(self.colliders) do
-        if world:hasItem(colliderParameter.colliderReference) then
-            world:remove(colliderParameter.colliderReference)
+    if world then
+        for _, colliderParameter in pairs(self.colliders) do
+            if world:hasItem(colliderParameter.colliderReference) then
+                world:remove(colliderParameter.colliderReference)
+            end
         end
     end
 

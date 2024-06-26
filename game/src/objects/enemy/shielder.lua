@@ -71,14 +71,12 @@ function shielder:update(dt)
     -- Update the collider
     local world = gameHelper:getWorld()
 
-    if world then
-        if world:hasItem(self.collider) then
-            local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
-            colliderPositionX = self.position.x - colliderWidth/2
-            colliderPositionY = self.position.y - colliderHeight/2
-            
-            world:update(self.collider, colliderPositionX, colliderPositionY)
-        end
+    if world and world:hasItem(self.collider) then
+        local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(self.collider)
+        colliderPositionX = self.position.x - colliderWidth/2
+        colliderPositionY = self.position.y - colliderHeight/2
+        
+        world:update(self.collider, colliderPositionX, colliderPositionY)
     end
 
     self:checkColliders(self.collider)

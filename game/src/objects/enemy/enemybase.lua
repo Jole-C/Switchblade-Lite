@@ -47,7 +47,7 @@ function enemyBase:checkColliders(colliders)
     end
 
     for _, collider in pairs(colliderTable) do
-        if world:hasItem(collider) then
+        if world and world:hasItem(collider) then
             local colliderPositionX, colliderPositionY = world:getRect(collider)
             local x, y, cols, len = world:check(collider, colliderPositionX, colliderPositionY)
     
