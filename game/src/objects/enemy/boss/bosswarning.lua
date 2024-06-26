@@ -5,6 +5,8 @@ local bossWarning = class({name = "Boss Warning", extends = gameObject})
 
 function bossWarning:new(x, y, bossClass)
     self:super(x, y)
+    game.musicManager:getTrack("levelMusic"):pause()
+    game.musicManager:getTrack("bossMusic"):start()
 
     self.bossClass = bossClass
 
@@ -40,7 +42,7 @@ function bossWarning:new(x, y, bossClass)
     self.backgroundMaxY = 60
     self.backgroundHeight = 0
     self.backgroundMaxHeight = 165
-    self.backgroundLerpSpeed = 0.2
+    self.backgroundLerpSpeed = 0.3
 
     game.interfaceRenderer:addHudElement(self.warningBackground)
 
@@ -82,20 +84,20 @@ function bossWarning:new(x, y, bossClass)
     self.warningColourFrequency = 0.05
 
     -- Variable used to scale each letter of the WARNING text over time
-    self.spriteScaleSpeed = 0.15
+    self.spriteScaleSpeed = 0.2
     self.currentScaledSprite = 1
 
     -- After all letters appear they shake by this value
     self.maxShakeIntensity = 6
     self.shakeIntensity = 0
-    self.shakeFadeRate = 0.05
+    self.shakeFadeRate = 0.025
 
     -- The rectangle to display as the warning flash before the full warning appears
     self.warningFlash = rect(0, 0, 480, 270, "fill", {1, 1, 1, 0})
     game.interfaceRenderer:addHudElement(self.warningFlash)
 
     -- Cooldown for the warning siren
-    self.maxWarningSirenCooldown = 2
+    self.maxWarningSirenCooldown = 1.25
     self.warningSirenCooldown = 0
 
     -- The screen will flash white when the whole warning appears
@@ -103,7 +105,7 @@ function bossWarning:new(x, y, bossClass)
 
     -- Stop the warning after this many seconds with a second flash
     self.stopWarning = false
-    self.warningTime = 5
+    self.warningTime = 3
 
     -- Load the sounds
     self.warningBoom = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("bossWarningBoom")
