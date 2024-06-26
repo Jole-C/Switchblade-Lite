@@ -10,7 +10,7 @@ function stageTimeHud:new()
 end
 
 function stageTimeHud:draw()
-    local timeString = string.format("%02.0f:%02.0f",self.timeMinutes,self.timeSeconds)
+    local timeString = string.format("%02.0f:%02.0f",math.abs(self.timeMinutes),math.abs(self.timeSeconds))
     local textWidth = self.font:getWidth(timeString)
     love.graphics.setFont(self.font)
     love.graphics.print(timeString, game.arenaValues.screenWidth/2 - textWidth/2, 0)
