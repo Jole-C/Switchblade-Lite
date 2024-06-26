@@ -201,10 +201,14 @@ function boss:switchState(newState)
     self.currentState:enter(self)
 end
 
-function boss:cleanup()
-    self.explosionSoundEnd:play()
-    game.musicManager:getTrack("levelMusic"):play()
-    game.musicManager:getTrack("bossMusic"):stop()
+function boss:cleanup(destroyReason)
+    if destroyReason ~= "autoDestruction" then
+        self.explosionSoundEnd:play()
+        
+        game.musicManager:getTrack("levelMusic"):play()
+        game.musicManager:getTrack("bossMusic"):stop()
+    end
+
     game.manager:swapPaletteGroup("main")
 
     local world = gameHelper:getWorld()
