@@ -1,5 +1,5 @@
 local gameObject = require "src.objects.gameobject"
-local stageTimeHud = require "src.stagetimedisplay"
+local stageTimeHud = require "src.objects.stagedirector.stagetimedisplay"
 local text = require "src.interface.text"
 local enemyWarning = require "src.objects.enemy.enemywarning"
 local bossWarning = require "src.objects.enemy.boss.bosswarning"

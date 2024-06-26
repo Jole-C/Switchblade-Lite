@@ -1,5 +1,5 @@
 local gamestate = require "src.gamestates.gamestate"
-local stageDirector = require "src.objects.stagedirector"
+local stageDirector = require "src.objects.stagedirector.stagedirector"
 local enemyManager = require "src.objects.enemy.enemymanager"
 local cameraManager = require "src.objects.camera.cameramanager"
 local cameraTarget = require "src.objects.camera.cameratarget"
