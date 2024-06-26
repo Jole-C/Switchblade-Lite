@@ -26,7 +26,7 @@ function pauseMenu:new()
                 end),
 
                 textButton("quit", "fontUI", 10, 65, 15, 65, function()
-                    game.gameStateMachine:set_state("menuState")
+                    game.transitionManager:doTransition("menuState")
                     game.manager:togglePausing()
                 end),
             }
@@ -38,10 +38,12 @@ function pauseMenu:new()
                 {
                 text("are you sure?", "fontUI", "left", 10, 10, 1000),
 
-                textButton("yes", "fontUI", 10, 25, 15, 25, function()
-                    -- I think this sucks but it works for now
-                    game.gameStateMachine:set_state("menuState")
-                    game.gameStateMachine:set_state("gameLevelState")
+                textButton("yes!", "fontUI", 10, 25, 15, 25, function()
+                    game.transitionManager:doTransition("gameLevelState", function() 
+                        gameHelper:getCurrentState():exit()
+                        gameHelper:getCurrentState():enter()
+                    end)
+
                     game.manager:togglePausing()
                 end),
 

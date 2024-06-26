@@ -6,6 +6,8 @@ local interfaceRenderer = require "src.interface.interfacerenderer"
 local gameManager = require "src.gamemanager"
 local playerManager = require "src.objects.player.playermanager"
 local particleManager = require "src.particlemanager"
+local transitionManager = require "src.transition.transitionmanager"
+
 colliderDefinitions = require "src.collision.colliderdefinitions"
 
 local game = class({name = "Game"})
@@ -36,6 +38,7 @@ function game:new()
     self.interfaceRenderer = interfaceRenderer()
     self.particleManager = particleManager()
     self.resourceManager = resourceManager()
+    self.transitionManager = transitionManager()
 
     self.tags = 
     {
@@ -92,6 +95,7 @@ function game:new()
         upperForegroundCanvas = self.gameRenderer:addRenderCanvas("upperForegroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         menuBackgroundCanvas = self.gameRenderer:addRenderCanvas("menuBackgroundCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
+        transitionCanvas = self.gameRenderer:addRenderCanvas("transitionCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
     
     local music = self.resourceManager:getAsset("Music"):get("mainMusic")
@@ -162,6 +166,7 @@ function game:update(dt)
     self.input:update()
 
     self.manager:update(dt)
+    self.transitionManager:update(dt)
 
     if self.manager.isPaused or self.manager.gameFrozen then
         return
@@ -206,6 +211,7 @@ function game:draw()
     self:drawBackground()
     self:drawForeground()
     self:drawInterface()
+    self:drawTransition()
 
     self.gameRenderer:drawCanvases()
 end
@@ -289,7 +295,6 @@ function game:drawInterface()
     -- Draw the interface
     love.graphics.setCanvas(self.canvases.interfaceCanvas.canvas)
     love.graphics.clear()
-    self.manager:draw()
     self.interfaceRenderer:draw()
 
     if self.manager:getOption("enableDebugMode") or self.manager:getOption("showFPS") then
@@ -299,6 +304,13 @@ function game:drawInterface()
     love.graphics.setFont(self.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function game:drawTransition()
+    love.graphics.setCanvas(self.canvases.transitionCanvas.canvas)
+    love.graphics.clear()
+    self.transitionManager:draw()
+    love.graphics.setCanvas()
 end
 
 function game:drawParticles()

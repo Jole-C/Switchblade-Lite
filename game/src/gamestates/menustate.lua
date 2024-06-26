@@ -4,8 +4,6 @@ local mainMenu = require "src.menu.mainmenu.mainmenu"
 local menuState = class({name = "Menu State", extends = gamestate})
 
 function menuState:enter()
-    collectgarbage("collect")
-    
     game.camera:setWorld(0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
     game.camera:setPosition(game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2)
     

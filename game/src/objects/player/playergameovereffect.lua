@@ -26,7 +26,7 @@ function playerGameover:update(dt)
             self.timeUntilGameover = self.timeUntilGameover - (1 * dt)
     
             if self.timeUntilGameover <= 0 then
-                game.gameStateMachine:set_state("gameOverState")
+                game.transitionManager:doTransition("gameOverState")
             end
         end
     end

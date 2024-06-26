@@ -186,7 +186,7 @@ function stageDirector:update(dt)
 
                 if arena.outroComplete == true then
                     game.playerManager:setPlayerDeathReason("You won! (Though this is gameover screen)")
-                    game.gameStateMachine:set_state("gameOverState")
+                    game.transitionManager:doTransition("gameOverState")
                 end
             end
         end
@@ -408,7 +408,6 @@ function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.alertElement)
     game.interfaceRenderer:removeHudElement(self.hud)
     game.interfaceRenderer:removeHudElement(self.debugText)
-    self.alertElement = nil
 end
 
 return stageDirector

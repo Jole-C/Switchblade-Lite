@@ -19,6 +19,7 @@ function gameOverState:update(dt)
 end
 
 function gameOverState:draw()
+    self.menu:draw()
 end
 
 function gameOverState:addObject(object)

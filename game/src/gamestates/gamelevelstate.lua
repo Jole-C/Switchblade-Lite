@@ -69,7 +69,7 @@ function gameLevelState:exit()
         local object = self.objects[i]
 
         if object.markedForDelete == false then
-            object:destroy()
+            object:destroy("autoDestruction")
         end
     end
 

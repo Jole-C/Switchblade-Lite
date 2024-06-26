@@ -15,11 +15,11 @@ function gameoverMenu:new()
                 text(game.playerManager.deathReason, "fontUI", "left", 10, 10, 1000),
     
                 textButton("retry", "fontUI", 10, 25, 15, 25, function(self)
-                    game.gameStateMachine:set_state("gameLevelState")
+                    game.transitionManager:doTransition("gameLevelState")
                 end),
 
                 textButton("quit to menu", "fontUI", 10, 40, 15, 40, function()
-                    game.gameStateMachine:set_state("menuState")
+                    game.transitionManager:doTransition("menuState")
                 end),
             }
         }
