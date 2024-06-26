@@ -7,6 +7,7 @@ local gameManager = require "src.gamemanager"
 local playerManager = require "src.objects.player.playermanager"
 local particleManager = require "src.particlemanager"
 local transitionManager = require "src.transition.transitionmanager"
+local musicManager = require "src.music.musicmanager"
 
 colliderDefinitions = require "src.collision.colliderdefinitions"
 
@@ -39,6 +40,7 @@ function game:new()
     self.particleManager = particleManager()
     self.resourceManager = resourceManager()
     self.transitionManager = transitionManager()
+    self.musicManager = musicManager()
 
     self.tags = 
     {
@@ -47,6 +49,19 @@ function game:new()
     }
 
     self:setupResources()
+
+    self.musicManager:addTrack(
+    {
+        {sound = self.resourceManager:getAsset("Music"):get("level"):get("intro"), loopCount = 1},
+        {sound = self.resourceManager:getAsset("Music"):get("level"):get("main"), loopCount = 1, loopPermanent = true},
+    }, "levelMusic")
+
+    self.musicManager:addTrack(
+    {
+        {sound = self.resourceManager:getAsset("Music"):get("boss"):get("main"), loopCount = 1, loopPermanent = true},
+    }, "bossMusic")
+
+    self.musicManager:getTrack("levelMusic"):start()
 
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
     self.camera:setWindow(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
@@ -97,10 +112,6 @@ function game:new()
         interfaceCanvas = self.gameRenderer:addRenderCanvas("interfaceCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
         transitionCanvas = self.gameRenderer:addRenderCanvas("transitionCanvas", self.arenaValues.screenWidth, self.arenaValues.screenHeight),
     }
-    
-    local music = self.resourceManager:getAsset("Music"):get("mainMusic")
-    music:play({loop = true, volume = 0.2})
-    music:tag(self.tags.music)
 
     self:setupParticles()
 
@@ -167,6 +178,7 @@ function game:update(dt)
 
     self.manager:update(dt)
     self.transitionManager:update(dt)
+    self.musicManager:update()
 
     if self.manager.isPaused or self.manager.gameFrozen then
         return
@@ -324,7 +336,18 @@ function game:setupResources()
 
     resourceManager:addAsset(assetGroup(
     {
-        mainMusic = {path = "assets/audio/music/song.wav", type = "Source", parameters = {type = "stream"}}
+        mainMusic = {path = "assets/audio/music/song.wav", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+
+        level = assetGroup(
+        {
+            intro = {path = "assets/audio/music/songintro.wav", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+            main = {path = "assets/audio/music/songloop.wav", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+        }),
+
+        boss = assetGroup(
+        {
+            main = {path = "assets/audio/music/boss.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+        })
     }), "Music")
 
     resourceManager:addAsset(assetGroup(
