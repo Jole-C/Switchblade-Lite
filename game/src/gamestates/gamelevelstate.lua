@@ -10,7 +10,6 @@ local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
 function gameLevelState:enter()
     game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
-    game.interfaceRenderer:clearElements()
 
     self.objects = {}
     
@@ -82,8 +81,6 @@ function gameLevelState:leave()
     self.arena = nil
     self.stageDirector = nil
     self.cameraManager = nil
-
-    game.interfaceRenderer:clearElements()
 end
 
 return gameLevelState

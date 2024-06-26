@@ -232,7 +232,7 @@ function mainMenu:new()
             {
                 textButton("arena 1", "fontUI", 10, 10, 15, 10, function()
                     game.manager:changePlayerDefinition("default definition")
-                    game.gameStateMachine:set_state("gameLevelState")
+                    game.transitionManager:doTransition("gameLevelState")
                 end),
 
                 textButton("WIP", "fontUI", 10, 25, 15, 25, function()
@@ -351,6 +351,7 @@ function mainMenu:drawOverlay()
 end
 
 function mainMenu:cleanup()
+    menu.cleanup(self)
     game.canvases.menuBackgroundCanvas.enabled = false
 end
 

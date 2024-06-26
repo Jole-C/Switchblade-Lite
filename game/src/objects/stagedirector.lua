@@ -406,6 +406,8 @@ end
 
 function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.alertElement)
+    game.interfaceRenderer:removeHudElement(self.hud)
+    game.interfaceRenderer:removeHudElement(self.debugText)
     self.alertElement = nil
 end
 

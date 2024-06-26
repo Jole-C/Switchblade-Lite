@@ -216,6 +216,8 @@ function boss:cleanup()
     end
 
     game.interfaceRenderer:removeHudElement(self.healthElement)
+    game.interfaceRenderer:removeHudElement(self.debugText)
+    game.interfaceRenderer:removeHudElement(self.introCard)
 end
 
 return boss

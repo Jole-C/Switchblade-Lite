@@ -27,6 +27,10 @@ function interfaceRenderer:removeHudElement(elementToRemove)
     end
 end
 
+function interfaceRenderer:hasHudElement(element)
+    return table.contains(self.hudElements, element)
+end
+
 function interfaceRenderer:clearElements()
     self.hudElements = {}
 end

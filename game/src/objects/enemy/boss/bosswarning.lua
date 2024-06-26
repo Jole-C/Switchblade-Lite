@@ -237,6 +237,18 @@ end
 
 function bossWarning:cleanup()
     game.interfaceRenderer:removeHudElement(self.warningFlash)
+
+    for i = 1, #self.warningQuads do
+        self.warningQuads[i].quad:release()
+        game.interfaceRenderer:removeHudElement(self.warningQuads[i].sprite)
+    end
+
+    for i = 1, #self.cautionSprites do
+        self.cautionSprites[i].quad:release()
+        game.interfaceRenderer:removeHudElement(self.cautionSprites[i].sprite)
+    end
+    
+    game.interfaceRenderer:removeHudElement(self.warningBackground)
 end
 
 return bossWarning
