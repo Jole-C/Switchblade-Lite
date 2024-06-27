@@ -10,9 +10,14 @@ function bossOrb:new(x, y, bossReference, angle)
     
     self.bossReference = bossReference
     self.radius = 0
+    self.radiusOffset = 0
+    self.radiusChangeTime = 1
+    self.radiusOffsetFrequency = 1
+    self.radiusOffsetAmplitude = 200
     self.maxRadius = 300
     self.angle = angle or 0
     self.turnRate = 0.25
+    self.introDone = false
 
     self.maxEnemySpawnCooldown = 3
     self.enemySpawnCooldown = self.maxEnemySpawnCooldown
@@ -39,7 +44,19 @@ function bossOrb:update(dt)
 
     self.angle = self.angle + (self.turnRate * dt)
     self.spriteAngle = self.spriteAngle + (self.spriteAngleTurnRate * dt)
-    self.radius = math.lerpDT(self.radius, self.maxRadius, 0.02, dt)
+
+    if self.introDone == false then
+        self.radius = math.lerpDT(self.radius, self.maxRadius, 0.02, dt)
+
+        if self.radius > 299 then
+            self.introDone = true
+        end
+    else
+        self.radiusChangeTime = self.radiusChangeTime + (self.radiusOffsetFrequency * dt)
+        self.radiusOffset = (1 + math.sin(self.radiusChangeTime)) / 2
+
+        self.radius = self.maxRadius - ((1 - self.radiusOffset) * self.radiusOffsetAmplitude)
+    end
     
     self.damageableCooldown = self.damageableCooldown - (1 * dt)
     
