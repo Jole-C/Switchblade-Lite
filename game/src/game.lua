@@ -61,8 +61,8 @@ function game:new()
         {sound = self.resourceManager:getAsset("Music"):get("boss"):get("main"), loopCount = 1, loopPermanent = true},
     }, "bossMusic")
 
-    self.musicManager:getTrack("levelMusic"):start()
-
+    self.musicManager:getTrack("levelMusic"):start({fadeDuration = 0.5})
+    
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
     self.camera:setWindow(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
 
@@ -178,7 +178,7 @@ function game:update(dt)
 
     self.manager:update(dt)
     self.transitionManager:update(dt)
-    self.musicManager:update()
+    self.musicManager:update(dt)
 
     if self.manager.isPaused or self.manager.gameFrozen then
         return
