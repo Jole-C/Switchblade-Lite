@@ -3,9 +3,9 @@ local text = require "src.interface.text"
 local rect = require "src.interface.rect"
 local textButton = require "src.interface.textbutton"
 
-local gameoverMenu = class({name = "Gameover Menu", extends = menu})
+local victoryMenu = class({name = "Victory Menu", extends = menu})
 
-function gameoverMenu:new()
+function victoryMenu:new()
     self:super()
     
     self.menus =
@@ -16,7 +16,7 @@ function gameoverMenu:new()
                 {
                 rect(0, 0, 480, 270, "fill", {0, 0, 0, 1}),
 
-                text(game.playerManager.deathReason, "fontUI", "left", 10, 10, 1000),
+                text("You did the thing!", "fontUI", "left", 10, 10, 1000),
     
                 textButton("retry", "fontUI", 10, 25, 15, 25, function(self)
                     game.transitionManager:doTransition("gameLevelState")
@@ -32,4 +32,4 @@ function gameoverMenu:new()
     self:switchMenu("main")
 end
 
-return gameoverMenu
+return victoryMenu

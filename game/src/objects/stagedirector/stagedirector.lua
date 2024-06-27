@@ -187,8 +187,7 @@ function stageDirector:update(dt)
                 arena:enableOutro()
 
                 if arena.outroComplete == true then
-                    game.playerManager:setPlayerDeathReason("You won! (Though this is gameover screen)")
-                    game.transitionManager:doTransition("gameOverState")
+                    game.transitionManager:doTransition("victoryState")
                 end
             end
         end

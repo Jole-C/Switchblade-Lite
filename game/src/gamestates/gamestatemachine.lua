@@ -1,10 +1,12 @@
 local gameLevelState = require "src.gamestates.gamelevelstate"
 local menuState = require "src.gamestates.menustate"
 local gameOverState = require "src.gamestates.gameoverstate"
+local victoryState = require "src.gamestates.victorystate"
 
 local gameLevel = gameLevelState()
 local menuLevel = menuState()
 local gameOverLevel = gameOverState()
+local victoryLevel = victoryState()
 
 local gameStateMachine = state_machine(
 {
@@ -33,6 +35,16 @@ local gameStateMachine = state_machine(
         addObject = gameOverLevel.addObject,
         removeObject = gameOverLevel.removeObject
     },
+
+    victoryState =
+    {
+        enter = victoryLevel.enter,
+        exit = victoryLevel.exit,
+        update = victoryLevel.update,
+        draw = victoryLevel.draw,
+        addObject = victoryLevel.addObject,
+        removeObject = victoryLevel.removeObject
+    }
 }, "menuState")
 
 return gameStateMachine
