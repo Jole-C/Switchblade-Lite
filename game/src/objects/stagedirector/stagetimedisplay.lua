@@ -13,7 +13,14 @@ function stageTimeHud:draw()
     local timeString = string.format("%02.0f:%02.0f",math.abs(self.timeMinutes),math.abs(self.timeSeconds))
     local textWidth = self.font:getWidth(timeString)
     love.graphics.setFont(self.font)
-    love.graphics.print(timeString, game.arenaValues.screenWidth/2 - textWidth/2, 1)
+
+    love.graphics.setColor(game.manager.currentPalette.uiColour)
+
+    if self.timeSeconds <= 5 and self.timeMinutes <= 0 then
+        love.graphics.setColor(game.manager.currentPalette.enemyColour)
+    end
+
+    love.graphics.print(timeString, game.arenaValues.screenWidth/2 - textWidth/2, 8)
 end
 
 return stageTimeHud
