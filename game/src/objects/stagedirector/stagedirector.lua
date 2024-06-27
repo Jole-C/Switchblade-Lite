@@ -22,6 +22,19 @@ function stageDirector:new(levelDefinition)
     self.textChangeCooldown = self.secondsBetweenTextChange
     self.currentText = 0
 
+    self.timeAlertText = 
+    {
+        {text = "2 min\nleft!", displayed = false, time = {minutes = 1, seconds = 59}},
+        {text = "1 min\nleft!", displayed = false, time = {minutes = 0, seconds = 59}},
+        {text = "30 sec\nleft!", displayed = false, time = {minutes = 0, seconds = 30}},
+        {text = "10 sec\nleft!", displayed = false, time = {minutes = 0, seconds = 10}},
+        {text = "5!", displayed = false, time = {minutes = 0, seconds = 5}},
+        {text = "4!", displayed = false, time = {minutes = 0, seconds = 4}},
+        {text = "3!", displayed = false, time = {minutes = 0, seconds = 3}},
+        {text = "2!", displayed = false, time = {minutes = 0, seconds = 2}},
+        {text = "1!", displayed = false, time = {minutes = 0, seconds = 1}},
+    }
+
     self.currentWaveIndex = 0
     self.currentWaveType = "enemy"
     self.waveTransitionTime = self.maxWaveTransitionTime
@@ -120,9 +133,27 @@ function stageDirector:update(dt)
     end
 
     self.timeSeconds = self.timeSeconds - 1 * dt
+
     if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
         player:destroy()
         game.playerManager:setPlayerDeathReason("You ran out of time!")
+    end
+
+    for _, timeAlert in pairs(self.timeAlertText) do
+        local minutes = self.timeMinutes
+        local seconds = math.ceil(self.timeSeconds)
+
+        if minutes > timeAlert.time.minutes then
+            timeAlert.displayed = false
+        end
+        
+        if minutes == timeAlert.time.minutes and seconds == timeAlert.time.seconds and timeAlert.displayed == false then
+            timeAlert.displayed = true
+            
+            local text = alertObject(timeAlert.text, 0.05, 0.2)
+            gameHelper:addGameObject(text)
+            gameHelper:screenShake(0.1)
+        end
     end
 
     if self.currentWaveType ~= "bossWave" then
