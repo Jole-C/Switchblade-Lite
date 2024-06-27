@@ -3,6 +3,7 @@ local stageTimeHud = require "src.objects.stagedirector.stagetimedisplay"
 local text = require "src.interface.text"
 local enemyWarning = require "src.objects.enemy.enemywarning"
 local bossWarning = require "src.objects.enemy.boss.bosswarning"
+local alertObject = require "src.objects.stagedirector.alertobject"
 
 local stageDirector = class({name = "Stage Director", extends = gameObject})
 
@@ -12,14 +13,14 @@ function stageDirector:new(levelDefinition)
     self.maxMinutes = 3
     self.maxSeconds = 30
     self.maxWaveTransitionTime = 1
-    self.secondsBetweenTextChange = 0.25
+    self.secondsBetweenTextChange = 0.5
     self.enemySpawnTime = 2
     self.defaultTimeForNextWave = 15
     self.outroTime = 3
 
     self.introText = {"Ready?", "Steady?", "GO!"}
     self.textChangeCooldown = self.secondsBetweenTextChange
-    self.currentText = 1
+    self.currentText = 0
 
     self.currentWaveIndex = 0
     self.currentWaveType = "enemy"
@@ -71,8 +72,6 @@ function stageDirector:new(levelDefinition)
     -- Set up the hud
     self.hud = stageTimeHud()
     game.interfaceRenderer:addHudElement(self.hud)
-    self.alertElement = text(self.introText[1], "fontAlert", "center", 0, game.arenaValues.screenHeight/2 - 20, game.arenaValues.screenWidth)
-    game.interfaceRenderer:addHudElement(self.alertElement)
     self.debugText = text("", "fontMain", "left", 360, 10, game.arenaValues.screenWidth)
     game.interfaceRenderer:addHudElement(self.debugText)
 end
@@ -87,10 +86,7 @@ function stageDirector:update(dt)
         self.textChangeCooldown = self.textChangeCooldown - 1 * dt
 
         if self.textChangeCooldown <= 0 then
-            self.textChangeCooldown = self.secondsBetweenTextChange
-            self.currentText = self.currentText + 1
-
-            if self.currentText > #self.introText then
+            if self.currentText >= #self.introText then
                 local arena = gameHelper:getCurrentState().arena
 
                 if arena then
@@ -98,14 +94,18 @@ function stageDirector:update(dt)
                 end
 
                 self.inIntro = false
-            else
-                self.alertElement.text = self.introText[self.currentText]
+                return
             end
+
+            self.textChangeCooldown = self.secondsBetweenTextChange
+            self.currentText = self.currentText + 1
+            
+            local text = alertObject(self.introText[self.currentText], 0.05, 0.3)
+            gameHelper:addGameObject(text)
+            gameHelper:screenShake(0.1)
         end
 
         return
-    else
-        self.alertElement.text = ""
     end
 
     if game.playerManager:doesPlayerExist() == false then
@@ -405,7 +405,6 @@ function stageDirector:draw()
 end
 
 function stageDirector:cleanup()
-    game.interfaceRenderer:removeHudElement(self.alertElement)
     game.interfaceRenderer:removeHudElement(self.hud)
     game.interfaceRenderer:removeHudElement(self.debugText)
 end
