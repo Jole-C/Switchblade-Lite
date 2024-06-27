@@ -11,6 +11,7 @@ function bossWarning:new(x, y, bossClass)
     self.musicStarted = false
 
     game.musicManager:getTrack("levelMusic"):pause(2)
+    gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
 
     -- Create a sprite to hold the caution strip
     self.cautionSprites = {}

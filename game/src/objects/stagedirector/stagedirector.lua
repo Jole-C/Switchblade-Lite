@@ -35,6 +35,8 @@ function stageDirector:new(levelDefinition)
         {text = "1!", displayed = false, time = {minutes = 0, seconds = 1}},
     }
 
+    self.timerPaused = false
+
     self.currentWaveIndex = 0
     self.currentWaveType = "enemy"
     self.waveTransitionTime = self.maxWaveTransitionTime
@@ -127,12 +129,14 @@ function stageDirector:update(dt)
 
     local player = game.playerManager.playerReference
 
-    if self.timeSeconds <= 0 then
-        self.timeSeconds = 59
-        self.timeMinutes = self.timeMinutes - 1
-    end
+    if self.timerPaused == false then
+        if self.timeSeconds <= 0 then
+            self.timeSeconds = 59
+            self.timeMinutes = self.timeMinutes - 1
+        end
 
-    self.timeSeconds = self.timeSeconds - 1 * dt
+        self.timeSeconds = self.timeSeconds - 1 * dt
+    end
 
     if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
         player:destroy()
@@ -236,6 +240,10 @@ end
 function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
     local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.enemySpawnTime)
     gameHelper:addGameObject(newWarning)
+end
+
+function stageDirector:setTimerPaused(isPaused)
+    self.timerPaused = isPaused
 end
 
 function stageDirector:startWave()

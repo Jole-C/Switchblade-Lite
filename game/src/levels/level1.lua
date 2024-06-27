@@ -47,6 +47,8 @@ local levelDefinition =
 
     playerStartSegment = "mainCircle",
 
+    startingWave = 25,
+
     level = 
     {
         -- line of wanderers (introduction)

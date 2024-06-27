@@ -41,6 +41,7 @@ function bossIntro:update(dt, bossInstance)
         bossInstance.position = vec2:zero()
         gameHelper:getCurrentState().cameraManager:removeOverrideTarget()
         gameHelper:getCurrentState().cameraManager:zoom(1, 0.1)
+        gameHelper:getCurrentState().stageDirector:setTimerPaused(false)
     end
 end
 
