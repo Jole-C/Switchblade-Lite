@@ -9,8 +9,8 @@ local arena = require "src.objects.arena"
 local gameLevelState = class({name = "Game Level State", extends = gamestate})
 
 function gameLevelState:enter()
-    game.musicManager:getTrack("levelMusic"):play()
     game.musicManager:getTrack("bossMusic"):stop()
+    game.musicManager:getTrack("levelMusic"):play(1)
     
     game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
 
