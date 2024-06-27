@@ -18,6 +18,7 @@ function bossIntro:enter(bossInstance)
 
     self.introEffect = game.particleManager:getEffect("Boss Intro Burst")
     gameHelper:getCurrentState().cameraManager:setOverrideTarget(cameraTarget(bossInstance.position, 1))
+    gameHelper:getCurrentState().cameraManager:zoom(3, 0.001)
 end
 
 function bossIntro:update(dt, bossInstance)
@@ -39,6 +40,7 @@ function bossIntro:update(dt, bossInstance)
         bossInstance.healthElement:doIntro()
         bossInstance.position = vec2:zero()
         gameHelper:getCurrentState().cameraManager:removeOverrideTarget()
+        gameHelper:getCurrentState().cameraManager:zoom(1, 0.1)
     end
 end
 
