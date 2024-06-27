@@ -1,8 +1,8 @@
 local gameObject = require "src.objects.gameobject"
-local stageTimeHud = require "src.objects.stagedirector.stagetimedisplay"
 local text = require "src.interface.text"
 local enemyWarning = require "src.objects.enemy.enemywarning"
 local bossWarning = require "src.objects.enemy.boss.bosswarning"
+local timer = require "src.objects.stagedirector.stagetimer"
 local alertObject = require "src.objects.stagedirector.alertobject"
 
 local stageDirector = class({name = "Stage Director", extends = gameObject})
@@ -10,8 +10,8 @@ local stageDirector = class({name = "Stage Director", extends = gameObject})
 function stageDirector:new(levelDefinition)
     self:super(0, 0)
 
-    self.maxMinutes = 0
-    self.maxSeconds = 15
+    self.maxMinutes = 3
+    self.maxSeconds = 30
     self.maxWaveTransitionTime = 1
     self.secondsBetweenTextChange = 0.5
     self.enemySpawnTime = 2
@@ -22,7 +22,7 @@ function stageDirector:new(levelDefinition)
     self.textChangeCooldown = self.secondsBetweenTextChange
     self.currentText = 0
 
-    self.timeAlertText = 
+    self.timer = timer(self.maxMinutes, self.maxSeconds,
     {
         {text = "2 minutes!", displayed = false, time = {minutes = 1, seconds = 59}},
         {text = "1 minutes!", displayed = false, time = {minutes = 0, seconds = 59}},
@@ -33,22 +33,16 @@ function stageDirector:new(levelDefinition)
         {text = "3!", displayed = false, time = {minutes = 0, seconds = 3}},
         {text = "2!", displayed = false, time = {minutes = 0, seconds = 2}},
         {text = "1!", displayed = false, time = {minutes = 0, seconds = 1}},
-    }
+    })
 
-    self.maxLowTimeWarningCooldown = 1
-    self.lowTimeWarningCooldown = 0
-    self.lowTimeSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("timeSiren")
-
-    self.timerPaused = false
+    gameHelper:addGameObject(self.timer)
+    self:setTimerPaused(true)
 
     self.currentWaveIndex = 0
     self.currentWaveType = "enemy"
     self.waveTransitionTime = self.maxWaveTransitionTime
     self.inWaveTransition = false
     self.elapsedWaveTime = 0
-
-    self.timeMinutes = self.maxMinutes
-    self.timeSeconds = self.maxSeconds
 
     self.enemyKills = 0
     self.bossReference = nil
@@ -88,18 +82,11 @@ function stageDirector:new(levelDefinition)
         assert(false, "No player segment specified!")
     end
 
-    -- Set up the hud
-    self.hud = stageTimeHud()
-    game.interfaceRenderer:addHudElement(self.hud)
     self.debugText = text("", "fontMain", "left", 360, 10, game.arenaValues.screenWidth)
     game.interfaceRenderer:addHudElement(self.debugText)
 end
 
 function stageDirector:update(dt)
-    -- Update the hud
-    self.hud.timeSeconds = self.timeSeconds
-    self.hud.timeMinutes = self.timeMinutes
-
     -- Quit early if the intro is in progress
     if self.inIntro == true then
         self.textChangeCooldown = self.textChangeCooldown - 1 * dt
@@ -113,6 +100,7 @@ function stageDirector:update(dt)
                 end
 
                 self.inIntro = false
+                self:setTimerPaused(false)
                 return
             end
 
@@ -133,44 +121,10 @@ function stageDirector:update(dt)
 
     local player = game.playerManager.playerReference
 
-    if self.timerPaused == false then
-        if self.timeSeconds <= 0 then
-            self.timeSeconds = 59
-            self.timeMinutes = self.timeMinutes - 1
-        end
-
-        self.timeSeconds = self.timeSeconds - (1 * dt)
-
-        if self.timeMinutes <= 0 and self.timeSeconds <= 10 then
-            self.lowTimeWarningCooldown = self.lowTimeWarningCooldown - (1 * dt)
-
-            if self.lowTimeWarningCooldown <= 0 then
-                self.lowTimeWarningCooldown = self.maxLowTimeWarningCooldown
-                self.lowTimeSound:play()
-            end
-        end
-    end
-
-    if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
+    if self.timer.timeSeconds <= 0 and self.timer.timeMinutes <= 0 then
         player:destroy()
         game.playerManager:setPlayerDeathReason("You ran out of time!")
-    end
-
-    for _, timeAlert in pairs(self.timeAlertText) do
-        local minutes = self.timeMinutes
-        local seconds = math.ceil(self.timeSeconds)
-
-        if self:getAbsoluteTime(minutes, seconds) > self:getAbsoluteTime(timeAlert.time.minutes, timeAlert.time.seconds) then
-            timeAlert.displayed = false
-        end
-        
-        if minutes == timeAlert.time.minutes and seconds == timeAlert.time.seconds and timeAlert.displayed == false then
-            timeAlert.displayed = true
-            
-            local text = alertObject(timeAlert.text, 0.05, 0.2)
-            gameHelper:addGameObject(text)
-            gameHelper:screenShake(0.1)
-        end
+        self:setTimerPaused(true)
     end
 
     if self.currentWaveType ~= "bossWave" then
@@ -242,25 +196,24 @@ function stageDirector:update(dt)
 end
 
 function stageDirector:setTime(minutes, seconds)
-    self.timeMinutes = minutes or 1
-    self.timeSeconds = seconds or 59
+    self.timer:setTime(minutes or 1, seconds or 59)
 end
 
 function stageDirector:getAbsoluteTime(minutes, seconds)
-    return (minutes * 60) + math.floor(seconds)
+    return self.timer:getAbsoluteTime(minutes, seconds)
 end
 
 function stageDirector:registerBoss(boss)
     self.bossReference = boss
 end
 
+function stageDirector:setTimerPaused(isPaused)
+    self.timer:setTimerPaused(isPaused)
+end
+
 function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
     local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.enemySpawnTime)
     gameHelper:addGameObject(newWarning)
-end
-
-function stageDirector:setTimerPaused(isPaused)
-    self.timerPaused = isPaused
 end
 
 function stageDirector:startWave()
@@ -461,7 +414,6 @@ function stageDirector:draw()
 end
 
 function stageDirector:cleanup()
-    game.interfaceRenderer:removeHudElement(self.hud)
     game.interfaceRenderer:removeHudElement(self.debugText)
 end
 
