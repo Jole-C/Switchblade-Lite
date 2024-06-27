@@ -8,6 +8,9 @@ function menu:new()
     self.elements = {}
     self.selectionIndex = 1
     self.inputDelay = 0.5
+
+    self.menuUpSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuUp")
+    self.menuDownSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuDown")
 end
 
 function menu:update(dt)
@@ -30,11 +33,15 @@ function menu:update(dt)
     -- Change the selected element
     local direction = 1
     if game.input:pressed("menuUp") then
+        self.menuUpSound:play()
+        
         self.selectionIndex = self.selectionIndex - 1
         direction = -1
     end
 
     if game.input:pressed("menuDown") then
+        self.menuDownSound:play()
+        
         self.selectionIndex = self.selectionIndex + 1
         direction = 1
     end
