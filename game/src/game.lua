@@ -507,6 +507,7 @@ function game:setupResources()
         {
             bossWarningBoom = {path = "assets/audio/sfx/bosswarningboom.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             bossWarningSiren = {path = "assets/audio/sfx/bosswarningsiren.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            timeSiren = {path = "assets/audio/sfx/timewarning.wav", type = "Source", parameters = {tag = self.tags.sfx}}
         }),
 
         shaders = assetGroup(
