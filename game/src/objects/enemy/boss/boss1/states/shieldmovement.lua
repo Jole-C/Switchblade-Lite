@@ -7,6 +7,7 @@ function shieldMovement:enter(bossInstance)
     self.attackCooldown = self.maxAttackCooldown
     self.attacks = self.parameters.attacks
     self.returnState = self.parameters.returnState
+    gameHelper:getCurrentState().stageDirector:setTimerPaused(false)
 end
 
 function shieldMovement:update(dt, bossInstance)

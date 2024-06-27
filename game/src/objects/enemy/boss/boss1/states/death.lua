@@ -7,6 +7,7 @@ function shieldOutro:enter(bossInstance)
     self.maxTimeBetweenExplosions = 0.7
     self.maxExplosionDistanceOffset = 50
     self.startingPosition = bossInstance.position
+    gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
 end
 
 function shieldOutro:update(dt, bossInstance)
