@@ -47,7 +47,7 @@ local levelDefinition =
 
     playerStartSegment = "mainCircle",
 
-    startingWave = 25,
+    --startingWave = 25,
 
     level = 
     {
