@@ -10,8 +10,8 @@ local stageDirector = class({name = "Stage Director", extends = gameObject})
 function stageDirector:new(levelDefinition)
     self:super(0, 0)
 
-    self.maxMinutes = 3
-    self.maxSeconds = 30
+    self.maxMinutes = 0
+    self.maxSeconds = 15
     self.maxWaveTransitionTime = 1
     self.secondsBetweenTextChange = 0.5
     self.enemySpawnTime = 2
@@ -34,6 +34,10 @@ function stageDirector:new(levelDefinition)
         {text = "2!", displayed = false, time = {minutes = 0, seconds = 2}},
         {text = "1!", displayed = false, time = {minutes = 0, seconds = 1}},
     }
+
+    self.maxLowTimeWarningCooldown = 1
+    self.lowTimeWarningCooldown = 0
+    self.lowTimeSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("timeSiren")
 
     self.timerPaused = false
 
@@ -135,7 +139,16 @@ function stageDirector:update(dt)
             self.timeMinutes = self.timeMinutes - 1
         end
 
-        self.timeSeconds = self.timeSeconds - 1 * dt
+        self.timeSeconds = self.timeSeconds - (1 * dt)
+
+        if self.timeMinutes <= 0 and self.timeSeconds <= 10 then
+            self.lowTimeWarningCooldown = self.lowTimeWarningCooldown - (1 * dt)
+
+            if self.lowTimeWarningCooldown <= 0 then
+                self.lowTimeWarningCooldown = self.maxLowTimeWarningCooldown
+                self.lowTimeSound:play()
+            end
+        end
     end
 
     if self.timeSeconds <= 0 and self.timeMinutes <= 0 then
