@@ -147,6 +147,13 @@ function player:updateShipMovement(dt, movementDirection)
             self.isBoosting = false
         end
 
+        if game.input:pressed("boost") and not game.input:down("thrust") then
+            gameHelper:screenShake(0.03)
+            self.isBoosting = true
+            self:spawnTrail()
+            self.isBoosting = false
+        end
+
         if game.input:pressed("boost") and game.input:down("thrust") then
             self.boostSound:play()
         end
@@ -281,12 +288,10 @@ function player:spawnTrail()
     local x = self.position.x + math.cos(angle) * 10
     local y = self.position.y + math.sin(angle) * 10
 
-    if self.velocity:length() > 0 then
-        if self.isBoosting == true then
-            newTrailSegment = trailEffect(x, y, 10, self.velocity:length()/2, angle)
-        else
-            newTrailSegment = trailEffect(x, y, 3, self.velocity:length()/2, angle)
-        end
+    if self.isBoosting == true then
+        newTrailSegment = trailEffect(x, y, 10, self.velocity:length()/2, angle)
+    else
+        newTrailSegment = trailEffect(x, y, 3, self.velocity:length()/2, angle)
     end
 
     if newTrailSegment then
@@ -305,7 +310,9 @@ function player:updatePosition(dt)
         return
     end
 
-    self:spawnTrail()
+    if game.input:down("boost") or game.input:down("thrust") then
+        self:spawnTrail()
+    end
 
     local trimmedSpeed = self.maxSpeed
 
@@ -501,11 +508,22 @@ function player:draw()
         return
     end
 
-    love.graphics.setColor(1, 1, 1, 0.17)
+    local colour = {1, 1, 1, 0.17}
+
+    if self.health <= 2 then
+        local enemySpawnColour = game.manager.currentPalette.enemySpawnColour
+
+        colour[1] = enemySpawnColour[1]
+        colour[2] = enemySpawnColour[2]
+        colour[3] = enemySpawnColour[3]
+        colour[4] = 0.17
+    end
+
+    love.graphics.setColor(colour)
     love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 1 - (self.health/self.maxHealth)))
     love.graphics.setLineWidth(3)
     love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius)
-    love.graphics.setColor(1, 1, 1, 0.08)
+    love.graphics.setColor(colour)
     love.graphics.setLineWidth(2)
     love.graphics.circle("line", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 0.6))
     love.graphics.setLineWidth(1)
