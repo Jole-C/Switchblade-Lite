@@ -445,6 +445,12 @@ function game:setupResources()
             enemyHit5 = {path = "assets/audio/sfx/enemyhit5.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
+        spawnSounds = randomAssetGroup(
+        {
+            spawn = {path = "assets/audio/sfx/enemyspawn.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            warning = {path = "assets/audio/sfx/spawnWarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+        }),
+
         bossExplosionSounds = assetGroup(
         {
             endExplosion = {path = "assets/audio/sfx/bossexplosionend.wav", type = "Source", parameters = {tag = self.tags.sfx}},
