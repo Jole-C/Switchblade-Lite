@@ -100,17 +100,47 @@ function mainMenu:new()
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("Accessibility", "fontUI", 10, 40, 15, 40, function(self)
+                textButton("Gameplay", "fontUI", 10, 40, 15, 40, function(self)
+                    self.owner:switchMenu("optionsGameplay")
+                    self.owner:setBackgroundSlideAmount(0.7)
+                end),
+
+                textButton("Accessibility", "fontUI", 10, 55, 15, 55, function(self)
                     self.owner:switchMenu("optionsAccessibility")
                     self.owner:setBackgroundSlideAmount(0.8)
                 end),
 
-                textButton("back", "fontUI", 10, 65, 15, 65, function(self)
+                textButton("back", "fontUI", 10, 80, 15, 80, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
                     end
                 end)
+            }
+        },
+
+        ["optionsGameplay"] =
+        {
+            elements = 
+            {
+                text("Gameplay", "fontUI", "left", 10, 10, 1000),
+
+                slider("Health Ring Scale", "fontUI",  50, 150, 10, 25, "playerHealthRingSizePercentage"),
+    
+                toggleButton("Show Player Health", "fontUI", 10, 40, 20, 40, "showPlayerHealth", 260),
+    
+                toggleButton("Center Camera", "fontUI", 10, 55, 20, 55, "centerCamera", 260),
+
+                toggleButton("Show FPS", "fontUI", 10, 70, 20, 70, "showFPS", 260),
+    
+                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("optionsSelect")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                    end
+                    
+                    game.manager:saveOptions()
+                end),
             }
         },
 
@@ -122,21 +152,13 @@ function mainMenu:new()
 
                 toggleButton("Enable Debug Mode", "fontUI", 10, 25, 20, 25, "enableDebugMode", 260),
 
-                toggleButton("Show FPS", "fontUI", 10, 40, 20, 40, "showFPS", 260),
+                toggleButton("Limit Palette Swaps", "fontUI", 10, 40, 20, 40, "limitPaletteSwaps", 260),
 
-                toggleButton("Limit Palette Swaps", "fontUI", 10, 55, 20, 55, "limitPaletteSwaps", 260),
+                toggleButton("Disable Screenshake", "fontUI", 10, 55, 20, 55, "disableScreenshake", 260),
 
-                toggleButton("Disable Screenshake", "fontUI", 10, 70, 20, 70, "disableScreenshake", 260),
+                slider("Shake Intensity", "fontUI",  50, 9999, 10, 70, "screenshakeIntensity"),
 
-                slider("Shake Intensity", "fontUI",  50, 9999, 10, 85, "screenshakeIntensity"),
-
-                toggleButton("Center Camera", "fontUI", 10, 100, 20, 100, "centerCamera", 260),
-
-                slider("Health Ring Size", "fontUI",  50, 150, 10, 115, "playerHealthRingSizePercentage"),
-
-                toggleButton("Show Player Health", "fontUI", 10, 130, 20, 130, "showPlayerHealth", 260),
-
-                textButton("back", "fontUI", 10, 155, 15, 155, function(self)
+                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
