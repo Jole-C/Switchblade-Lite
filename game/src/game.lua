@@ -32,6 +32,7 @@ function game:new()
         main = love.image.newImageData("assets/sprites/mainpalettes.png"),
         boss = love.image.newImageData("assets/sprites/bosspalettes.png")
     })
+    
     self.manager:swapPaletteGroup("main")
     self.manager:swapPalette()
     
