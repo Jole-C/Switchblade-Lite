@@ -56,7 +56,6 @@ local spawnBullet = function(angle, x, y)
         enemy = spawnCharger(angle, x, y)
     end
 
-
     return enemy
 end
 
