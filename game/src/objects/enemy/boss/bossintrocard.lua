@@ -38,6 +38,7 @@ function bossIntroCard:setInOutro()
 end
 
 function bossIntroCard:draw()
+    love.graphics.setColor(game.manager.currentPalette.uiColour)
     love.graphics.printf(self.name.."\n"..self.subtitle, 240 - 300/2, self.textY, 300, "center")
 end
 

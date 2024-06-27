@@ -108,6 +108,7 @@ function bossHealthBar:setPhase(phase)
 end
 
 function bossHealthBar:draw()
+    love.graphics.setColor(game.manager.currentPalette.uiColour)
     self.phaseHealth = math.clamp(self.phaseHealth, 0, self.maxPhaseHealth)
     self.shieldHealth = math.clamp(self.shieldHealth, 0, self.maxShieldHealth)
 
