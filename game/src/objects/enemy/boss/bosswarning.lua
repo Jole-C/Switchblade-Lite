@@ -5,10 +5,12 @@ local bossWarning = class({name = "Boss Warning", extends = gameObject})
 
 function bossWarning:new(x, y, bossClass)
     self:super(x, y)
-    game.musicManager:getTrack("levelMusic"):pause()
-    game.musicManager:getTrack("bossMusic"):start()
-
     self.bossClass = bossClass
+
+    self.warningStartTime = 3
+    self.musicStarted = false
+
+    game.musicManager:getTrack("levelMusic"):pause(2)
 
     -- Create a sprite to hold the caution strip
     self.cautionSprites = {}
@@ -117,6 +119,18 @@ function bossWarning:new(x, y, bossClass)
 end
 
 function bossWarning:update(dt)
+    self.warningStartTime = self.warningStartTime - (1 * dt)
+
+    if self.warningStartTime > 0 then
+        return
+    else
+        if self.musicStarted == false then
+            game.musicManager:getTrack("bossMusic"):start()
+            
+            self.musicStarted = true
+        end
+    end
+
     local player = game.playerManager.playerReference
 
     if player then

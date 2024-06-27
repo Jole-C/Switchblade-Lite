@@ -205,7 +205,7 @@ function boss:cleanup(destroyReason)
     if destroyReason ~= "autoDestruction" then
         self.explosionSoundEnd:play()
         
-        game.musicManager:getTrack("levelMusic"):play()
+        game.musicManager:getTrack("levelMusic"):play(1)
         game.musicManager:getTrack("bossMusic"):stop()
     end
 
