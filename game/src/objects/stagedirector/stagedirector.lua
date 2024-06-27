@@ -24,11 +24,11 @@ function stageDirector:new(levelDefinition)
 
     self.timeAlertText = 
     {
-        {text = "2 min left!", displayed = false, time = {minutes = 1, seconds = 59}},
-        {text = "1 min left!", displayed = false, time = {minutes = 0, seconds = 59}},
-        {text = "30 sec left!", displayed = false, time = {minutes = 0, seconds = 30}},
-        {text = "10 sec left!", displayed = false, time = {minutes = 0, seconds = 10}},
-        {text = "5 sec left!", displayed = false, time = {minutes = 0, seconds = 5}},
+        {text = "2 minutes!", displayed = false, time = {minutes = 1, seconds = 59}},
+        {text = "1 minutes!", displayed = false, time = {minutes = 0, seconds = 59}},
+        {text = "30 seconds!", displayed = false, time = {minutes = 0, seconds = 30}},
+        {text = "10 seconds!", displayed = false, time = {minutes = 0, seconds = 10}},
+        {text = "5 seconds!", displayed = false, time = {minutes = 0, seconds = 5}},
         {text = "4!", displayed = false, time = {minutes = 0, seconds = 4}},
         {text = "3!", displayed = false, time = {minutes = 0, seconds = 3}},
         {text = "2!", displayed = false, time = {minutes = 0, seconds = 2}},
