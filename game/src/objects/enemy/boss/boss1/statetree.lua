@@ -48,7 +48,14 @@ local spawnSticker = function(angle, x, y)
 end
 
 local spawnBullet = function(angle, x, y)
-    local enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemybullet, 16, 16)
+    local enemy = nil
+
+    if math.random(0, 100) > 10 then
+        enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemybullet, 16, 16)
+    else 
+        enemy = spawnCharger(angle, x, y)
+    end
+
 
     return enemy
 end
