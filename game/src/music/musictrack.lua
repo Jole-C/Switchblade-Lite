@@ -19,6 +19,10 @@ function musicTrack:new(trackElements)
 end
 
 function musicTrack:update(dt)
+    if self.currentElement then
+        self.currentElement.sound:update(dt)
+    end
+
     if self.started == false then
         return
     end
@@ -46,18 +50,18 @@ function musicTrack:update(dt)
     end
 end
 
-function musicTrack:start()
+function musicTrack:start(options)
     self:stop()
 
     self.currentElementIndex = 0
     self.started = true
-    self:startNextElement()
+    self:startNextElement(options)
 end
 
-function musicTrack:startNextElement()
+function musicTrack:startNextElement(options)
     self.currentElementIndex = self.currentElementIndex + 1
     self.currentElement = self.trackElements[self.currentElementIndex]
-    self.currentSoundInstance = self.currentElement.sound:play()
+    self.currentSoundInstance = self.currentElement.sound:play(options)
     self.loopCount = 1
 end
 
@@ -66,20 +70,20 @@ function musicTrack:stop()
     self.currentElementIndex = 0
 
     if self.currentElement and self.currentSoundInstance then
-        self.currentSoundInstance:stop()
+        self.currentElement.sound:stop()
     end
 end
 
-function musicTrack:pause()
+function musicTrack:pause(fade)
     if self.currentElement and self.currentSoundInstance then
-        self.currentSoundInstance:pause()
+        self.currentElement.sound:pause(fade)
         self.started = false
     end
 end
 
-function musicTrack:play()
+function musicTrack:play(fade)
     if self.started == false and self.currentElement and self.currentSoundInstance then
-        self.currentSoundInstance:resume()
+        self.currentElement.sound:resume(fade)
         self.started = true
     end
 end

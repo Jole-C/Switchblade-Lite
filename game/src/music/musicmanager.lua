@@ -9,9 +9,9 @@ function musicManager:addTrack(trackElements, trackName)
     self.tracks[trackName] = musicTrack(trackElements)
 end
 
-function musicManager:update()
+function musicManager:update(dt)
     for _, track in pairs(self.tracks) do
-        track:update()
+        track:update(dt)
     end
 end
 
