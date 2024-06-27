@@ -147,7 +147,7 @@ function stageDirector:update(dt)
         local minutes = self.timeMinutes
         local seconds = math.ceil(self.timeSeconds)
 
-        if minutes > timeAlert.time.minutes then
+        if self:getAbsoluteTime(minutes, seconds) > self:getAbsoluteTime(timeAlert.time.minutes, timeAlert.time.seconds) then
             timeAlert.displayed = false
         end
         
@@ -231,6 +231,10 @@ end
 function stageDirector:setTime(minutes, seconds)
     self.timeMinutes = minutes or 1
     self.timeSeconds = seconds or 59
+end
+
+function stageDirector:getAbsoluteTime(minutes, seconds)
+    return (minutes * 60) + math.floor(seconds)
 end
 
 function stageDirector:registerBoss(boss)
