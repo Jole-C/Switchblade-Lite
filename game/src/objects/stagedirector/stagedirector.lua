@@ -4,6 +4,7 @@ local enemyWarning = require "src.objects.enemy.enemywarning"
 local bossWarning = require "src.objects.enemy.boss.bosswarning"
 local timer = require "src.objects.stagedirector.stagetimer"
 local alertObject = require "src.objects.stagedirector.alertobject"
+local soundObject = require "src.objects.stagedirector.spawnsound"
 
 local stageDirector = class({name = "Stage Director", extends = gameObject})
 
@@ -221,6 +222,8 @@ function stageDirector:startWave()
     if self.currentWaveIndex > self.maxWave then
         return
     end
+
+    gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 
     -- Get a reference to the gamestate and arena
     local currentGamestate = gameHelper:getCurrentState()
