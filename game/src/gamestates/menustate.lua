@@ -4,12 +4,13 @@ local mainMenu = require "src.menu.mainmenu.mainmenu"
 local menuState = class({name = "Menu State", extends = gamestate})
 
 function menuState:enter()
-    game.musicManager:getTrack("levelMusic"):play()
+    game.musicManager:getTrack("levelMusic"):play(0)
     game.musicManager:getTrack("bossMusic"):stop()
     game.camera:setScale(1)
     game.camera:setWorld(0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
     game.camera:setPosition(game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2)
     game.manager:swapPaletteGroup("main")
+    game.manager:swapPalette()
     
     self.menu = mainMenu()
 end
