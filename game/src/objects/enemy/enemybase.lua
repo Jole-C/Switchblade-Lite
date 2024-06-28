@@ -12,6 +12,8 @@ function enemyBase:new(x, y)
     self.invulnerableTime = 0
     self.isInvulnerable = false
     self.enemyColour = game.manager.currentPalette.enemyColour
+
+    self.damageSound = game.resourceManager:getAsset("Enemy Assets"):get("damageSound")
     
     local currentGamestate = gameHelper:getCurrentState()
 
@@ -99,10 +101,12 @@ function enemyBase:onHit(damageType, amount)
 
     if self.health <= 0 then
         self:destroy()
+    else
+        self.damageSound:play()
     end
 
     if tookDamage then
-        game.manager:setFreezeFrames(1)
+        game.manager:setFreezeFrames(2)
         self:setInvulnerable()
     end
 
