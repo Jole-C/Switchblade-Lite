@@ -165,16 +165,20 @@ function boss:switchAttack(attacksTable)
     assert(attacksTable ~= nil, "Attacks table is nil! Did you specify an attacks table in the state parameters?")
 
     local bulletAttacks = {}
+
+    for i = 1, #attacksTable do
+        local attack = attacksTable.attackList[i]
+
+        if attack.isBulletAttack then
+            table.insert(bulletAttacks,attacksTable[i])
+        end
+    end
     
     local state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
 
     if #attacksTable > 1 then
         if #gameHelper:getCurrentState().enemyManager.enemies > 30 then
-            local state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
-
-            while state.isBulletAttack == false do
-                state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
-            end
+            state = tablex.pick_weighted_random(bulletAttacks.attackList, bulletAttacks.attackWeights)
         else
             while state == self.lastAttack do
                 state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
