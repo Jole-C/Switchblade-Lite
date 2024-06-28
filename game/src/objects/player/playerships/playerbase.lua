@@ -416,12 +416,12 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
 
                             game.manager:swapPalette()
                         end)
+
+                        self:incrementAmmo()
                     else
                         game.manager:setFreezeFrames(2)
                         gameHelper:screenShake(0.2)
                     end
-
-                    self:incrementAmmo()
 
                     self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
 
