@@ -133,6 +133,8 @@ function bossHealthBar:draw()
         self.eye:draw()
     end
 
+    love.graphics.setColor(game.manager.currentPalette.uiColour)
+    
     love.graphics.setFont(game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
 
     love.graphics.setScissor(240 - self.bossTitleScissorWidth, 0, self.bossTitleScissorWidth * 2, 270)
