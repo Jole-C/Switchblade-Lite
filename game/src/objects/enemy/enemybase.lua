@@ -103,6 +103,7 @@ function enemyBase:onHit(damageType, amount)
         self:destroy()
     else
         self.damageSound:play()
+        game.particleManager:burstEffect("Enemy Hit", 3, self.position)
     end
 
     if tookDamage then

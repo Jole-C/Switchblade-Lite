@@ -18,7 +18,7 @@ function enemy:cleanup(destroyReason)
         self:playDeathSound()
     end
 
-    game.particleManager:burstEffect("Explosion", 50, self.position)
+    game.particleManager:burstEffect("Explosion", 9, self.position)
 end
 
 function enemy:playDeathSound()
