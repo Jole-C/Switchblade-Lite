@@ -428,6 +428,9 @@ function game:setupResources()
                 hurt = {path = "assets/audio/sfx/boss1hurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
                 fire = {path = "assets/audio/sfx/heavyfire.wav", type = "Source", parameters = {tag = self.tags.sfx}},
 
+                laserCharge = {path = "assets/audio/sfx/boss1lasercharge.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+                laserFire = {path = "assets/audio/sfx/boss1laser.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+
                 randomSounds = randomAssetGroup(
                 {
                     sound1 = {path = "assets/audio/sfx/boss1sound1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
