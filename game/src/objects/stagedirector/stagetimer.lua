@@ -56,7 +56,7 @@ function stageTimer:update(dt)
     
     for _, timeAlert in pairs(self.timeAlertText) do
         local minutes = self.timeMinutes
-        local seconds = math.ceil(self.timeSeconds)
+        local seconds = math.floor(self.timeSeconds)
 
         if self:getAbsoluteTime(minutes, seconds) > self:getAbsoluteTime(timeAlert.time.minutes, timeAlert.time.seconds) then
             timeAlert.displayed = false
