@@ -32,8 +32,8 @@ function bossIntro:update(dt, bossInstance)
 
     if (bossInstance.position - vec2:zero()):length() < self.lerpRadius then
         bossInstance:setPhaseTime()
-        bossInstance:setPhase("phase2")
-        bossInstance:setShielded(false)
+        bossInstance:setPhase(self.phase)
+        bossInstance:setShielded(true)
         bossInstance:switchState(self.returnState)
         bossInstance.introCard:setInOutro()
         bossInstance.healthElement:doIntro()
