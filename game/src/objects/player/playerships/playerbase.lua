@@ -598,7 +598,7 @@ function player:setInvulnerable()
     self.invulnerabilityCooldown = self.invulnerableGracePeriod
 end
 
-function player:cleanup()
+function player:cleanup(destroyReason)
     local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
@@ -607,7 +607,9 @@ function player:cleanup()
 
     game.playerManager:setPlayerDeathReason("You died!")
 
-    gameHelper:addGameObject(gameoverEffect(self.position.x, self.position.y, self.angle))
+    if destroyReason ~= "autoDestruction" then
+        gameHelper:addGameObject(gameoverEffect(self.position.x, self.position.y, self.angle))
+    end
 end
 
 return player
