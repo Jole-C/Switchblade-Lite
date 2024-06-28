@@ -25,17 +25,15 @@ function bossIntro:update(dt, bossInstance)
     gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
     
     game.particleManager:burstEffect("Boss Intro Burst", 20, bossInstance.position)
-
-    local colour = game.manager.currentPalette.enemySpawnColour
-    self.introEffect.systems[1]:setColors(colour[1], colour[2], colour[3], colour[4])
+    self.introEffect.systems[1]:setColors(game.manager.currentPalette.enemySpawnColour)
 
     bossInstance.position.x = math.lerpDT(bossInstance.position.x, 0, self.lerpSpeed, dt)
     bossInstance.position.y = math.lerpDT(bossInstance.position.y, 0, self.lerpSpeed, dt)
 
     if (bossInstance.position - vec2:zero()):length() < self.lerpRadius then
         bossInstance:setPhaseTime()
-        bossInstance:setPhase(self.phase)
-        bossInstance:setShielded(true)
+        bossInstance:setPhase("phase2")
+        bossInstance:setShielded(false)
         bossInstance:switchState(self.returnState)
         bossInstance.introCard:setInOutro()
         bossInstance.healthElement:doIntro()
