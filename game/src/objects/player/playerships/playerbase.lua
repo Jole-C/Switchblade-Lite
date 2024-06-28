@@ -407,7 +407,7 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
                 
                 if collidedObject.markedForDelete and collidedObject.restoreAmmo then
                     if self.ammo < self.maxAmmo then
-                        game.manager:setFreezeFrames(10, function()
+                        game.manager:setFreezeFrames(4, function()
                             local playerPosition = game.playerManager.playerPosition
                             local newEffect = boostAmmoEffect(playerPosition.x, playerPosition.y)
                             
@@ -416,14 +416,14 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
 
                             game.manager:swapPalette()
                         end)
-
-                        self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
                     else
-                        game.manager:setFreezeFrames(4)
+                        game.manager:setFreezeFrames(2)
                         gameHelper:screenShake(0.2)
                     end
 
                     self:incrementAmmo()
+
+                    self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
 
                     self:handleBoostHeatDividend()
                     self:handleBoostExplosion()
