@@ -369,6 +369,8 @@ function boss1:handleDamage(damageType, amount)
             return true
         end
     end
+
+    return false
 end
 
 return boss1
