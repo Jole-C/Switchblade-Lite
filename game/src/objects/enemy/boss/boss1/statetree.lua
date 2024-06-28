@@ -47,7 +47,7 @@ local spawnSticker = function(angle, x, y)
     return enemy
 end
 
-local spawnBullet = function(angle, x, y)
+local spawnBulletAndCharger = function(angle, x, y)
     local enemy = nil
 
     if math.random(0, 100) > 10 then
@@ -56,6 +56,11 @@ local spawnBullet = function(angle, x, y)
         enemy = spawnCharger(angle, x, y)
     end
 
+    return enemy
+end
+
+local spawnBulletOnly = function(angle, x, y)
+    local enemy = bullet(x, y, 150, angle, 1, colliderDefinitions.enemybullet, 16, 16)
     return enemy
 end
 
@@ -90,13 +95,25 @@ local states =
                             timesToRepeat = 5,
                             enemyFunctions =
                             {
-                                spawnBullet,
+                                spawnBulletOnly,
                             },
                             returnState = "movement"
-                        })
+                        }),
+                        rotationFire(
+                        {
+                            isBulletAttack = true,
+                            angleTurnSpeed = 6,
+                            maxFireCooldown = 0.05,
+                            enemyFunctions =
+                            {
+                                spawnBulletOnly,
+                            },
+                            returnState = "movement"
+                        }),
                     },
                     attackWeights =
                     {
+                        1,
                         1
                     }
                 },
@@ -144,7 +161,7 @@ local states =
                             maxFireCooldown = 0.1,
                             enemyFunctions =
                             {
-                                spawnBullet,
+                                spawnBulletAndCharger,
                             },
                             returnState = "movement"
                         }),
@@ -165,7 +182,7 @@ local states =
                             maxFireCooldown = 0.07,
                             enemyFunctions =
                             {
-                                spawnBullet,
+                                spawnBulletAndCharger,
                             },
                             returnState = "movement"
                         }),
@@ -204,6 +221,7 @@ local states =
                 {
                     attackList =
                     {
+
                         circleFire(
                         {
                             isBulletAttack = true,
@@ -211,13 +229,25 @@ local states =
                             timesToRepeat = 3,
                             enemyFunctions =
                             {
-                                spawnBullet
+                                spawnBulletOnly,
                             },
                             returnState = "movement"
-                        })
+                        }),
+                        rotationFire(
+                        {
+                            isBulletAttack = true,
+                            angleTurnSpeed = 5,
+                            maxFireCooldown = 0.05,
+                            enemyFunctions =
+                            {
+                                spawnBulletOnly,
+                            },
+                            returnState = "movement"
+                        }),
                     },
                     attackWeights =
                     {
+                        1,
                         1
                     }
                 },
@@ -281,7 +311,7 @@ local states =
                             timesToRepeat = 5,
                             enemyFunctions =
                             {
-                                spawnBullet,
+                                spawnBulletAndCharger,
                             },
                             returnState = "movement"
                         }),
@@ -302,7 +332,7 @@ local states =
                             maxAngle = 55,
                             enemyFunctions =
                             {
-                                spawnBullet,
+                                spawnBulletAndCharger,
                             },
                             returnState = "movement"
                         }),
@@ -356,6 +386,7 @@ local states =
                 {
                     attackList =
                     {
+
                         circleFire(
                         {
                             isBulletAttack = true,
@@ -363,13 +394,25 @@ local states =
                             timesToRepeat = 3,
                             enemyFunctions =
                             {
-                                spawnBullet
+                                spawnBulletOnly,
                             },
                             returnState = "movement"
-                        })
+                        }),
+                        rotationFire(
+                        {
+                            isBulletAttack = true,
+                            angleTurnSpeed = 3,
+                            maxFireCooldown = 0.05,
+                            enemyFunctions =
+                            {
+                                spawnBulletOnly,
+                            },
+                            returnState = "movement"
+                        }),
                     },
                     attackWeights =
                     {
+                        1,
                         1
                     }
                 },
@@ -423,7 +466,7 @@ local states =
                             timesToRepeat = 5,
                             enemyFunctions =
                             {
-                                spawnBullet,
+                                spawnBulletAndCharger,
                             },
                             returnState = "movement"
                         }),
