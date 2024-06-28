@@ -18,6 +18,7 @@ function gameManager:new()
 
     self.freezeFrames = 0
     self.gameFrozen = false
+    self.freezeFrameFunctions = {}
 
     -- Set up the player definitions
     self.playerDefinitions = {
@@ -83,6 +84,14 @@ function gameManager:update(dt)
     self.freezeFrames = self.freezeFrames - 1 * dt
     self.gameFrozen = self.freezeFrames > 0
 
+    if self.freezeFrames <= 0 then
+        for _, func in pairs(self.freezeFrameFunctions) do
+            func()
+        end
+
+        self.freezeFrameFunctions = {}
+    end
+
     if self:getOption("limitPaletteSwaps") then
         self.paletteSwapCooldown = self.paletteSwapCooldown - (1 * dt)
     end
@@ -98,8 +107,12 @@ function gameManager:changePlayerDefinition(definitionName)
     self.currentPlayerDefinition = chosenDefinition
 end
 
-function gameManager:setFreezeFrames(freezeFrames)
+function gameManager:setFreezeFrames(freezeFrames, optionalFunction)
     self.freezeFrames = freezeFrames / 50
+
+    if optionalFunction then
+        table.insert(self.freezeFrameFunctions, optionalFunction)
+    end
 end
 
 function gameManager:togglePausing()
