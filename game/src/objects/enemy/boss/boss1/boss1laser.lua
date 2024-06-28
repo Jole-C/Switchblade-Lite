@@ -12,6 +12,8 @@ function bossLaser:new(x, y, angle, length, lifetime)
     self.innerLaserScaleFrequency = 30
     self.innerLaserScaleAmplitude = 1.5
     self.laserOffsetPosition = 40
+
+    self.laserWallEffect = game.particleManager:getEffect("Boss Intro Burst")
 end
 
 function bossLaser:update(dt)
@@ -19,6 +21,13 @@ function bossLaser:update(dt)
     
     self.innerLaserScaleTime = self.innerLaserScaleTime + (self.innerLaserScaleFrequency * dt)
     self.innerLaserScaleMultiplier = ((math.sin(self.innerLaserScaleTime) + 1) / 2) * self.innerLaserScaleAmplitude
+
+    local angleVector = vec2(math.cos(self.angle), math.sin(self.angle))
+    local arenaEdgePosition = angleVector * self.length
+    gameHelper:getArena():getClampedPosition(arenaEdgePosition)
+
+    game.particleManager:burstEffect("Boss Intro Burst", 20, arenaEdgePosition + angleVector * -30)
+    self.laserWallEffect.systems[1]:setColors(game.manager.currentPalette.enemySpawnColour)
 end
 
 function bossLaser:draw()
@@ -41,6 +50,8 @@ function bossLaser:draw()
     
     love.graphics.setColor(game.manager.currentPalette.enemyColour)
     love.graphics.circle("fill", laserX, laserY, 32 + 10 * self.innerLaserScaleMultiplier)
+
+    self.laserWallEffect:draw()
 end
 
 function bossLaser:handleCollision(items, len, dt)
