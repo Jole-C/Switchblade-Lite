@@ -364,13 +364,12 @@ end
 function boss1:handleDamage(damageType, amount)
     if damageType == "bullet" then
         if self.isShielded == false then
-            print("damaged")
             self.phaseHealth = self.phaseHealth - amount
             return true
         end
     end
 
-    return false
+    return
 end
 
 return boss1
