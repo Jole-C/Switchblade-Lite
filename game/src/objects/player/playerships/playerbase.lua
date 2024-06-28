@@ -400,21 +400,30 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting and collidedObject.onHit then
                 local tookDamage = collidedObject:onHit("boost", self.boostDamage)
-                
+
                 if tookDamage then
                     self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
                 end
                 
                 if collidedObject.markedForDelete and collidedObject.restoreAmmo then
+                    if self.ammo < self.maxAmmo then
+                        game.manager:setFreezeFrames(10, function()
+                            local playerPosition = game.playerManager.playerPosition
+                            local newEffect = boostAmmoEffect(playerPosition.x, playerPosition.y)
+                            
+                            gameHelper:addGameObject(newEffect)
+                            gameHelper:screenShake(0.3)
+
+                            game.manager:swapPalette()
+                        end)
+
+                        self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
+                    else
+                        game.manager:setFreezeFrames(4)
+                        gameHelper:screenShake(0.2)
+                    end
+
                     self:incrementAmmo()
-
-                    local newEffect = boostAmmoEffect(self.position.x, self.position.y)
-                    gameHelper:addGameObject(newEffect)
-                    game.manager:setFreezeFrames(2)
-
-                    game.manager:swapPalette()
-
-                    self.boostHitSound:play({pitch = 1 + (2 * (self.boostHitEnemies / self.maxEnemiesForExplosion))})
 
                     self:handleBoostHeatDividend()
                     self:handleBoostExplosion()
