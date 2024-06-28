@@ -668,6 +668,20 @@ function game:setupParticles()
     
     self.particleManager:addEffect(self.particleManager:newEffect({bossIntroBurst}, self.canvases.foregroundCanvas.canvas, true), "Boss Intro Burst")
 
+    local bossDeath = love.graphics.newParticleSystem(circleFill, 1000)
+    bossDeath:setColors(1, 1, 1, 1)
+    bossDeath:setDirection(-1.5707963705063)
+    bossDeath:setEmissionArea("none", 0, 0, 0, false)
+    bossDeath:setEmitterLifetime(-1)
+    bossDeath:setInsertMode("top")
+    bossDeath:setParticleLifetime(0.5, 1)
+    bossDeath:setSizes(6, 0)
+    bossDeath:setSpeed(100.98336791992, 800.73107910156)
+    bossDeath:setRadialAcceleration(-200, -100)
+    bossDeath:setSpread(6.2831854820251)
+    
+    self.particleManager:addEffect(self.particleManager:newEffect({bossDeath}, self.canvases.foregroundCanvas.canvas, false), "Boss Death")
+
     local explosionBurst = love.graphics.newParticleSystem(circleFill, 1000)
     explosionBurst:setColors(1, 1, 1, 1)
     explosionBurst:setDirection(-1.5707963705063)

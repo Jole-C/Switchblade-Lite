@@ -204,6 +204,8 @@ end
 function boss:cleanup(destroyReason)
     if destroyReason ~= "autoDestruction" then
         self.explosionSoundEnd:play()
+        game.particleManager:burstEffect("Boss Death", 100, self.position)
+        gameHelper:screenShake(1)
         
         game.musicManager:getTrack("levelMusic"):play(1)
         game.musicManager:getTrack("bossMusic"):stop()
