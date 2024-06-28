@@ -7,12 +7,15 @@ function laserFire:enter(bossInstance)
     self.angleTurnRate = self.parameters.angleTurnRate or 0.025
     self.returnState = self.parameters.returnState
     self.laserReference = nil
+    self.drawAbove = true
 
     bossInstance:setMandibleOpenAmount(1)
 
     self.laserChargeSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserCharge"):play()
     self.laserFireSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserFire")
     gameHelper:getCurrentState().cameraManager:zoom(1.5, 0.005)
+
+    self.laserChargeEffect = game.particleManager:getEffect("Boss Intro Burst")
 end
 
 function laserFire:update(dt, bossInstance)
@@ -24,10 +27,18 @@ function laserFire:update(dt, bossInstance)
     if self.laserChargeSound:isStopped() and self.laserReference == nil then
         self.laserReference = laser(bossInstance.position.x, bossInstance.position.y, bossInstance.angle, 500, 4)
         gameHelper:addGameObject(self.laserReference)
+        
         self.laserFireSound:play()
         gameHelper:screenShake(0.5)
         game.manager:setFreezeFrames(3)
         gameHelper:getCurrentState().cameraManager:zoom(1, 0.1)
+    else
+        local effectPosition = vec2(0, 0)
+        effectPosition.x = bossInstance.position.x + math.cos(bossInstance.angle) * 40
+        effectPosition.y = bossInstance.position.y + math.sin(bossInstance.angle) * 40
+
+        game.particleManager:burstEffect("Boss Intro Burst", 1, effectPosition)
+        self.laserChargeEffect.systems[1]:setColors(game.manager.currentPalette.enemyColour)
     end
 
     if self.laserReference then
@@ -37,6 +48,12 @@ function laserFire:update(dt, bossInstance)
             bossInstance:switchState(self.returnState)
             self.laserReference = nil
         end
+    end
+end
+
+function laserFire:draw()
+    if self.laserChargeSound:isStopped() == false then
+        self.laserChargeEffect:draw()
     end
 end
 
