@@ -5,11 +5,14 @@ local laserFire = class({name = "Laser Fire", extends = bossState})
 
 function laserFire:enter(bossInstance)
     self.angleTurnRate = self.parameters.angleTurnRate or 0.025
-    self.laserWindupTime = self.parameters.laserWindupTime or 3
     self.returnState = self.parameters.returnState
     self.laserReference = nil
 
     bossInstance:setMandibleOpenAmount(1)
+
+    self.laserChargeSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserCharge"):play()
+    self.laserFireSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserFire")
+    gameHelper:getCurrentState().cameraManager:zoom(1.5, 0.005)
 end
 
 function laserFire:update(dt, bossInstance)
@@ -18,10 +21,13 @@ function laserFire:update(dt, bossInstance)
 
     bossInstance.angle = math.lerpAngle(bossInstance.angle, angleToPlayer, self.angleTurnRate, dt)
 
-    self.laserWindupTime = self.laserWindupTime - (1 * dt)
-    if self.laserWindupTime <= 0 and self.laserReference == nil then
-        self.laserReference = laser(bossInstance.position.x, bossInstance.position.y, bossInstance.angle, 500, 3)
+    if self.laserChargeSound:isStopped() and self.laserReference == nil then
+        self.laserReference = laser(bossInstance.position.x, bossInstance.position.y, bossInstance.angle, 500, 4)
         gameHelper:addGameObject(self.laserReference)
+        self.laserFireSound:play()
+        gameHelper:screenShake(0.5)
+        game.manager:setFreezeFrames(3)
+        gameHelper:getCurrentState().cameraManager:zoom(1, 0.1)
     end
 
     if self.laserReference then
