@@ -1,7 +1,6 @@
 local enemy = require "src.objects.enemy.enemy"
 local collider = require "src.collision.collider"
-local charger = require "src.objects.enemy.charger"
-local enemyIndicator = require "src.objects.enemy.enemyindicator"
+local bullet = require "src.objects.enemy.enemybullet"
 
 local bossOrb = class({name = "Boss 1 Orb", extends = enemy})
 
@@ -79,13 +78,10 @@ function bossOrb:update(dt)
     self.enemySpawnCooldown = self.enemySpawnCooldown - (1 * dt)
 
     if self.enemySpawnCooldown <= 0 then
-        local newCharger = charger(self.position.x, self.position.y)
-        newCharger.angle = (game.playerManager.playerPosition - self.position):angle()
-        
-        local indicator = enemyIndicator(self.position.x, self.position.y, newCharger)
-        gameHelper:addGameObject(indicator)
+        local angleToPlayer = (game.playerManager.playerPosition - self.position):angle()
+        local newBullet = bullet(self.position.x, self.position.y, 150, angleToPlayer, 1, colliderDefinitions.enemybullet, 16, 16)
 
-        gameHelper:addGameObject(newCharger)
+        gameHelper:addGameObject(newBullet)
 
         self.enemySpawnCooldown = self.maxEnemySpawnCooldown
     end
