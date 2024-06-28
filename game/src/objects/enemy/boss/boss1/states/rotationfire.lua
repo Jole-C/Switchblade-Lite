@@ -14,6 +14,8 @@ function rotationFire:enter(bossInstance)
     self.chosenEnemyFunction = self:chooseEnemy()
     
     bossInstance:setMandibleOpenAmount(1)
+
+    self.angle = bossInstance.angle
 end
 
 function rotationFire:update(dt, bossInstance)
@@ -22,15 +24,19 @@ function rotationFire:update(dt, bossInstance)
     if self.fireCooldown <= 0 then
         self.fireCooldown = self.maxFireCooldown
         
-        local newEnemy = self.chosenEnemyFunction(bossInstance.angle, bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
+        local newEnemy = self.chosenEnemyFunction(self.angle, bossInstance.enemySpawnPosition.x, bossInstance.enemySpawnPosition.y)
         gameHelper:addGameObject(newEnemy)
 
         bossInstance.fireSound:play()
     end
 
-    bossInstance.angle = bossInstance.angle + (self.angleTurnSpeed * dt)
+    self.angle = self.angle + (self.angleTurnSpeed * dt)
 
-    if bossInstance.angle > self.targetAngle then
+    if bossInstance.isShielded == false then
+        bossInstance.angle = self.angle
+    end
+
+    if self.angle > self.targetAngle then
         bossInstance:switchState(self.returnState)
     end
 end
