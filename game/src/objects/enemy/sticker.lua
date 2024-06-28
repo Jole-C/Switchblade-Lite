@@ -98,6 +98,8 @@ function sticker:update(dt)
                 self.stickGracePeriod = self.maxStickGracePeriod
             end
         end
+
+        game.particleManager:burstEffect("Player Smoke", 5, playerPosition)
     end
 
     self.circleSine = self.circleSine + self.circleFrequency * dt
