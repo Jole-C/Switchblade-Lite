@@ -101,14 +101,17 @@ function enemyBase:onHit(damageType, amount)
 
     if self.health <= 0 then
         self:destroy()
-    else
-        self.damageSound:play()
-        game.particleManager:burstEffect("Enemy Hit", 3, self.position)
+        game.manager:setFreezeFrames(2)
+        
+        return tookDamage
     end
 
     if tookDamage then
-        game.manager:setFreezeFrames(2)
+        game.manager:setFreezeFrames(1)
+        game.particleManager:burstEffect("Enemy Hit", 3, self.position)
+        
         self:setInvulnerable()
+        self.damageSound:play()
     end
 
     return tookDamage
