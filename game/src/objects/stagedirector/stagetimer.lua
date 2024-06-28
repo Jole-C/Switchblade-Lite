@@ -38,7 +38,7 @@ function stageTimer:update(dt)
 
     if self.paused == false then
         if self.timeSeconds <= 0 then
-            self.timeSeconds = 59
+            self.timeSeconds = 60
             self.timeMinutes = self.timeMinutes - 1
         end
 
