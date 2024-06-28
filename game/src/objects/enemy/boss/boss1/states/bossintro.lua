@@ -22,7 +22,7 @@ function bossIntro:enter(bossInstance)
 end
 
 function bossIntro:update(dt, bossInstance)
-    bossInstance:setPhaseTime()
+    gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
     
     game.particleManager:burstEffect("Boss Intro Burst", 20, bossInstance.position)
 
@@ -33,6 +33,7 @@ function bossIntro:update(dt, bossInstance)
     bossInstance.position.y = math.lerpDT(bossInstance.position.y, 0, self.lerpSpeed, dt)
 
     if (bossInstance.position - vec2:zero()):length() < self.lerpRadius then
+        bossInstance:setPhaseTime()
         bossInstance:setPhase(self.phase)
         bossInstance:setShielded(true)
         bossInstance:switchState(self.returnState)

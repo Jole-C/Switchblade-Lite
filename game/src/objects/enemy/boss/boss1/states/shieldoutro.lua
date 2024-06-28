@@ -7,11 +7,10 @@ function shieldOutro:enter(bossInstance)
     self.maxTimeBetweenExplosions = self.parameters.timeBetweenExplosions
     self.maxExplosionDistanceOffset = self.parameters.maxExplosionDistanceOffset or 50
     self.returnState = self.parameters.returnState
-    gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
 end
 
 function shieldOutro:update(dt, bossInstance)
-    bossInstance:setPhaseTime()
+    gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
     
     self.timeBetweenExplosions = self.timeBetweenExplosions - (1 * dt)
 
@@ -40,7 +39,9 @@ function shieldOutro:update(dt, bossInstance)
         
         bossInstance:setShielded(false)
         bossInstance:switchState(self.returnState)
+        bossInstance:setPhaseTime()
         gameHelper:screenShake(0.6)
+        gameHelper:getCurrentState().stageDirector:setTimerPaused(false)
     end
 end
 
