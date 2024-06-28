@@ -4,14 +4,12 @@ local boostRestore = class({name = "Boost Ammo Restore Effect", extends = effect
 function boostRestore:new(x, y)
     self:super(x, y)
 
-    self.lifetime = 0.05
     self.angle = math.random(0, 2 * math.pi)
-    self.maxLineLength = 6000
     self.lineLength = 0
     self.lineIncreaseRate = 3000
-
-    self.circleRadius = 15
     self.lineCount = math.random(3, 4)
+
+    self.circleRadius = 20
 
     self.sizePercentage = 6
     self.sizeIncrement = 30
