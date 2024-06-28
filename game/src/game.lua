@@ -638,7 +638,7 @@ function game:setupParticles()
     explosionDust:setInsertMode("top")
     explosionDust:setParticleLifetime(0.07, 0.2)
     explosionDust:setSizes(2, 0)
-    explosionDust:setSpeed(269.98336791992, 891.73107910156)
+    explosionDust:setSpeed(200, 500)
     explosionDust:setSpread(6.2831854820251)
     
     local explosionBoom = love.graphics.newParticleSystem(circleFill, 100)
