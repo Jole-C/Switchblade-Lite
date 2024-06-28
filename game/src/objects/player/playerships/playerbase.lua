@@ -574,6 +574,11 @@ function player:onHit(damage)
 
     if self.health <= 0 then
         self:destroy()
+    else
+        game.manager:setFreezeFrames(15, function()
+            gameHelper:screenShake(0.3)
+            game.particleManager:burstEffect("Player Death", 10, game.playerManager.playerPosition)
+        end)
     end
 
     self.hurtSound:play()
