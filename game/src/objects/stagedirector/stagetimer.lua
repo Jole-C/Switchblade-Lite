@@ -11,6 +11,8 @@ function stageTimer:new(minutes, seconds, intervalTexts)
     self.maxSeconds = seconds
     self.timeAlertText = intervalTexts
     self.maxLowTimeWarningCooldown = 1
+    self.alertDisplayTime = 0.3
+    self.alertDisplaySpeed = 0.2
 
     self.timeMinutes = self.maxMinutes
     self.timeSeconds = self.maxSeconds
@@ -63,7 +65,7 @@ function stageTimer:update(dt)
         if minutes == timeAlert.time.minutes and seconds == timeAlert.time.seconds and timeAlert.displayed == false then
             timeAlert.displayed = true
             
-            local text = alertObject(timeAlert.text, 0.05, 0.4)
+            local text = alertObject(timeAlert.text, self.alertDisplayTime, self.alertDisplaySpeed)
             gameHelper:addGameObject(text)
             gameHelper:screenShake(0.1)
         end
@@ -72,7 +74,11 @@ end
 
 function stageTimer:setTime(minutes, seconds)
     self.timeMinutes = minutes or 1
-    self.timeSeconds = seconds or 59
+    self.timeSeconds = seconds or 59 
+    
+    for _, timeAlert in pairs(self.timeAlertText) do
+        timeAlert.displayed = false
+    end
 end
 
 function stageTimer:getAbsoluteTime(minutes, seconds)
