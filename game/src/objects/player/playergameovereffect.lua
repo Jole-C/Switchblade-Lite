@@ -12,6 +12,8 @@ function playerGameover:new(x, y, angle)
     self.timeUntilGameover = 3
 
     self.playerExploded = false
+
+    game.resourceManager:getAsset("Player Assets"):get("sounds"):get("deathTrigger"):play()
 end
 
 function playerGameover:update(dt)
@@ -22,6 +24,7 @@ function playerGameover:update(dt)
             self.playerExploded = true
             game.particleManager:burstEffect("Player Death", 20, self.position)
             gameHelper:screenShake(0.1)
+            game.resourceManager:getAsset("Player Assets"):get("sounds"):get("deathExplosion"):play()
         else
             self.timeUntilGameover = self.timeUntilGameover - (1 * dt)
     

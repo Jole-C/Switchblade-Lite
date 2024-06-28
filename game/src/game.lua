@@ -366,6 +366,8 @@ function game:setupResources()
             overheatWarning = {path = "assets/audio/sfx/overheatwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             shipOverheat = {path = "assets/audio/sfx/overheat.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             boostHit = {path = "assets/audio/sfx/boosthit.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            deathExplosion = {path = "assets/audio/sfx/playerdeath.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            deathTrigger = {path = "assets/audio/sfx/playerdeathtrigger.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         })
     }), "Player Assets")
 
