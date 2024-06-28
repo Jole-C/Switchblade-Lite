@@ -448,7 +448,7 @@ function game:setupResources()
         spawnSounds = assetGroup(
         {
             spawn = {path = "assets/audio/sfx/enemyspawn.wav", type = "Source", parameters = {tag = self.tags.sfx}},
-            warning = {path = "assets/audio/sfx/spawnWarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            warning = {path = "assets/audio/sfx/spawnwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         bossExplosionSounds = assetGroup(
