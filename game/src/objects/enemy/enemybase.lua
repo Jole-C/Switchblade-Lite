@@ -101,7 +101,6 @@ function enemyBase:onHit(damageType, amount)
 
     if self.health <= 0 then
         self:destroy()
-        game.manager:setFreezeFrames(2)
         
         return tookDamage
     end
@@ -109,7 +108,7 @@ function enemyBase:onHit(damageType, amount)
     if tookDamage then
         game.manager:setFreezeFrames(1)
         game.particleManager:burstEffect("Enemy Hit", 3, self.position)
-        
+
         self:setInvulnerable()
         self.damageSound:play()
     end
@@ -127,7 +126,7 @@ function enemyBase:cleanup(destroyReason)
     currentGamestate.cameraManager:screenShake(0.1)
 
     if game.manager then
-        game.manager:setFreezeFrames(1)
+        game.manager:setFreezeFrames(2)
     end
 
     if currentGamestate.stageDirector then
