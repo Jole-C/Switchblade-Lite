@@ -101,10 +101,9 @@ function enemyBase:onHit(damageType, amount)
         self:destroy()
     end
 
-    self:setInvulnerable()
-
-    if game.manager then
+    if tookDamage then
         game.manager:setFreezeFrames(1)
+        self:setInvulnerable()
     end
 
     return tookDamage
