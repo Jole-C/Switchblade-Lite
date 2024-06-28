@@ -11,6 +11,7 @@ function bossLaser:new(x, y, angle, length, lifetime)
     self.innerLaserScaleTime = 0
     self.innerLaserScaleFrequency = 30
     self.innerLaserScaleAmplitude = 1.5
+    self.laserOffsetPosition = 40
 end
 
 function bossLaser:update(dt)
@@ -28,15 +29,18 @@ function bossLaser:draw()
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
+
+    local laserX = self.position.x + math.cos(self.angle) * self.laserOffsetPosition
+    local laserY = self.position.y + math.sin(self.angle) * self.laserOffsetPosition
     
     love.graphics.setColor(game.manager.currentPalette.enemyColour)
-    love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, self.length, 1, 0, yOffset)
+    love.graphics.draw(self.sprite, laserX, laserY, self.angle, self.length, 1, 0, yOffset)
     
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.spriteInner, self.position.x, self.position.y, self.angle, self.length, 0.5 + 1 * self.innerLaserScaleMultiplier, 0, yOffset)
+    love.graphics.draw(self.spriteInner, laserX, laserY, self.angle, self.length, 0.5 + 1 * self.innerLaserScaleMultiplier, 0, yOffset)
     
     love.graphics.setColor(game.manager.currentPalette.enemyColour)
-    love.graphics.circle("fill", self.position.x, self.position.y, 32)
+    love.graphics.circle("fill", laserX, laserY, 32 + 10 * self.innerLaserScaleMultiplier)
 end
 
 function bossLaser:handleCollision(items, len, dt)
