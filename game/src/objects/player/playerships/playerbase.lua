@@ -586,8 +586,9 @@ function player:onHit(damage)
     else
         game.manager:setFreezeFrames(7, function()
             gameHelper:screenShake(0.3)
-            game.particleManager:burstEffect("Player Death", 10, game.playerManager.playerPosition)
         end)
+        
+        game.particleManager:burstEffect("Player Death", 10, game.playerManager.playerPosition)
     end
 
     self.hurtSound:play()
