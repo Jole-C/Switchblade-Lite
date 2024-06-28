@@ -26,7 +26,7 @@ function stageDirector:new(levelDefinition)
     self.timer = timer(self.maxMinutes, self.maxSeconds,
     {
         {text = "2 minutes!", displayed = false, time = {minutes = 1, seconds = 59}},
-        {text = "1 minutes!", displayed = false, time = {minutes = 0, seconds = 59}},
+        {text = "1 minute!", displayed = false, time = {minutes = 0, seconds = 59}},
         {text = "30 seconds!", displayed = false, time = {minutes = 0, seconds = 30}},
         {text = "10 seconds!", displayed = false, time = {minutes = 0, seconds = 10}},
         {text = "5 seconds!", displayed = false, time = {minutes = 0, seconds = 5}},
