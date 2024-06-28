@@ -85,6 +85,7 @@ local states =
                     {
                         circleFire(
                         {
+                            isBulletAttack = true,
                             numberOfEnemiesInCircle = 8,
                             timesToRepeat = 5,
                             enemyFunctions =
@@ -138,6 +139,7 @@ local states =
                         }),
                         directedFire(
                         {
+                            isBulletAttack = true,
                             enemiesToFire = 25,
                             maxFireCooldown = 0.1,
                             enemyFunctions =
@@ -158,6 +160,7 @@ local states =
                         }),
                         rotationFire(
                         {
+                            isBulletAttack = true,
                             angleTurnSpeed = 3,
                             maxFireCooldown = 0.07,
                             enemyFunctions =
@@ -203,6 +206,7 @@ local states =
                     {
                         circleFire(
                         {
+                            isBulletAttack = true,
                             numberOfEnemiesInCircle = 12,
                             timesToRepeat = 3,
                             enemyFunctions =
@@ -272,6 +276,7 @@ local states =
                         }),
                         circleFire(
                         {
+                            isBulletAttack = true,
                             numberOfEnemiesInCircle = 12,
                             timesToRepeat = 5,
                             enemyFunctions =
@@ -292,6 +297,7 @@ local states =
                         }),
                         randomFire(
                         {
+                            isBulletAttack = true,
                             enemiesToFire = 15,
                             maxAngle = 55,
                             enemyFunctions =
@@ -352,6 +358,7 @@ local states =
                     {
                         circleFire(
                         {
+                            isBulletAttack = true,
                             numberOfEnemiesInCircle = 16,
                             timesToRepeat = 3,
                             enemyFunctions =
@@ -411,6 +418,7 @@ local states =
                         }),
                         circleFire(
                         {
+                            isBulletAttack = true,
                             numberOfEnemiesInCircle = 12,
                             timesToRepeat = 5,
                             enemyFunctions =

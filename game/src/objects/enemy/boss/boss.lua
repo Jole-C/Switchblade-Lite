@@ -26,6 +26,7 @@ function boss:new(x, y)
     self.phase = nil
     self.shieldState = {}
     self.states = nil
+    self.lastAttack = nil
 
     self.debugText = text("", "fontMain", "left", 380, 200, 100)
     game.interfaceRenderer:addHudElement(self.debugText)
@@ -163,11 +164,24 @@ end
 function boss:switchAttack(attacksTable)
     assert(attacksTable ~= nil, "Attacks table is nil! Did you specify an attacks table in the state parameters?")
 
-    if #gameHelper:getCurrentState().enemyManager.enemies > 30 then
-        return
-    end
-
+    local bulletAttacks = {}
+    
     local state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
+
+    if #attacksTable > 1 then
+        if #gameHelper:getCurrentState().enemyManager.enemies > 30 then
+            local state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
+
+            while state.isBulletAttack == false do
+                state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
+            end
+        else
+            while state == self.lastAttack do
+                state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
+                self.lastAttack = state
+            end
+        end
+    end
 
     self.currentState:exit(self)
     self.currentState = state

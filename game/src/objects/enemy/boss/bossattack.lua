@@ -3,6 +3,7 @@ local bossAttack = class({name = "Boss Attack", extends = bossState})
 
 function bossAttack:enter(bossInstance)
     self.enemyFunctions = self.parameters.enemyFunctions
+    self.isBulletAttack = self.parameters.isBulletAttack or false
 end
 
 function bossAttack:chooseEnemy()
