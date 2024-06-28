@@ -10,8 +10,8 @@ function playerDefault:new(x, y)
     -- Movement parameters of the ship
     self.steeringSpeedMoving = 81.25
     self.steeringSpeedStationary = 43.75
-    self.steeringSpeedBoosting = 68.75
-    self.steeringSpeedFiring = 62.5
+    self.steeringSpeedBoosting = 45.75
+    self.steeringSpeedFiring = 55.5
     self.steeringAccelerationMoving = 62.5
     self.steeringAccelerationStationary = 31.25
     self.steeringAccelerationBoosting = 43.75

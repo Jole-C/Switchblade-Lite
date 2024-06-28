@@ -328,6 +328,7 @@ function player:updatePosition(dt)
         if segment then
             local normal = (segment.position - self.position):normalise_inplace()
             self.velocity = self.velocity - (2 * self.velocity:dot(normal) * normal)
+            self.angle = normal:angle()
         end
     end
 
