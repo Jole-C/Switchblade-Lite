@@ -30,11 +30,11 @@ function alertObject:update(dt)
             self.displayTime = self.displayTime - (1 * dt)
         end
     else
-        self.textElement.angle = math.lerpAngle(self.textElement.angle, math.pi, self.angleLerpRate, dt)
+        self.textElement.angle = math.lerpAngle(self.textElement.angle, math.pi - 0.001, self.angleLerpRate, dt)
         self.textElement.scale.x = math.lerpDT(self.textElement.scale.x, 0, self.scaleLerpRate, dt)
         self.textElement.scale.y = math.lerpDT(self.textElement.scale.y, 0, self.scaleLerpRate, dt)
 
-        if self.textElement.scale.x < 0.01 and self.textElement.scale.y < 0.01 then
+        if self.textElement.scale.x < 0.001 and self.textElement.scale.y < 0.001 then
             self:destroy()
         end
     end
