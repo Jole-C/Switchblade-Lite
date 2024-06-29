@@ -1,9 +1,11 @@
-local bossState = require "src.objects.enemy.boss.bossstate"
+local bossAttack = require "src.objects.enemy.boss.bossattack"
 local laser = require "src.objects.enemy.boss.boss1.boss1laser"
 
-local laserFire = class({name = "Laser Fire", extends = bossState})
+local laserFire = class({name = "Laser Fire", extends = bossAttack})
 
 function laserFire:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
+    
     self.angleTurnRate = self.parameters.angleTurnRate or 0.025
     self.returnState = self.parameters.returnState
     self.laserReference = nil
