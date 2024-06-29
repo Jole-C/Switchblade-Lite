@@ -129,13 +129,11 @@ function enemyBase:cleanup(destroyReason)
         game.manager:setFreezeFrames(2)
     end
 
-    if currentGamestate.stageDirector then
+    if destroyReason ~= "autoDestruction" then
         currentGamestate.stageDirector:registerEnemyKill()
     end
 
-    if currentGamestate.enemyManager then
-        currentGamestate.enemyManager:unregisterEnemy(self)
-    end
+    currentGamestate.enemyManager:unregisterEnemy(self)
 end
 
 return enemyBase
