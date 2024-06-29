@@ -165,6 +165,12 @@ local states =
                             },
                             returnState = "movement"
                         }),
+                        laserFire(
+                        {
+                            angleTurnRate = 0.025,
+                            laserWindupTime = 0.025,
+                            returnState = "movement"
+                        }),
                         randomFire(
                         {
                             enemiesToFire = 15,
@@ -191,6 +197,7 @@ local states =
                     {
                         3,
                         4,
+                        3,
                         3,
                         2,
                     }
