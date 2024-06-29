@@ -52,6 +52,7 @@ function gameManager:new()
         centerCamera = false,
         playerHealthRingSizePercentage = 100,
         showPlayerHealth = false,
+        disableTimeAlerts = false,
     }
 
     self.unlocks = {

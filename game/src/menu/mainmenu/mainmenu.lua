@@ -132,8 +132,10 @@ function mainMenu:new()
                 toggleButton("Center Camera", "fontUI", 10, 55, 20, 55, "centerCamera", 260),
 
                 toggleButton("Show FPS", "fontUI", 10, 70, 20, 70, "showFPS", 260),
+
+                toggleButton("Disable time alert", "fontUI", 10, 85, 20, 85, "disableTimeAlerts", 260),
     
-                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
+                textButton("back", "fontUI", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)

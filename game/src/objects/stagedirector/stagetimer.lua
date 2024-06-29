@@ -60,20 +60,22 @@ function stageTimer:update(dt)
         end
     end    
     
-    for _, timeAlert in pairs(self.timeAlertText) do
-        local minutes = self.timeMinutes
-        local seconds = math.floor(self.timeSeconds)
+    if game.manager:getOption("disableTimeAlerts") then
+        for _, timeAlert in pairs(self.timeAlertText) do
+            local minutes = self.timeMinutes
+            local seconds = math.floor(self.timeSeconds)
 
-        if self:getAbsoluteTime(minutes, seconds) > self:getAbsoluteTime(timeAlert.time.minutes, timeAlert.time.seconds) then
-            timeAlert.displayed = false
-        end
-        
-        if minutes == timeAlert.time.minutes and seconds == timeAlert.time.seconds and timeAlert.displayed == false then
-            timeAlert.displayed = true
+            if self:getAbsoluteTime(minutes, seconds) > self:getAbsoluteTime(timeAlert.time.minutes, timeAlert.time.seconds) then
+                timeAlert.displayed = false
+            end
             
-            local text = alertObject(timeAlert.text, self.alertDisplayTime, self.alertDisplaySpeed)
-            gameHelper:addGameObject(text)
-            gameHelper:screenShake(0.1)
+            if minutes == timeAlert.time.minutes and seconds == timeAlert.time.seconds and timeAlert.displayed == false then
+                timeAlert.displayed = true
+                
+                local text = alertObject(timeAlert.text, self.alertDisplayTime, self.alertDisplaySpeed)
+                gameHelper:addGameObject(text)
+                gameHelper:screenShake(0.1)
+            end
         end
     end
 end
