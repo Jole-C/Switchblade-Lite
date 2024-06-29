@@ -31,10 +31,10 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.46"
+    self.expectedOptionsVersion = "0.47"
     
     self.options = {
-        OPTIONS_VERSION = "0.46",
+        OPTIONS_VERSION = self.expectedOptionsVersion,
         enableFullscreen = true,
         enableBackground = true,
         fadingPercentage = 10,
