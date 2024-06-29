@@ -4,6 +4,18 @@ function playerManager:new()
     self.playerPosition = vec2(0, 0)
     self.playerReference = nil
     self.deathReason = ""
+
+    self.runInfo =
+    {
+        deathReason = "NO REASON",
+        time =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
+        score = 0,
+        kills = 0,
+    }
 end
 
 function playerManager:spawnPlayer(x, y)
@@ -13,8 +25,18 @@ function playerManager:spawnPlayer(x, y)
     return newPlayer
 end
 
-function playerManager:setPlayerDeathReason(deathReason)
-    self.deathReason = deathReason
+function playerManager:resetRunInfo()
+    self.runInfo =
+    {
+        deathReason = "NO REASON",
+        time =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
+        score = 0,
+        kills = 0,
+    }
 end
 
 function playerManager:destroyPlayer(x, y)
