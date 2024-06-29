@@ -64,8 +64,11 @@ function cameraManager:update(dt)
     self.cameraPosition.y = math.lerpDT(self.cameraPosition.y, self.cameraTargetPosition.y, self.cameraLerpSpeed, dt)
 
     game.camera:setPosition(self.cameraPosition.x + self.cameraShakeOffset.x, self.cameraPosition.y + self.cameraShakeOffset.y)
-    game.camera:setAngle(0 + math.rad(math.random(-self.cameraShakeAngleRange, self.cameraShakeAngleRange)) * self.screenShakeAmount)
 
+    if game.manager:getOption("disableAngleshake") == false then
+        game.camera:setAngle(0 + math.rad(math.random(-self.cameraShakeAngleRange, self.cameraShakeAngleRange)) * self.screenShakeAmount)
+    end
+    
     game.camera:setScale(self.zoomAmount)
     self.zoomAmount = math.lerpDT(self.zoomAmount, self.targetZoomAmount, self.zoomRate, dt)
 end

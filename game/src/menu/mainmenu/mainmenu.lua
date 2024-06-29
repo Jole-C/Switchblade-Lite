@@ -160,7 +160,9 @@ function mainMenu:new()
 
                 slider("Shake Intensity", "fontUI",  50, 9999, 10, 70, "screenshakeIntensity"),
 
-                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
+                toggleButton("Disable Angle Shake", "fontUI", 10, 85, 20, 85, "disableAngleshake", 260),
+
+                textButton("back", "fontUI", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)

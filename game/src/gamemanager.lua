@@ -31,7 +31,7 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.47"
+    self.expectedOptionsVersion = "0.48"
     
     self.options = {
         OPTIONS_VERSION = self.expectedOptionsVersion,
@@ -47,6 +47,7 @@ function gameManager:new()
         showFPS = false,
         limitPaletteSwaps = false,
         disableScreenshake = false,
+        disableAngleshake = false,
         screenshakeIntensity = 150,
         disableFreeze = false,
         centerCamera = false,
