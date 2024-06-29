@@ -46,6 +46,7 @@ function stageDirector:new(levelDefinition)
     self.elapsedWaveTime = 0
 
     self.enemyKills = 0
+    self.totalKills = 0
     self.bossReference = nil
     self.minimumEnemyKills = 0
     self.nextWaveConditions = {
@@ -124,7 +125,8 @@ function stageDirector:update(dt)
 
     if self.timer.timeSeconds <= 0 and self.timer.timeMinutes <= 0 then
         player:destroy()
-        game.playerManager:setPlayerDeathReason("You ran out of time!")
+        game.playerManager.runInfo.deathReason = "You ran out of time!"
+
         self:setTimerPaused(true)
     end
 
@@ -389,6 +391,7 @@ end
 
 function stageDirector:registerEnemyKill()
     self.enemyKills = self.enemyKills + 1
+    self.totalKills = self.totalKills + 1
 end
 
 function stageDirector:draw()
@@ -417,6 +420,9 @@ end
 
 function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.debugText)
+    game.playerManager.runInfo.time.minutes = self.timer.totalMinutes
+    game.playerManager.runInfo.time.seconds = self.timer.totalSeconds
+    game.playerManager.runInfo.kills = self.totalKills
 end
 
 return stageDirector
