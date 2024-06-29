@@ -164,27 +164,35 @@ end
 function boss:switchAttack(attacksTable)
     assert(attacksTable ~= nil, "Attacks table is nil! Did you specify an attacks table in the state parameters?")
 
-    local bulletAttacks = {}
+    local numberOfEnemies = #gameHelper:getCurrentState().enemyManager.enemies
+    local tableToUse = attacksTable
+    local bulletAttacks = {
+        attackList = {},
+        attackWeights = {}
+    }
 
-    for i = 1, #attacksTable do
-        local attack = attacksTable.attackList[i]
+    if numberOfEnemies > 30 then
+        for i = 1, #attacksTable.attackList do
+            local attack = attacksTable.attackList[i]
+            local weight = attacksTable.attackWeights[i]
 
-        if attack.isBulletAttack then
-            table.insert(bulletAttacks,attacksTable[i])
-        end
-    end
-    
-    local state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
-
-    if #attacksTable > 1 then
-        if #gameHelper:getCurrentState().enemyManager.enemies > 30 then
-            state = tablex.pick_weighted_random(bulletAttacks.attackList, bulletAttacks.attackWeights)
-        else
-            while state == self.lastAttack do
-                state = tablex.pick_weighted_random(attacksTable.attackList, attacksTable.attackWeights)
-                self.lastAttack = state
+            if attack.isBulletAttack then
+                table.insert(bulletAttacks.attackList, attack)
+                table.insert(bulletAttacks.attackWeights, weight)
             end
         end
+        
+        tableToUse = bulletAttacks
+    end
+
+    local state = tablex.pick_weighted_random(tableToUse.attackList, tableToUse.attackWeights)
+
+    if #tableToUse.attackList > 1 then
+        while state == self.lastAttack do
+            state = tablex.pick_weighted_random(tableToUse.attackList, tableToUse.attackWeights)
+        end
+
+        self.lastAttack = state
     end
 
     self.currentState:exit(self)
