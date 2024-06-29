@@ -41,6 +41,7 @@ function gameoverMenu:new()
     self.textFadeRate = 0.1
 
     self.shaderTime = 0
+    self.backgroundShaderTime = 0
 
     self.tips = 
     {
@@ -48,7 +49,9 @@ function gameoverMenu:new()
         "Boosting into consecutive enemies reduces temperature for each enemy!",
         "Tippity tip",
         "Your health won't recharge while boosting or overheating, manage it well!",
-        "Boosting builds your temperature, boost for too long and you'll overheat!"
+        "Boosting builds your temperature, boost for too long and you'll overheat!",
+        "Bosses only take damage from bullets!",
+        "Only some enemies spawned by bosses drop ammo! They have a visual indicator."
     }
 
     self.tip = self.tips[math.random(1, #self.tips)]
@@ -89,6 +92,7 @@ function gameoverMenu:update(dt)
 
     local shaderSpeed = game.manager:getOption("speedPercentage") / 100
     self.shaderTime = self.shaderTime + (0.1 * shaderSpeed) * dt
+    self.backgroundShaderTime = self.backgroundShaderTime + (0.5 * shaderSpeed) * dt
 
     local angle = 2
     local warpScale = 0.1 + math.sin(self.shaderTime) * 0.3
@@ -105,7 +109,7 @@ function gameoverMenu:update(dt)
     self.foregroundShader:send("position", {0, 0})
     
     self.backgroundShader:send("resolution", resolution)
-    self.backgroundShader:send("time", self.shaderTime)
+    self.backgroundShader:send("time", self.backgroundShaderTime)
 
     local bgColour = game.manager.currentPalette.backgroundColour[1]
     self.backgroundShader:send("colour", {bgColour[1], bgColour[2], bgColour[3]})
