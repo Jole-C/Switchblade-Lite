@@ -13,7 +13,7 @@ function love.conf(t)
     t.console = false                  -- Attach a console (boolean, Windows only)
  
     t.window.title = "Switchblade" -- The window title (string)
-    t.window.icon = nil                -- Filepath to an image to use as the window's icon (string)
+    t.window.icon = "/assets/sprites/icon.png"                -- Filepath to an image to use as the window's icon (string)
     t.window.width = 320 * 4 -- The window width (number)
     t.window.height = 180 * 4 -- The window height (number)
     t.window.borderless = true        -- Remove all border visuals from the window (boolean)
