@@ -12,7 +12,7 @@ local levelDefinition =
         ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer"},
         ["charger"] = {enemyClass = charger, spriteName = "charger"},
         ["drone"] = {enemyClass = drone, spriteName = "drone"},
-        ["shielder"] = {enemyClass = shielder, spriteName = "wanderer"},
+        ["shielder"] = {enemyClass = shielder, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("warningSprite")},
         ["orbiter"] = {enemyClass = orbiter, spriteName = "orbiter"},
         ["boss"] = {enemyClass = boss}
     },

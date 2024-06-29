@@ -396,8 +396,10 @@ function game:setupResources()
 
         shielder = assetGroup(
         {
-            bodySprite = {path = "assets/sprites/enemy/wanderer.png", type = "Image"},
-            tailSprite = {path = "assets/sprites/enemy/wanderertail.png", type = "Image"}
+            bodySprite = {path = "assets/sprites/enemy/shieldereye.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/shieldertail.png", type = "Image"},
+            segmentSprite = {path = "assets/sprites/enemy/shieldersegment.png", type = "Image"},
+            warningSprite = {path = "assets/sprites/enemy/shielderwarning.png", type = "Image"},
         }),
 
         orbiter = assetGroup(
