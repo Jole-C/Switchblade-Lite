@@ -1,5 +1,7 @@
 local enemy = require "src.objects.enemy.enemy"
 local collider = require "src.collision.collider"
+local tail = require "src.objects.enemy.enemytail"
+local eye = require "src.objects.enemy.enemyeye"
 
 local shielder = class({name = "Shielder Enemy", extends = enemy})
 
@@ -14,6 +16,12 @@ function shielder:new(x, y)
     self.fleeTurnRate = 0.3
     self.shieldDistance = 80
     self.fleeDistance = 100
+    self.maxSegmentCloseTime = 1
+    self.segmentCloseTime = 0
+    self.segmentCloseRate = 0.1
+    self.maxSegmentOpenOffset = 10
+    self.segmentOpenOffset = self.maxSegmentOpenOffset
+    self.tailYOffset = 3
 
     -- Variables
     self.direction = vec2(30, 30)
@@ -22,15 +30,19 @@ function shielder:new(x, y)
     -- Components
     self.shader = game.resourceManager:getAsset("Enemy Assets"):get("enemyOutlineShader")
     self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("bodySprite")
+    self.segmentSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("segmentSprite")
+    self.tailSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("tailSprite")
+
+    self.tail = tail(self.tailSprite, x, y + self.tailYOffset, 15, 1)
+    self.eye = eye(x, y, 2, 2)
     
     self.collider = collider(colliderDefinitions.enemy, self)
-    gameHelper:getWorld():add(self.collider, x, y, 12, 12)
+    gameHelper:getWorld():add(self.collider, x, y, 18, 12)
 end
 
 function shielder:update(dt)
     enemy.update(self, dt)
 
-    -- Move the enemy to the player
     local playerReference = game.playerManager.playerReference
     local playerPosition = game.playerManager.playerPosition
 
@@ -68,7 +80,29 @@ function shielder:update(dt)
         end
     end
 
-    -- Update the collider
+    self.segmentCloseTime = self.segmentCloseTime - (1 * dt)
+
+    if self.segmentCloseTime > 0 then
+        self.segmentOpenOffset = math.lerpDT(self.segmentOpenOffset, 0, self.segmentCloseRate, dt)
+    else
+        self.segmentOpenOffset = math.lerpDT(self.segmentOpenOffset, self.maxSegmentOpenOffset, self.segmentCloseRate, dt)
+    end    
+    
+    if self.tail then
+        self.tail.tailSpritePosition.x = self.position.x
+        self.tail.tailSpritePosition.y = self.position.y + self.tailYOffset
+        self.tail.baseTailAngle = 4.7123 -- pi + pi / 2
+
+        self.tail:update(dt)
+    end
+
+    -- Update the eye
+    if self.eye then
+        self.eye.eyeBasePosition.x = self.position.x
+        self.eye.eyeBasePosition.y = self.position.y
+        self.eye:update()
+    end
+
     local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then
@@ -87,10 +121,13 @@ function shielder:draw()
         return
     end
 
+    if self.eye then
+        self.eye:draw()
+    end
+
     love.graphics.setColor(self.enemyColour)
 
     for _, enemy in pairs(self.shieldedEnemies) do
-
         if enemy then
             local x1 = self.position.x
             local y1 = self.position.y
@@ -107,11 +144,24 @@ function shielder:draw()
     yOffset = yOffset/2
 
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y, 0, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y, math.pi, 1, 1, 15, 6)
+
+    if self.tail then
+        self.tail:draw()
+    end
 
     self.shader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
     
     love.graphics.setShader(self.shader)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
+    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y, 0, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y, math.pi, 1, 1, 15, 6)
+
+    if self.tail then
+        self.tail:draw()
+    end
+    
     love.graphics.setShader()
 
     love.graphics.circle("line", self.position.x, self.position.y, self.shieldDistance)
@@ -125,6 +175,7 @@ function shielder:handleDamage(damageType, amount)
         return true
     end
 
+    self.segmentCloseTime = self.maxSegmentCloseTime
     return false
 end
 
