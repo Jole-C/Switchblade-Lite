@@ -167,6 +167,7 @@ local states =
                         }),
                         laserFire(
                         {
+                            isBulletAttack = true,
                             angleTurnRate = 0.025,
                             laserWindupTime = 0.025,
                             returnState = "movement"
@@ -297,6 +298,7 @@ local states =
                         }),
                         laserFire(
                         {
+                            isBulletAttack = true,
                             angleTurnRate = 0.025,
                             laserWindupTime = 0.025,
                             returnState = "movement"
@@ -462,6 +464,7 @@ local states =
                         }),
                         laserFire(
                         {
+                            isBulletAttack = true,
                             angleTurnRate = 0.025,
                             laserWindupTime = 0.025,
                             returnState = "movement"
