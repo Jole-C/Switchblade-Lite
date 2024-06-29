@@ -22,6 +22,7 @@ function cameraManager:new()
     self.shakeFadeAmount = 0.95
     
     self.cameraShakeRange = 32
+    self.cameraShakeAngleRange = 15
 
     self.targetZoomAmount = 1
     self.zoomAmount = 1
@@ -63,6 +64,7 @@ function cameraManager:update(dt)
     self.cameraPosition.y = math.lerpDT(self.cameraPosition.y, self.cameraTargetPosition.y, self.cameraLerpSpeed, dt)
 
     game.camera:setPosition(self.cameraPosition.x + self.cameraShakeOffset.x, self.cameraPosition.y + self.cameraShakeOffset.y)
+    game.camera:setAngle(0 + math.rad(math.random(-self.cameraShakeAngleRange, self.cameraShakeAngleRange)) * self.screenShakeAmount)
 
     game.camera:setScale(self.zoomAmount)
     self.zoomAmount = math.lerpDT(self.zoomAmount, self.targetZoomAmount, self.zoomRate, dt)
