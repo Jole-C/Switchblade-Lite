@@ -14,6 +14,8 @@ colliderDefinitions = require "src.collision.colliderdefinitions"
 local game = class({name = "Game"})
 
 function game:new()
+    math.randomseed(os.time())
+
     -- Set up the arena values
     self.arenaValues =
     {
@@ -514,6 +516,8 @@ function game:setupResources()
             bossHealth = {path = "assets/sprites/interface/bosshealth.png", type = "Image"},
             bossHealthOutline = {path = "assets/sprites/interface/bosshealthoutline.png", type = "Image"},
             bossEyeOutline = {path = "assets/sprites/interface/bosseyeoutline.png", type = "Image"},
+            gameover = {path = "assets/sprites/interface/gameover.png", type = "Image"},
+            gameoverOutline = {path = "assets/sprites/interface/gameoveroutline.png", type = "Image"},
         }),
 
         sounds = assetGroup(
@@ -523,10 +527,23 @@ function game:setupResources()
             timeSiren = {path = "assets/audio/sfx/timewarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             menuUp = {path = "assets/audio/sfx/menuup.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             menuDown = {path = "assets/audio/sfx/menudown.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            gameoverBlam = {path = "assets/audio/sfx/gameoverblam.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         shaders = assetGroup(
         {
+            maskShader = love.graphics.newShader([[
+                vec4 effect(vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
+                {
+                    if (Texel(texture, texCoords).xyz == vec3(0.0))
+                    {
+                        discard;
+                    }
+
+                    return vec4(1.0);
+                }
+            ]]),
+
             menuBoxShader = love.graphics.newShader([[
                 extern number angle;
                 extern number warpScale;
