@@ -312,11 +312,12 @@ function game:drawInterface()
     love.graphics.clear()
     self.interfaceRenderer:draw()
 
+    love.graphics.setFont(self.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
+    
     if self.manager:getOption("enableDebugMode") or self.manager:getOption("showFPS") then
         love.graphics.print(tostring(love.timer.getFPS()), 10, 250)
     end
 
-    love.graphics.setFont(self.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain"))
     love.graphics.setCanvas()
     love.graphics.setColor(1, 1, 1, 1)
 end
