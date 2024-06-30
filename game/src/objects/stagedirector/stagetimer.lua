@@ -62,7 +62,7 @@ function stageTimer:update(dt)
         end
     end    
     
-    if game.manager:getOption("disableTimeAlerts") then
+    if game.manager:getOption("disableTimeAlerts") == false then
         for _, timeAlert in pairs(self.timeAlertText) do
             local minutes = self.timeMinutes
             local seconds = math.floor(self.timeSeconds)
