@@ -505,7 +505,7 @@ function game:setupResources()
             fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-/", spacing = 1}},
             fontUI = {path = "assets/fonts/kenneyfuture.ttf", type = "Font", parameters = {size = 16}},
             fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 48}},
-            fontTime = {path = "assets/fonts/timefont.png", type = "Image Font", parameters = {glyphs = "0123456789:", spacing = 2}},
+            fontTime = {path = "assets/fonts/timefont.png", type = "Image Font", parameters = {glyphs = "0123456789:x", spacing = 2}},
             fontScore = {path = "assets/fonts/scorefont.png", type = "Image Font", parameters = {glyphs = "0123456789+", spacing = 1}}
         }),
 
