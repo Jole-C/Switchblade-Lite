@@ -538,6 +538,7 @@ function game:setupResources()
             scoreBlast = {path = "assets/audio/sfx/scoreblast.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             scoreBlastEnd = {path = "assets/audio/sfx/scoreblastend.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             victoryIntro = {path = "assets/audio/sfx/victoryintro.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            multiplierReset = {path = "assets/audio/sfx/multiplierreset.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         shaders = assetGroup(

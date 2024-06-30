@@ -39,6 +39,14 @@ function playerManager:update(dt)
     self.multiplierResetTime = self.multiplierResetTime - (1 * dt)
 
     if self.multiplierResetTime <= 0 then
+        if self.multiplierResetSound == nil then
+            self.multiplierResetSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("multiplierReset")
+        end
+
+        if self.scoreMultiplier > 1 then
+            self.multiplierResetSound:play()
+        end
+
         self.scoreMultiplier = 1
     end
 end
