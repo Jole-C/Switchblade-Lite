@@ -116,6 +116,7 @@ function player:new(x, y)
     self.overheatWarningSound = assets:get("sounds"):get("overheatWarning")
     self.overheatSound = assets:get("sounds"):get("shipOverheat")
     self.boostHitSound = assets:get("sounds"):get("boostHit")
+    self.wallHitSound = assets:get("sounds"):get("wallHit")
 
     self.cameraTarget = cameraTarget(self.position, 100)
     gameHelper:getCurrentState().cameraManager:addTarget(self.cameraTarget)
@@ -338,6 +339,7 @@ function player:updatePosition(dt)
             end
 
             self.velocity = self.velocity - (2 * self.velocity:dot(normal) * normal)
+            self.wallHitSound:play()
         end
     end
 
