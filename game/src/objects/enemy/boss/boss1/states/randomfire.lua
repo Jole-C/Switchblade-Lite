@@ -1,15 +1,18 @@
 local bossAttack = require "src.objects.enemy.boss.bossattack"
 local randomFire = class({name = "Random Fire", extends = bossAttack})
 
-function randomFire:enter(bossInstance)
-    bossAttack.enter(self, bossInstance)
+function randomFire:new(parameters)
+    self:super(parameters)
 
     self.enemiesToFire = self.parameters.enemiesToFire or 5
     self.maxAngle = self.parameters.maxAngle or 30
     self.returnState = self.parameters.returnState
+end
+
+function randomFire:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
 
     self.chosenEnemyFunction = self:chooseEnemy()
-
     bossInstance:setMandibleOpenAmount(1)
 end
 

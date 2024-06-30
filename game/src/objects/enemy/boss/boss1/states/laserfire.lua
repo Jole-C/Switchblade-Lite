@@ -3,21 +3,24 @@ local laser = require "src.objects.enemy.boss.boss1.boss1laser"
 
 local laserFire = class({name = "Laser Fire", extends = bossAttack})
 
-function laserFire:enter(bossInstance)
-    bossAttack.enter(self, bossInstance)
+function laserFire:new(parameters)
+    self:super(parameters)
     
     self.angleTurnRate = self.parameters.angleTurnRate or 0.025
     self.returnState = self.parameters.returnState
     self.laserReference = nil
     self.drawAbove = true
 
-    bossInstance:setMandibleOpenAmount(1)
+    self.laserFireSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserFire")
+    self.laserChargeEffect = game.particleManager:getEffect("Boss Intro Burst")
+end
+
+function laserFire:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
 
     self.laserChargeSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserCharge"):play()
-    self.laserFireSound = game.resourceManager:getAsset("Enemy Assets"):get("boss1"):get("sounds"):get("laserFire")
+    bossInstance:setMandibleOpenAmount(1)
     gameHelper:getCurrentState().cameraManager:zoom(1.5, 0.005)
-
-    self.laserChargeEffect = game.particleManager:getEffect("Boss Intro Burst")
 end
 
 function laserFire:update(dt, bossInstance)

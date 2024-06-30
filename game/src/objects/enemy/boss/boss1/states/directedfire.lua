@@ -1,19 +1,20 @@
 local bossAttack = require "src.objects.enemy.boss.bossattack"
-local charger = require "src.objects.enemy.charger"
-local sticker = require "src.objects.enemy.sticker"
 
 local fireDirected = class({name = "Fire Directed", extends = bossAttack})
 
-function fireDirected:enter(bossInstance)
-    bossAttack.enter(self, bossInstance)
+function fireDirected:new(parameters)
+    self:super(parameters)
     
     self.enemiesToFire = self.parameters.enemiesToFire or 5
     self.maxFireCooldown = self.parameters.maxFireCooldown or 0.5
-    self.fireCooldown = self.maxFireCooldown
     self.returnState = self.parameters.returnState
+end
 
+function fireDirected:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
+
+    self.fireCooldown = self.maxFireCooldown
     self.chosenEnemyFunction = self:chooseEnemy()
-    
     bossInstance:setMandibleOpenAmount(1)
 end
 

@@ -1,20 +1,22 @@
 local bossAttack = require "src.objects.enemy.boss.bossattack"
 local rotationFire = class({name = "Rotation Fire", extends = bossAttack})
 
-function rotationFire:enter(bossInstance)
-    bossAttack.enter(self, bossInstance)
+function rotationFire:new(parameters)
+    self:super(parameters)
 
     self.angleTurnSpeed = self.parameters.angleTurnSpeed or 3
     self.maxFireCooldown = self.parameters.maxFireCooldown or 0.1
     self.returnState = self.parameters.returnState
+end
+
+function rotationFire:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
+
+    self.chosenEnemyFunction = self:chooseEnemy()
+    bossInstance:setMandibleOpenAmount(1)
 
     self.targetAngle = bossInstance.angle + 2 * math.pi
     self.fireCooldown = self.maxFireCooldown
-    
-    self.chosenEnemyFunction = self:chooseEnemy()
-    
-    bossInstance:setMandibleOpenAmount(1)
-
     self.angle = bossInstance.angle
 end
 

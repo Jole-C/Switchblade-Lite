@@ -1,16 +1,20 @@
 local bossAttack = require "src.objects.enemy.boss.bossattack"
 local circleFire = class({name = "Circle Fire", extends = bossAttack})
 
-function circleFire:enter(bossInstance)
-    bossAttack.enter(self, bossInstance)
+function circleFire:new(parameters)
+    self:super(parameters)
     
     self.timesToRepeat = self.parameters.timesToRepeat or 5
     self.numberOfEnemies = self.parameters.numberOfEnemiesInCircle or 3
     self.maxFireCooldown = 0.5
-    self.fireCooldown = self.maxFireCooldown
     self.baseAngleIncrement = 2
     self.returnState = self.parameters.returnState
-    
+end
+
+function circleFire:enter(bossInstance)
+    bossAttack.enter(self, bossInstance)
+
+    self.fireCooldown = self.maxFireCooldown
     bossInstance:setMandibleOpenAmount(1)
 end
 
