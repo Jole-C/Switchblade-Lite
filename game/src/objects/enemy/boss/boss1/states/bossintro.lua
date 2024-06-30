@@ -42,6 +42,12 @@ function bossIntro:update(dt, bossInstance)
         gameHelper:getCurrentState().cameraManager:zoom(1, 0.1)
         gameHelper:getCurrentState().stageDirector:setTimerPaused(false)
     end
+
+    local player = game.playerManager.playerReference
+
+    if player then
+        player:setInvulnerable()
+    end
 end
 
 function bossIntro:draw()
