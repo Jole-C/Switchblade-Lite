@@ -22,6 +22,7 @@ function shielder:new(x, y)
     self.maxSegmentOpenOffset = 10
     self.segmentOpenOffset = self.maxSegmentOpenOffset
     self.tailYOffset = 3
+    self.score = 500
 
     -- Variables
     self.direction = vec2(30, 30)
@@ -42,6 +43,7 @@ end
 
 function shielder:update(dt)
     enemy.update(self, dt)
+    self.multiplierToApply = game.playerManager.scoreMultiplier
 
     local playerReference = game.playerManager.playerReference
     local playerPosition = game.playerManager.playerPosition
