@@ -9,6 +9,7 @@ function logo:new()
     self.logoSpriteSwitch = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("logoTextSwitch")
     self.logoSpriteBlade = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("logoTextBlade")
     self.shipSprite = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("logoShip")
+    self.boostSound = game.resourceManager:getAsset("Player Assets"):get("sounds"):get("boost"):play()
 
     self.inShipIntro = true
 
