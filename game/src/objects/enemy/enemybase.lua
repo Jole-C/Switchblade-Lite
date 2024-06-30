@@ -26,6 +26,10 @@ function enemyBase:new(x, y)
     end
 end
 
+function enemyBase:addScore(score, multiplier)
+    gameHelper:addGameObject(scoreObject(self.position.x, self.position.y, score, multiplier))
+end
+
 function enemyBase:update(dt)
     if self.isInvulnerable == true then
         self.enemyColour = {1, 1, 1, 1}
@@ -143,7 +147,7 @@ function enemyBase:cleanup(destroyReason)
 
     if destroyReason ~= "autoDestruction" then
         currentGamestate.stageDirector:registerEnemyKill()
-        gameHelper:addGameObject(scoreObject(self.position.x, self.position.y, self.score, self.multiplierToApply))
+        self:addScore(self.score, self.multiplierToApply)
     end
 
     currentGamestate.enemyManager:unregisterEnemy(self)
