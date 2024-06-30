@@ -586,7 +586,8 @@ function player:onHit(damage)
     end
 
     damage = damage or 1
-
+    game.playerManager:resetMultiplier()
+    
     self.health = self.health - damage
     self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
 
