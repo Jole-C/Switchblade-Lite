@@ -42,13 +42,15 @@ function stageTimer:update(dt)
         if self.timeSeconds <= 0 then
             self.timeSeconds = 60
             self.timeMinutes = self.timeMinutes - 1
-            
-            self.totalSeconds = 0
-            self.totalMinutes = self.totalMinutes + 1
         end
 
         self.timeSeconds = self.timeSeconds - (1 * dt)
         self.totalSeconds = self.totalSeconds + (1 * dt)
+
+        if self.totalSeconds > 59 then
+            self.totalSeconds = 0
+            self.totalMinutes = self.totalMinutes + 1
+        end
 
         if self.timeMinutes <= 0 and self.timeSeconds <= 10 then
             self.lowTimeWarningCooldown = self.lowTimeWarningCooldown - (1 * dt)
@@ -91,6 +93,13 @@ end
 
 function stageTimer:getAbsoluteTime(minutes, seconds)
     return (minutes * 60) + math.floor(seconds)
+end
+
+function stageTimer:getRelativeTime(seconds)
+    local parsedMinutes = (seconds % 3600) / 60
+    local parsedSeconds = seconds % 60
+
+    return parsedSeconds, parsedMinutes
 end
 
 function stageTimer:setTimerPaused(isPaused)
