@@ -365,6 +365,7 @@ function boss1:handleDamage(damageType, amount)
     if damageType == "bullet" then
         if self.isShielded == false then
             self.phaseHealth = self.phaseHealth - amount
+            self:addScore(self.bossHitScore, game.playerManager.scoreMultiplier)
             return true
         end
     end
