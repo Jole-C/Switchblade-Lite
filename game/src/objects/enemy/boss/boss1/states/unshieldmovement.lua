@@ -45,7 +45,7 @@ function unshieldMovement:update(dt, bossInstance)
             bossInstance:setShielded(true)
             bossInstance:switchState(self.returnState)
             bossInstance.hurtSound:play()
-            game.playerManager.setMultiplierPaused(true)
+            game.playerManager:setMultiplierPaused(true)
         end
     end
 end

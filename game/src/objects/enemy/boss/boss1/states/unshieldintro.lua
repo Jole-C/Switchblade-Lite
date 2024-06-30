@@ -13,7 +13,7 @@ function unshieldIntro:enter(bossInstance)
     
     bossInstance:playSound()
     gameHelper:getCurrentState().stageDirector:setTimerPaused(false)
-    game.playerManager.setMultiplierPaused(false)
+    game.playerManager:setMultiplierPaused(false)
 end
 
 return unshieldIntro
