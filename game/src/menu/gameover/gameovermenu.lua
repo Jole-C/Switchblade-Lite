@@ -191,7 +191,8 @@ function gameoverMenu:draw()
         string = string.."score: "..game.playerManager.runInfo.score.."\n"
         string = string.."kills: "..game.playerManager.runInfo.kills.."\n"
         
-        love.graphics.setColor(1, 1, 1, self.textAlpha)
+        local colour = game.manager.currentPalette.uiColour
+        love.graphics.setColor(colour[1], colour[2], colour[3], self.textAlpha)
         love.graphics.setFont(self.infoFont)
         love.graphics.printf(string, 0, 120, 480, "center")
 
