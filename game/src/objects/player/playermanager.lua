@@ -33,6 +33,7 @@ function playerManager:update(dt)
 
         if self.playerReference.health <= 0 or self.playerReference.markedForDelete then
             self.playerReference = nil
+            return
         end
     end
 
