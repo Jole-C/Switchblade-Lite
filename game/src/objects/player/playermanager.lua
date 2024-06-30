@@ -5,6 +5,10 @@ function playerManager:new()
     self.playerReference = nil
     self.deathReason = ""
 
+    self.scoreMultiplier = 1
+    self.maxMultiplierResetTime = 3
+    self.multiplierResetTime = self.maxMultiplierResetTime
+
     self.runInfo =
     {
         deathReason = "NO REASON",
@@ -21,6 +25,22 @@ function playerManager:new()
         score = 0,
         kills = 0,
     }
+end
+
+function playerManager:update(dt)
+    if self.playerReference then
+        self.playerPosition = self.playerReference.position
+
+        if self.playerReference.health <= 0 or self.playerReference.markedForDelete then
+            self.playerReference = nil
+        end
+    end
+
+    self.multiplierResetTime = self.multiplierResetTime - (1 * dt)
+
+    if self.multiplierResetTime <= 0 then
+        self.scoreMultiplier = 1
+    end
 end
 
 function playerManager:spawnPlayer(x, y)
@@ -55,14 +75,13 @@ function playerManager:doesPlayerExist()
     return self.playerReference ~= nil
 end
 
-function playerManager:update()
-    if self.playerReference then
-        self.playerPosition = self.playerReference.position
+function playerManager:addScore(score, multiplier)
+    self.runInfo.score = self.runInfo.score + (score * multiplier)
+end
 
-        if self.playerReference.health <= 0 or self.playerReference.markedForDelete then
-            self.playerReference = nil
-        end
-    end
+function playerManager:incrementMultiplier()
+    self.scoreMultiplier = self.scoreMultiplier + 1
+    self.multiplierResetTime = self.maxMultiplierResetTime
 end
 
 return playerManager

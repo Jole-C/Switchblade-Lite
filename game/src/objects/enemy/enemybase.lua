@@ -1,4 +1,6 @@
 local gameObject = require "src.objects.gameobject"
+local scoreObject = require "src.objects.scoreindicator"
+
 local enemyBase = class({name = "Enemy Base", extends = gameObject})
 
 function enemyBase:new(x, y)
@@ -6,6 +8,8 @@ function enemyBase:new(x, y)
 
     self.health = 1
     self.maxInvulnerableTime = 0.15
+    self.score = 100
+    self.multiplierToApply = 1
 
     self.restoreAmmo = true
 
@@ -100,6 +104,14 @@ function enemyBase:onHit(damageType, amount)
     local tookDamage = self:handleDamage(damageType, amount)
 
     if self.health <= 0 then
+        if damageType == "bullet" then
+            self.multiplierToApply = game.playerManager.scoreMultiplier
+        end
+
+        if damageType == "boost" then
+            game.playerManager:incrementMultiplier()
+        end
+        
         self:destroy()
         
         return tookDamage
@@ -131,6 +143,7 @@ function enemyBase:cleanup(destroyReason)
 
     if destroyReason ~= "autoDestruction" then
         currentGamestate.stageDirector:registerEnemyKill()
+        gameHelper:addGameObject(scoreObject(self.position.x, self.position.y, self.score, self.multiplierToApply))
     end
 
     currentGamestate.enemyManager:unregisterEnemy(self)
