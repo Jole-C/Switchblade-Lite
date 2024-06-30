@@ -13,6 +13,9 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 3
     self.maxSeconds = 30
+    self.bossMinutes = 0
+    self.bossSeconds = 0
+
     self.maxWaveTransitionTime = 1
     self.secondsBetweenTextChange = 0.5
     self.enemySpawnTime = 2
@@ -191,7 +194,16 @@ function stageDirector:update(dt)
 
                 if arena.outroComplete == true then
                     game.transitionManager:doTransition("victoryState")
+                    game.playerManager.runInfo.bossTime.minutes = self.bossMinutes
+                    game.playerManager.runInfo.bossTime.seconds = self.bossSeconds
                 end
+            end
+        else
+            self.bossSeconds = self.bossSeconds + (1 * dt)
+
+            if self.bossSeconds > 59 then
+                self.bossMinutes = self.bossMinutes + 1
+                self.bossSeconds = 0
             end
         end
     end

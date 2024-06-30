@@ -13,6 +13,11 @@ function playerManager:new()
             minutes = 0,
             seconds = 0,
         },
+        bossTime =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
         score = 0,
         kills = 0,
     }
