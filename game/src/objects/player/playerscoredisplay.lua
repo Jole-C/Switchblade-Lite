@@ -15,8 +15,9 @@ function playerScore:draw()
     love.graphics.setFont(self.font)
     love.graphics.setColor(game.manager.currentPalette.uiColour)
 
-    local scoreString = string.format("%09d", game.playerManager.runInfo.score)
-    love.graphics.printf(tostring(scoreString), 0, 8, 480, "right")
+    local scoreString = string.format("%07d", game.playerManager.runInfo.score)
+    local multiplier = game.playerManager.scoreMultiplier
+    love.graphics.printf(tostring(multiplier).."x".." "..tostring(scoreString), 0, 8, 480, "right")
     
     local t = game.playerManager.multiplierResetTime / game.playerManager.maxMultiplierResetTime
     local rectWidth = math.lerp(0, self.multiplierLineLength, math.clamp(t, 0, 1))
