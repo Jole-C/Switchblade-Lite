@@ -1,8 +1,11 @@
 local explosion = require "src.objects.bullet.explosion"
+local scoreObject = require "src.objects.scoreindicator"
+
 local playerExplosion = class({name = "Player Explosion", extends = explosion})
 
 function playerExplosion:new(x, y, radius, damage)
     self:super(x, y, radius, damage, "line", game.manager.currentPalette.playerColour)
+    gameHelper:addGameObject(scoreObject(self.position.x, self.position.y, 1500, game.playerManager.scoreMultiplier))
 end
 
 function playerExplosion:handleExplosion()
