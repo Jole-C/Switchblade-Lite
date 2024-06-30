@@ -8,6 +8,7 @@ function playerManager:new()
     self.scoreMultiplier = 1
     self.maxMultiplierResetTime = 3
     self.multiplierResetTime = self.maxMultiplierResetTime
+    self.multiplierPaused = false
 
     self.runInfo =
     {
@@ -35,6 +36,10 @@ function playerManager:update(dt)
             self.playerReference = nil
             return
         end
+    end
+
+    if self.multiplierPaused then
+        return
     end
 
     self.multiplierResetTime = self.multiplierResetTime - (1 * dt)
@@ -73,7 +78,11 @@ function playerManager:resetRunInfo()
     }
 end
 
-function playerManager:destroyPlayer(x, y)
+function playerManager:setMultiplierPaused(multiplierPaused)
+    self.multiplierPaused = multiplierPaused
+end
+
+function playerManager:destroyPlayer()
     if self.playerReference then
         self.playerReference:destroy()
         self.playerReference = nil
