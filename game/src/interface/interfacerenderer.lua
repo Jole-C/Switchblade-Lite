@@ -43,7 +43,7 @@ function interfaceRenderer:draw()
     for i = 1, #self.hudElements do
         local element = self.hudElements[i]
 
-        if element and element.draw then
+        if element and element.draw and element.enabled then
             element:draw()
         end
     end

@@ -57,13 +57,23 @@ function menu:update(dt)
     end
 
     -- Execute the selected button when pressed
-    if game.input:pressed("select") then
+    if game.input:pressed("select") and selectedElement.enabled then
         selectedElement:execute()
     end
 end
 
 function menu:draw()
 
+end
+
+function menu:setElementsEnabled(enabled)
+    for i = 1, #self.elements do
+        local element = self.elements[i]
+        
+        if element then
+            element.enabled = enabled
+        end
+    end
 end
 
 function menu:wrapSelectionIndex()
