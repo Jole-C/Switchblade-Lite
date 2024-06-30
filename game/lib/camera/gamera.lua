@@ -105,6 +105,13 @@ function gamera:setWindow(l,t,w,h)
   adjustPosition(self)
 end
 
+function gamera:reset()
+  self:setWorld(0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
+  self:setPosition(game.arenaValues.screenWidth/2, game.arenaValues.screenHeight/2)
+  self:setScale(1)
+  self:setAngle(0)
+end
+
 function gamera:setPosition(x,y)
   checkNumber(x, "x")
   checkNumber(y, "y")
