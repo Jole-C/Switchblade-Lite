@@ -521,6 +521,8 @@ function game:setupResources()
             bossEyeOutline = {path = "assets/sprites/interface/bosseyeoutline.png", type = "Image"},
             gameover = {path = "assets/sprites/interface/gameover.png", type = "Image"},
             gameoverOutline = {path = "assets/sprites/interface/gameoveroutline.png", type = "Image"},
+            victory = {path = "assets/sprites/interface/victory.png", type = "Image"},
+            victoryOutline = {path = "assets/sprites/interface/victoryoutline.png", type = "Image"},
         }),
 
         sounds = assetGroup(
@@ -531,6 +533,9 @@ function game:setupResources()
             menuUp = {path = "assets/audio/sfx/menuup.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             menuDown = {path = "assets/audio/sfx/menudown.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             gameoverBlam = {path = "assets/audio/sfx/gameoverblam.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            scoreBlast = {path = "assets/audio/sfx/scoreblast.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            scoreBlastEnd = {path = "assets/audio/sfx/scoreblastend.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            victoryIntro = {path = "assets/audio/sfx/victoryintro.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         shaders = assetGroup(
