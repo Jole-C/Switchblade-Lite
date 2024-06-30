@@ -2,8 +2,6 @@ local hudElement require "src.interface.hudelement"
 local textElement = class({name = "Text", extends = hudElement})
 
 function textElement:new(text, font, textAlign, x, y, width, angle, scaleX, scaleY, centerText)
-    self:super()
-
     self.text = text
     self.position = vec2(x, y)
     self.textAlign = textAlign
@@ -12,6 +10,7 @@ function textElement:new(text, font, textAlign, x, y, width, angle, scaleX, scal
     self.angle = angle or 0
     self.scale = vec2(scaleX or 1, scaleY or 1)
     self.centerText = centerText or false
+    self.enabled = true
 end
 
 function textElement:draw()

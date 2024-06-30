@@ -4,6 +4,8 @@ local eye = require "src.objects.enemy.enemyeye"
 local bossHealthBar = class({name = "Boss Health Bar", extends = hudElement})
 
 function bossHealthBar:new(bossInstance, name, subtitle)
+    self:super()
+    
     self.bossName = name or "NAME"
     self.bossSubtitle = subtitle or "Subtitle"
 

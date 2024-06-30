@@ -2,6 +2,8 @@ local hudElement = require "src.interface.hudelement"
 local bossIntroCard = class({name = "Boss Intro Card", extends = hudElement})
 
 function bossIntroCard:new(name, subtitle)
+    self:super()
+    
     self.name = name
     self.subtitle = subtitle
     self.textLerpSpeed = 0.1
