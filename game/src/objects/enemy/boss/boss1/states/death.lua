@@ -6,6 +6,8 @@ function shieldOutro:enter(bossInstance)
     self.timeBetweenExplosions = 0
     self.maxTimeBetweenExplosions = 0.3
     self.maxExplosionDistanceOffset = 50
+    self.numberOfBursts = 5
+    self.explosionRadius = 300
     self.startingPosition = bossInstance.position
     gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
     game.playerManager:setMultiplierPaused(true)
@@ -25,15 +27,19 @@ function shieldOutro:update(dt, bossInstance)
 
         local angle = math.rad(math.random(0, 360))
         local offset = math.random(-self.maxExplosionDistanceOffset, self.maxExplosionDistanceOffset)
-        local offsetVector = vec2(math.cos(angle) * offset, math.sin(angle) * offset)
+        local offsetVector = vec2(math.cos(angle), math.sin(angle))
 
-        bossInstance.position = self.startingPosition + offsetVector
+        bossInstance.position = self.startingPosition + offsetVector * offset
 
         self.numberOfExplosions = self.numberOfExplosions - 1
         
         bossInstance.angle = angle
 
-        game.particleManager:burstEffect("Explosion", 300, bossInstance.position + offsetVector / 3)
+        for i = 1, self.numberOfBursts do
+            game.particleManager:burstEffect("Explosion", 50, self.startingPosition + offsetVector * math.random(-self.explosionRadius, self.explosionRadius))
+        end
+
+        game.particleManager:burstEffect("Explosion", 100, bossInstance.position)
 
         bossInstance:playExplosionSound()
     end
