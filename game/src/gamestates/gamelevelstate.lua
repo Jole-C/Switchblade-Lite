@@ -12,6 +12,7 @@ function gameLevelState:enter()
     game.musicManager:getTrack("bossMusic"):stop()
     game.musicManager:getTrack("levelMusic"):play(1)
     game.playerManager:resetRunInfo()
+    game.playerManager:resetMultiplier(false)
     
     game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
 

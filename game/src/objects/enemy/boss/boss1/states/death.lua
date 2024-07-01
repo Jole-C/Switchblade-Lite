@@ -4,11 +4,13 @@ local shieldOutro = class({name = "Shield Outro", extends = bossState})
 function shieldOutro:enter(bossInstance)
     self.numberOfExplosions = 25
     self.timeBetweenExplosions = 0
-    self.maxTimeBetweenExplosions = 0.7
+    self.maxTimeBetweenExplosions = 0.3
     self.maxExplosionDistanceOffset = 50
     self.startingPosition = bossInstance.position
     gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
     game.playerManager:setMultiplierPaused(true)
+    game.musicManager:getTrack("bossMusic"):stop()
+    bossInstance.deathSound:play()
 end
 
 function shieldOutro:update(dt, bossInstance)

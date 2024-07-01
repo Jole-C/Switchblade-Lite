@@ -61,6 +61,7 @@ function game:new()
 
     self.musicManager:addTrack(
     {
+        {sound = self.resourceManager:getAsset("Music"):get("boss"):get("intro"), loopCount = 1, loopPermanent = false},
         {sound = self.resourceManager:getAsset("Music"):get("boss"):get("main"), loopCount = 1, loopPermanent = true},
     }, "bossMusic")
 
@@ -350,7 +351,9 @@ function game:setupResources()
 
         boss = assetGroup(
         {
-            main = {path = "assets/audio/music/boss.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+            intro = {path = "assets/audio/music/bossintro.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+            main = {path = "assets/audio/music/bossloop.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+            dead = {path = "assets/audio/music/bossend.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
         })
     }), "Music")
 

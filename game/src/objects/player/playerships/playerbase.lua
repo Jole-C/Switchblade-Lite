@@ -65,6 +65,7 @@ function player:new(x, y)
     self.shipKnockbackForce = self.shipKnockbackForce or 10
     self.fireOffset = self.fireOffset or 10
     self.boostAmmoIncrement = self.boostAmmoIncrement or 5
+    self.isShooting = false
     
     -- Ship variables
     self.health = self.maxHealth
@@ -205,6 +206,9 @@ function player:updateShipShooting(dt, movementDirection)
         gameHelper:screenShake(0.05)
         
         self.ammo = self.ammo - 1
+        self.isShooting = true
+    else
+        self.isShooting = false
     end
 end
 

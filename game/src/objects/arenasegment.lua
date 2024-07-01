@@ -5,6 +5,7 @@ function arenaSegment:new(x, y, radius)
     self:super(x, y)
 
     self.radius = radius
+    self.minRadius = radius/2
 
     self.segmentChanges = {}
     self.changeLerpSpeed = 0
@@ -30,6 +31,7 @@ function arenaSegment:update(dt)
 
             if math.abs(change.newRadius - self.radius) < 3 then
                 table.remove(self.segmentChanges, i)
+                self.minRadius = self.radius / 2
             end
         elseif changeType == "reset" then
             self.radius = math.lerpDT(self.radius, self.originRadius, self.changeLerpSpeed, dt)
@@ -39,11 +41,21 @@ function arenaSegment:update(dt)
             if math.abs(self.radius - self.originRadius) < 3 and (self.originPosition - self.position):length() < 3 then
                 table.remove(self.segmentChanges, i)
             end
+        elseif changeType == "shrink" then
+            self.radius = math.lerpDT(self.radius, self.minRadius, self.changeLerpSpeed, dt)
+
+            if math.abs(self.radius - self.minRadius) < 3 then
+                table.remove(self.segmentChanges, i)
+            end
         end
     end
 end
 
 function arenaSegment:addChange(newChangeType)
+    if newChangeType.changeType == "reset" then
+        self.segmentChanges = {}
+    end
+    
     table.insert(self.segmentChanges, newChangeType)
 end
 
