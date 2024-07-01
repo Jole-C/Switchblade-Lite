@@ -34,6 +34,7 @@ function boss:new(x, y)
 
     self.explosionSounds = game.resourceManager:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("midExplosion")
     self.explosionSoundEnd = game.resourceManager:getAsset("Enemy Assets"):get("bossExplosionSounds"):get("endExplosion")
+    self.deathSound = game.resourceManager:getAsset("Music"):get("boss"):get("dead")
 
     self.healthElement = bossHealthBar(self, self.bossName, self.bossSubtitle)
     game.interfaceRenderer:addHudElement(self.healthElement)
