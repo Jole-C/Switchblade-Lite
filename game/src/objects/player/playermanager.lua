@@ -7,7 +7,7 @@ function playerManager:new()
 
     self.scoreMultiplier = 1
     self.maxMultiplierResetTime = 3
-    self.multiplierResetTime = self.maxMultiplierResetTime
+    self.multiplierResetTime = 0
     self.multiplierPaused = false
 
     self.runInfo =
@@ -49,12 +49,12 @@ function playerManager:update(dt)
     end
 end
 
-function playerManager:resetMultiplier()
+function playerManager:resetMultiplier(playSound)
     if self.multiplierResetSound == nil then
         self.multiplierResetSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("multiplierReset")
     end
 
-    if self.scoreMultiplier > 1 then
+    if self.scoreMultiplier > 1 and playSound then
         self.multiplierResetSound:play()
     end
 
