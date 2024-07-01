@@ -36,7 +36,6 @@ function exploder:update(dt)
 
         if self.fuseTime <= 0 then
             self:destroy("autoDestruction")
-            gameHelper:addGameObject(wave(self.position.x, self.position.y, self.waveWidth, self.waveScaleSpeed))
         end
     end
     
@@ -68,6 +67,12 @@ function exploder:cleanup(destroyReason)
     if world and world:hasItem(self.collider) then
         gameHelper:getWorld():remove(self.collider)
     end
+
+    self:explosion()
+end
+
+function exploder:explosion()
+    gameHelper:addGameObject(wave(self.position.x, self.position.y, self.waveWidth, self.waveScaleSpeed))
 end
 
 return exploder
