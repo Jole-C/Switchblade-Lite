@@ -10,8 +10,10 @@ function hider:new(x, y)
     self.maxTimeBetweenWaves = 1
     self.waveWidth = 10
     self.waveScaleSpeed = 200
+    self.maxRevealGracePeriod = 0.25
     
     self.timeBetweenWaves = 0
+    self.revealGracePeriod = self.maxRevealGracePeriod
     self.revealed = false
 
     self.collider = collider(colliderDefinitions.enemy, self)
@@ -29,9 +31,14 @@ function hider:update(dt)
 
     if player.isBoosting or player.isShooting then
         self.revealed = true
+        self.revealGracePeriod = self.maxRevealGracePeriod
     else
-        self.timeBetweenWaves = self.maxTimeBetweenWaves
-        self.revealed = false
+        self.revealGracePeriod = self.revealGracePeriod - (1 * dt)
+        
+        if self.revealGracePeriod <= 0 then
+            self.timeBetweenWaves = self.maxTimeBetweenWaves
+            self.revealed = false
+        end
     end
 
     if self.revealed == true then
