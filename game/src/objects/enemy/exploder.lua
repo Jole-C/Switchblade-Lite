@@ -12,7 +12,7 @@ function exploder:new(x, y)
     
     self.fuseTime = 2
     self.fuseRadius = 100
-    self.waveRadius = 30
+    self.waveWidth = 30
     self.waveScaleSpeed = 100
 
     self.isFused = false
@@ -36,7 +36,7 @@ function exploder:update(dt)
 
         if self.fuseTime <= 0 then
             self:destroy("autoDestruction")
-            gameHelper:addGameObject(wave(self.position.x, self.position.y, self.waveRadius, self.waveScaleSpeed))
+            gameHelper:addGameObject(wave(self.position.x, self.position.y, self.waveWidth, self.waveScaleSpeed))
         end
     end
     
