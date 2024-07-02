@@ -29,7 +29,7 @@ end
 function enemyBase:addScore(score, multiplier, overridePosition)
     local position = self.position
 
-    if overridePosition.type and overridePosition:type() == "vec2" then
+    if overridePosition and overridePosition.type and overridePosition:type() == "vec2" then
         position = overridePosition
     end
 
