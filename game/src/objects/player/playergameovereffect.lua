@@ -14,6 +14,7 @@ function playerGameover:new(x, y, angle)
     self.playerExploded = false
 
     game.resourceManager:getAsset("Player Assets"):get("sounds"):get("deathTrigger"):play()
+    game.musicManager:pauseAllTracks(1)
 
     gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
 end

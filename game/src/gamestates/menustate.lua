@@ -4,8 +4,9 @@ local mainMenu = require "src.menu.mainmenu.mainmenu"
 local menuState = class({name = "Menu State", extends = gamestate})
 
 function menuState:enter()
-    game.musicManager:getTrack("levelMusic"):play(0)
-    game.musicManager:getTrack("bossMusic"):stop()
+    game.musicManager:pauseAllTracks()
+    game.musicManager:getTrack("levelMusic"):play(1)
+
     game.camera:reset()
     game.manager:swapPaletteGroup("main")
     game.manager:swapPalette()

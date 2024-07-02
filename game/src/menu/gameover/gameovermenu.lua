@@ -21,6 +21,7 @@ function gameoverMenu:new()
     self.finalSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("gameoverBlam")
     self.infoFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontUI")
     self.tipFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain")
+    self.gameoverSong = game.musicManager:getTrack("gameoverMusic")
     
     self.quadIncrementAmount = 60
     self.quadIncrements = 0
@@ -210,6 +211,7 @@ function gameoverMenu:updateQuad()
     if self.quadIncrements >= 8 then
         self.flashAlpha = 1
         self.finalSound:play()
+        self.gameoverSong:start()
     end
 end
 
