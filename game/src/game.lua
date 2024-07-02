@@ -65,6 +65,11 @@ function game:new()
         {sound = self.resourceManager:getAsset("Music"):get("boss"):get("main"), loopCount = 1, loopPermanent = true},
     }, "bossMusic")
 
+    self.musicManager:addTrack(
+    {
+        {sound = self.resourceManager:getAsset("Music"):get("gameover"):get("main"), loopCount = 1, loopPermanent = true},
+    }, "gameoverMusic")
+
     self.musicManager:getTrack("levelMusic"):start({fadeDuration = 0.5})
     
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
@@ -341,8 +346,6 @@ function game:setupResources()
 
     resourceManager:addAsset(assetGroup(
     {
-        mainMusic = {path = "assets/audio/music/song.wav", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
-
         level = assetGroup(
         {
             intro = {path = "assets/audio/music/songintro.wav", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
@@ -354,6 +357,11 @@ function game:setupResources()
             intro = {path = "assets/audio/music/bossintro.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
             main = {path = "assets/audio/music/bossloop.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
             dead = {path = "assets/audio/music/bossend.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+        }),
+
+        gameover = assetGroup(
+        {
+            main = {path = "assets/audio/music/gameover.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
         })
     }), "Music")
 
