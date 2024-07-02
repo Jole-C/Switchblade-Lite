@@ -237,6 +237,7 @@ end
 function victoryMenu:cleanup()
     menu.cleanup(self)
     game.interfaceRenderer:removeHudElement(self.flashRect)
+    game.canvases.menuBackgroundCanvas.enabled = false
 end
 
 return victoryMenu
