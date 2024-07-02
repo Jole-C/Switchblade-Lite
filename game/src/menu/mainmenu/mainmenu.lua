@@ -128,14 +128,16 @@ function mainMenu:new()
                 slider("Health Ring Scale", "fontUI",  50, 150, 10, 25, "playerHealthRingSizePercentage"),
     
                 toggleButton("Show Player Health", "fontUI", 10, 40, 20, 40, "showPlayerHealth", 260),
-    
-                toggleButton("Center Camera", "fontUI", 10, 55, 20, 55, "centerCamera", 260),
 
-                toggleButton("Show FPS", "fontUI", 10, 70, 20, 70, "showFPS", 260),
-
-                toggleButton("Disable time alert", "fontUI", 10, 85, 20, 85, "disableTimeAlerts", 260),
+                toggleButton("Show Ring Helpers", "fontUI", 10, 55, 20, 55, "showHealthRingHelpers", 260),
     
-                textButton("back", "fontUI", 10, 110, 15, 110, function(self)
+                toggleButton("Center Camera", "fontUI", 10, 70, 20, 70, "centerCamera", 260),
+
+                toggleButton("Show FPS", "fontUI", 10, 85, 20, 85, "showFPS", 260),
+
+                toggleButton("Disable time alert", "fontUI", 10, 100, 20, 100, "disableTimeAlerts", 260),
+    
+                textButton("back", "fontUI", 10, 125, 15, 125, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)

@@ -31,7 +31,7 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.48"
+    self.expectedOptionsVersion = "0.49"
     
     self.options = {
         OPTIONS_VERSION = self.expectedOptionsVersion,
@@ -54,6 +54,7 @@ function gameManager:new()
         playerHealthRingSizePercentage = 100,
         showPlayerHealth = false,
         disableTimeAlerts = false,
+        showHealthRingHelpers = true,
     }
 
     self.unlocks = {
