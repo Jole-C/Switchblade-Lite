@@ -15,6 +15,18 @@ function musicManager:update(dt)
     end
 end
 
+function musicManager:pauseAllTracks(fade)
+    for _, track in pairs(self.tracks) do
+        track:pause(fade)
+    end
+end
+
+function musicManager:stopAllTracks(fade)
+    for _, track in pairs(self.tracks) do
+        track:stop(fade)
+    end
+end
+
 function musicManager:getTrack(trackName)
     local track = self.tracks[trackName]
     assert(track ~= nil, "Track does not exist!")
