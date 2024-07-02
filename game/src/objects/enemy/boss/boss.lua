@@ -235,8 +235,8 @@ function boss:cleanup(destroyReason)
         game.particleManager:burstEffect("Boss Death", 100, self.position)
         gameHelper:screenShake(1)
         
+        game.musicManager:pauseAllTracks()
         game.musicManager:getTrack("levelMusic"):play(1)
-        game.musicManager:getTrack("bossMusic"):stop()
     end
 
     game.manager:swapPaletteGroup("main")
