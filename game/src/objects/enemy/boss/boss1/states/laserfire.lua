@@ -30,7 +30,7 @@ function laserFire:update(dt, bossInstance)
     bossInstance.angle = math.lerpAngle(bossInstance.angle, angleToPlayer, self.angleTurnRate, dt)
 
     if self.laserChargeSound:isStopped() and self.laserReference == nil then
-        self.laserReference = laser(bossInstance.position.x, bossInstance.position.y, bossInstance.angle, 500, 4)
+        self.laserReference = laser(bossInstance.position.x, bossInstance.position.y, bossInstance.angle, 1000, 4)
         gameHelper:addGameObject(self.laserReference)
         
         self.laserFireSound:play()
