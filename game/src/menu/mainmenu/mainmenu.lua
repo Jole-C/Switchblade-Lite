@@ -25,6 +25,25 @@ function mainMenu:new()
     self.minMenuBoxOffset = -150
     self.targetMenuBoxOffset = 0
 
+    self.eyePositionOffset = vec2(-30, -30)
+    self.targetEyePositionOffset = vec2(0, 0)
+    self.maxEyeOffset = 100
+    self.minEyeOffset = 50
+    self.maxEyePositionChangeCooldown = 5
+    self.minEyePositionChangeCooldown = 2
+    self.eyePositionChangeCooldown = self.maxEyePositionChangeCooldown
+    self.eyePositionLerpRate = 0.05
+    self.eyeAlpha = 0.1
+    self.targetEyeOrigin = vec2(420, 200)
+    self.eyeOrigin = vec2(500, 400)
+    self.eyeOriginLerpRate = 0.1
+    self.showEye = false
+    self.pupilRadius = 30
+    self.maxPupilRadius = 50
+    self.minPupilRadius = 15
+    self.targetPupilRadius = self.pupilRadius
+    self.pupilRadiusLerpRate = 0.1
+
     -- Initialise background rendering
     self.menuBackgroundSprite = game.resourceManager:getAsset("Interface Assets"):get("menuBackgroundMesh")
     game.canvases.menuBackgroundCanvas.enabled = true
@@ -52,6 +71,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.showEye = true
                     end
                 end, true)
             }
@@ -322,6 +342,24 @@ function mainMenu:update(dt)
     end
 
     self.menuBoxOffset = math.lerpDT(self.menuBoxOffset, self.targetMenuBoxOffset, 0.2, dt)
+
+    self.eyePositionChangeCooldown = self.eyePositionChangeCooldown - (1 * dt)
+
+    if self.eyePositionChangeCooldown <= 0 then
+        self.eyePositionChangeCooldown = math.random(self.minEyePositionChangeCooldown, self.maxEyePositionChangeCooldown)
+        self.targetEyePositionOffset = vec2:polar(math.random(self.minEyeOffset, self.maxEyeOffset), math.rad(math.random(0, 360)))
+        self.targetPupilRadius = math.random(self.minPupilRadius, self.maxPupilRadius)
+    end
+
+    self.pupilRadius = math.lerpDT(self.pupilRadius, self.targetPupilRadius, self.pupilRadiusLerpRate, dt)
+
+    self.eyePositionOffset.x = math.lerpDT(self.eyePositionOffset.x, self.targetEyePositionOffset.x, self.eyePositionLerpRate, dt)
+    self.eyePositionOffset.y = math.lerpDT(self.eyePositionOffset.y, self.targetEyePositionOffset.y, self.eyePositionLerpRate, dt)
+
+    if self.showEye then
+        self.eyeOrigin.x = math.lerpDT(self.eyeOrigin.x, self.targetEyeOrigin.x, self.eyeOriginLerpRate, dt)
+        self.eyeOrigin.y = math.lerpDT(self.eyeOrigin.y, self.targetEyeOrigin.y, self.eyeOriginLerpRate, dt)
+    end
 end
 
 function mainMenu:setBackgroundSlideAmount(percentage)
@@ -340,13 +378,36 @@ function mainMenu:draw()
             love.graphics.setShader()
         end
 
+        if self.showEye then
+            local x = self.eyeOrigin.x
+            local y = self.eyeOrigin.y
+
+            love.graphics.setColor(0, 0, 0, self.eyeAlpha)
+            love.graphics.setLineWidth(50)
+            love.graphics.circle("line", x, y, 150)
+
+            love.graphics.stencil(function()
+                local angle = ((self.eyeOrigin + self.eyePositionOffset) - self.eyeOrigin):angle()
+                local normal = vec2(math.cos(angle), math.sin(angle))
+                local pupilMask = self.eyeOrigin + self.eyePositionOffset + (normal * self.pupilRadius/2)
+
+                love.graphics.circle("fill", pupilMask.x, pupilMask.y, self.pupilRadius/1.5)
+            end, "replace", 1)
+
+            love.graphics.setStencilTest("equal", 0)
+
+            love.graphics.circle("fill", x + self.eyePositionOffset.x, y + self.eyePositionOffset.y, self.pupilRadius)
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.setLineWidth(1)
+        end
+
+        love.graphics.setStencilTest()
         self:drawOverlay()
 
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, self.backgroundScrollY)
         love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, self.backgroundScrollY - game.arenaValues.screenHeight)
 
-        -- Use the menu background as a stencil
         love.graphics.stencil(function()
             love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, self.backgroundScrollY)
             love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, self.backgroundScrollY - game.arenaValues.screenHeight)
