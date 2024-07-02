@@ -26,8 +26,14 @@ function enemyBase:new(x, y)
     end
 end
 
-function enemyBase:addScore(score, multiplier)
-    gameHelper:addGameObject(scoreObject(self.position.x, self.position.y, score, multiplier))
+function enemyBase:addScore(score, multiplier, overridePosition)
+    local position = self.position
+
+    if overridePosition.type and overridePosition:type() == "vec2" then
+        position = overridePosition
+    end
+
+    gameHelper:addGameObject(scoreObject(position.x, position.y, score, multiplier))
 end
 
 function enemyBase:update(dt)
