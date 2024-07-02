@@ -45,7 +45,7 @@ function playerManager:update(dt)
     self.multiplierResetTime = self.multiplierResetTime - (1 * dt)
 
     if self.multiplierResetTime <= 0 then
-        self:resetMultiplier()
+        self:resetMultiplier(true)
     end
 end
 
