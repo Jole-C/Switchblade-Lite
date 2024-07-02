@@ -164,7 +164,9 @@ function mainMenu:new()
 
                 toggleButton("Disable Angle Shake", "fontUI", 10, 85, 20, 85, "disableAngleshake", 260),
 
-                textButton("back", "fontUI", 10, 110, 15, 110, function(self)
+                slider("Zoom Scale", "fontUI",  50, 150, 10, 100, "cameraZoomScale"),
+
+                textButton("back", "fontUI", 10, 125, 15, 125, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)

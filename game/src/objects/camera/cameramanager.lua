@@ -24,8 +24,8 @@ function cameraManager:new()
     self.cameraShakeRange = 32
     self.cameraShakeAngleRange = 15
 
-    self.targetZoomAmount = 1
-    self.zoomAmount = 1
+    self.zoomAmount = 1 * (game.manager:getOption("cameraZoomScale") / 100)
+    self.targetZoomAmount = self.zoomAmount
     self.zoomRate = 1
 end
 
@@ -74,7 +74,7 @@ function cameraManager:update(dt)
 end
 
 function cameraManager:zoom(zoomAmount, zoomRate)
-    self.targetZoomAmount = zoomAmount
+    self.targetZoomAmount = zoomAmount * (game.manager:getOption("cameraZoomScale") / 100)
     self.zoomRate = zoomRate
 end
 
