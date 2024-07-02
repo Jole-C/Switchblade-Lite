@@ -145,7 +145,7 @@ function mainMenu:new()
             {
                 text("Gameplay", "fontUI", "left", 10, 10, 1000),
 
-                slider("Health Ring Scale", "fontUI",  50, 150, 10, 25, "playerHealthRingSizePercentage"),
+                slider("Health Ring Scale", "fontUI",  50, 150, 10, 25, "playerHealthRingSizePercentage", 260),
     
                 toggleButton("Show Player Health", "fontUI", 10, 40, 20, 40, "showPlayerHealth", 260),
 
@@ -180,7 +180,7 @@ function mainMenu:new()
 
                 toggleButton("Disable Screenshake", "fontUI", 10, 55, 20, 55, "disableScreenshake", 260),
 
-                slider("Shake Intensity", "fontUI",  50, 9999, 10, 70, "screenshakeIntensity"),
+                slider("Shake Intensity", "fontUI",  50, 9999, 10, 70, "screenshakeIntensity", 260),
 
                 toggleButton("Disable Angle Shake", "fontUI", 10, 85, 20, 85, "disableAngleshake", 260),
 

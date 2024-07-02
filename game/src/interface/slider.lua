@@ -1,7 +1,7 @@
 local interactiveHudElement = require "src.interface.interactablehudelement"
 local slider = class({name = "Menu Slider", extends = interactiveHudElement})
 
-function slider:new(text, font, minValue, maxValue, x, y, option)
+function slider:new(text, font, minValue, maxValue, x, y, option, overrideSpriteX)
     self:super()
     
     self.position = vec2(x, y)
@@ -12,6 +12,7 @@ function slider:new(text, font, minValue, maxValue, x, y, option)
     self.text = text
     self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get(font)
     self.lineLength = 75
+    self.numberPosition = vec2(x + (overrideSpriteX or 205), y)
 
     self.minSliderCooldownTime = 0
     self.maxSliderCooldownTime = 0.8
@@ -67,8 +68,10 @@ function slider:draw()
     love.graphics.print(self.text, self.position.x, self.position.y)
 
     -- Print the text for the slider's percentage
-    love.graphics.print(tostring(self.value).."%", self.position.x + 200, self.position.y)
+    local offsetX = self.font:getWidth(tostring(self.value).."%")
+    love.graphics.print(tostring(self.value).."%", self.numberPosition.x - offsetX / 4, self.numberPosition.y)
     
+    --[[
     -- Print the slider
     local textHeight = self.font:getHeight(self.text)
     local lineX = self.position.x + 270
@@ -78,7 +81,7 @@ function slider:draw()
     love.graphics.setLineWidth(2)
     love.graphics.line(lineX, lineY, lineX + self.lineLength, lineY)
     love.graphics.circle("fill", circleX, lineY, 6)
-    love.graphics.setLineWidth(1)
+    love.graphics.setLineWidth(1)]]
 
     love.graphics.setColor(1, 1, 1, 1)
 end
