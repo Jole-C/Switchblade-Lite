@@ -370,7 +370,7 @@ function boss1:handleDamage(damageType, amount)
         end
     end
 
-    return
+    return false
 end
 
 return boss1
