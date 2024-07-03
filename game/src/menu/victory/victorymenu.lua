@@ -40,7 +40,7 @@ function victoryMenu:new()
     self.shaderTime = 0
     self.backgroundShaderTime = 0
 
-    self.playerScore = game.playerManager.runInfo.score
+    self.playerScore = game.gameManager.runInfo.score
     self.displayScore = 0
     self.displayScoreLerpRate = 0.05
 
@@ -208,15 +208,15 @@ function victoryMenu:draw()
     love.graphics.setStencilTest()
 
     if math.abs(self.maxStencilCircleRadius - self.stencilCircleRadius) < 10 then
-        local timeValues = game.playerManager.runInfo.time
-        local bossTimeValues = game.playerManager.runInfo.bossTime
+        local timeValues = game.gameManager.runInfo.time
+        local bossTimeValues = game.gameManager.runInfo.bossTime
         local time = string.format("%02.0f:%02.0f",math.abs(timeValues.minutes),math.abs(math.floor(timeValues.seconds)))
         local bossTime = string.format("%02.0f:%02.0f",math.abs(bossTimeValues.minutes),math.abs(math.floor(bossTimeValues.seconds)))
         local string = ""
         
         string = string.."time: "..time.."\n"
         string = string.."boss time: "..bossTime.."\n"
-        string = string.."kills: "..game.playerManager.runInfo.kills.."\n"
+        string = string.."kills: "..game.gameManager.runInfo.kills.."\n"
         
         local colour = game.manager.currentPalette.uiColour
         love.graphics.setColor(colour[1], colour[2], colour[3], self.infoAlpha)

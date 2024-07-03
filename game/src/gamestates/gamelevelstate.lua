@@ -12,7 +12,7 @@ local gameLevelState = class({name = "Game Level State", extends = gamestate})
 function gameLevelState:enter()
     game.musicManager:pauseAllTracks(1)
     game.musicManager:getTrack("levelMusic"):play(1)
-    game.playerManager:resetRunInfo()
+    game.gameManager:resetRunInfo()
     gameHelper:resetMultiplier(false)
     
     game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
