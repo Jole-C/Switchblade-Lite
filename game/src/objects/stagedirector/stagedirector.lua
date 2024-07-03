@@ -128,7 +128,7 @@ function stageDirector:update(dt)
 
     if self.timer.timeSeconds <= 0 and self.timer.timeMinutes <= 0 then
         player:destroy()
-        game.gameManager.runInfo.deathReason = "You ran out of time!"
+        game.manager.runInfo.deathReason = "You ran out of time!"
 
         self:setTimerPaused(true)
     end
@@ -194,8 +194,8 @@ function stageDirector:update(dt)
 
                 if arena.outroComplete == true then
                     game.transitionManager:doTransition("victoryState")
-                    game.gameManager.runInfo.bossTime.minutes = self.bossMinutes
-                    game.gameManager.runInfo.bossTime.seconds = self.bossSeconds
+                    game.manager.runInfo.bossTime.minutes = self.bossMinutes
+                    game.manager.runInfo.bossTime.seconds = self.bossSeconds
                 end
             end
         else
@@ -432,9 +432,9 @@ end
 
 function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.debugText)
-    game.gameManager.runInfo.time.minutes = self.timer.totalMinutes
-    game.gameManager.runInfo.time.seconds = self.timer.totalSeconds
-    game.gameManager.runInfo.kills = self.totalKills
+    game.manager.runInfo.time.minutes = self.timer.totalMinutes
+    game.manager.runInfo.time.seconds = self.timer.totalSeconds
+    game.manager.runInfo.kills = self.totalKills
 end
 
 return stageDirector

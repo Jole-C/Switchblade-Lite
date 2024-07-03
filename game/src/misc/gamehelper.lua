@@ -41,6 +41,14 @@ function gameHelper:resetMultiplier(playSound)
     end
 end
 
+function gameHelper:incrementMultiplier()
+    local scoreManager = self:getScoreManager()
+
+    if scoreManager then
+        scoreManager:incrementMultiplier()
+    end
+end
+
 function gameHelper:setMultiplierPaused(multiplierPaused)
     local scoreManager = self:getScoreManager()
 

@@ -115,7 +115,7 @@ function enemyBase:onHit(damageType, amount)
 
     if self.health <= 0 then
         if damageType == "bullet" then
-            self.multiplierToApply = game.playerManager.scoreMultiplier
+            self.multiplierToApply = gameHelper:getScoreManager().scoreMultiplier
         end
 
         if damageType == "boost" then

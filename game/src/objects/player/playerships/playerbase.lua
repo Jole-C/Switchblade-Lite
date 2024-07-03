@@ -630,7 +630,7 @@ function player:cleanup(destroyReason)
         gameHelper:getWorld():remove(self.collider)
     end
 
-    game.gameManager.runInfo.deathReason = "You died!"
+    game.manager.runInfo.deathReason = "You died!"
 
     game.interfaceRenderer:removeHudElement(self.scoreDisplay)
 

@@ -43,7 +43,7 @@ end
 
 function shielder:update(dt)
     enemy.update(self, dt)
-    self.multiplierToApply = game.playerManager.scoreMultiplier
+    self.multiplierToApply = gameHelper:getScoreManager().scoreMultiplier
 
     local playerReference = game.playerManager.playerReference
     local playerPosition = game.playerManager.playerPosition

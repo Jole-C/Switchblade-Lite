@@ -15,11 +15,12 @@ function playerScore:draw()
     love.graphics.setFont(self.font)
     love.graphics.setColor(game.manager.currentPalette.uiColour)
 
-    local scoreString = string.format("%07d", game.gameManager.runInfo.score)
-    local multiplier = game.gameManager.scoreMultiplier
+    local scoreManager = gameHelper:getScoreManager()
+    local scoreString = string.format("%07d", scoreManager.score)
+    local multiplier = scoreManager.scoreMultiplier
     love.graphics.printf(tostring(multiplier).."x".." "..tostring(scoreString), 0, 8, 480, "right")
     
-    local t = game.gameManager.multiplierResetTime / game.gameManager.maxMultiplierResetTime
+    local t = scoreManager.multiplierResetTime / scoreManager.maxMultiplierResetTime
     local rectWidth = math.lerp(0, self.multiplierLineLength, math.clamp(t, 0, 1))
 
     love.graphics.rectangle("fill", self.multiplierLineX, self.multiplierLineY, rectWidth, self.multiplierLineHeight)
