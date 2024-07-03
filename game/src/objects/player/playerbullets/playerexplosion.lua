@@ -1,5 +1,5 @@
 local explosion = require "src.objects.bullet.explosion"
-local scoreObject = require "src.objects.scoreindicator"
+local scoreObject = require "src.objects.score.scoreindicator"
 
 local playerExplosion = class({name = "Player Explosion", extends = explosion})
 
