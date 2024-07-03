@@ -67,6 +67,23 @@ function gameManager:new()
         }
     }
 
+    self.runInfo =
+    {
+        deathReason = "NO REASON",
+        time =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
+        bossTime =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
+        score = 0,
+        kills = 0,
+    }
+
     love.filesystem.setIdentity("switchblade")
     self:loadOptions()
 end
@@ -99,6 +116,25 @@ function gameManager:update(dt)
     if self:getOption("limitPaletteSwaps") then
         self.paletteSwapCooldown = self.paletteSwapCooldown - (1 * dt)
     end
+end
+
+function gameManager:resetRunInfo()
+    self.runInfo =
+    {
+        deathReason = "NO REASON",
+        time =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
+        bossTime =
+        {
+            minutes = 0,
+            seconds = 0,
+        },
+        score = 0,
+        kills = 0,
+    }
 end
 
 function gameManager:changePlayerDefinition(definitionName)
