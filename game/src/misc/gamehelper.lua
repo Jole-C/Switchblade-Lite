@@ -20,6 +20,35 @@ function gameHelper:getArena()
     return currentGamestate.arena
 end
 
+function gameHelper:getScoreManager()
+    local currentGamestate = self:getCurrentState()
+    return currentGamestate.scoreManager
+end
+
+function gameHelper:addScore(score, multiplier)
+    local scoreManager = self:getScoreManager()
+
+    if scoreManager then
+        scoreManager:addScore(score, multiplier)
+    end
+end
+
+function gameHelper:resetMultiplier(playSound)
+    local scoreManager = self:getScoreManager()
+
+    if scoreManager then
+        scoreManager:resetMultiplier(playSound)
+    end
+end
+
+function gameHelper:setMultiplierPaused(multiplierPaused)
+    local scoreManager = self:getScoreManager()
+
+    if scoreManager then
+        scoreManager:setMultiplierPaused(multiplierPaused)
+    end
+end
+
 function gameHelper:addCollider(collider, x, y, width, height)
     local world = self:getWorld()
 

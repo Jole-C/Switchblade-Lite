@@ -14,7 +14,7 @@ function scoreIndicator:new(x, y, score, multiplier)
     self.textAlpha = 1
     self.textAlphaLerpRate = 0.05
     
-    game.playerManager:addScore(self.score, self.multiplier)
+    gameHelper:addScore(self.score, self.multiplier)
 end
 
 function scoreIndicator:update(dt)

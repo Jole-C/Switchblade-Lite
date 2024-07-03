@@ -1,5 +1,6 @@
 local gamestate = require "src.gamestates.gamestate"
 local stageDirector = require "src.objects.stagedirector.stagedirector"
+local scoreManager = require "src.objects.score.scoremanager"
 local enemyManager = require "src.objects.enemy.enemymanager"
 local cameraManager = require "src.objects.camera.cameramanager"
 local cameraTarget = require "src.objects.camera.cameratarget"
@@ -12,7 +13,7 @@ function gameLevelState:enter()
     game.musicManager:pauseAllTracks(1)
     game.musicManager:getTrack("levelMusic"):play(1)
     game.playerManager:resetRunInfo()
-    game.playerManager:resetMultiplier(false)
+    gameHelper:resetMultiplier(false)
     
     game.camera:setWorld(game.arenaValues.worldX, game.arenaValues.worldY, game.arenaValues.worldWidth * 2, game.arenaValues.worldHeight * 2)
 
@@ -32,6 +33,9 @@ function gameLevelState:enter()
 
     self.stageDirector = stageDirector(level, 0, 0)
     self:addObject(self.stageDirector)
+
+    self.scoreManager = scoreManager(0, 0)
+    self:addObject(self.scoreManager)
 
     local newPlayer = game.playerManager:spawnPlayer(self.stageDirector.playerStartSegment.position.x, self.stageDirector.playerStartSegment.position.y)
     self:addObject(newPlayer)
@@ -70,9 +74,7 @@ function gameLevelState:removeObject(index)
 end
 
 function gameLevelState:exit()
-    for i = 1, #self.objects do
-        local object = self.objects[i]
-
+    for _, object in pairs(self.objects) do
         if object.markedForDelete == false then
             object:destroy("autoDestruction")
         end
@@ -86,6 +88,7 @@ function gameLevelState:exit()
     self.arena = nil
     self.stageDirector = nil
     self.cameraManager = nil
+    self.scoreManager = nil
 end
 
 return gameLevelState

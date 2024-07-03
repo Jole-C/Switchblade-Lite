@@ -7,7 +7,7 @@ function shieldIntro:enter(bossInstance)
     bossInstance:summonOrbs(self.parameters.orbsToSummon)
     bossInstance:switchState(self.parameters.returnState)
     bossInstance:setPhaseTime()
-    game.playerManager:setMultiplierPaused(true)
+    gameHelper:setMultiplierPaused(true)
 end
 
 return shieldIntro

@@ -10,7 +10,7 @@ function shieldOutro:enter(bossInstance)
     self.explosionRadius = 300
     self.startingPosition = bossInstance.position
     gameHelper:getCurrentState().stageDirector:setTimerPaused(true)
-    game.playerManager:setMultiplierPaused(true)
+    gameHelper:setMultiplierPaused(true)
     game.musicManager:getTrack("bossMusic"):stop()
     bossInstance.deathSound:play()
 end

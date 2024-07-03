@@ -119,7 +119,7 @@ function enemyBase:onHit(damageType, amount)
         end
 
         if damageType == "boost" then
-            game.playerManager:incrementMultiplier()
+            gameHelper:incrementMultiplier()
         end
         
         self:destroy()

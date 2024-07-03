@@ -17,7 +17,7 @@ function bossIntro:enter(bossInstance)
     bossInstance.introCard:setInIntro()
 
     self.introEffect = game.particleManager:getEffect("Boss Intro Burst")
-    game.playerManager:setMultiplierPaused(true)
+    gameHelper:setMultiplierPaused(true)
     gameHelper:getCurrentState().cameraManager:setOverrideTarget(cameraTarget(bossInstance.position, 1))
     gameHelper:getCurrentState().cameraManager:zoom(3, 0.001)
 end
