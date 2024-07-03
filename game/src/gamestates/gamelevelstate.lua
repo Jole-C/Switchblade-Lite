@@ -4,7 +4,6 @@ local scoreManager = require "src.objects.score.scoremanager"
 local enemyManager = require "src.objects.enemy.enemymanager"
 local cameraManager = require "src.objects.camera.cameramanager"
 local cameraTarget = require "src.objects.camera.cameratarget"
-local level = require "src.levels.level1"
 local arena = require "src.objects.arena"
 
 local gameLevelState = class({name = "Game Level State", extends = gamestate})
@@ -31,7 +30,7 @@ function gameLevelState:enter()
         self.cameraManager:addTarget(cameraTarget(vec2(0, 0), 3))
     end
 
-    self.stageDirector = stageDirector(level, 0, 0)
+    self.stageDirector = stageDirector(game.manager.runSetup.level, 0, 0)
     self:addObject(self.stageDirector)
 
     self.scoreManager = scoreManager(0, 0)

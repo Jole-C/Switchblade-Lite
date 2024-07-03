@@ -6,6 +6,10 @@ local slider = require "src.interface.slider"
 local sprite = require "src.interface.sprite"
 local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
+
+local level1 = require "src.levels.level1"
+local level2 = require "src.levels.level2"
+
 local mainMenu = class({name = "Main Menu", extends = menu})
 
 function mainMenu:new()
@@ -282,10 +286,14 @@ function mainMenu:new()
             {
                 textButton("arena 1", "fontUI", 10, 10, 15, 10, function()
                     game.manager:changePlayerDefinition("default definition")
+                    game.manager.runSetup.level = level1
                     game.transitionManager:doTransition("gameLevelState")
                 end),
 
-                textButton("WIP", "fontUI", 10, 25, 15, 25, function()
+                textButton("arena 2", "fontUI", 10, 25, 15, 25, function()
+                    game.manager:changePlayerDefinition("default definition")
+                    game.manager.runSetup.level = level2
+                    game.transitionManager:doTransition("gameLevelState")
                 end),
 
                 textButton("WIPPITY WIP", "fontUI", 10, 40, 15, 40, function()

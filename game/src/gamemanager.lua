@@ -84,6 +84,12 @@ function gameManager:new()
         kills = 0,
     }
 
+    self.runSetup =
+    {
+        gamemode = nil,
+        level = nil,
+    }
+
     love.filesystem.setIdentity("switchblade")
     self:loadOptions()
 end
@@ -306,6 +312,11 @@ function gameManager:optionExists(optionName)
     end
 
     return false
+end
+
+function gameManager:startRun()
+    self:changePlayerDefinition("default definition")
+    game.transitionManager:doTransition("gameLevelState")
 end
 
 function gameManager:draw()
