@@ -7,7 +7,6 @@ local playerExplosion = require "src.objects.player.playerbullets.playerexplosio
 local ammoDisplay = require "src.objects.player.playerammodisplay"
 local healthDisplay = require "src.objects.player.playerhealthdisplay"
 local temperatureDisplay = require "src.objects.player.playertemperaturedisplay"
-local scoreDisplay = require "src.objects.player.playerscoredisplay"
 
 local boostAmmoEffect = require "src.objects.effects.boostammorestore"
 local boostLineEffect = require "src.objects.effects.boostline"
@@ -100,9 +99,6 @@ function player:new(x, y)
 
     self.temperatureDisplay = temperatureDisplay(0, 0)
     gameHelper:addGameObject(self.temperatureDisplay)
-
-    self.scoreDisplay = scoreDisplay()
-    game.interfaceRenderer:addHudElement(self.scoreDisplay)
 
     if game.manager:getOption("showPlayerHealth") then
         self.healthDisplay = healthDisplay(0, 0)
@@ -631,8 +627,6 @@ function player:cleanup(destroyReason)
     end
 
     game.manager.runInfo.deathReason = "You died!"
-
-    game.interfaceRenderer:removeHudElement(self.scoreDisplay)
 
     if destroyReason ~= "autoDestruction" then
         gameHelper:addGameObject(gameoverEffect(self.position.x, self.position.y, self.angle))

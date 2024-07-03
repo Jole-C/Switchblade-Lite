@@ -1,4 +1,6 @@
 local gameObject = require "src.objects.gameobject"
+local scoreDisplay = require "src.objects.score.scoredisplay"
+
 local scoreManager = class({name = "Score Manager", extends = gameObject})
 
 function scoreManager:new(x, y)
@@ -9,6 +11,9 @@ function scoreManager:new(x, y)
     self.multiplierResetTime = 0
     self.multiplierPaused = false
     self.score = 0
+
+    self.scoreDisplay = scoreDisplay()
+    game.interfaceRenderer:addHudElement(self.scoreDisplay)
 
     self.multiplierResetSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("multiplierReset")
 end
@@ -45,6 +50,13 @@ end
 function scoreManager:incrementMultiplier()
     self.scoreMultiplier = self.scoreMultiplier + 1
     self.multiplierResetTime = self.maxMultiplierResetTime
+end
+
+function scoreManager:cleanup(destroyReason)
+    gameObject.cleanup(self, destroyReason)
+
+    game.interfaceRenderer:removeHudElement(self.scoreDisplay)
+    game.manager.runInfo.score = self.score
 end
 
 return scoreManager

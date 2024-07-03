@@ -1,7 +1,7 @@
 local hudElement = require "src.interface.hudelement"
-local playerScore = class({name = "Player Score", extends = hudElement})
+local scoreDisplay = class({name = "Score Display", extends = hudElement})
 
-function playerScore:new()
+function scoreDisplay:new()
     self:super()
     
     self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontTime")
@@ -11,7 +11,7 @@ function playerScore:new()
     self.multiplierLineHeight = 6
 end
 
-function playerScore:draw()
+function scoreDisplay:draw()
     love.graphics.setFont(self.font)
     love.graphics.setColor(game.manager.currentPalette.uiColour)
 
@@ -27,4 +27,4 @@ function playerScore:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-return playerScore
+return scoreDisplay
