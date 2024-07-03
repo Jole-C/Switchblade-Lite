@@ -5,6 +5,7 @@ local bossWarning = require "src.objects.enemy.boss.bosswarning"
 local timer = require "src.objects.stagedirector.stagetimer"
 local alertObject = require "src.objects.stagedirector.alertobject"
 local soundObject = require "src.objects.stagedirector.spawnsound"
+local killDisplay = require "src.objects.stagedirector.killprogressdisplay"
 
 local stageDirector = class({name = "Stage Director", extends = gameObject})
 
@@ -89,6 +90,9 @@ function stageDirector:new(levelDefinition)
 
     self.debugText = text("", "fontMain", "left", 360, 10, game.arenaValues.screenWidth)
     game.interfaceRenderer:addHudElement(self.debugText)
+
+    self.killDisplay = killDisplay()
+    game.interfaceRenderer:addHudElement(self.killDisplay)
 end
 
 function stageDirector:update(dt)
@@ -161,20 +165,31 @@ function stageDirector:update(dt)
                     if self.enemyKills >= minimumKills and self.inWaveTransition == false then
                         self.inWaveTransition = true
                     end
+
+                    self.killDisplay.kills = self.enemyKills
+                    self.killDisplay.totalKills = minimumKills
                 elseif condition.conditionType == "timer" then
                     local time = condition.timeUntilNextWave or 3
 
                     if self.elapsedWaveTime > time and self.inWaveTransition == false then
                         self.inWaveTransition = true
                     end
+                        
+                    self.killDisplay.time = self.elapsedWaveTime
+                    self.killDisplay.totalTime = time
                     
                     useDefaultOverride = false
                 end
             end
 
             -- Handle the default timer override
-            if useDefaultOverride == true and self.elapsedWaveTime > self.defaultTimeForNextWave then
-                self.inWaveTransition = true
+            if useDefaultOverride == true then
+                self.killDisplay.time = self.elapsedWaveTime
+                self.killDisplay.totalTime = self.defaultTimeForNextWave
+
+                if self.elapsedWaveTime > self.defaultTimeForNextWave then
+                    self.inWaveTransition = true
+                end
             end
         end
     else
@@ -286,6 +301,7 @@ function stageDirector:startWave()
     if self.currentWaveType == "bossWave" then
         local newBossWarning = bossWarning(0, 0, self.enemyDefinitions[wave.bossID])
         gameHelper:addGameObject(newBossWarning)
+        game.interfaceRenderer:removeHudElement(self.killDisplay)
     end
 
     if not spawnDefinitions then
@@ -432,6 +448,8 @@ end
 
 function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.debugText)
+    game.interfaceRenderer:removeHudElement(self.killDisplay)
+
     game.manager.runInfo.time.minutes = self.timer.totalMinutes
     game.manager.runInfo.time.seconds = self.timer.totalSeconds
     game.manager.runInfo.kills = self.totalKills
