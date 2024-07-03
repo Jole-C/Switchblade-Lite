@@ -1,5 +1,5 @@
 local gameObject = require "src.objects.gameobject"
-local scoreObject = require "src.objects.scoreindicator"
+local scoreObject = require "src.objects.score.scoreindicator"
 
 local enemyBase = class({name = "Enemy Base", extends = gameObject})
 
