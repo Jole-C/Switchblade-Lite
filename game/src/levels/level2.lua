@@ -721,13 +721,13 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "wanderer",
-                        spawnCount = 8,
+                        spawnCount = 6,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 8,
-                        radius = 150,
+                        numberOfPoints = 6,
+                        radius = 75,
                         origin = "upperCircle"
                     }
                 },
@@ -744,7 +744,7 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 6,
-                        radius = 150,
+                        radius = 75,
                         origin = "lowerLeftCircle"
                     }
                 },
@@ -761,25 +761,62 @@ local levelDefinition =
                     shapeDef =
                     {
                         numberOfPoints = 6,
-                        radius = 150,
+                        radius = 75,
                         origin = "lowerRightCircle"
                     }
                 },
 
                 {
-                    spawnType = "alongShapePerimeter",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
-                        spawnCount = 6,
+                        enemyID = "shielder",
+                        spawnCount = 1,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 6,
-                        radius = 150,
-                        origin = "mainCircle"
+                        origin = "upperCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "shielder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
                     }
                 },
 
@@ -810,7 +847,7 @@ local levelDefinition =
                 },
                 {
                     conditionType = "timer",
-                    timeUntilNextWave = 30
+                    timeUntilNextWave = 60
                 }
             },
         },
@@ -831,24 +868,7 @@ local levelDefinition =
                     {
                         origin = "mainCircle",
                         points = {
-                            x = 0, y = -100
-                        }
-                    }
-                },
-                {
-                    spawnType = "predefined",
-    
-                    enemyDef =
-                    {
-                        enemyID = "hider",
-                        spawnCount = 1,
-                    },
-    
-                    shapeDef =
-                    {
-                        origin = "mainCircle",
-                        points = {
-                            x = 0, y = 100
+                            x = 0, y = 0
                         }
                     }
                 },
@@ -859,14 +879,31 @@ local levelDefinition =
                     enemyDef =
                     {
                         enemyID = "drone",
-                        spawnCount = 3,
+                        spawnCount = 2,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 5,
+                        numberOfPoints = 2,
                         radius = 150,
-                        origin = "mainCircle"
+                        origin = "lowerLeftCircle"
+                    }
+                },
+
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 2,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 2,
+                        radius = 150,
+                        origin = "lowerRightCircle"
                     }
                 },
             },
@@ -1090,33 +1127,98 @@ local levelDefinition =
             {
                 {
                     conditionType = "minimumKills",
-                    minimumKills = 8
+                    minimumKills = 16
                 },
                 {
                     conditionType = "timer",
                     timeUntilNextWave = 30
                 }
-            },
-    
-            segmentChanges =
+            }
+        },
+
+        {
+            spawnDefinitions = 
             {
                 {
-                    changeType = "position",
-                    arenaSegment = "upperCircle",
-                    newPosition = vec2:polar(0, math.rad(90)),
-                    lerpSpeed = 0.01,
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "hider",
+                        spawnCount = 1,
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
                 },
                 {
-                    changeType = "position",
-                    arenaSegment = "lowerLeftCircle",
-                    newPosition = vec2:polar(200, math.rad(180)),
-                    lerpSpeed = 0.01,
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "hider",
+                        spawnCount = 1,
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+
+                {
+                    spawnType = "predefined",
+    
+                    enemyDef =
+                    {
+                        enemyID = "orbiter",
+                        spawnCount = 1,
+                    },
+    
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 3,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 150,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+    
+            nextWaveConditions = 
+            {
+                {
+                    conditionType = "minimumKills",
+                    minimumKills = 5
                 },
                 {
-                    changeType = "position",
-                    arenaSegment = "lowerRightCircle",
-                    newPosition = vec2:polar(200, math.rad(0)),
-                    lerpSpeed = 0.01,
+                    conditionType = "timer",
+                    timeUntilNextWave = 30
                 }
             }
         }
