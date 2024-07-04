@@ -38,7 +38,6 @@ function hider:update(dt)
         self.revealGracePeriod = self.revealGracePeriod - (1 * dt)
         
         if self.revealGracePeriod <= 0 then
-            self.timeBetweenWaves = self.maxTimeBetweenWaves
             self.revealed = false
         end
     end
