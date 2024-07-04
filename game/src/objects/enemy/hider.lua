@@ -7,6 +7,7 @@ local hider = class({name = "Hider", extends = enemy})
 function hider:new(x, y)
     self:super(x, y)
 
+    self.health = 3
     self.maxTimeBetweenWaves = 1.75
     self.waveWidth = 10
     self.waveScaleSpeed = 200
