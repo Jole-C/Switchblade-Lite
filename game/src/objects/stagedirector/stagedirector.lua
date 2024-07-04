@@ -88,7 +88,7 @@ function stageDirector:new(levelDefinition)
         assert(false, "No player segment specified!")
     end
 
-    self.debugText = text("", "fontMain", "left", 360, 10, game.arenaValues.screenWidth)
+    self.debugText = text("", "fontMain", "left", 10, 200, game.arenaValues.screenWidth)
     game.interfaceRenderer:addHudElement(self.debugText)
 
     self.killDisplay = killDisplay()
