@@ -29,7 +29,7 @@ function hider:update(dt)
         return
     end
 
-    if player.isBoosting or player.isShooting then
+    if player.isBoosting then
         self.revealed = true
         self.revealGracePeriod = self.maxRevealGracePeriod
     else
