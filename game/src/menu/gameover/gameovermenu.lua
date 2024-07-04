@@ -46,11 +46,11 @@ function gameoverMenu:new()
 
     self.tips = 
     {
+        "Boosting makes you completely invulnerable to all damage!",
+        "Boosting builds your temperature, boost for too long and you'll overheat!",
         "Boosting into consecutive enemies creates an explosion damaging all\nenemies inside!",
         "Boosting into consecutive enemies reduces temperature for each enemy!",
-        "Tippity tip",
         "Your health won't recharge while boosting or overheating, manage it well!",
-        "Boosting builds your temperature, boost for too long and you'll overheat!",
         "Bosses only take damage from bullets!",
         "Only some enemies spawned by bosses drop ammo! They have a visual indicator."
     }
