@@ -24,6 +24,8 @@ end
 function exploder:update(dt)
     enemy.update(self, dt)
 
+    self.position = gameHelper:getArena():getClampedPosition(self.position)
+    
     local playerPosition = game.playerManager.playerPosition
     local distance = (self.position - playerPosition):length()
 

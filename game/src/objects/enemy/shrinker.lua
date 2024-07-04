@@ -27,6 +27,8 @@ function shrinker:update(dt)
     self.position.x = self.position.x + math.cos(angle) * (self.movementSpeed * dt)
     self.position.y = self.position.y + math.sin(angle) * (self.movementSpeed * dt)
     
+    self.position = gameHelper:getArena():getClampedPosition(self.position)
+    
     local world = gameHelper:getWorld()
 
     if world and world:hasItem(self.collider) then

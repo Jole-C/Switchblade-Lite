@@ -23,6 +23,8 @@ end
 function hider:update(dt)
     enemy.update(self, dt)
 
+    self.position = gameHelper:getArena():getClampedPosition(self.position)
+
     local player = game.playerManager.playerReference
 
     if not player then
