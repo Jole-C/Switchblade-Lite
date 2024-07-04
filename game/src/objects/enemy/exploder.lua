@@ -35,7 +35,7 @@ function exploder:update(dt)
         self.fuseTime = self.fuseTime - (1 * dt)
 
         if self.fuseTime <= 0 then
-            self:destroy("autoDestruction")
+            self:destroy("explosion")
         end
     end
     
@@ -68,7 +68,9 @@ function exploder:cleanup(destroyReason)
         gameHelper:getWorld():remove(self.collider)
     end
 
-    self:explosion()
+    if destroyReason == "explosion" then
+        self:explosion()
+    end
 end
 
 function exploder:explosion()
