@@ -75,7 +75,6 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
-                        self.owner.showEye = true
                     end
                 end, true)
             }
@@ -87,8 +86,8 @@ function mainMenu:new()
             
             elements =
             {
-                rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
-                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
+                --rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
+                --text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
 
                 textButton("start", "fontUI", 10, 10, 15, 10, function(self)
                     if self.owner then
@@ -104,9 +103,17 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("quit", "fontUI", 10, 50, 15, 50, function()
+                textButton("credits", "fontUI", 10, 40, 15, 40, function(self)
+                end),
+
+                textButton("about", "fontUI", 10, 55, 15, 55, function(self)
+                end),
+
+                textButton("quit", "fontUI", 10, 70, 15, 70, function()
                     love.event.quit()
-                end)
+                end),
+
+                text("demo v0.4", "fontUI", "left", 10, 250, 500, 0, 1, 1, false, {0.4, 0.4, 0.4, 1})
             }
         },
 
@@ -266,10 +273,16 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("endless", "fontUI", 10, 25, 15, 25, function()
+                textButton("gamemodes", "fontUI", 10, 25, 15, 25, function()
                 end),
 
-                textButton("back", "fontUI", 10, 50, 15, 50, function(self)
+                textButton("unlocks", "fontUI", 10, 40, 15, 40, function()
+                end),
+
+                textButton("achievements", "fontUI", 10, 55, 15, 55, function()
+                end),
+
+                textButton("back", "fontUI", 10, 80, 15, 80, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)

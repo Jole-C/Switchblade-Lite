@@ -8,6 +8,7 @@ function victoryMenu:new()
     self:super()
     
     game.canvases.menuBackgroundCanvas.enabled = true
+    game.musicManager:pauseAllTracks()
 
     self.initialCooldown = 0.25
 
@@ -21,6 +22,7 @@ function victoryMenu:new()
     self.scoreBlast = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("scoreBlast")
     self.scoreBlastEnd = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("scoreBlastEnd")
     self.victoryIntro = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("victoryIntro")
+    self.victorySong = game.musicManager:getTrack("victoryMusic")
 
     self.scoreBlastEffect = game.particleManager:getEffect("Boss Intro Burst")
 
@@ -121,6 +123,7 @@ function victoryMenu:update(dt)
                 self.scoreBlastFinished = true
                 self.scoreDisplayShakeAmount = self.maxScoreDisplayShakeAmount * 3
                 self.flashAlpha = 1
+                self.victorySong:start()
             end
         else
             self.scoreDisplayShakeAmount = self.maxScoreDisplayShakeAmount

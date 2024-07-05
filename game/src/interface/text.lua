@@ -1,7 +1,7 @@
 local hudElement require "src.interface.hudelement"
 local textElement = class({name = "Text", extends = hudElement})
 
-function textElement:new(text, font, textAlign, x, y, width, angle, scaleX, scaleY, centerText)
+function textElement:new(text, font, textAlign, x, y, width, angle, scaleX, scaleY, centerText, overrideDrawColour)
     self.text = text
     self.position = vec2(x, y)
     self.textAlign = textAlign
@@ -11,11 +11,12 @@ function textElement:new(text, font, textAlign, x, y, width, angle, scaleX, scal
     self.scale = vec2(scaleX or 1, scaleY or 1)
     self.centerText = centerText or false
     self.enabled = true
+    self.overrideColour = overrideDrawColour
 end
 
 function textElement:draw()
     love.graphics.setFont(self.font)
-    love.graphics.setColor(game.manager.currentPalette.uiColour)
+    love.graphics.setColor(self.overrideColour or game.manager.currentPalette.uiColour)
 
     local offsetX = 0
     local offsetY = 0

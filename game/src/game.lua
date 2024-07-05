@@ -70,6 +70,12 @@ function game:new()
         {sound = self.resourceManager:getAsset("Music"):get("gameover"):get("main"), loopCount = 1, loopPermanent = true},
     }, "gameoverMusic")
 
+    self.musicManager:addTrack(
+    {
+        {sound = self.resourceManager:getAsset("Music"):get("victory"):get("main"), loopCount = 1, loopPermanent = true},
+    }, "victoryMusic")
+
+
     self.musicManager:getTrack("levelMusic"):start({fadeDuration = 0.5})
     
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
@@ -362,6 +368,11 @@ function game:setupResources()
         gameover = assetGroup(
         {
             main = {path = "assets/audio/music/gameover.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
+        }),
+
+        victory = assetGroup(
+        {
+            main = {path = "assets/audio/music/victory.mp3", type = "Source", parameters = {type = "stream", tag = self.tags.music}},
         })
     }), "Music")
 
@@ -515,6 +526,7 @@ function game:setupResources()
         {
             fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-/", spacing = 1}},
             fontUI = {path = "assets/fonts/fontui.png", type = "Image Font", parameters = {glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,/%!?:0123456789 ", spacing = 2}},
+            fontBigUI = {path = "assets/fonts/fontuibig.png", type = "Image Font", parameters = {glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,/%!?:0123456789 ", spacing = 2}},
             fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 48}},
             fontTime = {path = "assets/fonts/timefont.png", type = "Image Font", parameters = {glyphs = "0123456789:x", spacing = 2}},
             fontScore = {path = "assets/fonts/scorefont.png", type = "Image Font", parameters = {glyphs = "0123456789+", spacing = 1}}
