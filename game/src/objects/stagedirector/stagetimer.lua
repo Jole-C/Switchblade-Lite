@@ -27,6 +27,7 @@ function stageTimer:new(minutes, seconds)
 
     self.lowTimeWarningCooldown = 0
     self.lowTimeSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("timeSiren")
+    self.timeAddedSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("timeAdded")
 
     self.hud = stageTimeHud()
     game.interfaceRenderer:addHudElement(self.hud)
@@ -95,6 +96,7 @@ function stageTimer:addTime(minutes, seconds)
     self.timeSeconds = self.timeSeconds + seconds % 60
 
     self.waveCompleteDisplayTime = self.maxWaveCompleteDisplayTime
+    self.timeAddedSound:play()
 end
 
 function stageTimer:getAbsoluteTime(minutes, seconds)
