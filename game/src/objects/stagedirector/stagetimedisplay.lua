@@ -6,6 +6,7 @@ function stageTimeHud:new()
 
     self.timeSeconds = 0
     self.timeMinutes = 0
+    self.timerScale = 1
     self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontTime")
 end
 
@@ -21,6 +22,10 @@ function stageTimeHud:draw()
     love.graphics.setFont(self.font)
     love.graphics.setColor(game.manager.currentPalette.uiColour)
 
+    if self.timerScale > 1 then
+        love.graphics.setColor(game.manager.currentPalette.playerColour)
+    end
+
     if self.timeSeconds <= 5 and self.timeMinutes <= 0 then
         love.graphics.setColor(game.manager.currentPalette.enemyColour)
 
@@ -31,7 +36,7 @@ function stageTimeHud:draw()
         positionOffsetY = math.random(-3, 3)
     end
 
-    love.graphics.print(timeString, game.arenaValues.screenWidth/2 + positionOffsetX, 8 + positionOffsetY, 0, scaleX, scaleY, textWidth/2, 0)
+    love.graphics.print(timeString, game.arenaValues.screenWidth/2 + positionOffsetX, 8 + positionOffsetY, 0, scaleX * self.timerScale, scaleY * self.timerScale, textWidth/2, 0)
 end
 
 return stageTimeHud
