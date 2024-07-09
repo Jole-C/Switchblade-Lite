@@ -525,7 +525,7 @@ function game:setupResources()
     {
         fonts = assetGroup(
         {
-            fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-/", spacing = 1}},
+            fontMain = {path = "assets/fonts/font.png", type = "Image Font", parameters = {glyphs = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.:,;()!?-/+", spacing = 1}},
             fontUI = {path = "assets/fonts/fontui.png", type = "Image Font", parameters = {glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,/%!?:0123456789 ", spacing = 2}},
             fontBigUI = {path = "assets/fonts/fontuibig.png", type = "Image Font", parameters = {glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,/%!?:0123456789 ", spacing = 2}},
             fontAlert = {path = "assets/fonts/kenneyrocketsquare.ttf", type = "Font", parameters = {size = 48}},
@@ -563,6 +563,7 @@ function game:setupResources()
             scoreBlastEnd = {path = "assets/audio/sfx/scoreblastend.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             victoryIntro = {path = "assets/audio/sfx/victoryintro.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             multiplierReset = {path = "assets/audio/sfx/multiplierreset.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            timeAdded = {path = "assets/audio/sfx/timeadded.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         shaders = assetGroup(
