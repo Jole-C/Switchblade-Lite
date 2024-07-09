@@ -13,7 +13,7 @@ function stageDirector:new(levelDefinition)
     self:super(0, 0)
 
     self.maxMinutes = 0
-    self.maxSeconds = 15
+    self.maxSeconds = 30
     self.incrementSeconds = 10
     self.bossMinutes = 0
     self.bossSeconds = 0
@@ -88,6 +88,8 @@ end
 function stageDirector:update(dt)
     -- Quit early if the intro is in progress
     if self.inIntro == true then
+        self:setTimerPaused(true)
+
         self.textChangeCooldown = self.textChangeCooldown - 1 * dt
 
         if self.textChangeCooldown <= 0 then
