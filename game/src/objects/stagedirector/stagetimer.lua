@@ -79,11 +79,7 @@ end
 
 function stageTimer:setTime(minutes, seconds)
     self.timeMinutes = minutes or 1
-    self.timeSeconds = seconds or 59 
-    
-    for _, timeAlert in pairs(self.timeAlertText) do
-        timeAlert.displayed = false
-    end
+    self.timeSeconds = seconds or 59
 end
 
 function stageTimer:addTime(minutes, seconds)
