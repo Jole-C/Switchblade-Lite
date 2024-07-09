@@ -109,6 +109,7 @@ function player:new(x, y)
     self.sprite = assets:get("sprites"):get("playerSprite")
     self.fireSound = assets:get("sounds"):get("fire")
     self.boostSound = assets:get("sounds"):get("boost")
+    self.boostFailSound = assets:get("sounds"):get("boostFail")
     self.hurtSound = assets:get("sounds"):get("shipHurt")
     self.overheatWarningSound = assets:get("sounds"):get("overheatWarning")
     self.overheatSound = assets:get("sounds"):get("shipOverheat")
@@ -150,10 +151,11 @@ function player:updateShipMovement(dt, movementDirection)
         end
 
         if game.input:pressed("boost") and not game.input:down("thrust") then
-            gameHelper:screenShake(0.03)
+            gameHelper:screenShake(0.1)
             self.isBoosting = true
             self:spawnTrail()
             self.isBoosting = false
+            self.boostFailSound:play()
         end
 
         if game.input:pressed("boost") and game.input:down("thrust") then
@@ -222,7 +224,7 @@ function player:updatePlayerTimers(dt)
 end
 
 function player:playOverheatSound(dt)
-    if self.shipTemperature > self.maxShipTemperature/2.3 and self.isOverheating == false then
+    if self.shipTemperature > self.temperatureForWarning and self.isOverheating == false then
         self.overheatPlayCooldown = self.overheatPlayCooldown - (1 * dt)
 
         if self.overheatPlayCooldown <= 0 then

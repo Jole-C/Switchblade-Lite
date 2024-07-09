@@ -386,6 +386,7 @@ function game:setupResources()
         sounds = assetGroup(
         {
             boost = {path = "assets/audio/sfx/defaultboost.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            boostFail = {path = "assets/audio/sfx/boostfail.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             fire = {path = "assets/audio/sfx/defaultfire.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             shipHurt = {path = "assets/audio/sfx/shiphurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             overheatWarning = {path = "assets/audio/sfx/overheatwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
