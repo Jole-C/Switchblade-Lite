@@ -13,6 +13,12 @@ function stageTimer:new(minutes, seconds)
     self.alertDisplayTime = 0.3
     self.alertDisplaySpeed = 0.2
 
+    self.maxWaveCompleteDisplayTime = 2
+    self.waveCompleteDisplayTime = self.maxWaveCompleteDisplayTime
+    self.maxWaveCompleteScale = 1.5
+    self.waveCompleteScale = 1
+    self.timerScaleRate = 0.1
+
     self.timeMinutes = self.maxMinutes
     self.timeSeconds = self.maxSeconds
     self.totalMinutes = 0
@@ -60,6 +66,14 @@ function stageTimer:update(dt)
             end
         end
     end
+
+    self.waveCompleteDisplayTime = self.waveCompleteDisplayTime - (1 * dt)
+
+    if self.waveCompleteDisplayTime >= 0 then
+        self.hud.timerScale = math.lerpDT(self.hud.timerScale, self.maxWaveCompleteScale, self.timerScaleRate, dt)
+    else
+        self.hud.timerScale = math.lerpDT(self.hud.timerScale, 1, self.timerScaleRate, dt)
+    end
 end
 
 function stageTimer:setTime(minutes, seconds)
@@ -78,7 +92,9 @@ function stageTimer:addTime(minutes, seconds)
     self.timeMinutes = self.timeMinutes + minutes
     self.timeMinutes = self.timeMinutes + math.floor(seconds / 60)
     
-    self.timeSeconds = seconds % 60
+    self.timeSeconds = self.timeSeconds + seconds % 60
+
+    self.waveCompleteDisplayTime = self.maxWaveCompleteDisplayTime
 end
 
 function stageTimer:getAbsoluteTime(minutes, seconds)
