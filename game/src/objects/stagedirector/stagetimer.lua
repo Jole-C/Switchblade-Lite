@@ -72,15 +72,13 @@ function stageTimer:setTime(minutes, seconds)
 end
 
 function stageTimer:addTime(minutes, seconds)
-    self.timeMinutes = self.timeMinutes + (minutes or 0)
-    local totalSeconds = self.timeSeconds + (seconds or 0)
+    minutes = minutes or 0
+    seconds = seconds or 0
 
-    if totalSeconds > 59 then
-        self.timeMinutes = self.timeMinutes + 1
-        self.timeSeconds = totalSeconds - 60
-    else
-        self.timeSeconds = self.timeSeconds + seconds
-    end
+    self.timeMinutes = self.timeMinutes + minutes
+    self.timeMinutes = self.timeMinutes + math.floor(seconds / 60)
+    
+    self.timeSeconds = seconds % 60
 end
 
 function stageTimer:getAbsoluteTime(minutes, seconds)
