@@ -22,13 +22,14 @@ function stageTimeHud:draw()
     love.graphics.setFont(self.font)
     love.graphics.setColor(game.manager.currentPalette.uiColour)
 
-    if self.timerScale > 1 then
+    if self.timerScale > 1.05 then
         love.graphics.setColor(game.manager.currentPalette.playerColour)
     end
 
     if self.timeSeconds <= 5 and self.timeMinutes <= 0 then
         love.graphics.setColor(game.manager.currentPalette.enemyColour)
 
+        self.timerScale = 1
         local scale = math.lerp(1, 3, 1 - (math.max(math.floor(self.timeSeconds), 1)/5))
         scaleX = scale
         scaleY = scale
