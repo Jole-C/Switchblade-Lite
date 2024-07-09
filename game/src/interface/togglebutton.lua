@@ -11,11 +11,19 @@ function toggleButton:new(text, font, restX, restY, selectedX, selectedY, option
     self.spritePosition = vec2(restX + (overrideSpriteX or 205), restY)
     self.option = option
     self.bool = game.manager:getOption(option)
+    self.soundSelect = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuSelect")
+    self.soundUnselect = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuBack")
 end
 
 function toggleButton:execute()
     self.bool = not self.bool
     game.manager:setOption(self.option, self.bool)
+
+    if self.bool then
+        self.soundSelect:play()
+    else
+        self.soundUnselect:play()
+    end
 end
 
 function toggleButton:draw()

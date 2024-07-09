@@ -61,6 +61,11 @@ function mainMenu:new()
     -- Initialise the background shader
     self.menuBackgroundShader = game.resourceManager:getAsset("Interface Assets"):get("shaders"):get("menuBackgroundShader")
 
+    -- Menu Sounds
+    self.selectSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuSelect")
+    self.backSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuBack")
+    self.startSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("gameStart")
+
     -- Initialise menu elements
     self.menus =
     {
@@ -75,6 +80,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.startSound:play()
                     end
                 end, true)
             }
@@ -93,6 +99,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
                         self.owner:setBackgroundSlideAmount(0.35)
+                        self.owner.selectSound:play()
                     end
                 end),
 
@@ -100,6 +107,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.35)
+                        self.owner.selectSound:play()
                     end
                 end),
 
@@ -124,27 +132,32 @@ function mainMenu:new()
                 textButton("Visual", "fontBigUI", 10, 10, 15, 10, function(self)
                     self.owner:switchMenu("optionsVisual")
                     self.owner:setBackgroundSlideAmount(0.7)
+                    self.owner.selectSound:play()
                 end),
 
                 textButton("Audio", "fontBigUI", 10, 25, 15, 25, function(self)
                     self.owner:switchMenu("optionsAudio")
                     self.owner:setBackgroundSlideAmount(0.7)
+                    self.owner.selectSound:play()
                 end),
 
                 textButton("Gameplay", "fontBigUI", 10, 40, 15, 40, function(self)
                     self.owner:switchMenu("optionsGameplay")
                     self.owner:setBackgroundSlideAmount(0.7)
+                    self.owner.selectSound:play()
                 end),
 
                 textButton("Accessibility", "fontBigUI", 10, 55, 15, 55, function(self)
                     self.owner:switchMenu("optionsAccessibility")
                     self.owner:setBackgroundSlideAmount(0.8)
+                    self.owner.selectSound:play()
                 end),
 
                 textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
                     end
                 end)
             }
@@ -172,6 +185,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
                     end
                     
                     game.manager:saveOptions()
@@ -201,6 +215,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
                     end
                     
                     game.manager:saveOptions()
@@ -226,6 +241,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
                     end
                     
                     game.manager:saveOptions()
@@ -253,6 +269,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
                     end
                     
                     game.manager:saveOptions()
@@ -270,6 +287,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("levelselect")
                         self.owner:setBackgroundSlideAmount(0.5)
+                        self.owner.selectSound:play()
                     end
                 end),
 
@@ -286,6 +304,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
                     end
                 end)
             }
@@ -297,25 +316,26 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena 1", "fontBigUI", 10, 10, 15, 10, function()
+                textButton("arena 1", "fontBigUI", 10, 10, 15, 10, function(self)
                     game.manager:changePlayerDefinition("default definition")
                     game.manager.runSetup.level = level1
                     game.transitionManager:doTransition("gameLevelState")
+                    self.owner.selectSound:play()
                 end),
 
-                textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function()
+                textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function(self)
                     game.manager:changePlayerDefinition("default definition")
                     game.manager.runSetup.level = level2
                     game.transitionManager:doTransition("gameLevelState")
                 end),
 
-                textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function()
+                textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function(self)
                 end),
 
-                textButton("wippy wippy wip", "fontBigUI", 10, 55, 15, 55, function()
+                textButton("wippy wippy wip", "fontBigUI", 10, 55, 15, 55, function(self)
                 end),
 
-                textButton("not done lol", "fontBigUI", 10, 70, 15, 70, function()
+                textButton("not done lol", "fontBigUI", 10, 70, 15, 70, function(self)
                 end),
 
                 textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
@@ -480,12 +500,14 @@ function mainMenu:new()
                     game.manager:changePlayerDefinition("default definition")
                     game.manager.runSetup.level = level1
                     game.transitionManager:doTransition("gameLevelState")
+                    self.owner.startSound:play()
                 end),
 
                 textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function()
                     game.manager:changePlayerDefinition("default definition")
                     game.manager.runSetup.level = level2
                     game.transitionManager:doTransition("gameLevelState")
+                    self.owner.startSound:play()
                 end),
 
                 textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function()
@@ -501,6 +523,7 @@ function mainMenu:new()
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
                         self.owner:setBackgroundSlideAmount(0.35)
+                        self.owner.backSound:play()
                     end
                 end)
             }
