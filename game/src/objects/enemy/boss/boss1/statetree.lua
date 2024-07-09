@@ -24,9 +24,6 @@ local spawnCharger = function(angle, x, y)
     local enemy = charger(x, y)
     enemy.angle = angle
     enemy.targetPlayer = false
-
-    local indicator = enemyIndicator(x, y, enemy)
-    gameHelper:addGameObject(indicator)
     
     return enemy
 end
@@ -35,14 +32,6 @@ local spawnSticker = function(angle, x, y)
     local enemy = sticker(x, y)
     enemy.angle = angle
     enemy.startingSpeed = math.random(150, 300)
-    enemy.restoreAmmo = false
-
-    if math.random(0, 100) < 15 then
-        enemy.restoreAmmo = true
-
-        local indicator = enemyIndicator(x, y, enemy)
-        gameHelper:addGameObject(indicator)
-    end
     
     return enemy
 end

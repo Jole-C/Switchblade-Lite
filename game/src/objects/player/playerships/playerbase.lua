@@ -419,7 +419,7 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
                     self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
                 end
                 
-                if collidedObject.markedForDelete and collidedObject.restoreAmmo then
+                if collidedObject.markedForDelete then
                     if self.ammo < self.maxAmmo then
                         game.manager:setFreezeFrames(4, function()
                             local playerPosition = game.playerManager.playerPosition
@@ -431,7 +431,7 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
                             game.manager:swapPalette()
                         end)
 
-                        self:incrementAmmo()
+                        self:incrementAmmo(collidedObject.ammoIncrementAmount)
                     else
                         game.manager:setFreezeFrames(2)
                         gameHelper:screenShake(0.2)
@@ -463,10 +463,13 @@ function player:handleBoostExplosion()
     end
 end
 
-function player:incrementAmmo()
-    self.ammo = self.ammo + self.boostAmmoIncrement
+function player:incrementAmmo(ammoIncrementAmount)
+    ammoIncrementAmount = ammoIncrementAmount or self.boostAmmoIncrement
+
+    self.ammo = self.ammo + ammoIncrementAmount
     self.ammo = math.clamp(self.ammo, 0, self.maxAmmo)
-    self.ammoDisplay:setDisplayAmmo()
+
+    self.ammoDisplay:setDisplayAmmo(ammoIncrementAmount)
 end
 
 function player:setFireCooldown()

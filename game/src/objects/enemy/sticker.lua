@@ -18,6 +18,7 @@ function sticker:new(x, y)
     self.circleAmplitude = 3
     self.circleRadius = 2
     self.maxStickGracePeriod = 3
+    self.ammoIncrementAmount = 1
 
     self.circleSine = 0
     self.circleRadiusOffset = 0

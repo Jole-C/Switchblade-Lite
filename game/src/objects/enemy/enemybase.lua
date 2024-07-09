@@ -11,8 +11,6 @@ function enemyBase:new(x, y)
     self.score = 100
     self.multiplierToApply = 1
 
-    self.restoreAmmo = true
-
     self.invulnerableTime = 0
     self.isInvulnerable = false
     self.enemyColour = game.manager.currentPalette.enemyColour
