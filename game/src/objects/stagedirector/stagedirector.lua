@@ -248,8 +248,6 @@ function stageDirector:startWave()
         return
     end
 
-    self:addTime(0, self.incrementSeconds)
-
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 
     -- Get a reference to the gamestate and arena
@@ -304,6 +302,10 @@ function stageDirector:startWave()
 
     if not spawnDefinitions then
         return
+    end
+
+    if self.currentWaveIndex < self.maxWave and self.currentWaveIndex > 1 then
+        self:addTime(0, self.incrementSeconds)
     end
 
     for i = 1, #spawnDefinitions do
