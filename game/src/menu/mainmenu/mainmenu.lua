@@ -71,7 +71,7 @@ function mainMenu:new()
             {
                 logo(),
                 
-                textButton("press space", "fontUI", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
+                textButton("press space", "fontBigUI", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -89,27 +89,27 @@ function mainMenu:new()
                 --rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
                 --text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
 
-                textButton("start", "fontUI", 10, 10, 15, 10, function(self)
+                textButton("start", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
                         self.owner:setBackgroundSlideAmount(0.35)
                     end
                 end),
 
-                textButton("options", "fontUI", 10, 25, 15, 25, function(self)
+                textButton("options", "fontBigUI", 10, 25, 15, 25, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.35)
                     end
                 end),
 
-                textButton("credits", "fontUI", 10, 40, 15, 40, function(self)
+                textButton("credits", "fontBigUI", 10, 40, 15, 40, function(self)
                 end),
 
-                textButton("about", "fontUI", 10, 55, 15, 55, function(self)
+                textButton("about", "fontBigUI", 10, 55, 15, 55, function(self)
                 end),
 
-                textButton("quit", "fontUI", 10, 70, 15, 70, function()
+                textButton("quit", "fontBigUI", 10, 80, 15, 80, function()
                     love.event.quit()
                 end),
 
@@ -121,27 +121,27 @@ function mainMenu:new()
         {
             elements =
             {
-                textButton("Visual", "fontUI", 10, 10, 15, 10, function(self)
+                textButton("Visual", "fontBigUI", 10, 10, 15, 10, function(self)
                     self.owner:switchMenu("optionsVisual")
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("Audio", "fontUI", 10, 25, 15, 25, function(self)
+                textButton("Audio", "fontBigUI", 10, 25, 15, 25, function(self)
                     self.owner:switchMenu("optionsAudio")
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("Gameplay", "fontUI", 10, 40, 15, 40, function(self)
+                textButton("Gameplay", "fontBigUI", 10, 40, 15, 40, function(self)
                     self.owner:switchMenu("optionsGameplay")
                     self.owner:setBackgroundSlideAmount(0.7)
                 end),
 
-                textButton("Accessibility", "fontUI", 10, 55, 15, 55, function(self)
+                textButton("Accessibility", "fontBigUI", 10, 55, 15, 55, function(self)
                     self.owner:switchMenu("optionsAccessibility")
                     self.owner:setBackgroundSlideAmount(0.8)
                 end),
 
-                textButton("back", "fontUI", 10, 80, 15, 80, function(self)
+                textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -154,21 +154,21 @@ function mainMenu:new()
         {
             elements = 
             {
-                text("Gameplay", "fontUI", "left", 10, 10, 1000),
+                text("Gameplay", "fontBigUI", "left", 10, 10, 1000),
 
-                slider("Health Ring Scale", "fontUI",  50, 150, 10, 25, "playerHealthRingSizePercentage", 260),
+                slider("Health Ring Scale", "fontBigUI",  50, 150, 10, 25, "playerHealthRingSizePercentage", 260),
     
-                toggleButton("Show Player Health", "fontUI", 10, 40, 20, 40, "showPlayerHealth", 260),
+                toggleButton("Show Player Health", "fontBigUI", 10, 40, 20, 40, "showPlayerHealth", 260),
 
-                toggleButton("Show Ring Helpers", "fontUI", 10, 55, 20, 55, "showHealthRingHelpers", 260),
+                toggleButton("Show Ring Helpers", "fontBigUI", 10, 55, 20, 55, "showHealthRingHelpers", 260),
     
-                toggleButton("Center Camera", "fontUI", 10, 70, 20, 70, "centerCamera", 260),
+                toggleButton("Center Camera", "fontBigUI", 10, 70, 20, 70, "centerCamera", 260),
 
-                toggleButton("Show FPS", "fontUI", 10, 85, 20, 85, "showFPS", 260),
+                toggleButton("Show FPS", "fontBigUI", 10, 85, 20, 85, "showFPS", 260),
 
-                toggleButton("Disable time alert", "fontUI", 10, 100, 20, 100, "disableTimeAlerts", 260),
+                toggleButton("Disable time alert", "fontBigUI", 10, 100, 20, 100, "disableTimeAlerts", 260),
     
-                textButton("back", "fontUI", 10, 125, 15, 125, function(self)
+                textButton("back", "fontBigUI", 10, 125, 15, 125, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -183,21 +183,21 @@ function mainMenu:new()
         {
             elements =
             {
-                text("Accessibility", "fontUI", "left", 10, 10, 1000),
+                text("Accessibility", "fontBigUI", "left", 10, 10, 1000),
 
-                toggleButton("Enable Debug Mode", "fontUI", 10, 25, 20, 25, "enableDebugMode", 260),
+                toggleButton("Enable Debug Mode", "fontBigUI", 10, 25, 20, 25, "enableDebugMode", 260),
 
-                toggleButton("Limit Palette Swaps", "fontUI", 10, 40, 20, 40, "limitPaletteSwaps", 260),
+                toggleButton("Limit Palette Swaps", "fontBigUI", 10, 40, 20, 40, "limitPaletteSwaps", 260),
 
-                toggleButton("Disable Screenshake", "fontUI", 10, 55, 20, 55, "disableScreenshake", 260),
+                toggleButton("Disable Screenshake", "fontBigUI", 10, 55, 20, 55, "disableScreenshake", 260),
 
-                slider("Shake Intensity", "fontUI",  50, 9999, 10, 70, "screenshakeIntensity", 260),
+                slider("Shake Intensity", "fontBigUI",  50, 9999, 10, 70, "screenshakeIntensity", 260),
 
-                toggleButton("Disable Angle Shake", "fontUI", 10, 85, 20, 85, "disableAngleshake", 260),
+                toggleButton("Disable Angle Shake", "fontBigUI", 10, 85, 20, 85, "disableAngleshake", 260),
 
-                slider("Zoom Scale", "fontUI",  50, 150, 10, 100, "cameraZoomScale"),
+                slider("Zoom Scale", "fontBigUI",  50, 150, 10, 100, "cameraZoomScale", 260),
 
-                textButton("back", "fontUI", 10, 125, 15, 125, function(self)
+                textButton("back", "fontBigUI", 10, 125, 15, 125, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -212,17 +212,17 @@ function mainMenu:new()
         {
             elements =
             {
-                text("visual", "fontUI", "left", 10, 10, 1000),
+                text("visual", "fontBigUI", "left", 10, 10, 1000),
 
-                toggleButton("fullscreen.", "fontUI", 10, 25, 20, 25, "enableFullscreen"),
+                toggleButton("fullscreen.", "fontBigUI", 10, 25, 20, 25, "enableFullscreen"),
 
-                toggleButton("toggle bg.", "fontUI", 10, 40, 20, 40, "enableBackground"),
+                toggleButton("toggle bg.", "fontBigUI", 10, 40, 20, 40, "enableBackground"),
 
-                slider("bg. fading", "fontUI", 0, 100, 10, 55, "fadingPercentage"),
+                slider("bg. fading", "fontBigUI", 0, 100, 10, 55, "fadingPercentage"),
 
-                slider("bg. speed", "fontUI", 0, 100, 10, 70, "speedPercentage"),
+                slider("bg. speed", "fontBigUI", 0, 100, 10, 70, "speedPercentage"),
                 
-                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -239,17 +239,17 @@ function mainMenu:new()
 
             elements =
             {
-                text("audio", "fontUI", "left", 10, 10, 1000),
+                text("audio", "fontBigUI", "left", 10, 10, 1000),
 
-                slider("master vol.", "fontUI",  0, 100, 10, 25, "masterVolPercentage"),
+                slider("master vol.", "fontBigUI",  0, 100, 10, 25, "masterVolPercentage"),
 
-                slider("music vol.", "fontUI",  0, 100, 10, 40, "musicVolPercentage"),
+                slider("music vol.", "fontBigUI",  0, 100, 10, 40, "musicVolPercentage"),
 
-                slider("sfx vol.", "fontUI",  0, 100, 10, 55, "sfxVolPercentage"),
+                slider("sfx vol.", "fontBigUI",  0, 100, 10, 55, "sfxVolPercentage"),
 
-                toggleButton("mute", "fontUI", 10, 70, 20, 70, "muteAudio"),
+                toggleButton("mute", "fontBigUI", 10, 70, 20, 70, "muteAudio"),
 
-                textButton("back", "fontUI", 10, 95, 15, 95, function(self)
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -266,23 +266,23 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena", "fontUI", 10, 10, 15, 10, function(self)
+                textButton("arena", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("levelselect")
                         self.owner:setBackgroundSlideAmount(0.5)
                     end
                 end),
 
-                textButton("gamemodes", "fontUI", 10, 25, 15, 25, function()
+                textButton("gamemodes", "fontBigUI", 10, 25, 15, 25, function()
                 end),
 
-                textButton("unlocks", "fontUI", 10, 40, 15, 40, function()
+                textButton("unlocks", "fontBigUI", 10, 40, 15, 40, function()
                 end),
 
-                textButton("achievements", "fontUI", 10, 55, 15, 55, function()
+                textButton("achievements", "fontBigUI", 10, 55, 15, 55, function()
                 end),
 
-                textButton("back", "fontUI", 10, 80, 15, 80, function(self)
+                textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -297,22 +297,28 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena 1", "fontUI", 10, 10, 15, 10, function()
+                textButton("arena 1", "fontBigUI", 10, 10, 15, 10, function()
                     game.manager:changePlayerDefinition("default definition")
                     game.manager.runSetup.level = level1
                     game.transitionManager:doTransition("gameLevelState")
                 end),
 
-                textButton("arena 2", "fontUI", 10, 25, 15, 25, function()
+                textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function()
                     game.manager:changePlayerDefinition("default definition")
                     game.manager.runSetup.level = level2
                     game.transitionManager:doTransition("gameLevelState")
                 end),
 
-                textButton("WIPPITY WIP", "fontUI", 10, 40, 15, 40, function()
+                textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function()
                 end),
 
-                textButton("back", "fontUI", 10, 65, 15, 65, function(self)
+                textButton("wippy wippy wip", "fontBigUI", 10, 55, 15, 55, function()
+                end),
+
+                textButton("not done lol", "fontBigUI", 10, 70, 15, 70, function()
+                end),
+
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
                         self.owner:setBackgroundSlideAmount(0.35)
@@ -321,7 +327,186 @@ function mainMenu:new()
             }
         },
     }
-    
+
+    self.tooltips =
+    {
+        ["start"] =
+        {
+            elements =
+            {
+                "",
+                "",
+            }
+        },
+
+        ["main"] =
+        {
+            elements =
+            {
+                "Choose a gamemode and play!",
+                "Change the options",
+                "View the credits",
+                "View about the game and help",
+                "Quit Switchblade",
+            }
+        },
+
+        ["optionsSelect"] =
+        {
+            elements =
+            {
+                "Change screen and background options",
+                "Change audio volume and mute",
+                "Change gameplay options",
+                "Change accessibility options",
+            }
+        },
+
+        ["optionsGameplay"] =
+        {
+            elements = 
+            {
+                "Scale of the health ring surrounding the player",
+                "Show a number for the player's health",
+                "Center the camera on the player",
+                "Show the current FPS",
+                "Disable on-screen alerts for the timer"
+            }
+        },
+
+        ["optionsAccessibility"] =
+        {
+            elements =
+            {
+                "Enable debug mode to show colliders and info",
+                "Adds a cooldown between palette swaps",
+                "Turns off screen shake",
+                "Sets the intensity of the screen shake",
+                "Disables angle changes for the screenshake",
+                "Set the base camera zoom scale"
+            }
+        },
+
+        ["optionsVisual"] =
+        {
+            elements =
+            {
+                text("visual", "fontBigUI", "left", 10, 10, 1000),
+
+                toggleButton("fullscreen.", "fontBigUI", 10, 25, 20, 25, "enableFullscreen"),
+
+                toggleButton("toggle bg.", "fontBigUI", 10, 40, 20, 40, "enableBackground"),
+
+                slider("bg. fading", "fontBigUI", 0, 100, 10, 55, "fadingPercentage"),
+
+                slider("bg. speed", "fontBigUI", 0, 100, 10, 70, "speedPercentage"),
+                
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("optionsSelect")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                    end
+                    
+                    game.manager:saveOptions()
+                end),
+            }
+        },
+
+        ["optionsAudio"] = 
+        {
+            displayMenuName = false,
+
+            elements =
+            {
+                text("audio", "fontBigUI", "left", 10, 10, 1000),
+
+                slider("master vol.", "fontBigUI",  0, 100, 10, 25, "masterVolPercentage"),
+
+                slider("music vol.", "fontBigUI",  0, 100, 10, 40, "musicVolPercentage"),
+
+                slider("sfx vol.", "fontBigUI",  0, 100, 10, 55, "sfxVolPercentage"),
+
+                toggleButton("mute", "fontBigUI", 10, 70, 20, 70, "muteAudio"),
+
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("optionsSelect")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                    end
+                    
+                    game.manager:saveOptions()
+                end),
+            }
+        },
+
+        ["gamemodeselect"] =
+        {
+            displayMenuName = false,
+            
+            elements =
+            {
+                textButton("arena", "fontBigUI", 10, 10, 15, 10, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("levelselect")
+                        self.owner:setBackgroundSlideAmount(0.5)
+                    end
+                end),
+
+                textButton("gamemodes", "fontBigUI", 10, 25, 15, 25, function()
+                end),
+
+                textButton("unlocks", "fontBigUI", 10, 40, 15, 40, function()
+                end),
+
+                textButton("achievements", "fontBigUI", 10, 55, 15, 55, function()
+                end),
+
+                textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("main")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                    end
+                end)
+            }
+        },
+
+        ["levelselect"] =
+        {
+            displayMenuName = false,
+            
+            elements =
+            {
+                textButton("arena 1", "fontBigUI", 10, 10, 15, 10, function()
+                    game.manager:changePlayerDefinition("default definition")
+                    game.manager.runSetup.level = level1
+                    game.transitionManager:doTransition("gameLevelState")
+                end),
+
+                textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function()
+                    game.manager:changePlayerDefinition("default definition")
+                    game.manager.runSetup.level = level2
+                    game.transitionManager:doTransition("gameLevelState")
+                end),
+
+                textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function()
+                end),
+
+                textButton("wippy wippy wip", "fontBigUI", 10, 55, 15, 55, function()
+                end),
+
+                textButton("not done lol", "fontBigUI", 10, 70, 15, 70, function()
+                end),
+
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("gamemodeselect")
+                        self.owner:setBackgroundSlideAmount(0.35)
+                    end
+                end)
+            }
+        },
+    }
+
     -- Switch to the main menu
     self:switchMenu("start")
     self:setBackgroundSlideAmount(0)

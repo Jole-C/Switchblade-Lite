@@ -71,17 +71,16 @@ function slider:draw()
     local offsetX = self.font:getWidth(tostring(self.value).."%")
     love.graphics.print(tostring(self.value).."%", self.numberPosition.x - offsetX / 4, self.numberPosition.y)
     
-    --[[
     -- Print the slider
     local textHeight = self.font:getHeight(self.text)
-    local lineX = self.position.x + 270
-    local lineY = self.position.y + textHeight/2 + 1
-    local circleX = math.lerp(lineX, lineX + self.lineLength, mathx.inverse_lerp(self.value, self.minValue, self.maxValue))
+    local lineX = self.numberPosition.x + 50
+    local lineY = self.numberPosition.y + textHeight/2 + 1
+    local circleX = math.floor(math.lerp(lineX, lineX + self.lineLength, mathx.inverse_lerp(self.value, self.minValue, self.maxValue)))
 
     love.graphics.setLineWidth(2)
     love.graphics.line(lineX, lineY, lineX + self.lineLength, lineY)
     love.graphics.circle("fill", circleX, lineY, 6)
-    love.graphics.setLineWidth(1)]]
+    love.graphics.setLineWidth(1)
 
     love.graphics.setColor(1, 1, 1, 1)
 end
