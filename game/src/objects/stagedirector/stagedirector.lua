@@ -12,8 +12,9 @@ local stageDirector = class({name = "Stage Director", extends = gameObject})
 function stageDirector:new(levelDefinition)
     self:super(0, 0)
 
-    self.maxMinutes = 3
-    self.maxSeconds = 30
+    self.maxMinutes = 0
+    self.maxSeconds = 15
+    self.incrementSeconds = 8
     self.bossMinutes = 0
     self.bossSeconds = 0
 
@@ -27,18 +28,7 @@ function stageDirector:new(levelDefinition)
     self.textChangeCooldown = self.secondsBetweenTextChange
     self.currentText = 0
 
-    self.timer = timer(self.maxMinutes, self.maxSeconds,
-    {
-        {text = "2 minutes!", displayed = false, time = {minutes = 1, seconds = 59}},
-        {text = "1 minute!", displayed = false, time = {minutes = 0, seconds = 59}},
-        {text = "30 seconds!", displayed = false, time = {minutes = 0, seconds = 30}},
-        {text = "10 seconds!", displayed = false, time = {minutes = 0, seconds = 10}},
-        {text = "5 seconds!", displayed = false, time = {minutes = 0, seconds = 5}},
-        {text = "4!", displayed = false, time = {minutes = 0, seconds = 4}},
-        {text = "3!", displayed = false, time = {minutes = 0, seconds = 3}},
-        {text = "2!", displayed = false, time = {minutes = 0, seconds = 2}},
-        {text = "1!", displayed = false, time = {minutes = 0, seconds = 1}},
-    })
+    self.timer = timer(self.maxMinutes, self.maxSeconds)
 
     gameHelper:addGameObject(self.timer)
     self:setTimerPaused(true)
@@ -228,8 +218,12 @@ function stageDirector:setTime(minutes, seconds)
     self.timer:setTime(minutes or 1, seconds or 59)
 end
 
+function stageDirector:addTime(minutes, seconds)
+    self.timer:addTime(minutes or 0, seconds or 0)
+end
+
 function stageDirector:getAbsoluteTime(minutes, seconds)
-    return self.timer:getAbsoluteTime(minutes, seconds)
+    return self.timer:getAbsoluteTime(minutes or 0, seconds or 0)
 end
 
 function stageDirector:registerBoss(boss)
@@ -251,6 +245,8 @@ function stageDirector:startWave()
     if self.currentWaveIndex > self.maxWave then
         return
     end
+
+    self:addTime(0, self.incrementSeconds)
 
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 

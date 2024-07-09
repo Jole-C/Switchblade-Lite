@@ -4,12 +4,11 @@ local alertObject = require "src.objects.stagedirector.alertobject"
 
 local stageTimer = class({name = "Stage Director", extends = gameObject})
 
-function stageTimer:new(minutes, seconds, intervalTexts)
+function stageTimer:new(minutes, seconds)
     self:super(0, 0)
 
     self.maxMinutes = minutes
     self.maxSeconds = seconds
-    self.timeAlertText = intervalTexts
     self.maxLowTimeWarningCooldown = 1
     self.alertDisplayTime = 0.3
     self.alertDisplaySpeed = 0.2
@@ -60,25 +59,6 @@ function stageTimer:update(dt)
                 self.lowTimeSound:play()
             end
         end
-    end    
-    
-    if game.manager:getOption("disableTimeAlerts") == false then
-        for _, timeAlert in pairs(self.timeAlertText) do
-            local minutes = self.timeMinutes
-            local seconds = math.floor(self.timeSeconds)
-
-            if self:getAbsoluteTime(minutes, seconds) > self:getAbsoluteTime(timeAlert.time.minutes, timeAlert.time.seconds) then
-                timeAlert.displayed = false
-            end
-            
-            if minutes == timeAlert.time.minutes and seconds == timeAlert.time.seconds and timeAlert.displayed == false then
-                timeAlert.displayed = true
-                
-                local text = alertObject(timeAlert.text, self.alertDisplayTime, self.alertDisplaySpeed)
-                gameHelper:addGameObject(text)
-                gameHelper:screenShake(0.1)
-            end
-        end
     end
 end
 
@@ -88,6 +68,18 @@ function stageTimer:setTime(minutes, seconds)
     
     for _, timeAlert in pairs(self.timeAlertText) do
         timeAlert.displayed = false
+    end
+end
+
+function stageTimer:addTime(minutes, seconds)
+    self.timeMinutes = self.timeMinutes + (minutes or 0)
+    local totalSeconds = self.timeSeconds + (seconds or 0)
+
+    if totalSeconds > 59 then
+        self.timeMinutes = self.timeMinutes + 1
+        self.timeSeconds = totalSeconds - 60
+    else
+        self.timeSeconds = self.timeSeconds + seconds
     end
 end
 
