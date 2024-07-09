@@ -14,7 +14,7 @@ function stageTimer:new(minutes, seconds)
     self.alertDisplaySpeed = 0.2
 
     self.maxWaveCompleteDisplayTime = 2
-    self.waveCompleteDisplayTime = self.maxWaveCompleteDisplayTime
+    self.waveCompleteDisplayTime = 0
     self.maxWaveCompleteScale = 1.5
     self.waveCompleteScale = 1
     self.timerScaleRate = 0.1
