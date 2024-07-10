@@ -25,6 +25,11 @@ function gameHelper:getScoreManager()
     return currentGamestate.scoreManager
 end
 
+function gameHelper:getStageDirector()
+    local currentGamestate = self:getCurrentState()
+    return currentGamestate.stageDirector
+end
+
 function gameHelper:addScore(score, multiplier)
     local scoreManager = self:getScoreManager()
 
