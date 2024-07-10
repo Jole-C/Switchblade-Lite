@@ -20,7 +20,7 @@ function timePickup:new(x, y, secondsToAdd)
     self.effect = game.particleManager:getEffect("Timer Stream")
 
     self.collider = collider(colliderDefinitions.none, self)
-    gameHelper:addCollider(self.collider, self.position.x, self.position.y, self.innerCircleRadius * 2, self.innerCircleRadius * 2)
+    gameHelper:addCollider(self.collider, self.position.x, self.position.y, self.outerCircleRadius * 2, self.outerCircleRadius * 2)
 end
 
 function timePickup:update(dt)
@@ -87,12 +87,15 @@ function timePickup:draw()
     love.graphics.setFont(self.font)
     love.graphics.setColor(1, 1, 1, 1)
 
+    local playerPosition = game.playerManager.playerPosition
+    love.graphics.line(self.position.x, self.position.y, playerPosition.x, playerPosition.y)
+
     love.graphics.printf(string, self.position.x - width/2, self.position.y - height/2, width, "center")
 end
 
 function timePickup:onPickup()
     gameHelper:getCurrentState().stageDirector:addTime(0, self.secondsToAdd)
-    gameHelper:screenShake(0.2)
+    gameHelper:screenShake(0.3)
     self.timeAddedSound:play()
 
     self:destroy()
