@@ -92,8 +92,8 @@ function mainMenu:new()
             
             elements =
             {
-                --rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
-                --text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nOne of the enemies is currently using dev art,\nbut has other visual differences.\nYou die if you run out of time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
+                rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
+                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nYou die if you run out of time.\nDefeating waves restores time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
 
                 textButton("start", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
@@ -178,10 +178,8 @@ function mainMenu:new()
                 toggleButton("Center Camera", "fontBigUI", 10, 70, 20, 70, "centerCamera", 260),
 
                 toggleButton("Show FPS", "fontBigUI", 10, 85, 20, 85, "showFPS", 260),
-
-                toggleButton("Disable time alert", "fontBigUI", 10, 100, 20, 100, "disableTimeAlerts", 260),
-    
-                textButton("back", "fontBigUI", 10, 125, 15, 125, function(self)
+                
+                textButton("back", "fontBigUI", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -324,9 +322,9 @@ function mainMenu:new()
                 end),
 
                 textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function(self)
-                    game.manager:changePlayerDefinition("default definition")
-                    game.manager.runSetup.level = level2
-                    game.transitionManager:doTransition("gameLevelState")
+                    --game.manager:changePlayerDefinition("default definition")
+                    --game.manager.runSetup.level = level2
+                    --game.transitionManager:doTransition("gameLevelState")
                 end),
 
                 textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function(self)
