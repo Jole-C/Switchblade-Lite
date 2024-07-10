@@ -20,7 +20,7 @@ function timePickup:new(x, y, secondsToAdd)
     self.effect = game.particleManager:getEffect("Timer Stream")
 
     self.collider = collider(colliderDefinitions.none, self)
-    gameHelper:addCollider(self.collider, self.position.x, self.position.y, self.innerCircleRadius, self.innerCircleRadius)
+    gameHelper:addCollider(self.collider, self.position.x, self.position.y, self.innerCircleRadius * 2, self.innerCircleRadius * 2)
 end
 
 function timePickup:update(dt)
@@ -66,7 +66,7 @@ end
 
 function timePickup:draw()
     self.effect:draw()
-    
+
     love.graphics.setLineWidth(self.innerLineWidth)
     love.graphics.circle("line", self.position.x, self.position.y, self.innerCircleRadius)
 
