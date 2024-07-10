@@ -780,6 +780,18 @@ function game:setupParticles()
     
     self.particleManager:addEffect(self.particleManager:newEffect({playerDeath}, self.canvases.foregroundCanvas.canvas, false), "Player Death")
 
+    local timerStream = love.graphics.newParticleSystem(circleFill, 1000)
+    timerStream:setColors(1, 1, 1, 1)
+    timerStream:setDirection(-1.5707963705063)
+    timerStream:setEmissionArea("none", 0, 0, 0, false)
+    timerStream:setEmitterLifetime(-1)
+    timerStream:setInsertMode("top")
+    timerStream:setParticleLifetime(0.1, 0.25)
+    timerStream:setSizes(2, 0)
+    timerStream:setSpeed(269.98336791992, 891.73107910156)
+    timerStream:setSpread(6.2831854820251)
+    
+    self.particleManager:addEffect(self.particleManager:newEffect({timerStream}, self.canvases.foregroundCanvas.canvas, true), "Timer Stream")
 end
 
 return game
