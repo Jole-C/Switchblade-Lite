@@ -6,6 +6,7 @@ local timer = require "src.objects.stagedirector.stagetimer"
 local alertObject = require "src.objects.stagedirector.alertobject"
 local soundObject = require "src.objects.stagedirector.spawnsound"
 local killDisplay = require "src.objects.stagedirector.killprogressdisplay"
+local timePickup = require "src.objects.stagedirector.timepickup"
 
 local stageDirector = class({name = "Stage Director", extends = gameObject})
 
@@ -305,7 +306,7 @@ function stageDirector:startWave()
     end
 
     if self.currentWaveIndex < self.maxWave and self.currentWaveIndex > 1 then
-        self:addTime(0, self.incrementSeconds)
+        self:addTimePickup(self.incrementSeconds)
     end
 
     for i = 1, #spawnDefinitions do
@@ -420,6 +421,11 @@ end
 function stageDirector:registerEnemyKill()
     self.enemyKills = self.enemyKills + 1
     self.totalKills = self.totalKills + 1
+end
+
+function stageDirector:addTimePickup(secondsToAdd)
+    local position = gameHelper:getArena():getRandomPosition(1)
+    gameHelper:addGameObject(timePickup(position.x, position.y, secondsToAdd or 0))
 end
 
 function stageDirector:draw()
