@@ -51,6 +51,7 @@ function player:new(x, y)
     self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
     self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
+    self.maxBoostGracePeriod = 0.3
     self.contactDamageHeatMultiplier = self.contactDamageHeatMultiplier or 10
     self.bounceDampening = self.bounceDampening or 0.5
     self.boostLineCount = 5
@@ -65,6 +66,7 @@ function player:new(x, y)
     self.fireOffset = self.fireOffset or 10
     self.boostAmmoIncrement = self.boostAmmoIncrement or 5
     self.isShooting = false
+    self.boostGracePeriod = self.maxBoostGracePeriod
     
     -- Ship variables
     self.health = self.maxHealth
@@ -107,6 +109,7 @@ function player:new(x, y)
 
     local assets = game.resourceManager:getAsset("Player Assets")
     self.sprite = assets:get("sprites"):get("playerSprite")
+    self.outlineShader = game.resourceManager:getAsset("Enemy Assets"):get("enemyOutlineShader")
     self.fireSound = assets:get("sounds"):get("fire")
     self.boostSound = assets:get("sounds"):get("boost")
     self.boostFailSound = assets:get("sounds"):get("boostFail")
@@ -139,6 +142,7 @@ function player:updateShipMovement(dt, movementDirection)
 
         if game.input:down("boost") and game.input:down("thrust") then
             self.isBoosting = true
+            self.boostGracePeriod = self.maxBoostGracePeriod
             self.velocity = self.velocity + movementDirection * (self.boostingAccelerationSpeed * dt)
 
             self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
@@ -146,8 +150,6 @@ function player:updateShipMovement(dt, movementDirection)
 
             self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
             self:spawnBoostLines()
-        else
-            self.isBoosting = false
         end
 
         if game.input:pressed("boost") and not game.input:down("thrust") then
@@ -165,12 +167,14 @@ function player:updateShipMovement(dt, movementDirection)
 end
 
 function player:updateShipSteering(dt)
-    if game.input:down("steerLeft") then
-        self.steeringSpeed = self.steeringSpeed - (self.steeringAccelerationSpeed * dt)
-    end
+    if self.isOverheating == false then
+        if game.input:down("steerLeft") then
+            self.steeringSpeed = self.steeringSpeed - (self.steeringAccelerationSpeed * dt)
+        end
 
-    if game.input:down("steerRight") then
-        self.steeringSpeed = self.steeringSpeed + (self.steeringAccelerationSpeed * dt)
+        if game.input:down("steerRight") then
+            self.steeringSpeed = self.steeringSpeed + (self.steeringAccelerationSpeed * dt)
+        end
     end
 
     self.steeringSpeed = math.clamp(self.steeringSpeed, -self.maxSteeringSpeed, self.maxSteeringSpeed)
@@ -181,7 +185,7 @@ end
 function player:updateShipShooting(dt, movementDirection)
     self.ammoDisplay.ammo = self.ammo
 
-    if self.isBoosting == true or self.ammo <= 0 then
+    if (self.isBoosting and self.boostGracePeriod <= 0) or self.ammo <= 0 or self.isOverheating then
         self.canFire = false
     end
 
@@ -213,6 +217,7 @@ end
 function player:updatePlayerTimers(dt)
     self.fireCooldown = self.fireCooldown - 1 * dt
     self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
+    self.boostGracePeriod = self.boostGracePeriod - 1 * dt
 
     if self.invulnerabilityCooldown <= 0 then
         self.isInvulnerable = false
@@ -220,6 +225,10 @@ function player:updatePlayerTimers(dt)
 
     if self.fireCooldown <= 0 then
         self.canFire = true
+    end
+
+    if self.boostGracePeriod <= 0 then
+        self.isBoosting = false
     end
 end
 
@@ -340,7 +349,7 @@ function player:updatePosition(dt)
                 self.angle = normal:angle()
             end
 
-            self.velocity = self.velocity - (2 * self.velocity:dot(normal) * normal)
+            self.velocity = (self.velocity - (2 * self.velocity:dot(normal) * normal)) * self.bounceDampening
             self.wallHitSound:play()
         end
     end
@@ -569,10 +578,17 @@ function player:draw()
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
-    
+
     love.graphics.setColor(game.manager.currentPalette.playerColour)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
     love.graphics.setColor(1, 1, 1, 1)
+    
+    if self.isBoosting then
+        self.outlineShader:send("stepSize", {1.5/self.sprite:getWidth(), 1.5/self.sprite:getHeight()})
+        love.graphics.setShader(self.outlineShader)
+        love.graphics.draw(self.sprite, self.position.x, self.position.y, self.angle, 1, 1, xOffset, yOffset)
+        love.graphics.setShader()
+    end
 
     if self.isInvulnerable == true then
         love.graphics.circle("line", self.position.x, self.position.y, 10)
