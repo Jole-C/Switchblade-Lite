@@ -95,14 +95,14 @@ end
 
 function timePickup:onPickup()
     gameHelper:getCurrentState().stageDirector:addTime(0, self.secondsToAdd)
-    gameHelper:screenShake(0.3)
+    gameHelper:screenShake(0.5)
     self.timeAddedSound:play()
 
     self:destroy()
     
     local explosionBurst = game.particleManager:getEffect("Explosion Burst")
     explosionBurst.systems[1]:setColors(game.manager.currentPalette.playerColour[1], game.manager.currentPalette.playerColour[2], game.manager.currentPalette.playerColour[3], 1)
-    game.particleManager:burstEffect("Explosion Burst", 50, self.position)
+    game.particleManager:burstEffect("Explosion Burst", 100, self.position)
 end
 
 function timePickup:cleanup()
