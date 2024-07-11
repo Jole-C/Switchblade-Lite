@@ -239,12 +239,10 @@ function arenaController:getRandomPosition(maximumDistancePercentage)
     local segment = self:getRandomSegment()
 
     local segmentPosition = segment.position:copy()
-    local randomDirection = segmentPosition:rotate_inplace(math.random(0, 2 * math.pi))
-    randomDirection:normalise_inplace()
+    local randomAngle = math.rad(math.random(0, 360))
+    local randomDirection = vec2(math.cos(randomAngle), math.sin(randomAngle))
 
-    randomDirection = segmentPosition + randomDirection * (segment.radius * math.random(0, maximumDistancePercentage))
-
-    return randomDirection
+    return segmentPosition + (randomDirection * (segment.radius * math.random(0, maximumDistancePercentage)))
 end
 
 function arenaController:drawSegments(fillType)
