@@ -93,7 +93,34 @@ function mainMenu:new()
             elements =
             {
                 rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
-                text("READ ME:\nWelcome to Switchblade!\nThings are rough and unfinished.\nOnly one level is done for now with a boss at the end.\n\nControls - Keyboard:\nW - thrust, A/D - steer, SPACE - fire, LSHIFT - boost\nS - flip direction\n\nControls - Gamepad:\nA - thrust, LBUMPER - boost, RBUMPER - fire\nLSTICK - steer, B - flip direction\n\nUSEFUL TO KNOW:\nBoosting into enemies restores ammo.\nBoosting for too long makes you overheat.\nBoosting or overheating disables health\nregeneration.\nSome enemies can only be killed by boosting.\nThere is a visual indicator for this.\nYou die if you run out of time.\nDefeating waves restores time.\nHave fun!", "fontMain", "left", 110, 18, 1000),
+                text([[
+                    "READ ME:
+                    Welcome to Switchblade!
+                    Things are unfinished. This is a temporary readme.
+                    Only one level is done for now with a boss at the end.
+
+
+                    Controls - Keyboard:
+                    W - thrust, A/D - steer, SPACE - fire, LSHIFT - boost
+                    S - flip direction
+
+                    Controls - Gamepad:
+                    A - thrust, LBUMPER - boost, RBUMPER - fire
+                    LSTICK - steer, B - flip direction
+
+
+                    USEFUL TO KNOW:
+                    Boosting into enemies restores ammo.
+                    Boosting for too long makes you overheat.
+                    Boosting or overheating disables health recharge.
+                    Some enemies can only be killed by boosting - 
+                    - they have a white outline.
+                    You die if you run out of time.
+                    Defeating waves and other actions drop pickups - 
+                    - touch them to add time.
+                    
+                    
+                    Have fun!"]], "fontMain", "left", 40, 18, 1000),
 
                 textButton("start", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
