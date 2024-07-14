@@ -4,7 +4,7 @@ local killDisplay = class({name = "Kill Display", extends = hudElement})
 function killDisplay:new()
     self:super()
     
-    self.lineY = game.arenaValues.screenHeight - 5
+    self.lineY = game.arenaValues.screenHeight - 8
     self.lineX = 18
     self.lineLength = game.arenaValues.screenWidth - self.lineX / 2
     self.lineWidth = 3
@@ -37,8 +37,8 @@ function killDisplay:draw()
 
     love.graphics.line(x1, y1 - 16, x2, y2 - 16)
 
-    love.graphics.draw(self.skullSprite, 3, self.lineY - 8)
-    love.graphics.draw(self.clockSprite, 3, self.lineY - 16 - 8)
+    love.graphics.draw(self.skullSprite, 1, self.lineY - 8)
+    love.graphics.draw(self.clockSprite, 1, self.lineY - 16 - 8)
     
     love.graphics.setColor(1, 1, 1, 1)
 end
