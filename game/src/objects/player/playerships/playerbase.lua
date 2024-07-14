@@ -26,7 +26,7 @@ function player:new(x, y)
     self.healthCircleRadius = 200 * game.manager:getOption("playerHealthRingSizePercentage") / 100
     self.maxOverheatPlayRate = 0.5
     self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 5
-    self.boostExplosionDistance = self.boostExplosionDistance or 100
+    self.boostExplosionDistance = self.boostExplosionDistance or 65
     self.maxBoostHeatDividend = self.maxBoostHeatDividend or 5
     self.invulnerableGracePeriod = self.invulnerableGracePeriod or 0.5
     
