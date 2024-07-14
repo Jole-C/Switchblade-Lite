@@ -5,8 +5,8 @@ function killDisplay:new()
     self:super()
     
     self.lineY = game.arenaValues.screenHeight - 5
-    self.lineX = 10
-    self.lineLength = game.arenaValues.screenWidth - self.lineX
+    self.lineX = 18
+    self.lineLength = game.arenaValues.screenWidth - self.lineX / 2
     self.lineWidth = 3
 
     self.totalKills = 0
@@ -14,6 +14,9 @@ function killDisplay:new()
 
     self.time = 0
     self.totalTime = 0
+
+    self.clockSprite = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("clock")
+    self.skullSprite = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("skull")
 end
 
 function killDisplay:draw()
@@ -32,8 +35,11 @@ function killDisplay:draw()
     x1 = self.lineX
     x2 = math.lerp(self.lineLength, self.lineX, math.clamp(self.time/self.totalTime, 0, 1))
 
-    love.graphics.line(x1, y1 - 5, x2, y2 - 5)
+    love.graphics.line(x1, y1 - 16, x2, y2 - 16)
 
+    love.graphics.draw(self.skullSprite, 3, self.lineY - 8)
+    love.graphics.draw(self.clockSprite, 3, self.lineY - 16 - 8)
+    
     love.graphics.setColor(1, 1, 1, 1)
 end
 

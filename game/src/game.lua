@@ -549,6 +549,8 @@ function game:setupResources()
             gameoverOutline = {path = "assets/sprites/interface/gameoveroutline.png", type = "Image"},
             victory = {path = "assets/sprites/interface/victory.png", type = "Image"},
             victoryOutline = {path = "assets/sprites/interface/victoryoutline.png", type = "Image"},
+            clock = {path = "assets/sprites/interface/clock.png", type = "Image"},
+            skull = {path = "assets/sprites/interface/skull.png", type = "Image"},
         }),
 
         sounds = assetGroup(
@@ -760,8 +762,8 @@ function game:setupParticles()
     playerSmoke:setEmissionArea("none", 0, 0, 0, false)
     playerSmoke:setEmitterLifetime(-1)
     playerSmoke:setInsertMode("top")
-    playerSmoke:setParticleLifetime(0.1, 0.25)
-    playerSmoke:setSizes(1, 0)
+    playerSmoke:setParticleLifetime(0.25, 0.5)
+    playerSmoke:setSizes(1.5, 0)
     playerSmoke:setSpeed(50, 100)
     playerSmoke:setSpread(6.2831854820251)
     
@@ -786,7 +788,7 @@ function game:setupParticles()
     timerStream:setEmissionArea("none", 0, 0, 0, false)
     timerStream:setEmitterLifetime(-1)
     timerStream:setInsertMode("top")
-    timerStream:setParticleLifetime(0.1, 0.25)
+    timerStream:setParticleLifetime(0.05, 0.15)
     timerStream:setSizes(2, 0)
     timerStream:setSpeed(269.98336791992, 891.73107910156)
     timerStream:setSpread(6.2831854820251)
