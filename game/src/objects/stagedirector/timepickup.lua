@@ -6,7 +6,8 @@ function timePickup:new(x, y, secondsToAdd)
     self:super(x, y)
     self.secondsToAdd = secondsToAdd
 
-    self.maxLifetime = 5
+    self.maxLifetime = 15
+    self.health = 3
     self.lifetime = self.maxLifetime
 
     self.innerCircleRadius = 15
@@ -28,6 +29,12 @@ function timePickup:update(dt)
 
     if self.lifetime <= 0 then
         self:destroy()
+    end
+
+    local arena = gameHelper:getArena()
+
+    if arena then
+        self.position = arena:getClampedPosition(self.position, 0.8)
     end
     
     game.particleManager:burstEffect("Timer Stream", 5, self.position)
@@ -57,6 +64,13 @@ function timePickup:update(dt)
 
             if colliderDefinition == colliderDefinitions.player then
                 self:onPickup()
+            elseif colliderDefinition == colliderDefinitions.playerbullet then
+                self.health = self.health - 1
+                collidedObject:destroy()
+
+                if self.health <= 0 then
+                    self:onPickup()
+                end
             end
 
             ::continue::
@@ -78,8 +92,6 @@ function timePickup:draw()
 
     love.graphics.arc("line", "open", self.position.x, self.position.y, self.arcRadius, 0 + offset, arcAngle + offset)
 
-    love.graphics.setLineWidth(1)
-
     local string = tostring(self.secondsToAdd)
     local width = self.font:getWidth(string)
     local height = self.font:getHeight(string)
@@ -90,6 +102,7 @@ function timePickup:draw()
     local playerPosition = game.playerManager.playerPosition
     love.graphics.line(self.position.x, self.position.y, playerPosition.x, playerPosition.y)
 
+    love.graphics.setLineWidth(1)
     love.graphics.printf(string, self.position.x - width/2, self.position.y - height/2, width, "center")
 end
 
