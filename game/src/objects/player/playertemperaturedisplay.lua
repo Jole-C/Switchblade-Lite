@@ -4,9 +4,10 @@ local playerTemperatureDisplay = class({name = "Player Temperature Display", ext
 function playerTemperatureDisplay:new(x, y)
     self:super(x, y)
 
-    self.minArcAngle = 3.92699
-    self.maxArcAngle = 5.49779
+    self.minArcAngle = math.pi / 2
+    self.maxArcAngle = math.pi / 2 + (2 * math.pi)
     self.radius = 25
+    self.lineWidth = 5
     self.temperatureAngle = self.minArcAngle
 
     self.temperature = 0
@@ -19,7 +20,7 @@ end
 
 function playerTemperatureDisplay:draw()
     love.graphics.setColor(game.manager.currentPalette.playerColour)
-    love.graphics.setLineWidth(3)
+    love.graphics.setLineWidth(self.lineWidth)
     love.graphics.arc("line", "open", self.position.x, self.position.y, self.radius, self.minArcAngle, self.temperatureAngle)
     love.graphics.setLineWidth(1)
 end
