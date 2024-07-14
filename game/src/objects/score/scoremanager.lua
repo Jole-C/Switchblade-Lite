@@ -7,7 +7,7 @@ function scoreManager:new(x, y)
     self:super(x, y)
 
     self.scoreMultiplier = 1
-    self.maxMultiplierResetTime = 3
+    self.maxMultiplierResetTime = 3.5
     self.multiplierResetTime = 0
     self.multiplierPaused = false
     self.score = 0
