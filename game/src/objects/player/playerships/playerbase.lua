@@ -25,7 +25,7 @@ function player:new(x, y)
     self.maxHealthRechargeCooldown = 2
     self.healthCircleRadius = 200 * game.manager:getOption("playerHealthRingSizePercentage") / 100
     self.maxOverheatPlayRate = 0.5
-    self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 8
+    self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 5
     self.boostExplosionDistance = self.boostExplosionDistance or 100
     self.maxBoostHeatDividend = self.maxBoostHeatDividend or 5
     self.invulnerableGracePeriod = self.invulnerableGracePeriod or 0.5
@@ -46,9 +46,9 @@ function player:new(x, y)
     self.maxSpeed = self.maxSpeed or 30
     self.maxBoostingSpeed = self.maxBoostingSpeed or 60
     self.maxShipTemperature = self.maxShipTemperature or 100
-    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
+    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 3
     self.shipCoolingRate = self.shipCoolingRate or 40
-    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
+    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 27
     self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.maxBoostGracePeriod = 0.3
@@ -252,7 +252,10 @@ function player:playOverheatSound(dt)
             gameHelper:screenShake(0.2)
         end
 
-        game.particleManager:burstEffect("Player Smoke", 5, self.position)
+        local randomAngle = math.rad(math.random(0, 360))
+        local offsetVector = vec2(math.cos(randomAngle), math.sin(randomAngle))
+        local length = math.random(0, 30)
+        game.particleManager:burstEffect("Player Smoke", 30, self.position + (offsetVector * length))
     end
 end
 
@@ -263,7 +266,7 @@ function player:updateOverheating(dt)
         self.isBoosting = false
 
         if self.isOverheating == false then
-            self:onHit(2)
+            self:onHit(1)
         end
 
         self.isOverheating = true
