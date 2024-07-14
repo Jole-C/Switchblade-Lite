@@ -15,7 +15,7 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 0
     self.maxSeconds = 30
-    self.incrementSeconds = 10
+    self.incrementSeconds = 7
     self.bossMinutes = 0
     self.bossSeconds = 0
 
