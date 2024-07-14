@@ -424,7 +424,7 @@ function stageDirector:registerEnemyKill()
 end
 
 function stageDirector:addTimePickup(secondsToAdd)
-    local position = gameHelper:getArena():getRandomPosition(1)
+    local position = gameHelper:getArena():getRandomPosition(0.7)
     gameHelper:addGameObject(timePickup(position.x, position.y, secondsToAdd or 0))
 end
 
