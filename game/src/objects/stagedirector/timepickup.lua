@@ -6,7 +6,7 @@ function timePickup:new(x, y, secondsToAdd)
     self:super(x, y)
     self.secondsToAdd = secondsToAdd
 
-    self.maxLifetime = 15
+    self.maxLifetime = 10
     self.health = 3
     self.lifetime = self.maxLifetime
 
