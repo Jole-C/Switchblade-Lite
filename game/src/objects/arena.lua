@@ -94,7 +94,9 @@ function arenaController:enableOutro()
     self.doOutro = true
 end
 
-function arenaController:getClampedPosition(position)
+function arenaController:getClampedPosition(position, radiusPercentage)
+    radiusPercentage = radiusPercentage or 1
+
     if self.numberOfSegments <= 0 then
         print("No segments!")
         return position, nil
@@ -108,7 +110,7 @@ function arenaController:getClampedPosition(position)
         if segment then
             local positionToSegment = (segment.position - position)
 
-            if positionToSegment:length() < segment.radius then
+            if positionToSegment:length() < segment.radius * radiusPercentage then
                 return position, segment
             end
         end
@@ -126,7 +128,7 @@ function arenaController:getClampedPosition(position)
             local positionToSegment = (position - segment.position)
             local normalise = positionToSegment:normalise()
 
-            normalise = normalise * segment.radius
+            normalise = normalise * (segment.radius * radiusPercentage)
 
             local edgePosition = segment.position + normalise
             local edgeToPosition = (position - edgePosition)
