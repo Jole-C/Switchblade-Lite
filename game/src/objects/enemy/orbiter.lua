@@ -11,7 +11,7 @@ function orbiter:new(x, y)
     self.positionOffsetAngleLerpRate = 0.2
     self.distanceFromPlayer = 70
     self.secondsBetweenAngleChange = 3
-    self.maxFireCooldown = 6
+    self.maxFireCooldown = 4
     self.health = 3
     self.maxLineFlashCooldown = 1
 
