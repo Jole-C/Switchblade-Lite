@@ -6,8 +6,8 @@ local playerExplosion = class({name = "Player Explosion", extends = explosion})
 function playerExplosion:new(x, y, radius, damage)
     self:super(x, y, radius, damage, "line", game.manager.currentPalette.playerColour)
     self.lifetime = 0.6
+    
     gameHelper:addGameObject(scoreObject(self.position.x, self.position.y, 1500, gameHelper:getScoreManager().scoreMultiplier))
-    gameHelper:getStageDirector():addTimePickup(5)
 end
 
 function playerExplosion:handleExplosion()
