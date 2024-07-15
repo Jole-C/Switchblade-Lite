@@ -14,7 +14,7 @@ function shielder:new(x, y)
     self.fleeSpeed = 20
     self.turnRate = 0.05
     self.fleeTurnRate = 0.3
-    self.shieldDistance = 200
+    self.shieldDistance = 150
     self.fleeDistance = 100
     self.maxSegmentCloseTime = 1
     self.segmentCloseTime = 0
