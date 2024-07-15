@@ -495,7 +495,7 @@ function player:applyFriction(dt, value, frictionValue)
 end
 
 function player:rechargeHealth(dt)
-    if self.isBoosting or self.isOverheating then
+    if self.isBoosting then
         self.healthRechargeCooldown = self.maxHealthRechargeCooldown
     end
 
