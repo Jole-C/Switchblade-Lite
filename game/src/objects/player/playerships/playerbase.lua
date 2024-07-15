@@ -46,9 +46,9 @@ function player:new(x, y)
     self.maxSpeed = self.maxSpeed or 30
     self.maxBoostingSpeed = self.maxBoostingSpeed or 60
     self.maxShipTemperature = self.maxShipTemperature or 100
-    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 3
+    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
     self.shipCoolingRate = self.shipCoolingRate or 40
-    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 27
+    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
     self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.maxBoostGracePeriod = 0.3
@@ -266,7 +266,7 @@ function player:updateOverheating(dt)
         self.isBoosting = false
 
         if self.isOverheating == false then
-            self:onHit(1)
+            self:onHit(2)
         end
 
         self.isOverheating = true
