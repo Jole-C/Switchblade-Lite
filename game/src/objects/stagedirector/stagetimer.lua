@@ -38,6 +38,7 @@ function stageTimer:update(dt)
 
     self.hud.timeSeconds = self.timeSeconds
     self.hud.timeMinutes = self.timeMinutes
+    self.hud.paused = self.paused
     
     if self.paused then
         return
