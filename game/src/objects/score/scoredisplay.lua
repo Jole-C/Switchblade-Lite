@@ -5,6 +5,7 @@ function scoreDisplay:new()
     self:super()
     
     self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontTime")
+    self.multiplierFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontScore")
     self.multiplierLineX = 318
     self.multiplierLineY = 26
     self.multiplierLineLength = 480 - self.multiplierLineX
@@ -17,8 +18,20 @@ function scoreDisplay:draw()
 
     local scoreManager = gameHelper:getScoreManager()
     local scoreString = string.format("%07d", scoreManager.score)
+    local scoreLength = self.font:getWidth(scoreString)
+
+    love.graphics.print(scoreString, 480 - scoreLength - 2, 8)
+
+    love.graphics.setFont(self.multiplierFont)
+
     local multiplier = scoreManager.scoreMultiplier
-    love.graphics.printf(tostring(multiplier).."x".." "..tostring(scoreString), 0, 8, 480, "right")
+    local waveMultiplier = scoreManager.scoreWaveMultiplier
+    local multiplierString = tostring(multiplier).."x"..tostring(waveMultiplier).."x"
+    local multiplierLength = self.multiplierFont:getWidth(multiplierString)
+    local multiplierHeight = self.multiplierFont:getHeight(multiplierString)
+    local scoreHeight = self.font:getHeight(scoreString)
+
+    love.graphics.print(multiplierString, 480 - scoreLength - 2 - multiplierLength, 8 + scoreHeight - multiplierHeight)
     
     local t = scoreManager.multiplierResetTime / scoreManager.maxMultiplierResetTime
     local rectWidth = math.lerp(0, self.multiplierLineLength, math.clamp(t, 0, 1))
