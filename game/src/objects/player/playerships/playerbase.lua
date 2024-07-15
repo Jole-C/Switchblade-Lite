@@ -558,7 +558,7 @@ function player:draw()
     end
 
     love.graphics.setColor(colour)
-    love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 1 - (self.health/self.maxHealth)))
+    love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, self.health/self.maxHealth))
     love.graphics.setLineWidth(4)
     love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius)
     love.graphics.setColor(colour)
