@@ -15,7 +15,7 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 0
     self.maxSeconds = 30
-    self.incrementSeconds = 7
+    self.waveTime = 15
     self.bossMinutes = 0
     self.bossSeconds = 0
 
@@ -102,7 +102,6 @@ function stageDirector:update(dt)
                 end
 
                 self.inIntro = false
-                self:setTimerPaused(false)
                 return
             end
 
@@ -121,15 +120,6 @@ function stageDirector:update(dt)
         return
     end
 
-    local player = game.playerManager.playerReference
-
-    if self.timer.timeSeconds <= 0 and self.timer.timeMinutes <= 0 then
-        player:destroy()
-        game.manager.runInfo.deathReason = "You ran out of time!"
-
-        self:setTimerPaused(true)
-    end
-
     if self.currentWaveType ~= "bossWave" then
         -- Transition to the next wave
         if self.inWaveTransition == true then
@@ -144,46 +134,19 @@ function stageDirector:update(dt)
 
         -- This timer is the elapsed time into a wave, and is used for both the wave defined override, but also for a default override
         self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
+        
+        if self.enemyKills >= self.minimumEnemyKills then
+            self.inWaveTransition = true
+        end
 
-        -- Go over the conditions and use them to decide when the next wave will start
-        local useDefaultOverride = true
+        self.killDisplay.kills = self.enemyKills
+        self.killDisplay.totalKills = self.minimumEnemyKills
 
-        for i = 1, #self.nextWaveConditions do
-            local condition = self.nextWaveConditions[i]
+        self.killDisplay.time = self.elapsedWaveTime
+        self.killDisplay.totalTime = self.waveTime
 
-            if condition then
-                if condition.conditionType == "minimumKills" then
-                    local minimumKills = condition.minimumKills or 1
-
-                    if self.enemyKills >= minimumKills and self.inWaveTransition == false then
-                        self.inWaveTransition = true
-                    end
-
-                    self.killDisplay.kills = self.enemyKills
-                    self.killDisplay.totalKills = minimumKills
-                elseif condition.conditionType == "timer" then
-                    local time = condition.timeUntilNextWave or 3
-
-                    if self.elapsedWaveTime > time and self.inWaveTransition == false then
-                        self.inWaveTransition = true
-                    end
-                        
-                    self.killDisplay.time = self.elapsedWaveTime
-                    self.killDisplay.totalTime = time
-                    
-                    useDefaultOverride = false
-                end
-            end
-
-            -- Handle the default timer override
-            if useDefaultOverride == true then
-                self.killDisplay.time = self.elapsedWaveTime
-                self.killDisplay.totalTime = self.defaultTimeForNextWave
-
-                if self.elapsedWaveTime > self.defaultTimeForNextWave then
-                    self.inWaveTransition = true
-                end
-            end
+        if self.elapsedWaveTime >= self.waveTime then
+            gameHelper:getScoreManager():resetWaveMultiplier()
         end
     else
         if self.bossReference and self.bossReference.markedForDelete then
@@ -212,6 +175,15 @@ function stageDirector:update(dt)
             if self.bossSeconds > 59 then
                 self.bossMinutes = self.bossMinutes + 1
                 self.bossSeconds = 0
+            end
+
+            local player = game.playerManager.playerReference
+        
+            if self.timer.timeSeconds <= 0 and self.timer.timeMinutes <= 0 then
+                player:destroy()
+                game.manager.runInfo.deathReason = "You ran out of time!"
+        
+                self:setTimerPaused(true)
             end
         end
     end
@@ -251,6 +223,10 @@ function stageDirector:startWave()
 
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 
+    if self.currentWaveIndex > 1 then
+        gameHelper:getScoreManager():incrementWaveMultiplier()
+    end
+    
     -- Get a reference to the gamestate and arena
     local currentGamestate = gameHelper:getCurrentState()
     local arena = currentGamestate.arena
@@ -263,12 +239,11 @@ function stageDirector:startWave()
     local wave = self.waveDefinitions[self.currentWaveIndex]
     local spawnDefinitions = wave.spawnDefinitions
     local segmentChanges = wave.segmentChanges
-    local nextWaveConditions = wave.nextWaveConditions
     self.currentWaveType = wave.waveType or "enemyWave"
 
     -- Reset the number of kills and other values
     self.enemyKills = 0
-    self.minimumEnemyKills = (wave.minimumKillsForNextWave or 1)
+    self.minimumEnemyKills = 0
     self.waveTransitionTime = 3
     self.elapsedWaveTime = 0
 
@@ -278,20 +253,6 @@ function stageDirector:startWave()
             local segment = currentGamestate.arena:getArenaSegment(segmentChanges[i].arenaSegment)
             segment:addChange(segmentChanges[i])
         end
-    end
-    
-    -- For each next wave override
-    self.nextWaveConditions = {}
-
-    if nextWaveConditions then
-        for i = 1, #nextWaveConditions do
-            table.insert(self.nextWaveConditions, nextWaveConditions[i])
-        end
-    else
-        table.insert(self.nextWaveConditions, {
-            conditionType = "timer",
-            timeUntilNextWave = 10
-        })
     end
 
     -- For each spawn definition
@@ -305,9 +266,7 @@ function stageDirector:startWave()
         return
     end
 
-    if self.currentWaveIndex < self.maxWave and self.currentWaveIndex > 1 then
-        self:addTimePickup(self.incrementSeconds)
-    end
+    local totalEnemies = 0
 
     for i = 1, #spawnDefinitions do
         local currentDefinition = spawnDefinitions[i]
@@ -372,6 +331,7 @@ function stageDirector:startWave()
                 end
 
                 self:spawnEnemy(pointX, pointY, generatedShape.origin, enemyDefinition)
+                totalEnemies = totalEnemies + 1
             end
         elseif spawnType == "alongShapePerimeter" then
             local enemiesPerLine = math.ceil(enemyDef.spawnCount/#generatedShape.points)
@@ -409,13 +369,17 @@ function stageDirector:startWave()
                     local enemyPosition = point1 + (vectorBetweenPoints * ((i * pointSpacing) - pointSpacing/2))
                     
                     self:spawnEnemy(enemyPosition.x, enemyPosition.y, generatedShape.origin, enemyDefinition)
+                    totalEnemies = totalEnemies + 1
                 end
             end
         elseif spawnType == "predefined" then
             local enemyDefinition = self.enemyDefinitions[enemyDef.enemyID]
             self:spawnEnemy(generatedShape.points.x, generatedShape.points.y, generatedShape.origin, enemyDefinition)
+            totalEnemies = totalEnemies + 1
         end
     end
+
+    self.minimumEnemyKills = math.floor(totalEnemies * 0.7)
 end
 
 function stageDirector:registerEnemyKill()
