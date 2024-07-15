@@ -1,10 +1,10 @@
 local gameObject = require "src.objects.gameobject"
 local worldIndicator = class({name = "World Indicator", extends = gameObject})
 
-function worldIndicator:new(x, y, text)
+function worldIndicator:new(x, y, text, fontName)
     self:super(x, y)
 
-    self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontScore")
+    self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get(fontName or "fontScore")
     self.text = text or ""
 
     self.yOffset = 20
