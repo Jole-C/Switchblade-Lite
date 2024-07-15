@@ -7,6 +7,7 @@ function scoreManager:new(x, y)
     self:super(x, y)
 
     self.scoreMultiplier = 1
+    self.scoreWaveMultiplier = 1
     self.maxMultiplierResetTime = 3.5
     self.multiplierResetTime = 0
     self.multiplierPaused = false
@@ -39,17 +40,25 @@ function scoreManager:resetMultiplier(playSound)
     self.multiplierResetTime = 0
 end
 
+function scoreManager:resetWaveMultiplier()
+    self.scoreWaveMultiplier = 1
+end
+
 function scoreManager:setMultiplierPaused(multiplierPaused)
     self.multiplierPaused = multiplierPaused
 end
 
 function scoreManager:addScore(score, multiplier)
-    self.score = self.score + (score * multiplier)
+    self.score = self.score + ((score * multiplier) * self.scoreWaveMultiplier)
 end
 
 function scoreManager:incrementMultiplier()
     self.scoreMultiplier = self.scoreMultiplier + 1
     self.multiplierResetTime = self.maxMultiplierResetTime
+end
+
+function scoreManager:incrementWaveMultiplier()
+    self.scoreWaveMultiplier = self.scoreWaveMultiplier + 1
 end
 
 function scoreManager:cleanup(destroyReason)
