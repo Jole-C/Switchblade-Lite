@@ -4,6 +4,7 @@ local enemyWarning = require "src.objects.enemy.enemywarning"
 local bossWarning = require "src.objects.enemy.boss.bosswarning"
 local timer = require "src.objects.stagedirector.stagetimer"
 local alertObject = require "src.objects.stagedirector.alertobject"
+local worldAlertObject = require "src.objects.stagedirector.worldalertobject"
 local soundObject = require "src.objects.stagedirector.spawnsound"
 local killDisplay = require "src.objects.stagedirector.killprogressdisplay"
 local timePickup = require "src.objects.stagedirector.timepickup"
@@ -15,7 +16,7 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 0
     self.maxSeconds = 30
-    self.waveTime = 15
+    self.waveTime = 10
     self.bossMinutes = 0
     self.bossSeconds = 0
 
@@ -84,6 +85,8 @@ function stageDirector:new(levelDefinition)
 
     self.killDisplay = killDisplay()
     game.interfaceRenderer:addHudElement(self.killDisplay)
+
+    self.waveBonusSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("timeAdded")
 end
 
 function stageDirector:update(dt)
@@ -146,7 +149,16 @@ function stageDirector:update(dt)
         self.killDisplay.totalTime = self.waveTime
 
         if self.elapsedWaveTime >= self.waveTime then
-            gameHelper:getScoreManager():resetWaveMultiplier()
+            local scoreManager = gameHelper:getScoreManager()
+
+            if scoreManager and scoreManager.scoreWaveMultiplier > 1 then
+                scoreManager:resetWaveMultiplier()
+    
+                local playerPosition = game.playerManager.playerPosition
+                local text = worldAlertObject(playerPosition.x, playerPosition.y, "Wave Bonus Reset", "fontScore")
+                
+                gameHelper:addGameObject(text)
+            end
         end
     else
         if self.bossReference and self.bossReference.markedForDelete then
@@ -224,9 +236,17 @@ function stageDirector:startWave()
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 
     if self.currentWaveIndex > 1 then
-        gameHelper:getScoreManager():incrementWaveMultiplier()
-    end
+        if self.elapsedWaveTime < self.waveTime then
+            local playerPosition = game.playerManager.playerPosition
+            local text = worldAlertObject(playerPosition.x, playerPosition.y, "Wave Bonus!", "fontScore")
+            gameHelper:addGameObject(text)
     
+            self.waveBonusSound:play()
+            gameHelper:getScoreManager():incrementWaveMultiplier()
+            gameHelper:screenShake(0.3)
+        end
+    end
+
     -- Get a reference to the gamestate and arena
     local currentGamestate = gameHelper:getCurrentState()
     local arena = currentGamestate.arena
