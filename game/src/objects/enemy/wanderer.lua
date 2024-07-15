@@ -8,12 +8,12 @@ function wanderer:new(x, y)
     self:super(x, y)
 
     -- Parameters of the enemy
-    self.secondsBetweenAngleChange = 1
+    self.secondsBetweenAngleChange = 0.7
     self.randomChangeOffset = 0.5
-    self.speed = 16
+    self.speed = 30
     self.health = 1
     self.maxAngleOffset = 30
-    self.maxDistanceFromPlayer = 50
+    self.maxDistanceFromPlayer = 10
     self.chanceToAngleToPlayer = 50
 
     -- Variables
@@ -34,7 +34,7 @@ function wanderer:new(x, y)
     self.eye = eye(x, y, 2, 2)
 
     if math.random(0, 100) > self.chanceToAngleToPlayer then
-        self.speed = 30
+        self.speed = 50
         self.targetPlayer = true
     end
 end
