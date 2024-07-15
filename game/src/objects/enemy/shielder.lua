@@ -146,19 +146,19 @@ function shielder:draw()
     yOffset = yOffset/2
 
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
-    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y, 0, 1, 1, 15, 6)
-    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y, math.pi, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y - 2, 0, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y + 2, math.pi, 1, 1, 15, 6)
 
     if self.tail then
         self.tail:draw()
     end
 
-    self.shader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
+    self.shader:send("stepSize", {2/self.sprite:getWidth(), 2/self.sprite:getHeight()})
     
     love.graphics.setShader(self.shader)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
-    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y, 0, 1, 1, 15, 6)
-    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y, math.pi, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y - 2, 0, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y + 2, math.pi, 1, 1, 15, 6)
 
     if self.tail then
         self.tail:draw()
