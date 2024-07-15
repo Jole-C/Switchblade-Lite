@@ -26,7 +26,7 @@ function scoreDisplay:draw()
 
     local multiplier = scoreManager.scoreMultiplier
     local waveMultiplier = scoreManager.scoreWaveMultiplier
-    local multiplierString = tostring(multiplier).."x"..tostring(waveMultiplier).."x"
+    local multiplierString = tostring(multiplier).."*"..tostring(waveMultiplier).."*"
     local multiplierLength = self.multiplierFont:getWidth(multiplierString)
     local multiplierHeight = self.multiplierFont:getHeight(multiplierString)
     local scoreHeight = self.font:getHeight(scoreString)
