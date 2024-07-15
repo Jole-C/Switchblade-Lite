@@ -50,7 +50,7 @@ function gameoverMenu:new()
         "Boosting builds your temperature, boost for too long and you'll overheat!",
         "Boosting into consecutive enemies creates an explosion damaging all\nenemies inside!",
         "Boosting into consecutive enemies reduces temperature for each enemy!",
-        "Your health won't recharge while boosting or overheating, manage it well!",
+        "Your health won't recharge while boosting, manage it well!",
         "Bosses only take damage from bullets!",
         "Only some enemies spawned by bosses drop ammo! They have a visual indicator."
     }
