@@ -136,9 +136,10 @@ function stageDirector:update(dt)
             end
         end
 
-        -- This timer is the elapsed time into a wave, and is used for both the wave defined override, but also for a default override
-        self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
-        
+        if self.inWaveTransition == false then
+            self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
+        end
+
         if self.enemyKills >= self.minimumEnemyKills then
             self.inWaveTransition = true
         end
