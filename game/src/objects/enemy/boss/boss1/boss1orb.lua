@@ -98,7 +98,7 @@ function bossOrb:draw()
 
     if self.isDamageable == true then
         love.graphics.setShader(self.damageableShader)
-        self.damageableShader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
+        self.damageableShader:send("stepSize", {2/self.sprite:getWidth(), 2/self.sprite:getHeight()})
         love.graphics.draw(self.sprite, self.position.x, self.position.y, self.spriteAngle, 1, 1, xOffset, yOffset)
         love.graphics.setShader()
     end

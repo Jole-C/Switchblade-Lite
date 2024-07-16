@@ -38,6 +38,14 @@ function stageTimer:update(dt)
 
     self.hud.timeSeconds = self.timeSeconds
     self.hud.timeMinutes = self.timeMinutes
+    self.hud.paused = self.paused
+    
+    self.totalSeconds = self.totalSeconds + (1 * dt)
+
+    if self.totalSeconds > 59 then
+        self.totalSeconds = 0
+        self.totalMinutes = self.totalMinutes + 1
+    end
     
     if self.paused then
         return
@@ -50,12 +58,6 @@ function stageTimer:update(dt)
         end
 
         self.timeSeconds = self.timeSeconds - (1 * dt)
-        self.totalSeconds = self.totalSeconds + (1 * dt)
-
-        if self.totalSeconds > 59 then
-            self.totalSeconds = 0
-            self.totalMinutes = self.totalMinutes + 1
-        end
 
         if self.timeMinutes <= 0 and self.timeSeconds <= 10 then
             self.lowTimeWarningCooldown = self.lowTimeWarningCooldown - (1 * dt)

@@ -11,6 +11,10 @@ function stageTimeHud:new()
 end
 
 function stageTimeHud:draw()
+    if self.paused == true then
+        return
+    end
+
     local timeString = string.format("%02.0f:%02.0f",math.abs(self.timeMinutes),math.abs(math.floor(self.timeSeconds)))
     local textWidth = self.font:getWidth(timeString)
     local textHeight = self.font:getHeight(timeString)

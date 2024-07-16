@@ -46,9 +46,9 @@ function player:new(x, y)
     self.maxSpeed = self.maxSpeed or 30
     self.maxBoostingSpeed = self.maxBoostingSpeed or 60
     self.maxShipTemperature = self.maxShipTemperature or 100
-    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 3
+    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
     self.shipCoolingRate = self.shipCoolingRate or 40
-    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 27
+    self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
     self.boostDamage = self.boostDamage or 3
     self.boostEnemyHitHeatAccumulation = self.boostEnemyHitHeatAccumulation or 25
     self.maxBoostGracePeriod = 0.3
@@ -266,7 +266,7 @@ function player:updateOverheating(dt)
         self.isBoosting = false
 
         if self.isOverheating == false then
-            self:onHit(1)
+            self:onHit(2)
         end
 
         self.isOverheating = true
@@ -495,7 +495,7 @@ function player:applyFriction(dt, value, frictionValue)
 end
 
 function player:rechargeHealth(dt)
-    if self.isBoosting or self.isOverheating then
+    if self.isBoosting then
         self.healthRechargeCooldown = self.maxHealthRechargeCooldown
     end
 
@@ -558,10 +558,9 @@ function player:draw()
     end
 
     love.graphics.setColor(colour)
-    love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, 1 - (self.health/self.maxHealth)))
+    love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, self.health/self.maxHealth))
     love.graphics.setLineWidth(4)
-    love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius)
-    love.graphics.setColor(colour)
+    love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius - 2)
     love.graphics.setLineWidth(2)
 
     if game.manager:getOption("showHealthRingHelpers") then

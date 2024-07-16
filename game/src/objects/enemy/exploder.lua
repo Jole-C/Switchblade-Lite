@@ -7,7 +7,7 @@ local exploder = class({name = "Exploder", extends = enemy})
 function exploder:new(x, y)
     self:super(x, y)
 
-    self.health = 5
+    self.health = 4
     self.score = 700
     
     self.fuseTime = 2

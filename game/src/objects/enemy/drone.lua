@@ -2,20 +2,20 @@ local enemy = require "src.objects.enemy.enemy"
 local collider = require "src.collision.collider"
 local tail = require "src.objects.enemy.enemytail"
 local eye = require "src.objects.enemy.enemyeye"
-local drone = class({name = "Drone Enemy", extends = enemy})
+local drone = class({name = "Drone Enemy", extends = enemy}) 
 
 function drone:new(x, y)
     self:super(x, y, "drone sprite")
 
     -- Parameters of the enemy
-    self.maxSpeed = 93.75
-    self.turningRate = 0.16
+    self.maxSpeed = 160
+    self.turningRate = 0.2
     self.health = 5
-    self.maxChargeCooldown = 4
-    self.maxChargeSpeed = 375
+    self.maxChargeCooldown = 3
+    self.maxChargeSpeed = 500
     self.chargeDuration = 2
     self.friction = 1
-    self.bounceDampening = 0.5
+    self.bounceDampening = 0.75
     self.score = 500
 
     -- Variables

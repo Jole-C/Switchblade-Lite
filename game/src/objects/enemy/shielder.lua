@@ -10,11 +10,10 @@ function shielder:new(x, y)
 
     -- Parameters of the enemey
     self.health = 3
-    self.speed = 15
-    self.fleeSpeed = 20
+    self.speed = 20
+    self.fleeSpeed = 25
     self.turnRate = 0.05
     self.fleeTurnRate = 0.3
-    self.shieldDistance = 80
     self.fleeDistance = 100
     self.maxSegmentCloseTime = 1
     self.segmentCloseTime = 0
@@ -23,6 +22,11 @@ function shielder:new(x, y)
     self.segmentOpenOffset = self.maxSegmentOpenOffset
     self.tailYOffset = 3
     self.score = 500
+    self.minShieldDistance = 40
+    self.maxShieldDistance = 110
+    self.shieldDistance = self.minShieldDistance
+    self.shieldFrequency = 5
+    self.shieldTime = 0
 
     -- Variables
     self.direction = vec2(30, 30)
@@ -98,6 +102,10 @@ function shielder:update(dt)
         self.tail:update(dt)
     end
 
+    local amplitude = (self.maxShieldDistance - self.minShieldDistance) / 2
+    self.shieldTime = self.shieldTime + (self.shieldFrequency * dt)
+    self.shieldDistance = amplitude * math.sin(self.shieldTime) + (self.minShieldDistance + amplitude)
+
     -- Update the eye
     if self.eye then
         self.eye.eyeBasePosition.x = self.position.x
@@ -146,19 +154,19 @@ function shielder:draw()
     yOffset = yOffset/2
 
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
-    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y, 0, 1, 1, 15, 6)
-    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y, math.pi, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y - 2, 0, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y + 2, math.pi, 1, 1, 15, 6)
 
     if self.tail then
         self.tail:draw()
     end
 
-    self.shader:send("stepSize", {1/self.sprite:getWidth(), 1/self.sprite:getHeight()})
+    self.shader:send("stepSize", {2/self.sprite:getWidth(), 2/self.sprite:getHeight()})
     
     love.graphics.setShader(self.shader)
     love.graphics.draw(self.sprite, self.position.x, self.position.y, 0, 1, 1, xOffset, yOffset)
-    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y, 0, 1, 1, 15, 6)
-    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y, math.pi, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x - self.segmentOpenOffset, self.position.y - 2, 0, 1, 1, 15, 6)
+    love.graphics.draw(self.segmentSprite, self.position.x + self.segmentOpenOffset, self.position.y + 2, math.pi, 1, 1, 15, 6)
 
     if self.tail then
         self.tail:draw()
