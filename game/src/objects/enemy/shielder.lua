@@ -10,11 +10,10 @@ function shielder:new(x, y)
 
     -- Parameters of the enemey
     self.health = 3
-    self.speed = 15
-    self.fleeSpeed = 20
+    self.speed = 20
+    self.fleeSpeed = 25
     self.turnRate = 0.05
     self.fleeTurnRate = 0.3
-    self.shieldDistance = 150
     self.fleeDistance = 100
     self.maxSegmentCloseTime = 1
     self.segmentCloseTime = 0
@@ -23,6 +22,11 @@ function shielder:new(x, y)
     self.segmentOpenOffset = self.maxSegmentOpenOffset
     self.tailYOffset = 3
     self.score = 500
+    self.minShieldDistance = 40
+    self.maxShieldDistance = 110
+    self.shieldDistance = self.minShieldDistance
+    self.shieldFrequency = 5
+    self.shieldTime = 0
 
     -- Variables
     self.direction = vec2(30, 30)
@@ -97,6 +101,10 @@ function shielder:update(dt)
 
         self.tail:update(dt)
     end
+
+    local amplitude = (self.maxShieldDistance - self.minShieldDistance) / 2
+    self.shieldTime = self.shieldTime + (self.shieldFrequency * dt)
+    self.shieldDistance = amplitude * math.sin(self.shieldTime) + (self.minShieldDistance + amplitude)
 
     -- Update the eye
     if self.eye then
