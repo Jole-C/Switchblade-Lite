@@ -72,7 +72,10 @@ end
 
 function gameHelper:screenShake(amount)
     local currentGamestate = self:getCurrentState()
-    currentGamestate.cameraManager:screenShake(amount * game.manager:getOption("screenshakeIntensity")/100)
+
+    if currentGamestate.cameraManager then
+        currentGamestate.cameraManager:screenShake(amount * game.manager:getOption("screenshakeIntensity")/100)
+    end
 end
 
 return gameHelper
