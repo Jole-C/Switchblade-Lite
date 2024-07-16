@@ -25,7 +25,7 @@ function shielder:new(x, y)
     self.minShieldDistance = 40
     self.maxShieldDistance = 110
     self.shieldDistance = self.minShieldDistance
-    self.shieldFrequency = 5
+    self.shieldFrequency = 1
     self.shieldTime = 0
 
     -- Variables
