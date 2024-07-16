@@ -349,9 +349,9 @@ function mainMenu:new()
                 end),
 
                 textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function(self)
-                    --game.manager:changePlayerDefinition("default definition")
-                    --game.manager.runSetup.level = level2
-                    --game.transitionManager:doTransition("gameLevelState")
+                    game.manager:changePlayerDefinition("default definition")
+                    game.manager.runSetup.level = level2
+                    game.transitionManager:doTransition("gameLevelState")
                 end),
 
                 textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function(self)
