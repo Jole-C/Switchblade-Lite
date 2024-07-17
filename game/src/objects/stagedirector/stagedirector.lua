@@ -19,7 +19,7 @@ function stageDirector:new(levelDefinition)
     self.waveTime = 15
     self.bossMinutes = 0
     self.bossSeconds = 0
-    self.enemyKillPercentage = 0.8
+    self.enemyKillPercentage = 0.85
 
     self.maxWaveTransitionTime = 0.3
     self.secondsBetweenTextChange = 0.5
@@ -391,7 +391,7 @@ function stageDirector:startWave()
         end
     end
 
-    self.minimumEnemyKills = math.floor(totalEnemies * self.enemyKillPercentage)
+    self.minimumEnemyKills = math.floor((totalEnemies + #gameHelper:getEnemyManager().enemies) * self.enemyKillPercentage)
 end
 
 function stageDirector:registerEnemyKill()
