@@ -10,9 +10,11 @@ end
 function enemyManager:update(dt)
     gameObject.update(self, dt)
     
-    for index, enemy in pairs(self.enemies) do
+    for i = #self.enemies, 1, -1 do
+        local enemy = self.enemies[i]
+        
         if enemy.markedForDelete then
-            table.remove(self.enemies, index)
+            table.remove(self.enemies, i)
         end
     end
 end
