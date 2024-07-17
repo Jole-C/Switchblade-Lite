@@ -75,6 +75,7 @@ end
 
 function scoreManager:addScore(score, multiplier)
     self.waveScore = self.waveScore + (score * multiplier)
+    self.multiplierResetTime = self.maxMultiplierResetTime
 end
 
 function scoreManager:incrementMultiplier()
