@@ -8,7 +8,7 @@ function scoreManager:new(x, y)
     self:super(x, y)
 
     self.scoreMultiplier = 1
-    self.maxMultiplierResetTime = 4
+    self.maxMultiplierResetTime = 2.7
     self.multiplierResetTime = 0
     self.multiplierPaused = false
     self.score = 0
@@ -75,7 +75,6 @@ end
 
 function scoreManager:addScore(score, multiplier)
     self.waveScore = self.waveScore + (score * multiplier)
-    self.multiplierResetTime = self.maxMultiplierResetTime
 end
 
 function scoreManager:incrementMultiplier()
