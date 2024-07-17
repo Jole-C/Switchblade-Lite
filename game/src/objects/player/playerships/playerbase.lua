@@ -557,6 +557,21 @@ function player:draw()
         colour[4] = 0.17
     end
 
+    local enemyManager = gameHelper:getEnemyManager()
+    if enemyManager and #enemyManager.enemies < 3 then
+        love.graphics.setColor(colour)
+        love.graphics.setLineWidth(2)
+        
+        for _, enemy in pairs(enemyManager.enemies) do
+            local x1 = self.position.x
+            local y1 = self.position.y
+            local x2 = enemy.position.x
+            local y2 = enemy.position.y
+
+            love.graphics.line(x1, y1, x2, y2)
+        end
+    end
+
     love.graphics.setColor(colour)
     love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, self.health/self.maxHealth))
     love.graphics.setLineWidth(4)
