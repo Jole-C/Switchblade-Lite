@@ -64,7 +64,8 @@ function wanderer:update(dt)
             targetPosition = playerPosition + targetPosition
             self.targetAngle = (playerPosition - self.position):angle() + math.rad(math.random(-self.maxAngleOffset, self.maxAngleOffset))
         else
-            self.targetAngle = math.random(0, 2 * math.pi)
+            local randomPosition = gameHelper:getArena():getRandomPosition(0.7)
+            self.targetAngle = (randomPosition - self.position):angle()
         end
 
         self.angleChangeCooldown = self.secondsBetweenAngleChange
