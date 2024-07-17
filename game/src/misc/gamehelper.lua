@@ -20,6 +20,11 @@ function gameHelper:getArena()
     return currentGamestate.arena
 end
 
+function gameHelper:getEnemyManager()
+    local currentGamestate = self:getCurrentState()
+    return currentGamestate.enemyManager
+end
+
 function gameHelper:getScoreManager()
     local currentGamestate = self:getCurrentState()
     return currentGamestate.scoreManager
