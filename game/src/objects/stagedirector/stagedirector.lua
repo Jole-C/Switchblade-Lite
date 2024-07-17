@@ -21,10 +21,9 @@ function stageDirector:new(levelDefinition)
     self.bossSeconds = 0
     self.enemyKillPercentage = 0.8
 
-    self.maxWaveTransitionTime = 1
+    self.maxWaveTransitionTime = 0.3
     self.secondsBetweenTextChange = 0.5
     self.enemySpawnTime = 2
-    self.defaultTimeForNextWave = 15
     self.outroTime = 3
 
     self.introText = {"Ready?", "Steady?", "GO!"}
@@ -140,10 +139,7 @@ function stageDirector:update(dt)
 
             if self.enemySpawnTimer <= 0 then
                 self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
-                gameHelper:setMultiplierPaused(false)
             end
-        else
-            gameHelper:setMultiplierPaused(true)
         end
 
         if self.enemyKills >= self.minimumEnemyKills then
@@ -395,7 +391,7 @@ function stageDirector:startWave()
         end
     end
 
-    self.minimumEnemyKills = totalEnemies
+    self.minimumEnemyKills = math.floor(totalEnemies * self.enemyKillPercentage)
 end
 
 function stageDirector:registerEnemyKill()
