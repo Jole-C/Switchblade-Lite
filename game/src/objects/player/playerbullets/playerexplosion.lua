@@ -1,6 +1,5 @@
 local explosion = require "src.objects.bullet.explosion"
 local scoreObject = require "src.objects.score.scoreindicator"
-local worldAlertObject = require "src.objects.stagedirector.worldalertobject"
 
 local playerExplosion = class({name = "Player Explosion", extends = explosion})
 
@@ -8,8 +7,7 @@ function playerExplosion:new(x, y, radius, damage)
     self:super(x, y, radius, damage, "line", game.manager.currentPalette.playerColour)
     self.lifetime = 0.6
     
-    gameHelper:addGameObject(scoreObject(self.position.x, self.position.y + 30, 1500, gameHelper:getScoreManager().scoreMultiplier))
-    gameHelper:addGameObject(worldAlertObject(self.position.x, self.position.y, "Boost Explosion Bonus!", "fontScore"))
+    gameHelper:getScoreManager():applyBonus("boostBonus")
 end
 
 function playerExplosion:handleExplosion()

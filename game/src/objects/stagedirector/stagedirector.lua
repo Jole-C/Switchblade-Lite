@@ -16,7 +16,7 @@ function stageDirector:new(levelDefinition)
 
     self.maxMinutes = 0
     self.maxSeconds = 30
-    self.waveTime = 7
+    self.waveTime = 15
     self.bossMinutes = 0
     self.bossSeconds = 0
     self.enemyKillPercentage = 0.8
@@ -41,6 +41,7 @@ function stageDirector:new(levelDefinition)
     self.waveTransitionTime = self.maxWaveTransitionTime
     self.inWaveTransition = false
     self.elapsedWaveTime = 0
+    self.enemySpawnTimer = self.enemySpawnTime
 
     self.enemyKills = 0
     self.totalKills = 0
@@ -86,8 +87,6 @@ function stageDirector:new(levelDefinition)
 
     self.killDisplay = killDisplay()
     game.interfaceRenderer:addHudElement(self.killDisplay)
-
-    self.waveBonusSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("timeAdded")
 end
 
 function stageDirector:update(dt)
@@ -137,7 +136,14 @@ function stageDirector:update(dt)
         end
 
         if self.inWaveTransition == false then
-            self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
+            self.enemySpawnTimer = self.enemySpawnTimer - (1 * dt)
+
+            if self.enemySpawnTimer <= 0 then
+                self.elapsedWaveTime = self.elapsedWaveTime + (1 * dt)
+                gameHelper:setMultiplierPaused(false)
+            end
+        else
+            gameHelper:setMultiplierPaused(true)
         end
 
         if self.enemyKills >= self.minimumEnemyKills then
@@ -149,19 +155,6 @@ function stageDirector:update(dt)
 
         self.killDisplay.time = self.elapsedWaveTime
         self.killDisplay.totalTime = self.waveTime
-
-        if self.elapsedWaveTime >= self.waveTime then
-            local scoreManager = gameHelper:getScoreManager()
-
-            if scoreManager and scoreManager.scoreWaveMultiplier > 1 then
-                scoreManager:resetWaveMultiplier()
-    
-                local playerPosition = game.playerManager.playerPosition
-                local text = worldAlertObject(playerPosition.x, playerPosition.y, "Wave Bonus Reset", "fontScore")
-                
-                gameHelper:addGameObject(text)
-            end
-        end
     else
         if self.bossReference and self.bossReference.markedForDelete then
             self.outroTime = self.outroTime - 1 * dt
@@ -229,25 +222,25 @@ function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
 end
 
 function stageDirector:startWave()
+    -- Increment the wave index
     self.currentWaveIndex = self.currentWaveIndex + 1
+    
+    -- Apply the score and wave bonus
+    if self.currentWaveIndex > 1 then
+        if self.elapsedWaveTime < self.waveTime then
+            gameHelper:getScoreManager():applyBonus("waveBonus")
+        end
+
+        gameHelper:getScoreManager():applyWaveScore()
+    end
+
+    gameHelper:getScoreManager():beginNewWaveScore()
 
     if self.currentWaveIndex > self.maxWave then
         return
     end
 
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
-
-    if self.currentWaveIndex > 1 then
-        if self.elapsedWaveTime < self.waveTime then
-            local playerPosition = game.playerManager.playerPosition
-            local text = worldAlertObject(playerPosition.x, playerPosition.y, "Wave Bonus!", "fontScore")
-            gameHelper:addGameObject(text)
-    
-            self.waveBonusSound:play()
-            gameHelper:getScoreManager():incrementWaveMultiplier()
-            gameHelper:screenShake(0.3)
-        end
-    end
 
     -- Get a reference to the gamestate and arena
     local currentGamestate = gameHelper:getCurrentState()
@@ -268,6 +261,7 @@ function stageDirector:startWave()
     self.minimumEnemyKills = 0
     self.waveTransitionTime = 3
     self.elapsedWaveTime = 0
+    self.enemySpawnTimer = self.enemySpawnTime
 
     -- For each segment change
     if segmentChanges then
@@ -401,7 +395,7 @@ function stageDirector:startWave()
         end
     end
 
-    self.minimumEnemyKills = math.floor(totalEnemies * self.enemyKillPercentage)
+    self.minimumEnemyKills = totalEnemies
 end
 
 function stageDirector:registerEnemyKill()
@@ -441,6 +435,7 @@ end
 function stageDirector:cleanup()
     game.interfaceRenderer:removeHudElement(self.debugText)
     game.interfaceRenderer:removeHudElement(self.killDisplay)
+    gameHelper:getScoreManager():applyWaveScore()
 
     game.manager.runInfo.time.minutes = self.timer.totalMinutes
     game.manager.runInfo.time.seconds = self.timer.totalSeconds

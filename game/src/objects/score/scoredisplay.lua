@@ -25,14 +25,18 @@ function scoreDisplay:draw()
     love.graphics.setFont(self.multiplierFont)
 
     local multiplier = scoreManager.scoreMultiplier
-    local waveMultiplier = scoreManager.scoreWaveMultiplier
-    local multiplierString = tostring(multiplier).."*"..tostring(waveMultiplier).."*"
+    local multiplierString = tostring(multiplier).."*"
     local multiplierLength = self.multiplierFont:getWidth(multiplierString)
     local multiplierHeight = self.multiplierFont:getHeight(multiplierString)
     local scoreHeight = self.font:getHeight(scoreString)
 
     love.graphics.print(multiplierString, 480 - scoreLength - 2 - multiplierLength, 8 + scoreHeight - multiplierHeight)
     
+    local waveScoreString = string.format("%07d", scoreManager.waveScore)
+    local scoreLength = self.multiplierFont:getWidth(waveScoreString)
+
+    love.graphics.print(waveScoreString, 480 - scoreLength - 2, 34)
+
     local t = scoreManager.multiplierResetTime / scoreManager.maxMultiplierResetTime
     local rectWidth = math.lerp(0, self.multiplierLineLength, math.clamp(t, 0, 1))
 
