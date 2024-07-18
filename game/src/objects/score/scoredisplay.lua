@@ -41,6 +41,8 @@ function scoreDisplay:draw()
     local rectWidth = math.lerp(0, self.multiplierLineLength, math.clamp(t, 0, 1))
 
     love.graphics.rectangle("fill", self.multiplierLineX, self.multiplierLineY, rectWidth, self.multiplierLineHeight)
+
+    love.graphics.rectangle("line", self.multiplierLineX, self.multiplierLineY, self.multiplierLineLength, self.multiplierLineHeight)
     love.graphics.setColor(1, 1, 1, 1)
 end
 

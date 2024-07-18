@@ -437,6 +437,13 @@ function game:setupResources()
             bodySprite = {path = "assets/sprites/enemy/sticker.png", type = "Image"},
         }),
 
+        crisscross = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/crisscross.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/crisscrosstail.png", type = "Image"},
+        }),
+
+
         boss1 = assetGroup(
         {
             sprites = assetGroup(
