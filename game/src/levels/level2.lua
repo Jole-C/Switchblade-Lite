@@ -1,4 +1,4 @@
-local wanderer = require "src.objects.enemy.wanderer"
+local crisscross = require "src.objects.enemy.crisscross"
 local drone = require "src.objects.enemy.drone"
 local shielder = require "src.objects.enemy.shielder"
 local charger = require "src.objects.enemy.charger"
@@ -11,7 +11,7 @@ local levelDefinition =
 {
     enemyDefinitions =
     {
-        ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer"},
+        ["crisscross"] = {enemyClass = crisscross, spriteName = "crisscross"},
         ["drone"] = {enemyClass = drone, spriteName = "drone"},
         ["shielder"] = {enemyClass = shielder, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("warningSprite")},
         ["charger"] = {enemyClass = charger, spriteName = "charger"},
@@ -57,7 +57,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 8,
                     },
 
@@ -79,7 +79,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 8,
                     },
 
@@ -96,7 +96,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -118,7 +118,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 4,
                     },
 
@@ -134,7 +134,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 4,
                     },
 
@@ -150,7 +150,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 4,
                     },
 
@@ -189,7 +189,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 4,
                     },
 
@@ -229,19 +229,19 @@ local levelDefinition =
                 {
                     changeType = "position",
                     arenaSegment = "upperCircle",
-                    newPosition = vec2:polar(200, math.rad(90)),
+                    newPosition = vec2:polar(150, math.rad(90)),
                     lerpSpeed = 0.05,
                 },
                 {
                     changeType = "position",
                     arenaSegment = "lowerLeftCircle",
-                    newPosition = vec2:polar(200, math.rad(225)),
+                    newPosition = vec2:polar(150, math.rad(225)),
                     lerpSpeed = 0.05,
                 },
                 {
                     changeType = "position",
                     arenaSegment = "lowerRightCircle",
-                    newPosition = vec2:polar(200, math.rad(315)),
+                    newPosition = vec2:polar(150, math.rad(315)),
                     lerpSpeed = 0.05,
                 }
             }
@@ -255,7 +255,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -328,7 +328,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -345,7 +345,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -362,7 +362,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -397,19 +397,19 @@ local levelDefinition =
                 {
                     changeType = "size",
                     arenaSegment = "upperCircle",
-                    newRadius = 220,
+                    newRadius = 170,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "lowerLeftCircle",
-                    newRadius = 220,
+                    newRadius = 170,
                     lerpSpeed = 0.05
                 },
                 {
                     changeType = "size",
                     arenaSegment = "lowerRightCircle",
-                    newRadius = 220,
+                    newRadius = 170,
                     lerpSpeed = 0.05
                 },
                 {
@@ -539,7 +539,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 5,
                     },
 
@@ -556,7 +556,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 5,
                     },
 
@@ -573,7 +573,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 5,
                     },
 
@@ -667,7 +667,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -684,7 +684,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -701,7 +701,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 6,
                     },
 
@@ -892,7 +892,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 7,
                     },
 
@@ -909,7 +909,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 7,
                     },
 
@@ -985,7 +985,7 @@ local levelDefinition =
 
                     enemyDef =
                     {
-                        enemyID = "wanderer",
+                        enemyID = "crisscross",
                         spawnCount = 7,
                     },
 
