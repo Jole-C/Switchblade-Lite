@@ -634,7 +634,10 @@ function player:onHit(damage)
     gameHelper:resetMultiplier()
     
     self.health = self.health - damage
-    self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
+
+    if self.isOverheating == false then
+        self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
+    end
 
     self.isInvulnerable = true
     self.invulnerabilityCooldown = self.invulnerableGracePeriod
