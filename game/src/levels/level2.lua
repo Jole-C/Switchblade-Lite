@@ -1,3 +1,4 @@
+local snake = require "src.objects.enemy.snake"
 local crisscross = require "src.objects.enemy.crisscross"
 local drone = require "src.objects.enemy.drone"
 local shielder = require "src.objects.enemy.shielder"
@@ -12,6 +13,7 @@ local levelDefinition =
     enemyDefinitions =
     {
         ["crisscross"] = {enemyClass = crisscross, spriteName = "crisscross"},
+        ["snake"] = {enemyClass = snake, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("snake"):get("warningSprite")},
         ["drone"] = {enemyClass = drone, spriteName = "drone"},
         ["shielder"] = {enemyClass = shielder, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("warningSprite")},
         ["charger"] = {enemyClass = charger, spriteName = "charger"},
@@ -53,19 +55,20 @@ local levelDefinition =
             spawnDefinitions = 
             {
                 {
-                    spawnType = "alongShapePerimeter",
+                    spawnType = "predefined",
 
                     enemyDef =
                     {
-                        enemyID = "crisscross",
-                        spawnCount = 8,
+                        enemyID = "snake",
+                        spawnCount = 1,
                     },
 
                     shapeDef =
                     {
-                        numberOfPoints = 8,
-                        radius = 150,
-                        origin = "mainCircle"
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
                     }
                 }
             }

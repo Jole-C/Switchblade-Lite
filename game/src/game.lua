@@ -443,6 +443,17 @@ function game:setupResources()
             tailSprite = {path = "assets/sprites/enemy/crisscrosstail.png", type = "Image"},
         }),
 
+        snake = assetGroup(
+        {
+            warningSprite = {path = "assets/sprites/enemy/snakehead.png", type = "Image"},
+            headSprite = {path = "assets/sprites/enemy/snakehead.png", type = "Image"},
+            bodySprite = {path = "assets/sprites/enemy/snakesegment.png", type = "Image"},
+            bodySpriteNoEye = {path = "assets/sprites/enemy/snakesegmentnoeye.png", type = "Image"},
+            tailSprite = {path = "assets/sprites/enemy/snaketail.png", type = "Image"},
+            spawnSound = {path = "assets/audio/sfx/snakespawn.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            hurtSound = {path = "assets/audio/sfx/snakehurt.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            deathSound = {path = "assets/audio/sfx/snakedeath.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+        }),
 
         boss1 = assetGroup(
         {
@@ -789,18 +800,18 @@ function game:setupParticles()
     
     self.particleManager:addEffect(self.particleManager:newEffect({playerDeath}, self.canvases.foregroundCanvas.canvas, false), "Player Death")
 
-    local timerStream = love.graphics.newParticleSystem(circleFill, 1000)
-    timerStream:setColors(1, 1, 1, 1)
-    timerStream:setDirection(-1.5707963705063)
-    timerStream:setEmissionArea("none", 0, 0, 0, false)
-    timerStream:setEmitterLifetime(-1)
-    timerStream:setInsertMode("top")
-    timerStream:setParticleLifetime(0.05, 0.15)
-    timerStream:setSizes(2, 0)
-    timerStream:setSpeed(269.98336791992, 891.73107910156)
-    timerStream:setSpread(6.2831854820251)
+    local stream = love.graphics.newParticleSystem(circleFill, 1000)
+    stream:setColors(1, 1, 1, 1)
+    stream:setDirection(-1.5707963705063)
+    stream:setEmissionArea("none", 0, 0, 0, false)
+    stream:setEmitterLifetime(-1)
+    stream:setInsertMode("top")
+    stream:setParticleLifetime(0.05, 0.15)
+    stream:setSizes(2, 0)
+    stream:setSpeed(269.98336791992, 891.73107910156)
+    stream:setSpread(6.2831854820251)
     
-    self.particleManager:addEffect(self.particleManager:newEffect({timerStream}, self.canvases.foregroundCanvas.canvas, true), "Timer Stream")
+    self.particleManager:addEffect(self.particleManager:newEffect({stream}, self.canvases.foregroundCanvas.canvas, false), "Stream")
 end
 
 return game
