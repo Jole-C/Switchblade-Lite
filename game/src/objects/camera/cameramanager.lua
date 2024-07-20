@@ -102,7 +102,9 @@ function cameraManager:screenShake(amount)
         return
     end
     
-    self.screenShakeAmount = amount
+    if amount > self.screenShakeAmount then
+        self.screenShakeAmount = amount
+    end
 end
 
 return cameraManager
