@@ -441,6 +441,7 @@ function game:setupResources()
         {
             bodySprite = {path = "assets/sprites/enemy/crisscross.png", type = "Image"},
             tailSprite = {path = "assets/sprites/enemy/crisscrosstail.png", type = "Image"},
+            chargeSound = {path = "assets/audio/sfx/crisscrosscharge.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
         snake = assetGroup(
