@@ -35,6 +35,7 @@ function crisscross:new(x, y)
 
     self.sprite = game.resourceManager:getAsset("Enemy Assets"):get("crisscross"):get("bodySprite")
     self.tailSprite = game.resourceManager:getAsset("Enemy Assets"):get("crisscross"):get("tailSprite")
+    self.chargeSound = game.resourceManager:getAsset("Enemy Assets"):get("crisscross"):get("chargeSound")
 
     self.collider = collider(colliderDefinitions.enemy, self)
     gameHelper:addCollider(self.collider, self.position.x, self.position.y, 12, 12)
@@ -111,6 +112,8 @@ function crisscross:update(dt)
                     self.isCharging = true
                     self.velocity.x = 0
                     self.velocity.y = 0
+                    self.chargeSound:play()
+                    gameHelper:screenShake(0.05)
                 end
             end
         end
