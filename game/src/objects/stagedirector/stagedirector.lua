@@ -19,7 +19,7 @@ function stageDirector:new(levelDefinition)
     self.waveTime = 15
     self.bossMinutes = 0
     self.bossSeconds = 0
-    self.enemyKillPercentage = 0.7
+    self.enemyKillPercentage = 0.6
 
     self.maxWaveTransitionTime = 0.3
     self.secondsBetweenTextChange = 0.5
@@ -220,7 +220,7 @@ end
 function stageDirector:startWave()
     -- Increment the wave index
     self.currentWaveIndex = self.currentWaveIndex + 1
-    
+
     if self.currentWaveIndex > self.maxWave then
         return
     end
@@ -390,6 +390,9 @@ function stageDirector:startWave()
             totalEnemies = totalEnemies + 1
         end
     end
+
+    local enemies = #gameHelper:getEnemyManager().enemies
+    totalEnemies = totalEnemies + enemies
 
     self.minimumEnemyKills = math.ceil(totalEnemies * self.enemyKillPercentage)
 end
