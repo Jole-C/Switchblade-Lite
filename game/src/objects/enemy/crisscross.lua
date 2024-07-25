@@ -30,7 +30,7 @@ function crisscross:new(x, y)
     self.chargeCooldown = self.chargeDuration
     self.angleChangeCooldown = self.maxAngleChangeCooldown
     self.chargeGraceCooldown = 0
-    self.chargeWindupCooldown = self.chargeWindupTime
+    self.chargeWindupCooldown = 0
     self.angle = math.random(0, 2 * math.pi)
     self.spriteAngle = self.angle
     self.velocity = vec2(math.cos(self.angle), math.sin(self.angle)) * self.maxSpeed
@@ -74,7 +74,6 @@ function crisscross:update(dt)
                 self.isCharging = false
                 self.chargeCooldown = self.chargeDuration
                 self.chargeGraceCooldown = self.chargeGraceDuration
-                self.chargeWindupCooldown = self.chargeWindupTime
             end
         else
             currentSpeed = 0.001
@@ -123,7 +122,9 @@ function crisscross:update(dt)
                     self.angle = (playerPosition - self.position):angle()
                     self.velocity.x = 0
                     self.velocity.y = 0
+
                     self.isCharging = true
+                    self.chargeWindupCooldown = self.chargeWindupTime
 
                     self.chargeSound:play()
                     gameHelper:screenShake(0.05)
