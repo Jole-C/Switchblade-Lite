@@ -15,6 +15,7 @@ function crisscross:new(x, y)
     self.chargeGraceDuration = 1
     self.friction = 1
     self.maxAngleChangeCooldown = 1
+    self.chargeWindupTime = 0.5
 
     self.checkAngles = {
         {x = -1, y = 0},
@@ -29,6 +30,7 @@ function crisscross:new(x, y)
     self.chargeCooldown = 0
     self.angleChangeCooldown = self.maxAngleChangeCooldown
     self.chargeGraceCooldown = 0
+    self.chargeWindupCooldown = self.chargeWindupTime
     self.angle = math.random(0, 2 * math.pi)
     self.spriteAngle = self.angle
     self.velocity = vec2(math.cos(self.angle), math.sin(self.angle)) * self.maxSpeed
@@ -61,14 +63,20 @@ function crisscross:update(dt)
 
         self.chargeGraceCooldown = self.chargeGraceCooldown - (1 * dt)
     else
-        currentSpeed = self.maxChargingSpeed
+        self.chargeWindupCooldown = self.chargeWindupCooldown - (1 * dt)
 
-        self.chargeCooldown = self.chargeCooldown - (1 * dt)
-
-        if self.chargeCooldown <= 0 then
-            self.isCharging = false
-            self.chargeCooldown = self.chargeDuration
-            self.chargeGraceCooldown = self.chargeGraceDuration
+        if self.chargeWindupCooldown <= 0 then
+            currentSpeed = self.maxChargingSpeed
+    
+            self.chargeCooldown = self.chargeCooldown - (1 * dt)
+    
+            if self.chargeCooldown <= 0 then
+                self.isCharging = false
+                self.chargeCooldown = self.chargeDuration
+                self.chargeGraceCooldown = self.chargeGraceDuration
+            end
+        else
+            currentSpeed = 0.001
         end
     end
 
@@ -108,10 +116,13 @@ function crisscross:update(dt)
                 if item.colliderDefinition == colliderDefinitions.player and self.isCharging == false and self.chargeGraceCooldown <= 0 then
                     local playerPosition = game.playerManager.playerPosition
                     self.angle = (playerPosition - self.position):angle()
-                    self.chargeCooldown = self.chargeDuration
-                    self.isCharging = true
                     self.velocity.x = 0
                     self.velocity.y = 0
+
+                    self.chargeCooldown = self.chargeDuration
+                    self.chargeWindupCooldown = self.chargeWindupTime
+                    self.isCharging = true
+
                     self.chargeSound:play()
                     gameHelper:screenShake(0.05)
                 end
