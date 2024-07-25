@@ -218,12 +218,12 @@ function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
 end
 
 function stageDirector:startWave()
+    -- Increment the wave index
+    self.currentWaveIndex = self.currentWaveIndex + 1
+    
     if self.currentWaveIndex > self.maxWave then
         return
     end
-    
-    -- Increment the wave index
-    self.currentWaveIndex = self.currentWaveIndex + 1
     
     -- Apply the score and wave bonus
     if self.currentWaveIndex > 1 then
