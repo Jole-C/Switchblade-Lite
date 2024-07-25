@@ -2,6 +2,7 @@ local wanderer = require "src.objects.enemy.wanderer"
 local shielder = require "src.objects.enemy.shielder"
 local sticker = require "src.objects.enemy.sticker"
 local charger = require "src.objects.enemy.charger"
+local drone = require "src.objects.enemy.drone"
 
 local heater = require "src.objects.enemy.heater"
 local crisscross = require "src.objects.enemy.crisscross"
@@ -18,6 +19,7 @@ local levelDefinition =
         ["shielder"] = {enemyClass = shielder, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("warningSprite")},
         ["sticker"] = {enemyClass = sticker, spriteName = "wanderer"},
         ["charger"] = {enemyClass = charger, spriteName = "charger"},
+        ["drone"] = {enemyClass = drone, spriteName = "drone"},
 
         ["heater"] = {enemyClass = heater, spriteName = "wanderer"},
         ["exploder"] = {enemyClass = exploder, spriteName = "wanderer"},
@@ -400,7 +402,851 @@ local levelDefinition =
                     }
                 },
             }
-        }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = -150, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 150, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 12,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 12,
+                        radius = 200,
+                        origin = "mainCircle"
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 12,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 12,
+                        radius = 200,
+                        origin = "mainCircle"
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 12,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 3,
+                        radius = 200,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 12,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 12,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 150, y = 0
+                        }
+                    } 
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = -150, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "wanderer",
+                        spawnCount = 4,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 4,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = -200, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 200, y = 0
+                        }
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = -100, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 100, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "charger",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+            },
+
+            segmentChanges =
+            {
+                {
+                    changeType = "position",
+                    arenaSegment = "upperCircle",
+                    newPosition = vec2(0, 0),
+                    lerpSpeed = 0.005,
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "lowerLeftCircle",
+                    newPosition = vec2(90, 0),
+                    lerpSpeed = 0.005,
+                },
+                {
+                    changeType = "position",
+                    arenaSegment = "lowerRightCircle",
+                    newPosition = vec2(-90, 0),
+                    lerpSpeed = 0.005,
+                }
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 100,
+                        origin = "lowerLeftCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 100,
+                        origin = "lowerRightCircle"
+                    }
+                },
+            },
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points =
+                        {
+                            {x = 0, y = -150},
+                            {x = 0, y = 150}
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points =
+                        {
+                            {x = 0, y = -150},
+                            {x = 0, y = 150}
+                        }
+                    }
+                },
+            },
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = -200, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 100,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 4,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            {x = 150, y = 150},
+                            {x = -150, y = 150}
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 4,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points =
+                        {
+                            {x = 150, y = -150},
+                            {x = -150, y = -150}
+                        }
+                    }
+                },
+            },
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 170,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 170,
+                        origin = "mainCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 170,
+                        origin = "lowerLeftCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 8,
+                        radius = 170,
+                        origin = "lowerRightCircle"
+                    }
+                },
+            },
+            {
+                spawnType = "predefined",
+
+                enemyDef =
+                {
+                    enemyID = "drone",
+                    spawnCount = 1,
+                },
+
+                shapeDef =
+                {
+                    origin = "lowerLeftCircle",
+                    points = {
+                        x = 0, y = 0
+                    }
+                }
+            },
+            {
+                spawnType = "predefined",
+
+                enemyDef =
+                {
+                    enemyID = "drone",
+                    spawnCount = 1,
+                },
+
+                shapeDef =
+                {
+                    origin = "lowerRightCircle",
+                    points = {
+                        x = 0, y = 0
+                    }
+                }
+            },
+            {
+                spawnType = "predefined",
+
+                enemyDef =
+                {
+                    enemyID = "drone",
+                    spawnCount = 1,
+                },
+
+                shapeDef =
+                {
+                    origin = "mainCircle",
+                    points = {
+                        x = 0, y = 0
+                    }
+                }
+            },
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "snake",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "drone",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 170,
+                        origin = "lowerLeftCircle"
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "heater",
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        numberOfPoints = 6,
+                        radius = 170,
+                        origin = "lowerRightCircle"
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "snake",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "mainCircle",
+                        points = {
+                            x = 0, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points =
+                        {
+                            {x = 0, y = -150},
+                            {x = 0, y = 150}
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 6,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points =
+                        {
+                            {x = 0, y = -150},
+                            {x = 0, y = 150}
+                        }
+                    }
+                },
+            }
+        },
     }
 }
 
