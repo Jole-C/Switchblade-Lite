@@ -27,7 +27,7 @@ function crisscross:new(x, y)
     self.checkDistance = 1000
 
     self.isCharging = false
-    self.chargeCooldown = 0
+    self.chargeCooldown = self.chargeDuration
     self.angleChangeCooldown = self.maxAngleChangeCooldown
     self.chargeGraceCooldown = 0
     self.chargeWindupCooldown = self.chargeWindupTime
@@ -74,16 +74,21 @@ function crisscross:update(dt)
                 self.isCharging = false
                 self.chargeCooldown = self.chargeDuration
                 self.chargeGraceCooldown = self.chargeGraceDuration
+                self.chargeWindupCooldown = self.chargeWindupTime
             end
         else
             currentSpeed = 0.001
         end
     end
 
-    self.velocity.x = self.velocity.x + math.cos(self.angle) * (currentSpeed * dt)
-    self.velocity.y = self.velocity.y + math.sin(self.angle) * (currentSpeed * dt)
-    self.spriteAngle = self.velocity:angle()
-    
+    if self.chargeWindupCooldown <= 0 then
+        self.velocity.x = self.velocity.x + math.cos(self.angle) * (currentSpeed * dt)
+        self.velocity.y = self.velocity.y + math.sin(self.angle) * (currentSpeed * dt)
+        self.spriteAngle = self.velocity:angle()
+    else
+        self.spriteAngle = self.angle    
+    end
+
     self:applyFriction(dt)
 
     local arena = gameHelper:getArena()
@@ -118,9 +123,6 @@ function crisscross:update(dt)
                     self.angle = (playerPosition - self.position):angle()
                     self.velocity.x = 0
                     self.velocity.y = 0
-
-                    self.chargeCooldown = self.chargeDuration
-                    self.chargeWindupCooldown = self.chargeWindupTime
                     self.isCharging = true
 
                     self.chargeSound:play()
