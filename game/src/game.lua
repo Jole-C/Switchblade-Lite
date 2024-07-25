@@ -132,7 +132,7 @@ function game:new()
 
     -- Temporary particle system
     local bgCol = self.manager.currentPalette.backgroundColour
-    self.ps = love.graphics.newParticleSystem(self.resourceManager:getAsset("Temp Assets"):get("particleSprite"), 1632)
+    self.ps = love.graphics.newParticleSystem(self.resourceManager:getAsset("Temp Assets"):get("particleSprite"), 10000)
     
     local ps = self.ps
     --[[ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
@@ -160,23 +160,23 @@ function game:new()
     ps:setColors(bgCol[1], bgCol[2], bgCol[3], bgCol[4])
     ps:setDirection(0.045423280447721)
     ps:setEmissionArea("uniform", 480, 270, 0, false)
-    ps:setEmissionRate(4096)
+    ps:setEmissionRate(1000)
     ps:setEmitterLifetime(-1)
     ps:setInsertMode("top")
     ps:setLinearAcceleration(0, 0, 0, 0)
     ps:setLinearDamping(0, 0)
-    ps:setOffset(50, 50)
     ps:setParticleLifetime(1.7999999523163, 2.2000000476837)
     ps:setRadialAcceleration(0, 0)
     ps:setRelativeRotation(false)
     ps:setRotation(0, 0)
-    ps:setSizes(0.095902815461159, 0.53716236352921)
-    ps:setSizeVariation(0.99361020326614)
-    ps:setSpeed(0.51036554574966, 0.51036554574966)
+    ps:setSizes(0, 2)
+    ps:setSizeVariation(1)
+    ps:setSpeed(1, 3)
     ps:setSpin(0, 0)
     ps:setSpinVariation(0)
     ps:setSpread(0.11967971920967)
     ps:setTangentialAcceleration(379.81402587891, 405.12814331055)
+    ps:setParticleLifetime(1, 10)
     
     ps:start()  
 
