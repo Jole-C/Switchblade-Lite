@@ -54,6 +54,8 @@ local levelDefinition =
 
     playerStartSegment = "mainCircle",
 
+    startingWave = 12,
+
     level = 
     {
         {
@@ -1242,6 +1244,83 @@ local levelDefinition =
                         {
                             {x = 0, y = -150},
                             {x = 0, y = 150}
+                        }
+                    }
+                },
+            }
+        },
+        {
+            spawnDefinitions =
+            {
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points =
+                        {
+                            {x = 0, y = -150},
+                            {x = 0, y = 150}
+                        }
+                    }
+                },
+                {
+                    spawnType = "alongShapePerimeter",
+
+                    enemyDef =
+                    {
+                        enemyID = "crisscross",
+                        spawnCount = 8,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points =
+                        {
+                            {x = 0, y = -150},
+                            {x = 0, y = 150}
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerLeftCircle",
+                        points = {
+                            x = 100, y = 0
+                        }
+                    }
+                },
+                {
+                    spawnType = "predefined",
+
+                    enemyDef =
+                    {
+                        enemyID = "exploder",
+                        spawnCount = 1,
+                    },
+
+                    shapeDef =
+                    {
+                        origin = "lowerRightCircle",
+                        points = {
+                            x = 100, y = 0
                         }
                     }
                 },
