@@ -63,6 +63,9 @@ end
 function scoreManager:resetMultiplier(playSound)
     if self.scoreMultiplier > 1 and playSound then
         self.multiplierResetSound:play()
+
+        local playerPosition = game.playerManager.playerPosition
+        gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "Multiplier reset!", "fontScore"))
     end
 
     self.scoreMultiplier = 1
