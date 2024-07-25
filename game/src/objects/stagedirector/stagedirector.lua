@@ -218,6 +218,10 @@ function stageDirector:spawnEnemy(x, y, originSegment, spawnClass)
 end
 
 function stageDirector:startWave()
+    if self.currentWaveIndex > self.maxWave then
+        return
+    end
+    
     -- Increment the wave index
     self.currentWaveIndex = self.currentWaveIndex + 1
     
@@ -231,10 +235,6 @@ function stageDirector:startWave()
     end
 
     gameHelper:getScoreManager():beginNewWaveScore()
-
-    if self.currentWaveIndex > self.maxWave then
-        return
-    end
 
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 
