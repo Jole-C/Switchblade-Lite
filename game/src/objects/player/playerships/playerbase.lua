@@ -1,5 +1,6 @@
 local gameObject = require "src.objects.gameobject"
 local collider = require "src.collision.collider"
+local worldAlertObject = require "src.objects.stagedirector.worldalertobject"
 
 local playerBullet = require "src.objects.player.playerbullets.playerbullet"
 local playerExplosion = require "src.objects.player.playerbullets.playerexplosion"
@@ -267,6 +268,7 @@ function player:updateOverheating(dt)
 
         if self.isOverheating == false then
             self:onHit(2)
+            gameHelper:addGameObject(worldAlertObject(self.position.x, self.position.y, "Overheated!", "fontScore"))
         end
 
         self.isOverheating = true

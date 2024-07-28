@@ -251,7 +251,9 @@ function snake:cleanup(destroyReason)
         game.particleManager:burstEffect("Explosion", 9, segment.position)
     end
 
-    self.deathSound:play()
+    if destroyReason ~= "autoDestruction" then
+        self.deathSound:play()
+    end
 end
 
 return snake
