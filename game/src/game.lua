@@ -488,7 +488,15 @@ function game:setupResources()
             })
         }),
 
-        --
+        boss2 = assetGroup(
+        {
+            shaders = assetGroup(
+            {
+                metaballThreshold = love.graphics.newShader("assets/shaders/metaballthreshold.glsl"),
+                metaballBlend = love.graphics.newShader("assets/shaders/metaballblend.glsl"),
+            })
+        }),
+
         deathSounds = randomAssetGroup(
         {
             enemyHit1 = {path = "assets/audio/sfx/enemyhit1.wav", type = "Source", parameters = {tag = self.tags.sfx}},
