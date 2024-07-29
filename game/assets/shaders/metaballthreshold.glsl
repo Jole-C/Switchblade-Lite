@@ -11,8 +11,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
     {
         return vec4(1, 0, 0, 1);
     }
-    else
-    {
-        return col;
-    }
+
+    col.a = 0;
+    return col;
 }

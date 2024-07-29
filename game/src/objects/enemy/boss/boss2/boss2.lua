@@ -1,6 +1,5 @@
 local boss = require "src.objects.enemy.boss.boss"
 local states = require "src.objects.enemy.boss.boss2.statetree"
-local body = require "src.objects.enemy.boss.boss2.body"
 
 local boss2 = class({name = "Boss 2", extends = boss})
 
@@ -25,20 +24,6 @@ function boss2:new(x, y)
     self.thresholdShader = assets:get("shaders"):get("metaballThreshold")
     self.blendShader = assets:get("shaders"):get("metaballBlend")
     self.metaballSprite = assets:get("sprites"):get("metaball")
-
-    self.parameters =
-    {
-        numberOfMetaballs = 30,
-        minMetaballRadius = 10,
-        maxMetaballRadius = 30,
-        minMetaballRadiusScale = 0.1,
-        maxMetaballRadiusScale = 0.7,
-    }
-    
-    self.bodies = {
-        leftBody = body(x, y, self.parameters),
-        rightBody = body(x, y, self.parameters),
-    }
 
     self.st = 0
     self.s = 0
