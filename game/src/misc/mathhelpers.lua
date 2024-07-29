@@ -21,6 +21,11 @@ function math.lerpDT(val, pos, perc, dt)
 	return pos + (val - pos) * math.exp2(-dt/perc)
 end
 
+-- https://stackoverflow.com/questions/11548062/how-to-generate-random-float-in-lua
+function math.randomFloat(lower, greater)
+    return lower + math.random()  * (greater - lower);
+end
+
 function math.round(val)
     return math.floor(val + 0.5)
 end
