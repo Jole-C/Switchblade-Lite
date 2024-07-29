@@ -23,8 +23,8 @@ function game:new()
         screenHeight = 270,
         worldX = -600,
         worldY = -600,
-        worldWidth = 600,
-        worldHeight = 600,
+        worldWidth = 1200,
+        worldHeight = 1200,
     }
 
     -- Load all services
@@ -490,6 +490,11 @@ function game:setupResources()
 
         boss2 = assetGroup(
         {
+            sprites = assetGroup(
+            {
+               metaball = {path = "assets/sprites/enemy/boss2/ball.png", type = "Image"},
+            }),
+
             shaders = assetGroup(
             {
                 metaballThreshold = love.graphics.newShader("assets/shaders/metaballthreshold.glsl"),
