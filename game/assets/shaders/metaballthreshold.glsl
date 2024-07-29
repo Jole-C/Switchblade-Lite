@@ -1,3 +1,5 @@
+extern vec4 drawColour = vec4(1, 0, 0, 1);
+
 vec4 effect( vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
 {
     vec4 col = Texel(texture, texCoords);
@@ -9,7 +11,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
 
     if (col.a > 0.5)
     {
-        return vec4(1, 0, 0, 1);
+        return drawColour;
     }
 
     col.a = 0;
