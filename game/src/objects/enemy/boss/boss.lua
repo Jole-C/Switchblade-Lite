@@ -69,6 +69,10 @@ function boss:update(dt)
     end
 
     if self.debugText and game.manager:getOption("enableDebugMode") == true then
+        if self.currentState == nil then
+            return
+        end
+
         self.debugText.text = "Current Phase: "..self.phaseIndex.."\n".."Current State: "..self.currentState:type().."\n".."Health: "..self.phaseHealth.."\n".."Shield: "..self.shieldHealth
     end
 
