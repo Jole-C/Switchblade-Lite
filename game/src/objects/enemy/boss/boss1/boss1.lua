@@ -3,6 +3,7 @@ local states = require "src.objects.enemy.boss.boss1.statetree"
 local bossOrb = require "src.objects.enemy.boss.boss1.boss1orb"
 local tail = require "src.objects.enemy.enemytail"
 local eye = require "src.objects.enemy.enemyeye"
+local collider = require "src.collision.collider"
 
 local boss1 = class({name = "Boss 1", extends = boss})
 
@@ -78,6 +79,9 @@ function boss1:new(x, y)
     }
 
     self:setFearLevel(1)
+
+    self.colliders = {}
+    self.colliderIndices = {}
 
     self:initialiseColliders(
     {
@@ -186,6 +190,22 @@ function boss1:update(dt)
 
     self.tentacleWiggleTime = self.tentacleWiggleTime + (self.tentacleWiggleFrequency * dt)
     self.tentacleWiggle = math.sin(self.tentacleWiggleTime) * self.tentacleWiggleAmplitude
+
+    local world = gameHelper:getWorld()
+
+    if world then
+        for _, colliderParameter in pairs(self.colliders) do
+            if world:hasItem(colliderParameter.colliderReference) then
+                local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(colliderParameter.colliderReference)
+                colliderPositionX = colliderParameter.position.x - colliderWidth/2
+                colliderPositionY = colliderParameter.position.y - colliderHeight/2
+                
+                world:update(colliderParameter.colliderReference, colliderPositionX, colliderPositionY)
+            end
+        end
+    end
+
+    self:checkColliders(self.colliderIndices)
 
     boss.update(self, dt)
 end
@@ -371,6 +391,25 @@ function boss1:handleDamage(damageType, amount)
     end
 
     return false
+end
+
+function boss1:initialiseColliders(colliderParameters)
+    local world = gameHelper:getWorld()
+
+    if world then
+        for colliderName, colliderParameter in pairs(colliderParameters) do
+            local newCollider = collider(colliderDefinitions.enemy, self)
+
+            self.colliders[colliderName] = {
+                colliderReference = newCollider,
+                position = self.position:copy(),
+                width = colliderParameter.width
+            }
+
+            world:add(newCollider, self.position.x, self.position.y, colliderParameter.width, colliderParameter.width)
+            table.insert(self.colliderIndices, newCollider)
+        end
+    end
 end
 
 return boss1

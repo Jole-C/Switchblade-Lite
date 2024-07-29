@@ -1,6 +1,5 @@
 local enemyBase = require "src.objects.enemy.enemybase"
 local text = require "src.interface.text"
-local collider = require "src.collision.collider"
 local bossHealthBar = require "src.objects.enemy.boss.bosshealthbar"
 local bossIntroCard = require "src.objects.enemy.boss.bossintrocard"
 
@@ -19,9 +18,6 @@ function boss:new(x, y)
     self.isInvulnerable = false
     self.invulnerableTime = 0
     self.maxInvulnerableTime = 0.05
-
-    self.colliders = {}
-    self.colliderIndices = {}
 
     self.phaseIndex = ""
     self.phase = nil
@@ -47,22 +43,6 @@ end
 
 function boss:update(dt)
     enemyBase.update(self, dt)
-
-    local world = gameHelper:getWorld()
-
-    if world then
-        for _, colliderParameter in pairs(self.colliders) do
-            if world:hasItem(colliderParameter.colliderReference) then
-                local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(colliderParameter.colliderReference)
-                colliderPositionX = colliderParameter.position.x - colliderWidth/2
-                colliderPositionY = colliderParameter.position.y - colliderHeight/2
-                
-                world:update(colliderParameter.colliderReference, colliderPositionX, colliderPositionY)
-            end
-        end
-    end
-
-    self:checkColliders(self.colliderIndices)
 
     if self.currentState and self.currentState.update then
         self.currentState:update(dt, self)
@@ -119,22 +99,6 @@ function boss:setPhase(phase)
 end
 
 function boss:initialiseColliders(colliderParameters)
-    local world = gameHelper:getWorld()
-
-    if world then
-        for colliderName, colliderParameter in pairs(colliderParameters) do
-            local newCollider = collider(colliderDefinitions.enemy, self)
-
-            self.colliders[colliderName] = {
-                colliderReference = newCollider,
-                position = self.position:copy(),
-                width = colliderParameter.width
-            }
-
-            world:add(newCollider, self.position.x, self.position.y, colliderParameter.width, colliderParameter.width)
-            table.insert(self.colliderIndices, newCollider)
-        end
-    end
 end
 
 function boss:updateColliderPosition(colliderName, x, y)
