@@ -12,6 +12,9 @@ function shieldMovement:enter(bossInstance)
     self.rightPos = vec2(0, 0)
     self.normal = vec2(0, 0)
     self.angle = 0
+
+    self.leftPoint = bossInstance:getPoint("leftPoint")
+    self.rightPoint = bossInstance:getPoint("rightPoint")
 end
 
 function shieldMovement:update(dt, bossInstance)
@@ -26,10 +29,10 @@ function shieldMovement:update(dt, bossInstance)
 
     self.angle = self.angle + (self.angleTurnRate * dt)
 
-    bossInstance.points.leftPoint.x = math.lerpDT(bossInstance.points.leftPoint.x, self.leftPos.x, self.pointLerpRate, dt)
-    bossInstance.points.leftPoint.y = math.lerpDT(bossInstance.points.leftPoint.y, self.leftPos.y, self.pointLerpRate, dt)
-    bossInstance.points.rightPoint.x = math.lerpDT(bossInstance.points.rightPoint.x, self.rightPos.x, self.pointLerpRate, dt)
-    bossInstance.points.rightPoint.y = math.lerpDT(bossInstance.points.rightPoint.y, self.rightPos.y, self.pointLerpRate, dt)
+    self.leftPoint.position.x = math.lerpDT(self.leftPoint.position.x, self.leftPos.x, self.pointLerpRate, dt)
+    self.leftPoint.position.y = math.lerpDT(self.leftPoint.position.y, self.leftPos.y, self.pointLerpRate, dt)
+    self.rightPoint.position.x = math.lerpDT(self.rightPoint.position.x, self.rightPos.x, self.pointLerpRate, dt)
+    self.rightPoint.position.y = math.lerpDT(self.rightPoint.position.y, self.rightPos.y, self.pointLerpRate, dt)
 end
 
 return shieldMovement

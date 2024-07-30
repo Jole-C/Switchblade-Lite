@@ -1,6 +1,7 @@
 local boss = require "src.objects.enemy.boss.boss"
 local states = require "src.objects.enemy.boss.boss2.statetree"
 local collider = require "src.collision.collider"
+local eye = require "src.objects.enemy.enemyeye"
 
 local boss2 = class({name = "Boss 2", extends = boss})
 
@@ -29,15 +30,13 @@ function boss2:new(x, y)
     self.maxPositionLerpRate = 0.3
     self.minPositionDistance = 10
     self.maxPositionDistance = 30
-    self.minSpriteScale = 0.05
-    self.maxSpriteScale = 0.3
-    self.colliderWidth = 5
+    self.minSpriteScale = 0.1
+    self.maxSpriteScale = 0.5
+    self.colliderWidth = 10
 
-    self.points = 
-    {
-        leftPoint = vec2(x, y),
-        rightPoint = vec2(x, y),
-    }
+    self.points = {}
+    self:addPoint("leftPoint")
+    self:addPoint("rightPoint")
 
     self.metaballs = {}
 
@@ -58,7 +57,7 @@ function boss2:update(dt)
         local closestDistance = math.huge
 
         for _, point in pairs(self.points) do
-            local distance = (point - metaball.position):length()
+            local distance = (point.position - metaball.position):length()
 
             if distance < closestDistance then
                 closestPoint = point
@@ -76,7 +75,7 @@ function boss2:update(dt)
             metaball.positionChangeCooldown = math.randomFloat(self.minPositionChangeCooldown, self.maxPositionChangeCooldown)
 
             local randomAngle = math.rad(math.random(0, 360))
-            metaball.targetPosition = closestPoint + vec2:polar(math.random(self.minPositionDistance, self.maxPositionDistance), randomAngle)
+            metaball.targetPosition = closestPoint.position + vec2:polar(math.random(self.minPositionDistance, self.maxPositionDistance), randomAngle)
 
             metaball.lerpRate = math.randomFloat(self.minPositionLerpRate, self.maxPositionLerpRate)
         end
@@ -167,6 +166,7 @@ function boss2:handleDamage(damageType, amount)
 end
 
 function boss2:cleanup(destroyReason)
+    boss.cleanup(self, destroyReason)
     self.metaballCanvas:release()
 end
 
@@ -190,6 +190,21 @@ function boss2:addMetaballs(metaballsToAdd)
             radius = self.metaballSprite:getWidth() * spriteScale
         })
     end
+end
+
+function boss2:addPoint(pointName)
+    self.points[pointName] = 
+    {
+        position = vec2(self.position.x, self.position.y),
+        eye = eye(self.position.x, self.position.y, 10, 30, true)
+    }
+end
+
+function boss2:getPoint(pointName)
+    local point = self.points[pointName]
+    assert(point ~= nil, "Point does not exist!")
+
+    return point
 end
 
 return boss2
