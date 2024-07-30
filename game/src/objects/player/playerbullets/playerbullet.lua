@@ -1,6 +1,11 @@
 local bullet = require "src.objects.bullet.bullet"
 local playerBullet = class({name = "Player Bullet", extends = bullet})
 
+function playerBullet:new(x, y, speed, angle, damage, colliderDefinition, width, height)
+    self:super(x, y, speed, angle, damage, colliderDefinition, width, height)
+    game.playerManager:registerPlayerBullet(self)
+end
+
 function playerBullet:handleCollision(collider, collidedObject, colliderDefinition)
     if colliderDefinition == colliderDefinitions.enemy then
         if collidedObject.onHit then
