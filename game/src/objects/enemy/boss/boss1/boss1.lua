@@ -412,4 +412,16 @@ function boss1:initialiseColliders(colliderParameters)
     end
 end
 
+function boss1:cleanup(destroyReason)
+    local world = gameHelper:getWorld()
+
+    if world then
+        for _, collider in pairs(self.colliders) do
+            if world:hasItem(collider.colliderReference) then
+                world:remove(collider.colliderReference)
+            end
+        end
+    end
+end
+
 return boss1
