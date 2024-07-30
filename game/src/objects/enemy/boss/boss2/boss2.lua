@@ -21,7 +21,7 @@ function boss2:new(x, y)
 
     self.metaballCanvas = love.graphics.newCanvas(self.canvasValues.width, self.canvasValues.height)
 
-    self.numberOfMetaballs = 1000
+    self.numberOfMetaballs = 500
     self.ballSpawnDistance = 300
     self.minPositionChangeCooldown = 0.1
     self.maxPositionChangeCooldown = 0.5
@@ -40,7 +40,6 @@ function boss2:new(x, y)
     }
 
     self.metaballs = {}
-    self.colliders = {}
 
     local assets = game.resourceManager:getAsset("Enemy Assets"):get("boss2")
     self.thresholdShader = assets:get("shaders"):get("metaballThreshold")
@@ -85,12 +84,19 @@ function boss2:update(dt)
         metaball.position.x = math.lerpDT(metaball.position.x, metaball.targetPosition.x, metaball.lerpRate, dt)
         metaball.position.y = math.lerpDT(metaball.position.y, metaball.targetPosition.y, metaball.lerpRate, dt)
 
-        if world and world:hasItem(metaball.collider) then
-            local colliderPositionX, colliderPositionY, colliderWidth, colliderHeight = world:getRect(metaball.collider)
-            colliderPositionX = metaball.position.x - colliderWidth/2
-            colliderPositionY = metaball.position.y - colliderHeight/2
-            
-            world:update(metaball.collider, colliderPositionX, colliderPositionY)
+        local player = game.playerManager.playerReference
+        local playerPosition = game.playerManager.playerPosition
+
+        if player then
+            if (playerPosition - metaball.position):length() < 10 then
+                player:onHit(1)
+            end
+
+            for _, bullet in ipairs(game.playerManager.playerBullets) do
+                if (bullet.position - metaball.position):length() < 10 then
+                    self:onHit(1)
+                end
+            end
         end
 
         ::continue::
@@ -145,6 +151,21 @@ function boss2:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
+function boss2:handleDamage(damageType, amount)
+    if damageType == "bullet" then
+        if self.isShielded == false then
+            self.phaseHealth = self.phaseHealth - amount
+            self:addScore(self.bossHitScore, gameHelper:getScoreManager().scoreMultiplier, vec2(self.position.x + math.random(-50, 50), self.position.y + math.random(-50, 50)))
+            return true
+        else
+            self.shieldHealth = self.shieldHealth - amount
+            return true
+        end
+    end
+
+    return false
+end
+
 function boss2:cleanup(destroyReason)
     self.metaballCanvas:release()
 end
@@ -157,17 +178,16 @@ function boss2:addMetaballs(metaballsToAdd)
     for i = 1, metaballsToAdd do
         local randomAngle = math.rad(math.random(0, 360))
         local position = vec2(math.cos(randomAngle), math.sin(randomAngle)) * self.ballSpawnDistance
-
-        local newCollider = collider(colliderDefinitions.enemy, self)
-        gameHelper:addCollider(newCollider, position.x - self.colliderWidth/2, position.y - self.colliderWidth/2, self.colliderWidth, self.colliderWidth)
+        local spriteScale = math.randomFloat(self.minSpriteScale, self.maxSpriteScale)
 
         table.insert(self.metaballs, {
-            spriteScale = math.randomFloat(self.minSpriteScale, self.maxSpriteScale),
+            spriteScale = spriteScale,
             position = position,
             positionChangeCooldown = 0,
             positionDistance = math.random(self.minPositionDistance, self.maxPositionDistance),
             targetPosition = vec2(math.cos(randomAngle), math.sin(randomAngle)) * math.random(self.minPositionDistance, self.maxPositionDistance),
             lerpRate = math.randomFloat(self.minPositionLerpRate, self.maxPositionLerpRate),
+            radius = self.metaballSprite:getWidth() * spriteScale
         })
     end
 end
