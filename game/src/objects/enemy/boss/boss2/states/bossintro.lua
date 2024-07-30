@@ -7,7 +7,7 @@ function bossIntro:enter(bossInstance)
     self.phase = self.parameters.phase
     
     self.ballsToAdd = 3
-    self.ballAdditionTime = 0.2
+    self.ballAdditionTime = 0.025
 
     self.ballsAdded = 0
     self.ballAdditionCooldown = 0
@@ -25,7 +25,7 @@ function bossIntro:update(dt, bossInstance)
 
     self.ballAdditionCooldown = self.ballAdditionCooldown - (1 * dt)
 
-    if self.ballAdditionCooldown then
+    if self.ballAdditionCooldown <= 0 then
         bossInstance:addMetaballs(self.ballsToAdd)
         gameHelper:screenShake(0.1)
         
