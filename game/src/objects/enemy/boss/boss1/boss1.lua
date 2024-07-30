@@ -413,6 +413,8 @@ function boss1:initialiseColliders(colliderParameters)
 end
 
 function boss1:cleanup(destroyReason)
+    boss.cleanup(self, destroyReason)
+    
     local world = gameHelper:getWorld()
 
     if world then
