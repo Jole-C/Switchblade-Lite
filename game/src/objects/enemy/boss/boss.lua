@@ -209,16 +209,6 @@ function boss:cleanup(destroyReason)
 
     game.manager:swapPaletteGroup("main")
 
-    local world = gameHelper:getWorld()
-
-    if world then
-        for _, colliderParameter in pairs(self.colliders) do
-            if world:hasItem(colliderParameter.colliderReference) then
-                world:remove(colliderParameter.colliderReference)
-            end
-        end
-    end
-
     game.interfaceRenderer:removeHudElement(self.healthElement)
     game.interfaceRenderer:removeHudElement(self.debugText)
     game.interfaceRenderer:removeHudElement(self.introCard)
