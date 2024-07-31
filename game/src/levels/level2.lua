@@ -9,6 +9,7 @@ local crisscross = require "src.objects.enemy.crisscross"
 local ram = require "src.objects.enemy.crisscross"
 local exploder = require "src.objects.enemy.exploder"
 local snake = require "src.objects.enemy.snake"
+local boss = require "src.objects.enemy.boss.boss2.boss2"
 
 
 local levelDefinition = 
@@ -26,6 +27,7 @@ local levelDefinition =
         ["crisscross"] = {enemyClass = crisscross, spriteName = "crisscross"},
         ["ram"] = {enemyClass = wanderer, spriteName = "wanderer"},
         ["snake"] = {enemyClass = snake, spriteName = "snake"},
+        ["boss"] = {enemyClass = boss},
     },
     
     arenaSegmentDefinitions =
@@ -54,7 +56,7 @@ local levelDefinition =
 
     playerStartSegment = "mainCircle",
 
-    startingWave = 12,
+    startingWave = 23,
 
     level = 
     {
@@ -1326,6 +1328,20 @@ local levelDefinition =
                 },
             }
         },
+        {
+            waveType = "bossWave",
+            bossID = "boss",
+            
+            segmentChanges =
+            {
+                {
+                    changeType = "size",
+                    arenaSegment = "mainCircle",
+                    newRadius = 350,
+                    lerpSpeed = 0.05,
+                }
+            }
+        }
     }
 }
 
