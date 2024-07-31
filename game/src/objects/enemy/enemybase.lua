@@ -127,13 +127,16 @@ function enemyBase:onHit(damageType, amount)
 
     if tookDamage then
         game.manager:setFreezeFrames(1)
-        game.particleManager:burstEffect("Enemy Hit", 3, self.position)
-
+        self:onHitParticles()
         self:setInvulnerable()
         self.damageSound:play()
     end
 
     return tookDamage
+end
+
+function enemyBase:onHitParticles()
+    game.particleManager:burstEffect("Enemy Hit", 3, self.position)
 end
 
 function enemyBase:setInvulnerable()
