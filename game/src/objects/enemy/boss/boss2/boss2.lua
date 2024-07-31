@@ -22,19 +22,22 @@ function boss2:new(x, y)
 
     self.metaballCanvas = love.graphics.newCanvas(self.canvasValues.width, self.canvasValues.height)
 
-    self.numberOfMetaballs = 500
+    self.numberOfMetaballs = 700
     self.ballSpawnDistance = 300
     self.minPositionChangeCooldown = 0.1
     self.maxPositionChangeCooldown = 0.5
     self.minPositionLerpRate = 0.1
     self.maxPositionLerpRate = 0.3
     self.minPositionDistance = 10
-    self.maxPositionDistance = 30
+    self.maxPositionDistance = 60
     self.minSpriteScale = 0.1
-    self.maxSpriteScale = 0.5
+    self.maxSpriteScale = 1
     self.colliderWidth = 10
+    self.eyeDistance = 7
+    self.eyeRadius = 15
 
     self.points = {}
+    self.lastHitPoint = nil
     self:addPoint("leftPoint")
     self:addPoint("rightPoint")
 
@@ -50,8 +53,41 @@ function boss2:new(x, y)
 end
 
 function boss2:update(dt)
-    local world = gameHelper:getWorld()
+    self:updateMetaballs(dt)
+    self:updatePoints(dt)
 
+    boss.update(self, dt)
+end
+
+function boss2:updatePoints(dt)    
+    for pointKey, point in pairs(self.points) do
+        local averagePoint = vec2(0, 0)
+
+        for metaballKey, metaball in ipairs(point.attractedMetaballs) do
+            averagePoint.x = averagePoint.x + metaball.position.x
+            averagePoint.y = averagePoint.y + metaball.position.y
+        end
+
+        averagePoint.x = averagePoint.x / #point.attractedMetaballs
+        averagePoint.y = averagePoint.y / #point.attractedMetaballs
+
+        if point.eye then
+            point.eye.eyeBasePosition.x = averagePoint.x
+            point.eye.eyeBasePosition.y = averagePoint.y
+            point.eye:update()
+        end
+
+        point.invincibleTime = point.invincibleTime - (1 * dt)
+
+        if point.invincibleTime <= 0 then
+            point.drawColour = game.manager.currentPalette.enemyColour
+        else
+            point.drawColour = {1, 1, 1, 1}
+        end
+    end
+end
+
+function boss2:updateMetaballs(dt)
     for _, metaball in ipairs(self.metaballs) do
         local closestPoint = nil
         local closestDistance = math.huge
@@ -67,6 +103,17 @@ function boss2:update(dt)
 
         if closestPoint == nil then
             goto continue
+        end
+
+        if metaball.pointAttractedTo == nil then
+            metaball.pointAttractedTo = closestPoint
+            table.insert(metaball.pointAttractedTo.attractedMetaballs, metaball)
+        end
+
+        if metaball.pointAttractedTo ~= closestPoint then
+            tablex.remove_value(metaball.pointAttractedTo.attractedMetaballs, metaball)
+            metaball.pointAttractedTo = closestPoint
+            table.insert(metaball.pointAttractedTo.attractedMetaballs, metaball)
         end
         
         metaball.positionChangeCooldown = metaball.positionChangeCooldown - (1 * dt)
@@ -87,53 +134,72 @@ function boss2:update(dt)
         local playerPosition = game.playerManager.playerPosition
 
         if player then
-            if (playerPosition - metaball.position):length() < 10 then
+            if (playerPosition - metaball.position):length() < ((self.metaballSprite:getWidth()/2 * metaball.spriteScale) * 0.7) then
                 player:onHit(1)
             end
 
             for _, bullet in ipairs(game.playerManager.playerBullets) do
                 if (bullet.position - metaball.position):length() < 10 then
-                    self:onHit(1)
+                    self.lastHitPoint = metaball.pointAttractedTo
+                    local tookDamage = self:onHit("bullet", 1)
+
+                    if tookDamage then
+                        bullet:destroy()
+                        metaball.pointAttractedTo.invincibleTime = self.maxInvulnerableTime
+                        break
+                    end
                 end
             end
         end
 
         ::continue::
     end
-
-    local colour = self.enemyColour
-    self.thresholdShader:send("drawColour", {colour[1], colour[2], colour[3], 1})
-
-    self:checkColliders(self.colliders)
-
-    boss.update(self, dt)
 end
 
-function boss2:draw()
-    love.graphics.setScissor()
+function boss2:drawMetaballs()
     love.graphics.setCanvas(self.metaballCanvas)
+    love.graphics.setScissor()
+
     love.graphics.push()
     love.graphics.origin()
-    love.graphics.setShader(self.blendShader)
+
     love.graphics.clear()
+
+    love.graphics.setShader(self.blendShader)
 
     local offsetX = self.metaballSprite:getWidth() / 2
     local offsetY = self.metaballSprite:getHeight() / 2
 
-    for _, metaball in ipairs(self.metaballs) do
-        local drawPosition = self:toCanvasSpace(metaball.position)
-        love.graphics.draw(self.metaballSprite, drawPosition.x, drawPosition.y, 0, metaball.spriteScale, metaball.spriteScale, offsetX, offsetY)
+    for _, point in pairs(self.points) do
+        love.graphics.setColor(point.drawColour)
+
+        for __, metaball in ipairs(point.attractedMetaballs) do
+            local drawPosition = self:toCanvasSpace(metaball.position)
+            love.graphics.draw(self.metaballSprite, drawPosition.x, drawPosition.y, 0, metaball.spriteScale, metaball.spriteScale, offsetX, offsetY)
+        end
+
+        love.graphics.setColor(1, 1, 1, 1)
     end
 
     love.graphics.pop()
+    love.graphics.setShader()
+end
 
+function boss2:drawMetaballCanvas()
     love.graphics.setCanvas({game.canvases.foregroundCanvas.canvas, stencil = true})
     gameHelper:getArena():setArenaStencil()
     gameHelper:getArena():setArenaStencilTest()
 
     love.graphics.setShader(self.thresholdShader)
+    love.graphics.setBlendMode("alpha", "premultiplied")
     love.graphics.draw(self.metaballCanvas, self.canvasValues.x, self.canvasValues.y)
+    love.graphics.setBlendMode("alpha")
     love.graphics.setShader()
+end
+
+function boss2:draw()
+    self:drawMetaballs()
+    self:drawMetaballCanvas()
 
     if game.manager:getOption("enableDebugMode") then
         love.graphics.setColor(0, 1, 0, 1)
@@ -143,11 +209,31 @@ function boss2:draw()
 
         love.graphics.setColor(0, 0, 1, 1)
         for _, point in pairs(self.points) do
-            love.graphics.circle("fill", point.x, point.y, 10)
+            love.graphics.circle("fill", point.position.x, point.position.y, 10)
         end
     end
 
-    love.graphics.setColor(1, 1, 1, 1)
+    if self.renderEyes then
+        for _, point in pairs(self.points) do
+            if point.eye then
+                point.eye:draw()
+            end
+        end
+    end
+end
+
+function boss2:setRenderEyes(renderEyes)
+    self.renderEyes = renderEyes
+end
+
+function boss2:onHitParticles()
+    if not self.lastHitPoint then
+        return
+    end
+
+    for _, metaball in ipairs(self.lastHitPoint.attractedMetaballs) do
+        game.particleManager:burstEffect("Enemy Hit", 3, metaball.position)
+    end
 end
 
 function boss2:handleDamage(damageType, amount)
@@ -187,7 +273,7 @@ function boss2:addMetaballs(metaballsToAdd)
             positionDistance = math.random(self.minPositionDistance, self.maxPositionDistance),
             targetPosition = vec2(math.cos(randomAngle), math.sin(randomAngle)) * math.random(self.minPositionDistance, self.maxPositionDistance),
             lerpRate = math.randomFloat(self.minPositionLerpRate, self.maxPositionLerpRate),
-            radius = self.metaballSprite:getWidth() * spriteScale
+            pointAttractedTo = nil,
         })
     end
 end
@@ -196,7 +282,10 @@ function boss2:addPoint(pointName)
     self.points[pointName] = 
     {
         position = vec2(self.position.x, self.position.y),
-        eye = eye(self.position.x, self.position.y, 10, 30, true)
+        eye = eye(self.position.x, self.position.y, self.eyeDistance, self.eyeRadius, true),
+        attractedMetaballs = {},
+        drawColour = game.manager.currentPalette.enemyColour,
+        invincibleTime = 0
     }
 end
 
