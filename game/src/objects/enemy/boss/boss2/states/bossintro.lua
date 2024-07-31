@@ -6,7 +6,7 @@ function bossIntro:enter(bossInstance)
     self.returnState = self.parameters.returnState
     self.phase = self.parameters.phase
     
-    self.ballsToAdd = 3
+    self.ballsToAdd = 4
     self.ballAdditionTime = 0.025
 
     self.ballsAdded = 0
@@ -38,6 +38,7 @@ function bossIntro:update(dt, bossInstance)
         bossInstance:setPhase(self.phase)
         bossInstance:setShielded(true)
         bossInstance:switchState(self.returnState)
+        bossInstance:setRenderEyes(true)
         bossInstance.introCard:setInOutro()
         bossInstance.healthElement:doIntro()
         bossInstance.position = vec2:zero()
