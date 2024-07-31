@@ -4,16 +4,10 @@ vec4 effect( vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
 {
     vec4 col = Texel(texture, texCoords);
 
-    if (col.a * colour.a == 0)
+    if (col.a > 0.5)
     {
         return col;
     }
 
-    if (col.a > 0.5)
-    {
-        return drawColour;
-    }
-
-    col.a = 0;
-    return col;
+    return vec4(0, 0, 0, 0);
 }
