@@ -9,6 +9,8 @@ local particleManager = require "src.particlemanager"
 local transitionManager = require "src.transition.transitionmanager"
 local musicManager = require "src.music.musicmanager"
 
+local gauntlet = require "src.gamemode.gauntlet"
+
 colliderDefinitions = require "src.collision.colliderdefinitions"
 
 local game = class({name = "Game"})
@@ -45,6 +47,7 @@ function game:new()
     self.transitionManager = transitionManager()
     self.musicManager = musicManager()
 
+    -- Set up resources
     self.tags = 
     {
         music = ripple.newTag(),
@@ -77,12 +80,14 @@ function game:new()
 
 
     self.musicManager:getTrack("levelMusic"):start({fadeDuration = 0.5})
-    
+
+    -- Set up camera
     self.camera = gamera.new(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
     self.camera:setWindow(0, 0, self.arenaValues.screenWidth, self.arenaValues.screenHeight)
 
     self.playerManager = playerManager()
 
+    -- Set up input
     self.input = baton.new{
         controls = {
             thrust = {'key:w', 'key:up', 'button:a'},
@@ -101,6 +106,7 @@ function game:new()
         joystick = love.joystick.getJoysticks()[1]
     }
     
+    -- Set rendering
     self.fullscreenMode = self.manager:getOption("enableFullscreen")
 
     if self.manager:getOption("enableFullscreen") == true then
@@ -182,6 +188,13 @@ function game:new()
 
     local system = self.particleManager:newEffect({ps}, nil, true)
     self.particleManager:addEffect(system, "Temp Background")
+
+    self.manager:setupGamemodes(
+    {
+        ["gauntlet"] = gauntlet,
+        ["endless"] = nil,
+        ["defence"] = nil,
+    })
 end
 
 function game:start()

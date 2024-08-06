@@ -84,6 +84,11 @@ function gameManager:new()
         kills = 0,
     }
 
+    self.gamemodeDefinitions =
+    {
+        
+    }
+
     self.runSetup =
     {
         gamemode = nil,
@@ -317,6 +322,21 @@ end
 function gameManager:startRun()
     self:changePlayerDefinition("default definition")
     game.transitionManager:doTransition("gameLevelState")
+end
+
+function gameManager:spawnGamemode()
+    return self.runSetup.gamemode()
+end
+
+function gameManager:setupGamemodes(gamemodeDefinitions)
+    self.gamemodeDefinitions = gamemodeDefinitions
+end
+
+function gameManager:setCurrentGamemode(gamemodeName)
+    local gamemode = self.gamemodeDefinitions[gamemodeName]
+    assert(gamemode ~= nil, "Gamemode does not exist!")
+
+    self.runSetup.gamemode = gamemode
 end
 
 function gameManager:draw()
