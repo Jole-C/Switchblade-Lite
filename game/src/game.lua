@@ -10,6 +10,7 @@ local transitionManager = require "src.transition.transitionmanager"
 local musicManager = require "src.music.musicmanager"
 
 local gauntlet = require "src.gamemode.gauntlet"
+local endless = require "src.gamemode.endless.endless"
 
 colliderDefinitions = require "src.collision.colliderdefinitions"
 
@@ -192,7 +193,7 @@ function game:new()
     self.manager:setupGamemodes(
     {
         ["gauntlet"] = gauntlet,
-        ["endless"] = nil,
+        ["endless"] = endless,
         ["defence"] = nil,
     })
 end

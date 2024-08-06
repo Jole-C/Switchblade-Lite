@@ -323,7 +323,11 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("endless", "fontBigUI", 10, 25, 15, 25, function()
+                textButton("endless", "fontBigUI", 10, 25, 15, 25, function(self)
+                    game.manager:changePlayerDefinition("default definition")
+                    game.manager:setCurrentGamemode("endless")
+                    game.transitionManager:doTransition("gameLevelState")
+                    self.owner.selectSound:play()
                 end),
 
                 textButton("defence", "fontBigUI", 10, 40, 15, 40, function()
