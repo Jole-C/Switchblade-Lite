@@ -3,7 +3,7 @@ local playerDefault = class({name = "Player Default", extends = playerBase})
 
 function playerDefault:new(x, y)
     -- Generic parameters of the ship
-    self.maxHealth = 5
+    self.maxHealth = 3
     self.spriteName = "player default"
     self.invulnerableGracePeriod = 0.5
 
@@ -17,8 +17,8 @@ function playerDefault:new(x, y)
     self.steeringAccelerationBoosting = 43.75
     self.steeringAccelerationFiring = 31.25
     self.steeringFriction = 7
-    self.accelerationSpeed = 312.5
-    self.boostingAccelerationSpeed = 437.5
+    self.accelerationSpeed = 437.5
+    self.boostingAccelerationSpeed = 625.5
     self.friction = 0.8
     self.maxSpeed = 437.5
     self.maxBoostingSpeed = 625

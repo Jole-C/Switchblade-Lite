@@ -15,10 +15,16 @@ function endless:new()
     self:parseCurrentLevel()
 
     self.spawnTime = 0
-    gameHelper:getArena():addArenaSegment(0, 0, 250, "main")
+    gameHelper:getArena():addArenaSegment(0, 0, 300, "main")
 end
 
 function endless:update(dt)
+    local player = game.playerManager.playerReference
+
+    if player then
+        player:setHealthCanRecharge(false)
+    end
+
     self.spawnTime = self.spawnTime - (1 * dt)
 
     if self.spawnTime <= 0 then
