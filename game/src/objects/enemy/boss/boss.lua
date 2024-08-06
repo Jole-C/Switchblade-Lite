@@ -13,7 +13,7 @@ function boss:new(x, y)
     self.phaseHealth = 50
     self.maxShieldHealth = 100
     self.maxPhaseHealth = 50
-    self.bossHitScore = 50
+    self.bossHitScore = 10
 
     self.isInvulnerable = false
     self.invulnerableTime = 0

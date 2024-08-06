@@ -8,7 +8,7 @@ function exploder:new(x, y)
     self:super(x, y)
 
     self.health = 5
-    self.score = 700
+    self.score = 70
     
     self.fuseTime = 2
     self.fuseRadius = 100
