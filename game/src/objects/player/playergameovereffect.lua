@@ -9,7 +9,7 @@ function playerGameover:new(x, y, angle)
 
     self.circleRadiusIncreaseRate = 700
     self.circleRadius = 0
-    self.timeUntilGameover = 3
+    self.timeUntilGameover = 1.5
 
     self.playerExploded = false
 
