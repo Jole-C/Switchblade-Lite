@@ -1,20 +1,15 @@
-local wanderer = require "src.objects.enemy.wanderer"
-local charger = require "src.objects.enemy.charger"
-local drone = require "src.objects.enemy.drone"
-local shielder = require "src.objects.enemy.shielder"
-local orbiter = require "src.objects.enemy.orbiter"
-local boss = require "src.objects.enemy.boss.boss1.boss1"
+local enemyDefinitions = require "src.objects.enemy.enemydefinitions"
 
 local levelDefinition = 
 {
     enemyDefinitions =
     {
-        ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer"},
-        ["charger"] = {enemyClass = charger, spriteName = "charger"},
-        ["drone"] = {enemyClass = drone, spriteName = "drone"},
-        ["shielder"] = {enemyClass = shielder, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("warningSprite")},
-        ["orbiter"] = {enemyClass = orbiter, spriteName = "orbiter"},
-        ["boss"] = {enemyClass = boss}
+        ["wanderer"] = enemyDefinitions.wanderer,
+        ["shielder"] = enemyDefinitions.shielder,
+        ["sticker"] = enemyDefinitions.sticker,
+        ["charger"] = enemyDefinitions.charger,
+        ["drone"] = enemyDefinitions.drone,
+        ["boss"] = enemyDefinitions.boss1
     },
     
     arenaSegmentDefinitions =

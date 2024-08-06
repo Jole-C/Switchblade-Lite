@@ -1,33 +1,21 @@
-local wanderer = require "src.objects.enemy.wanderer"
-local shielder = require "src.objects.enemy.shielder"
-local sticker = require "src.objects.enemy.sticker"
-local charger = require "src.objects.enemy.charger"
-local drone = require "src.objects.enemy.drone"
-
-local heater = require "src.objects.enemy.heater"
-local crisscross = require "src.objects.enemy.crisscross"
-local ram = require "src.objects.enemy.crisscross"
-local exploder = require "src.objects.enemy.exploder"
-local snake = require "src.objects.enemy.snake"
-local boss = require "src.objects.enemy.boss.boss2.boss2"
-
+local enemyDefinitions = require "src.objects.enemy.enemydefinitions"
 
 local levelDefinition = 
 {
     enemyDefinitions =
     {
-        ["wanderer"] = {enemyClass = wanderer, spriteName = "wanderer"},
-        ["shielder"] = {enemyClass = shielder, overrideSprite = game.resourceManager:getAsset("Enemy Assets"):get("shielder"):get("warningSprite")},
-        ["sticker"] = {enemyClass = sticker, spriteName = "wanderer"},
-        ["charger"] = {enemyClass = charger, spriteName = "charger"},
-        ["drone"] = {enemyClass = drone, spriteName = "drone"},
+        ["wanderer"] = enemyDefinitions.wanderer,
+        ["shielder"] = enemyDefinitions.shielder,
+        ["sticker"] = enemyDefinitions.sticker,
+        ["charger"] = enemyDefinitions.charger,
+        ["drone"] = enemyDefinitions.drone,
 
-        ["heater"] = {enemyClass = heater, spriteName = "wanderer"},
-        ["exploder"] = {enemyClass = exploder, spriteName = "wanderer"},
-        ["crisscross"] = {enemyClass = crisscross, spriteName = "crisscross"},
-        ["ram"] = {enemyClass = wanderer, spriteName = "wanderer"},
-        ["snake"] = {enemyClass = snake, spriteName = "snake"},
-        ["boss"] = {enemyClass = boss},
+        ["heater"] = enemyDefinitions.heater,
+        ["exploder"] = enemyDefinitions.exploder,
+        ["crisscross"] = enemyDefinitions.crisscross,
+        ["ram"] = enemyDefinitions.wanderer,
+        ["snake"] = enemyDefinitions.snake,
+        ["boss"] = enemyDefinitions.boss2
     },
     
     arenaSegmentDefinitions =
