@@ -37,7 +37,7 @@ function overheatLaser:handleCollision(items, len)
 
         if colliderDefinition == colliderDefinitions.player then
             if collidedObject.isOverheating == false then
-                collidedObject.shipTemperature = collidedObject.maxShipTemperature
+                collidedObject.shipTemperature = collidedObject.shipTemperature + collidedObject.maxShipTemperature / 4
             end
         end
 
