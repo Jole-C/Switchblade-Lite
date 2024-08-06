@@ -80,6 +80,17 @@ function shrinker:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
+function shrinker:handleDamage(damageType, amount)
+    if damageType == "boost" or damageType == "contact" then
+        self.health = self.health - amount
+        return true
+    elseif damageType == "bullet" then
+        self.health = self.health - 3
+    end
+
+    return false
+end
+
 function shrinker:cleanup(destroyReason)
     enemy.cleanup(self, destroyReason)
     
