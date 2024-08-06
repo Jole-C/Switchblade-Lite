@@ -35,6 +35,11 @@ function gameHelper:getStageDirector()
     return currentGamestate.stageDirector
 end
 
+function gameHelper:getGamemode()
+    local stageDirector = self:getStageDirector()
+    return stageDirector.gamemode
+end
+
 function gameHelper:addScore(score, multiplier)
     local scoreManager = self:getScoreManager()
 
