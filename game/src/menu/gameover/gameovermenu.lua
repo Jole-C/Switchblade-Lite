@@ -46,13 +46,9 @@ function gameoverMenu:new()
 
     self.tips = 
     {
-        "Boosting makes you completely invulnerable to all damage!",
-        "Boosting builds your temperature, boost for too long and you'll overheat!",
-        "Boosting into consecutive enemies creates an explosion damaging all\nenemies inside!",
-        "Boosting into consecutive enemies reduces temperature for each enemy!",
-        "Your health won't recharge while boosting, manage it well!",
-        "Bosses only take damage from bullets!",
-        "Only some enemies spawned by bosses drop ammo! They have a visual indicator."
+        "",
+        "",
+        "",
     }
 
     self.tip = self.tips[math.random(1, #self.tips)]
