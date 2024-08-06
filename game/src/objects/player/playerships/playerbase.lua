@@ -24,6 +24,7 @@ function player:new(x, y)
     -- Generic parameters of the ship
     self.maxHealth = 5
     self.maxHealthRechargeCooldown = 2
+    self.maxOverheatCooloffTime = 0.7
     self.healthCircleRadius = 200 * game.manager:getOption("playerHealthRingSizePercentage") / 100
     self.maxOverheatPlayRate = 0.5
     self.maxEnemiesForExplosion = self.maxEnemiesForExplosion or 5
@@ -47,7 +48,7 @@ function player:new(x, y)
     self.maxSpeed = self.maxSpeed or 30
     self.maxBoostingSpeed = self.maxBoostingSpeed or 60
     self.maxShipTemperature = self.maxShipTemperature or 100
-    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 5
+    self.shipHeatAccumulationRate = self.shipHeatAccumulationRate or 2
     self.shipCoolingRate = self.shipCoolingRate or 40
     self.shipOverheatCoolingRate = self.shipOverheatCoolingRate or 20
     self.boostDamage = self.boostDamage or 3
@@ -57,6 +58,7 @@ function player:new(x, y)
     self.bounceDampening = self.bounceDampening or 0.5
     self.boostLineCount = 5
     self.boostLineSpawnRange = 500
+    self.overheatCooloffCooldown = self.maxOverheatCooloffTime
     
     -- Firing parameters of the ship
     self.maxFireCooldown = self.maxFireCooldown or 0.05
@@ -148,8 +150,8 @@ function player:updateShipMovement(dt, movementDirection)
 
             self.steeringAccelerationSpeed = self.steeringAccelerationBoosting
             self.maxSteeringSpeed = self.steeringSpeedBoosting
-
-            self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * dt
+            
+            self:accumulateTemperature(dt)
             self:spawnBoostLines()
         end
 
@@ -219,6 +221,7 @@ function player:updatePlayerTimers(dt)
     self.fireCooldown = self.fireCooldown - 1 * dt
     self.invulnerabilityCooldown = self.invulnerabilityCooldown - 1 * dt
     self.boostGracePeriod = self.boostGracePeriod - 1 * dt
+    self.overheatCooloffCooldown = self.overheatCooloffCooldown - 1 * dt
 
     if self.invulnerabilityCooldown <= 0 then
         self.isInvulnerable = false
@@ -267,7 +270,6 @@ function player:updateOverheating(dt)
         self.isBoosting = false
 
         if self.isOverheating == false then
-            self:onHit(2)
             gameHelper:addGameObject(worldAlertObject(self.position.x, self.position.y, "Overheated!", "fontScore"))
         end
 
@@ -287,7 +289,7 @@ function player:updateOverheating(dt)
         game.particleManager:burstEffect("Player Smoke", 5, self.position)
     end
 
-    if self.isBoosting == false then
+    if self.isBoosting == false and self.overheatCooloffCooldown <= 0 then
         self.shipTemperature = self.shipTemperature - (coolingRate * dt)
         self.boostHeatDividend = 1
         self.boostHitEnemies = 0
@@ -321,7 +323,9 @@ function player:spawnTrail()
 end
 
 function player:accumulateTemperature(dt, multiplier)
+    local multiplier = multiplier or 1
     self.shipTemperature = self.shipTemperature + self.shipHeatAccumulationRate * multiplier * dt
+    self.overheatCooloffCooldown = self.maxOverheatCooloffTime
 end
 
 function player:updatePosition(dt)
@@ -423,15 +427,11 @@ end
 
 function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
     if colliderHit == self.collider then
-        
+
     elseif colliderHit == self.boostCollider then
         if colliderDefinition == colliderDefinitions.enemy then
-            if self.isBoosting and collidedObject.onHit then
-                local tookDamage = collidedObject:onHit("boost", self.boostDamage)
-
-                if tookDamage then
-                    self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
-                end
+            if self.velocity:length() > 300 then
+                collidedObject:onHit("boost", self.boostDamage)
                 
                 if collidedObject.markedForDelete then
                     if self.ammo < self.maxAmmo then
@@ -548,52 +548,6 @@ function player:draw()
         return
     end
 
-    local colour = {1, 1, 1, 0.17}
-
-    if self.health <= 2 then
-        local enemySpawnColour = game.manager.currentPalette.enemySpawnColour
-
-        colour[1] = enemySpawnColour[1]
-        colour[2] = enemySpawnColour[2]
-        colour[3] = enemySpawnColour[3]
-        colour[4] = 0.17
-    end
-
-    local enemyManager = gameHelper:getEnemyManager()
-    if enemyManager and #enemyManager.enemies < 3 then
-        love.graphics.setColor(colour)
-        love.graphics.setLineWidth(2)
-        
-        for _, enemy in pairs(enemyManager.enemies) do
-            local x1 = self.position.x
-            local y1 = self.position.y
-            local x2 = enemy.position.x
-            local y2 = enemy.position.y
-
-            love.graphics.line(x1, y1, x2, y2)
-        end
-    end
-
-    love.graphics.setColor(colour)
-    love.graphics.circle("fill", self.position.x, self.position.y, math.lerp(0, self.healthCircleRadius, self.health/self.maxHealth))
-    love.graphics.setLineWidth(4)
-    love.graphics.circle("line", self.position.x, self.position.y, self.healthCircleRadius - 2)
-    love.graphics.setLineWidth(2)
-
-    if game.manager:getOption("showHealthRingHelpers") then
-        for i = 1, self.maxHealth - 1 do
-            local radius = math.lerp(0, self.healthCircleRadius, i/self.maxHealth)
-            love.graphics.circle("line", self.position.x, self.position.y, radius)
-        end
-    end
-
-    love.graphics.setLineWidth(1)
-
-    love.graphics.setColor(1, 1, 1, 0.17)
-    if self.health < self.maxHealth then
-        love.graphics.circle("line", self.position.x, self.position.y, math.lerp(self.healthCircleRadius, 0, math.clamp((self.healthRechargeCooldown/self.maxHealthRechargeCooldown), 0, 1)))
-    end
-
     local xOffset, yOffset = self.sprite:getDimensions()
     xOffset = xOffset/2
     yOffset = yOffset/2
@@ -609,8 +563,10 @@ function player:draw()
         love.graphics.setShader()
     end
 
-    if self.isInvulnerable == true then
-        love.graphics.circle("line", self.position.x, self.position.y, 10)
+    if self.isOverheating == false then
+        love.graphics.setLineWidth(2)
+        love.graphics.circle("line", self.position.x, self.position.y, 12)
+        love.graphics.setLineWidth(1)
     end
 end
 
@@ -625,34 +581,30 @@ function player:spawnBoostLines()
     end
 end
 
-function player:onHit(damage)
+function player:onHit()
     self.healthRechargeCooldown = self.maxHealthRechargeCooldown
 
     if self.isInvulnerable or self.isBoosting then
         return
     end
 
-    damage = damage or 1
     gameHelper:resetMultiplier()
-    
-    self.health = self.health - damage
 
     if self.isOverheating == false then
-        self.shipTemperature = self.shipTemperature + (self.contactDamageHeatMultiplier * damage)
+        self.shipTemperature = self.shipTemperature + self.contactDamageHeatMultiplier
+        self.overheatCooloffCooldown = self.maxOverheatCooloffTime
+    else
+        self:destroy()
     end
 
     self.isInvulnerable = true
     self.invulnerabilityCooldown = self.invulnerableGracePeriod
 
-    if self.health <= 0 then
-        self:destroy()
-    else
-        game.manager:setFreezeFrames(7, function()
-            gameHelper:screenShake(0.3)
-        end)
-        
-        game.particleManager:burstEffect("Player Death", 10, game.playerManager.playerPosition)
-    end
+    game.manager:setFreezeFrames(7, function()
+        gameHelper:screenShake(0.3)
+    end)
+    
+    game.particleManager:burstEffect("Player Death", 10, game.playerManager.playerPosition)
 
     self.hurtSound:play()
 end
