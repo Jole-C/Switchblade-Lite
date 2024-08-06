@@ -409,6 +409,7 @@ function game:setupResources()
             deathExplosion = {path = "assets/audio/sfx/playerdeath.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             deathTrigger = {path = "assets/audio/sfx/playerdeathtrigger.wav", type = "Source", parameters = {tag = self.tags.sfx}},
             wallHit = {path = "assets/audio/sfx/wallhit.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            oneUp = {path = "assets/audio/sfx/oneup.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         })
     }), "Player Assets")
 
