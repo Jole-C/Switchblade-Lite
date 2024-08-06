@@ -81,7 +81,7 @@ function scoreManager:applyBonus(bonusName)
     local bonus = self.bonuses[bonusName]
     assert(bonus ~= nil, "Bonus does not exist!")
 
-    self.waveScore = bonus.bonusFunction(self.waveScore, self.scoreMultiplier)
+    self.waveScore = bonus.bonusFunction(self.score, self.scoreMultiplier)
 
     local playerPosition = game.playerManager.playerPosition
     local text = worldAlertObject(playerPosition.x, playerPosition.y, bonus.bonusText or "", "fontScore")
