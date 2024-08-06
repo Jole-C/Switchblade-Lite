@@ -38,7 +38,7 @@ function boss:new(x, y)
     self.introCard = bossIntroCard(self.bossName, self.bossSubtitle)
     game.interfaceRenderer:addHudElement(self.introCard)
 
-    gameHelper:getCurrentState().stageDirector:registerBoss(self)
+    gameHelper:getGamemode():registerBoss(self)
 end
 
 function boss:update(dt)
