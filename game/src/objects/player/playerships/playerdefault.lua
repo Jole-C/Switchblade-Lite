@@ -19,13 +19,13 @@ function playerDefault:new(x, y)
     self.steeringFriction = 7
     self.accelerationSpeed = 312.5
     self.boostingAccelerationSpeed = 437.5
-    self.friction = 0.4
+    self.friction = 0.8
     self.maxSpeed = 437.5
     self.maxBoostingSpeed = 625
     self.maxShipTemperature = 100
     self.temperatureForWarning = 75
     self.shipHeatAccumulationRate = 30
-    self.shipCoolingRate = 50
+    self.shipCoolingRate = 60
     self.shipOverheatCoolingRate = 30
     self.boostDamage = 3
     self.boostEnemyHitHeatAccumulation = 7
