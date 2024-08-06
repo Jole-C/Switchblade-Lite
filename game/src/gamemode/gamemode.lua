@@ -1,4 +1,6 @@
 local gamemode = class({name = "Gamemode"})
+local enemyWarning = require "src.objects.enemy.enemywarning"
+
 local text = require "src.interface.text"
 
 function gamemode:new()
@@ -41,6 +43,11 @@ function gamemode:cleanup()
     gameHelper:getScoreManager():applyWaveScore()
     
     game.manager:addRunInfoText("Kills", self.totalKills)
+end
+
+function gamemode:spawnEnemy(x, y, originSegment, spawnClass)
+    local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.enemySpawnTime)
+    gameHelper:addGameObject(newWarning)
 end
 
 return gamemode

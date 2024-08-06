@@ -2,7 +2,6 @@ local timedGamemode = require "src.gamemode.timedgamemode"
 local killDisplay = require "src.objects.stagedirector.killprogressdisplay"
 local soundObject = require "src.objects.stagedirector.spawnsound"
 local bossWarning = require "src.objects.enemy.boss.bosswarning"
-local enemyWarning = require "src.objects.enemy.enemywarning"
 
 local gauntlet = class({name = "Gauntlet", extends = timedGamemode})
 
@@ -350,11 +349,6 @@ end
 
 function gauntlet:registerBoss(boss)
     self.bossReference = boss
-end
-
-function gauntlet:spawnEnemy(x, y, originSegment, spawnClass)
-    local newWarning = enemyWarning(x, y, originSegment, spawnClass, self.enemySpawnTime)
-    gameHelper:addGameObject(newWarning)
 end
 
 function gauntlet:cleanup()
