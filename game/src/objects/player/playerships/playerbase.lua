@@ -199,7 +199,7 @@ function player:updateShipShooting(dt, movementDirection)
 
     if self.canFire == true and game.input:down("shoot") then
         local firePosition = self.position + (movementDirection * self.fireOffset)
-        local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, 16, 16)
+        local newBullet = playerBullet(firePosition.x, firePosition.y, self.bulletSpeed, self.angle, self.bulletDamage, colliderDefinitions.playerbullet, 32, 32)
         gameHelper:addGameObject(newBullet)
 
         self.velocity = self.velocity + (movementDirection * -1) * (self.shipKnockbackForce * dt)
@@ -430,7 +430,7 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
 
     elseif colliderHit == self.boostCollider then
         if colliderDefinition == colliderDefinitions.enemy then
-            if self.velocity:length() > 300 then
+            if self.velocity:length() > 300 or self.isBoosting then
                 collidedObject:onHit("boost", self.boostDamage)
                 
                 if collidedObject.markedForDelete then
