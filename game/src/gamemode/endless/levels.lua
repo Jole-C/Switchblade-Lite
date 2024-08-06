@@ -32,7 +32,7 @@ local levels =
             {enemyClass = enemyDefinitions.shielder, spawnChance = 1},
         },
 
-        minEnemySpawns = 4,
+        minEnemySpawns = 3,
         maxEnemySpawns = 6,
     },
     {
@@ -44,7 +44,7 @@ local levels =
             {enemyClass = enemyDefinitions.orbiter, spawnChance = 1},
         },
 
-        minEnemySpawns = 4,
+        minEnemySpawns = 3,
         maxEnemySpawns = 6,
     },
     {
@@ -57,7 +57,7 @@ local levels =
             {enemyClass = enemyDefinitions.orbiter, spawnChance = 1},
         },
 
-        minEnemySpawns = 4,
+        minEnemySpawns = 3,
         maxEnemySpawns = 6,
     },
     {
@@ -71,8 +71,8 @@ local levels =
             {enemyClass = enemyDefinitions.exploder, spawnChance = 1},
         },
 
-        minEnemySpawns = 5,
-        maxEnemySpawns = 8,
+        minEnemySpawns = 4,
+        maxEnemySpawns = 7,
     },
     {
         spawns = 
@@ -85,8 +85,8 @@ local levels =
             {enemyClass = enemyDefinitions.exploder, spawnChance = 1},
         },
 
-        minEnemySpawns = 5,
-        maxEnemySpawns = 8,
+        minEnemySpawns = 4,
+        maxEnemySpawns = 7,
     },
     {
         spawns = 
@@ -100,8 +100,8 @@ local levels =
             {enemyClass = enemyDefinitions.snake, spawnChance = 1},
         },
 
-        minEnemySpawns = 5,
-        maxEnemySpawns = 9,
+        minEnemySpawns = 3,
+        maxEnemySpawns = 6,
     },
 }
 
