@@ -332,6 +332,12 @@ end
 
 function gameManager:parseRunInfoString()
     local string = ""
+    local maxElementsPerLine = 2
+    local currentElementsPerLine = 0
+
+    if #self.runInfo % maxElementsPerLine ~= 0 then
+        maxElementsPerLine = 1000
+    end
 
     for _, info in ipairs(self.runInfo) do
         local value = info.value
@@ -340,6 +346,12 @@ function gameManager:parseRunInfoString()
             value = string.format("%02.0f:%02.0f",math.abs(info.value[1]),math.abs(math.floor(info.value[2])))
         end
         string = string..info.name..": "..tostring(value).."     "
+
+        currentElementsPerLine = currentElementsPerLine + 1
+
+        if currentElementsPerLine == maxElementsPerLine then
+            string = string.."\n"
+        end
     end
 
     return string
