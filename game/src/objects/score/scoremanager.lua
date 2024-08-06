@@ -18,10 +18,10 @@ function scoreManager:new(x, y)
     self.bonuses =
     {
         ["boostBonus"] = {bonusFunction = function(score, multiplier)
-            return score + (1500 * multiplier)
+            return score + (200 * multiplier)
         end, bonusText = "Boost Bonus!"},
         ["waveBonus"] = {bonusFunction = function(score, multiplier)
-            return score * 2
+            return score + (100 * multiplier)
         end, bonusText = "Wave Bonus!"}
     }
 
@@ -63,6 +63,7 @@ function scoreManager:resetMultiplier(playSound)
     self.multiplierResetTime = 0
     self.numMultiplierIncrements = 1
 end
+
 function scoreManager:setMultiplierPaused(multiplierPaused)
     self.multiplierPaused = multiplierPaused
 end
