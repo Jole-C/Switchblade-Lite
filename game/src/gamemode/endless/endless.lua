@@ -9,13 +9,17 @@ function endless:new()
     self.levels = require "src.gamemode.endless.levels"
     self.maxSpawnTime = 3
     self.killsForLevelIncrement = 30
+    self.oneUpScore = 2000
 
+    self.currentOneUps = 0
     self.currentLevelIndex = 1
     self.currentLevel = nil
     self:parseCurrentLevel()
 
     self.spawnTime = 0
     gameHelper:getArena():addArenaSegment(0, 0, 300, "main")
+
+    self.oneUpSound = game.resourceManager:getAsset("Player Assets"):get("sounds"):get("oneUp")
 end
 
 function endless:update(dt)
@@ -46,12 +50,31 @@ function endless:update(dt)
         end
     end
 
+    local playerPosition = game.playerManager.playerPosition
+
     if self.totalKills > self.killsForLevelIncrement * self.currentLevelIndex and self.currentLevelIndex ~= #self.levels then
         self.currentLevelIndex = self.currentLevelIndex + 1
         self:parseCurrentLevel()
         
-        local playerPosition = game.playerManager.playerPosition
         gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "Level up!", "fontScore"))
+    end
+
+    local scoreManager = gameHelper:getScoreManager()
+    local player = game.playerManager.playerReference
+
+    if scoreManager.score > self.oneUpScore then
+        if player then
+            if player.health == player.maxHealth then
+                player.maxHealth = player.maxHealth + 1
+            end
+
+            player.health = player.health + 1
+        end
+
+        self.oneUpScore = self.oneUpScore + self.oneUpScore
+        self.oneUpSound:play()        
+        
+        gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "One up!", "fontScore"))
     end
 end
 
