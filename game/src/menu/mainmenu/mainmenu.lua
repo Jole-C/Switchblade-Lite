@@ -102,7 +102,6 @@ function mainMenu:new()
 
                     Controls - Keyboard:
                     W - thrust, A/D - steer, SPACE - fire, LSHIFT - boost
-                    S - flip direction
 
                     Controls - Gamepad:
                     A - thrust, LBUMPER - boost, RBUMPER - fire
@@ -111,13 +110,10 @@ function mainMenu:new()
 
                     USEFUL TO KNOW:
                     Boosting into enemies restores ammo.
-                    Boosting for too long makes you overheat.
-                    Boosting or overheating disables health recharge.
-                    Some enemies can only be killed by boosting - 
-                    - they have a white outline.
-                    You die if you run out of time.
-                    Defeating waves and other actions drop pickups - 
-                    - touch them to add time.
+                    Taking damage and boosting into enemies adds heat.
+                    Being hit while overheating causes instant death.
+                    Hitting enemies fast enough will damage them even while 
+                    not boosting.
                     
                     
                     Have fun!"]], "fontMain", "left", 40, 18, 1000),
@@ -314,29 +310,32 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("gauntlet", "fontBigUI", 10, 10, 15, 10, function(self)
+                textButton("endless", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
-                        self.owner:switchMenu("levelselect")
-                        self.owner:setBackgroundSlideAmount(0.5)
+                        game.manager:changePlayerDefinition("default definition")
+                        game.manager:setCurrentGamemode("endless")
+                        game.transitionManager:doTransition("gameLevelState")
                         self.owner.selectSound:play()
-                        game.manager:setCurrentGamemode("gauntlet")
                     end
                 end),
 
-                textButton("endless", "fontBigUI", 10, 25, 15, 25, function(self)
-                    game.manager:changePlayerDefinition("default definition")
-                    game.manager:setCurrentGamemode("endless")
-                    game.transitionManager:doTransition("gameLevelState")
+                textButton("gamemode 2", "fontBigUI", 10, 25, 15, 25, function(self)
+                end),
+
+                textButton("gamemode 3", "fontBigUI", 10, 40, 15, 40, function()
+                end),
+
+                textButton("boss", "fontBigUI", 10, 55, 15, 55, function()
+                end),
+
+                textButton("arena", "fontBigUI", 10, 70, 15, 70, function(self)
+                    self.owner:switchMenu("levelselect")
+                    self.owner:setBackgroundSlideAmount(0.5)
                     self.owner.selectSound:play()
+                    game.manager:setCurrentGamemode("gauntlet")
                 end),
 
-                textButton("defence", "fontBigUI", 10, 40, 15, 40, function()
-                end),
-
-                textButton("sum gamemode", "fontBigUI", 10, 55, 15, 55, function()
-                end),
-
-                textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
+                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -360,9 +359,9 @@ function mainMenu:new()
                 end),
 
                 textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function(self)
-                    game.manager:changePlayerDefinition("default definition")
-                    game.manager.runSetup.level = level2
-                    game.transitionManager:doTransition("gameLevelState")
+                    --game.manager:changePlayerDefinition("default definition")
+                    --game.manager.runSetup.level = level2
+                    --game.transitionManager:doTransition("gameLevelState")
                 end),
 
                 textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function(self)
