@@ -40,11 +40,11 @@ function gameHelper:getGamemode()
     return stageDirector.gamemode
 end
 
-function gameHelper:addScore(score, multiplier)
+function gameHelper:addScore(score)
     local scoreManager = self:getScoreManager()
 
     if scoreManager then
-        scoreManager:addScore(score, multiplier)
+        scoreManager:addScore(score)
     end
 end
 

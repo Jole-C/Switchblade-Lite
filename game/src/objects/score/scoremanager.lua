@@ -8,7 +8,7 @@ function scoreManager:new(x, y)
     self:super(x, y)
 
     self.scoreMultiplier = 1
-    self.maxMultiplierResetTime = 4
+    self.maxMultiplierResetTime = 5
     self.multiplierResetTime = 0
     self.multiplierPaused = false
     self.score = 0
@@ -67,8 +67,8 @@ function scoreManager:setMultiplierPaused(multiplierPaused)
     self.multiplierPaused = multiplierPaused
 end
 
-function scoreManager:addScore(score, multiplier)
-    self.score = self.score + (score * multiplier)
+function scoreManager:addScore(score)
+    self.score = self.score + (score * self.scoreMultiplier)
 end
 
 function scoreManager:incrementMultiplier()

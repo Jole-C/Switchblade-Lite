@@ -151,7 +151,7 @@ function boss2:handleDamage(damageType, amount)
     if damageType == "bullet" then
         if self.isShielded == false then
             self.phaseHealth = self.phaseHealth - amount
-            self:addScore(self.bossHitScore, gameHelper:getScoreManager().scoreMultiplier, vec2(self.position.x + math.random(-50, 50), self.position.y + math.random(-50, 50)))
+            self:addScore(self.bossHitScore, vec2(self.position.x + math.random(-50, 50), self.position.y + math.random(-50, 50)))
             return true
         else
             self.shieldHealth = self.shieldHealth - amount

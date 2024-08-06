@@ -24,14 +24,14 @@ function enemyBase:new(x, y)
     end
 end
 
-function enemyBase:addScore(score, multiplier, overridePosition)
+function enemyBase:addScore(score, overridePosition)
     local position = self.position
 
     if overridePosition and overridePosition.type and overridePosition:type() == "vec2" then
         position = overridePosition
     end
 
-    gameHelper:addGameObject(scoreObject(position.x, position.y, score, multiplier))
+    gameHelper:addGameObject(scoreObject(position.x, position.y, score))
 end
 
 function enemyBase:update(dt)
@@ -154,7 +154,7 @@ function enemyBase:cleanup(destroyReason)
 
     if destroyReason ~= "autoDestruction" then
         currentGamestate.stageDirector:registerEnemyKill()
-        self:addScore(self.score, self.multiplierToApply)
+        self:addScore(self.score)
     end
 
     currentGamestate.enemyManager:unregisterEnemy(self)
