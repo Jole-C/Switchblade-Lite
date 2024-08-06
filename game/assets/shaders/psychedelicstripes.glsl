@@ -17,8 +17,8 @@ vec4 effect(vec4 colour, Image texture, vec2 texCoords, vec2 screenCoords)
     pos.x += sin(pos.y * warpTiling * PI * 2.0) * warpScale;
     pos.x *= tiling;
 
-    vec3 col1 = vec3(0.1, 0.1, 0.1);
-    vec3 col2 = vec3(0.13, 0.13, 0.13);
+    vec3 col1 = vec3(0.1, 0, 0.1);
+    vec3 col2 = vec3(0.13, 0, 0.13);
     
     float val = floor(fract(pos.x) + 0.5);
     vec4 fragColour = vec4(mix(col1, col2, val), 1);
