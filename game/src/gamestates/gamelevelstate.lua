@@ -36,7 +36,8 @@ function gameLevelState:enter()
     self.scoreManager = scoreManager(0, 0)
     self:addObject(self.scoreManager)
 
-    local newPlayer = game.playerManager:spawnPlayer(self.stageDirector.playerStartSegment.position.x, self.stageDirector.playerStartSegment.position.y)
+    local gamemode = self.stageDirector.gamemode
+    local newPlayer = game.playerManager:spawnPlayer(gamemode.playerSpawnPosition.x, gamemode.playerSpawnPosition.y)
     self:addObject(newPlayer)
 
     self.enemyManager = enemyManager()
