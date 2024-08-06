@@ -183,14 +183,7 @@ function gameoverMenu:draw()
     love.graphics.setStencilTest()
 
     if self.quadIncrements >= 8 then
-        local timeValues = game.manager.runInfo.time
-        local time = string.format("%02.0f:%02.0f",math.abs(timeValues.minutes),math.abs(math.floor(timeValues.seconds)))
-        local string = ""
-        
-        string = string..game.manager.runInfo.deathReason.."\n"
-        string = string.."time: "..time.."\n"
-        string = string.."score: "..game.manager.runInfo.score.."\n"
-        string = string.."kills: "..game.manager.runInfo.kills.."\n"
+        local string = game.manager:parseRunInfoString()
         
         local colour = game.manager.currentPalette.uiColour
         love.graphics.setColor(colour[1], colour[2], colour[3], self.textAlpha)

@@ -130,7 +130,13 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("options", "fontBigUI", 10, 25, 15, 25, function(self)
+                textButton("achievements", "fontBigUI", 10, 25, 15, 25, function(self)
+                end),
+
+                textButton("help", "fontBigUI", 10, 40, 15, 40, function(self)
+                end),
+
+                textButton("options", "fontBigUI", 10, 55, 15, 55, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
                         self.owner:setBackgroundSlideAmount(0.35)
@@ -138,13 +144,13 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("credits", "fontBigUI", 10, 40, 15, 40, function(self)
+                textButton("credits", "fontBigUI", 10, 70, 15, 70, function(self)
                 end),
 
-                textButton("about", "fontBigUI", 10, 55, 15, 55, function(self)
+                textButton("about", "fontBigUI", 10, 85, 15, 85, function(self)
                 end),
 
-                textButton("quit", "fontBigUI", 10, 80, 15, 80, function()
+                textButton("quit", "fontBigUI", 10, 110, 15, 110, function()
                     love.event.quit()
                 end),
 
@@ -308,21 +314,22 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena", "fontBigUI", 10, 10, 15, 10, function(self)
+                textButton("gauntlet", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("levelselect")
                         self.owner:setBackgroundSlideAmount(0.5)
                         self.owner.selectSound:play()
+                        game.manager:setCurrentGamemode("gauntlet")
                     end
                 end),
 
-                textButton("gamemodes", "fontBigUI", 10, 25, 15, 25, function()
+                textButton("endless", "fontBigUI", 10, 25, 15, 25, function()
                 end),
 
-                textButton("unlocks", "fontBigUI", 10, 40, 15, 40, function()
+                textButton("defence", "fontBigUI", 10, 40, 15, 40, function()
                 end),
 
-                textButton("achievements", "fontBigUI", 10, 55, 15, 55, function()
+                textButton("sum gamemode", "fontBigUI", 10, 55, 15, 55, function()
                 end),
 
                 textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)

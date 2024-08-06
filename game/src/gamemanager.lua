@@ -69,19 +69,11 @@ function gameManager:new()
 
     self.runInfo =
     {
-        deathReason = "NO REASON",
-        time =
-        {
-            minutes = 0,
-            seconds = 0,
-        },
-        bossTime =
-        {
-            minutes = 0,
-            seconds = 0,
-        },
-        score = 0,
-        kills = 0,
+    }
+
+    self.gamemodeDefinitions =
+    {
+        
     }
 
     self.runSetup =
@@ -317,6 +309,60 @@ end
 function gameManager:startRun()
     self:changePlayerDefinition("default definition")
     game.transitionManager:doTransition("gameLevelState")
+end
+
+function gameManager:spawnGamemode()
+    return self.runSetup.gamemode()
+end
+
+function gameManager:setupGamemodes(gamemodeDefinitions)
+    self.gamemodeDefinitions = gamemodeDefinitions
+end
+
+function gameManager:setCurrentGamemode(gamemodeName)
+    local gamemode = self.gamemodeDefinitions[gamemodeName]
+    assert(gamemode ~= nil, "Gamemode does not exist!")
+
+    self.runSetup.gamemode = gamemode
+end
+
+function gameManager:addRunInfoText(name, value)
+    table.insert(self.runInfo, {name = name, value = value})
+end
+
+function gameManager:parseRunInfoString()
+    local string = ""
+    local maxElementsPerLine = 2
+    local currentElementsPerLine = 0
+
+    if #self.runInfo % maxElementsPerLine ~= 0 then
+        maxElementsPerLine = 1000
+    end
+
+    for _, info in ipairs(self.runInfo) do
+        local value = info.value
+
+        if type(value) == "table" then
+            value = string.format("%02.0f:%02.0f",math.abs(info.value[1]),math.abs(math.floor(info.value[2])))
+        end
+        string = string..info.name..": "..tostring(value).."     "
+
+        currentElementsPerLine = currentElementsPerLine + 1
+
+        if currentElementsPerLine == maxElementsPerLine then
+            string = string.."\n"
+        end
+    end
+
+    return string
+end
+
+function gameManager:getRunInfoElement(name)
+    for _, info in ipairs(self.runInfo) do
+        if info.name == name then
+            return info.value
+        end
+    end
 end
 
 function gameManager:draw()
