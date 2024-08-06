@@ -313,6 +313,7 @@ function mainMenu:new()
                         self.owner:switchMenu("levelselect")
                         self.owner:setBackgroundSlideAmount(0.5)
                         self.owner.selectSound:play()
+                        game.manager:setCurrentGamemode("gauntlet")
                     end
                 end),
 
