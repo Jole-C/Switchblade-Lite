@@ -24,20 +24,8 @@ function boss2:new(x, y)
 
     self.numberOfMetaballs = 700
     self.ballSpawnDistance = 300
-    self.minPositionChangeCooldown = 0.1
-    self.maxPositionChangeCooldown = 0.5
-    self.minPositionLerpRate = 0.1
-    self.maxPositionLerpRate = 0.3
-    self.minPositionDistance = 10
-    self.maxPositionDistance = 60
-    self.minSpriteScale = 0.1
-    self.maxSpriteScale = 1
-    self.colliderWidth = 10
-    self.eyeDistance = 7
-    self.eyeRadius = 15
 
     self.points = {}
-    self.lastHitPoint = nil
     self:addPoint("leftPoint")
     self:addPoint("rightPoint")
 
@@ -46,7 +34,6 @@ function boss2:new(x, y)
     local assets = game.resourceManager:getAsset("Enemy Assets"):get("boss2")
     self.thresholdShader = assets:get("shaders"):get("metaballThreshold")
     self.blendShader = assets:get("shaders"):get("metaballBlend")
-    self.metaballSprite = assets:get("sprites"):get("metaball")
 
     self:setPhase()
     self:switchState("intro")
@@ -84,75 +71,6 @@ function boss2:updatePoints(dt)
         else
             point.drawColour = {1, 1, 1, 1}
         end
-    end
-end
-
-function boss2:updateMetaballs(dt)
-    for _, metaball in ipairs(self.metaballs) do
-        local closestPoint = nil
-        local closestDistance = math.huge
-
-        for _, point in pairs(self.points) do
-            local distance = (point.position - metaball.position):length()
-
-            if distance < closestDistance then
-                closestPoint = point
-                closestDistance = distance
-            end
-        end
-
-        if closestPoint == nil then
-            goto continue
-        end
-
-        if metaball.pointAttractedTo == nil then
-            metaball.pointAttractedTo = closestPoint
-            table.insert(metaball.pointAttractedTo.attractedMetaballs, metaball)
-        end
-
-        if metaball.pointAttractedTo ~= closestPoint then
-            tablex.remove_value(metaball.pointAttractedTo.attractedMetaballs, metaball)
-            metaball.pointAttractedTo = closestPoint
-            table.insert(metaball.pointAttractedTo.attractedMetaballs, metaball)
-        end
-        
-        metaball.positionChangeCooldown = metaball.positionChangeCooldown - (1 * dt)
-
-        if metaball.positionChangeCooldown <= 0 then
-            metaball.positionChangeCooldown = math.randomFloat(self.minPositionChangeCooldown, self.maxPositionChangeCooldown)
-
-            local randomAngle = math.rad(math.random(0, 360))
-            metaball.targetPosition = closestPoint.position + vec2:polar(math.random(self.minPositionDistance, self.maxPositionDistance), randomAngle)
-
-            metaball.lerpRate = math.randomFloat(self.minPositionLerpRate, self.maxPositionLerpRate)
-        end
-
-        metaball.position.x = math.lerpDT(metaball.position.x, metaball.targetPosition.x, metaball.lerpRate, dt)
-        metaball.position.y = math.lerpDT(metaball.position.y, metaball.targetPosition.y, metaball.lerpRate, dt)
-
-        local player = game.playerManager.playerReference
-        local playerPosition = game.playerManager.playerPosition
-
-        if player then
-            if (playerPosition - metaball.position):length() < ((self.metaballSprite:getWidth()/2 * metaball.spriteScale) * 0.7) then
-                player:onHit(1)
-            end
-
-            for _, bullet in ipairs(game.playerManager.playerBullets) do
-                if (bullet.position - metaball.position):length() < 10 then
-                    self.lastHitPoint = metaball.pointAttractedTo
-                    local tookDamage = self:onHit("bullet", 1)
-
-                    if tookDamage then
-                        bullet:destroy()
-                        metaball.pointAttractedTo.invincibleTime = self.maxInvulnerableTime
-                        break
-                    end
-                end
-            end
-        end
-
-        ::continue::
     end
 end
 
@@ -227,13 +145,6 @@ function boss2:setRenderEyes(renderEyes)
 end
 
 function boss2:onHitParticles()
-    if not self.lastHitPoint then
-        return
-    end
-
-    for _, metaball in ipairs(self.lastHitPoint.attractedMetaballs) do
-        game.particleManager:burstEffect("Enemy Hit", 3, metaball.position)
-    end
 end
 
 function boss2:handleDamage(damageType, amount)

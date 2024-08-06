@@ -4,7 +4,7 @@ local shieldMovement = class({name = "Shield Movement", extends = bossState})
 function shieldMovement:enter(bossInstance)
     gameHelper:getCurrentState().stageDirector:setTimerPaused(false)
 
-    self.distance = 250
+    self.distance = 200 
     self.angleTurnRate = 1
     self.pointLerpRate = 0.1
     
