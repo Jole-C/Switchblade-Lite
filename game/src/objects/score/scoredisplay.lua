@@ -31,11 +31,6 @@ function scoreDisplay:draw()
     local scoreHeight = self.font:getHeight(scoreString)
 
     love.graphics.print(multiplierString, 480 - scoreLength - 2 - multiplierLength, 8 + scoreHeight - multiplierHeight)
-    
-    local waveScoreString = string.format("%07d", scoreManager.waveScore)
-    local scoreLength = self.multiplierFont:getWidth(waveScoreString)
-
-    love.graphics.print(waveScoreString, 480 - scoreLength - 2, 34)
 
     local t = scoreManager.multiplierResetTime / scoreManager.maxMultiplierResetTime
     local rectWidth = math.lerp(0, self.multiplierLineLength, math.clamp(t, 0, 1))

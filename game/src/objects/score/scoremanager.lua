@@ -12,7 +12,6 @@ function scoreManager:new(x, y)
     self.multiplierResetTime = 0
     self.multiplierPaused = false
     self.score = 0
-    self.waveScore = 0
     self.multiplierIncrementAmount = 10
     self.numMultiplierIncrements = 1
 
@@ -50,13 +49,6 @@ function scoreManager:update(dt)
         local playerPosition = game.playerManager.playerPosition
         gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "Multiplier: *"..self.scoreMultiplier, "fontScore"))
     end
-end
-
-function scoreManager:beginNewWaveScore()
-    self.waveScore = 0
-end
-
-function scoreManager:applyWaveScore()
 end
 
 function scoreManager:resetMultiplier(playSound)

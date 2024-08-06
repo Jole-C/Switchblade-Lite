@@ -175,11 +175,7 @@ function gauntlet:startWave()
         if self.elapsedWaveTime < self.waveTime then
             gameHelper:getScoreManager():applyBonus("waveBonus")
         end
-
-        gameHelper:getScoreManager():applyWaveScore()
     end
-
-    gameHelper:getScoreManager():beginNewWaveScore()
 
     gameHelper:addGameObject(soundObject(self.enemySpawnTime))
 

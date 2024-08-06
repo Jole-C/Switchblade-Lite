@@ -40,7 +40,6 @@ end
 
 function gamemode:cleanup()
     game.interfaceRenderer:removeHudElement(self.debugText)
-    gameHelper:getScoreManager():applyWaveScore()
     
     game.manager:addRunInfoText("Kills", self.totalKills)
 end
