@@ -69,19 +69,6 @@ function gameManager:new()
 
     self.runInfo =
     {
-        deathReason = "NO REASON",
-        time =
-        {
-            minutes = 0,
-            seconds = 0,
-        },
-        bossTime =
-        {
-            minutes = 0,
-            seconds = 0,
-        },
-        score = 0,
-        kills = 0,
     }
 
     self.gamemodeDefinitions =
@@ -337,6 +324,33 @@ function gameManager:setCurrentGamemode(gamemodeName)
     assert(gamemode ~= nil, "Gamemode does not exist!")
 
     self.runSetup.gamemode = gamemode
+end
+
+function gameManager:addRunInfoText(name, value)
+    table.insert(self.runInfo, {name = name, value = value})
+end
+
+function gameManager:parseRunInfoString()
+    local string = ""
+
+    for _, info in ipairs(self.runInfo) do
+        local value = info.value
+
+        if type(value) == "table" then
+            value = string.format("%02.0f:%02.0f",math.abs(info.value[1]),math.abs(math.floor(info.value[2])))
+        end
+        string = string..info.name..": "..tostring(value).."     "
+    end
+
+    return string
+end
+
+function gameManager:getRunInfoElement(name)
+    for _, info in ipairs(self.runInfo) do
+        if info.name == name then
+            return info.value
+        end
+    end
 end
 
 function gameManager:draw()

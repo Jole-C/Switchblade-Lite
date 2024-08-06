@@ -103,7 +103,7 @@ function scoreManager:cleanup(destroyReason)
     gameObject.cleanup(self, destroyReason)
 
     game.interfaceRenderer:removeHudElement(self.scoreDisplay)
-    game.manager.runInfo.score = self.score
+    game.manager:addRunInfoText("Score", self.score)
 end
 
 return scoreManager

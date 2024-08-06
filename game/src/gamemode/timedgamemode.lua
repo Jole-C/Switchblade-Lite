@@ -39,8 +39,7 @@ end
 function timedGamemode:cleanup()
     gamemode.cleanup(self)
 
-    game.manager.runInfo.time.minutes = self.timer.totalMinutes
-    game.manager.runInfo.time.seconds = self.timer.totalSeconds
+    game.manager:addRunInfoText("Time", {self.timer.totalMinutes, self.timer.totalSeconds})
 end
 
 return timedGamemode

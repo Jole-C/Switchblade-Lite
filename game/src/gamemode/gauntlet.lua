@@ -116,8 +116,8 @@ function gauntlet:update(dt)
 
                 if arena.outroComplete == true then
                     game.transitionManager:doTransition("victoryState")
-                    game.manager.runInfo.bossTime.minutes = self.bossMinutes
-                    game.manager.runInfo.bossTime.seconds = self.bossSeconds
+    
+                    game.manager:addRunInfoText("Boss Time", {self.bossMinutes, self.bossSeconds})
                 end
             end
         else
@@ -132,7 +132,6 @@ function gauntlet:update(dt)
         
             if self.timer.timeSeconds <= 0 and self.timer.timeMinutes <= 0 then
                 player:destroy()
-                game.manager.runInfo.deathReason = "You ran out of time!"
         
                 self:setTimerPaused(true)
             end

@@ -10,23 +10,6 @@ function playerManager:new()
     self.maxMultiplierResetTime = 3
     self.multiplierResetTime = 0
     self.multiplierPaused = false
-
-    self.runInfo =
-    {
-        deathReason = "NO REASON",
-        time =
-        {
-            minutes = 0,
-            seconds = 0,
-        },
-        bossTime =
-        {
-            minutes = 0,
-            seconds = 0,
-        },
-        score = 0,
-        kills = 0,
-    }
 end
 
 function playerManager:update(dt)

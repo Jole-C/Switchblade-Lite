@@ -669,8 +669,6 @@ function player:cleanup(destroyReason)
         gameHelper:getWorld():remove(self.collider)
     end
 
-    game.manager.runInfo.deathReason = "You died!"
-
     if destroyReason ~= "autoDestruction" then
         gameHelper:addGameObject(gameoverEffect(self.position.x, self.position.y, self.angle))
     end
