@@ -19,18 +19,20 @@ function endlessGamemode:parseCurrentLevel()
     self.currentLevelIndex = math.clamp(self.currentLevelIndex, 1, #self.levels)
     local currentLevel = self.levels[self.currentLevelIndex]
 
-    self.currentLevel = 
-    {
-        enemyClasses = {},
-        enemySpawnWeights = {},
-        minNumberSpawns = currentLevel.minEnemySpawns,
-        maxNumberSpawns = currentLevel.maxEnemySpawns,
-    }
+    self.currentLevel = {}
+    self:parseLevelEntry(currentLevel)
 
     for _, enemy in ipairs(currentLevel.spawns) do
         table.insert(self.currentLevel.enemyClasses, enemy.enemyClass)
         table.insert(self.currentLevel.enemySpawnWeights, enemy.spawnChance)
     end
+end
+
+function endlessGamemode:parseLevelEntry(currentLevel)
+    self.currentLevel.enemyClasses = {}
+    self.currentLevel.enemySpawnWeights = {}
+    self.currentLevel.minNumberSpawns = currentLevel.minEnemySpawns
+    self.currentLevel.maxNumberSpawns = currentLevel.maxEnemySpawns
 end
 
 function endlessGamemode:incrementLevel()

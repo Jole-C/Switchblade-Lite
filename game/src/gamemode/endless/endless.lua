@@ -2,16 +2,14 @@ local endlessGamemode = require "src.gamemode.endlessgamemode"
 local endless = class({name = "Endless", extends = endlessGamemode})
 
 function endless:new()
-    self:super("src.gamemode.endless.levels")            
+    self:super("src.gamemode.endless.levels")
     
     self.maxSpawnTime = 3
     self.killsForLevelIncrement = 30
-    self.oneUpScore = 5000
+    self.oneUpScore = 1000
 
     self.spawnTime = 0
     gameHelper:getArena():addArenaSegment(0, 0, 300, "main")
-
-    self.oneUpSound = game.resourceManager:getAsset("Player Assets"):get("sounds"):get("oneUp")
 end
 
 function endless:update(dt)
