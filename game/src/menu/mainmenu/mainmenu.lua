@@ -319,7 +319,13 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("timed", "fontBigUI", 10, 25, 15, 25, function(self)
+                textButton("rush", "fontBigUI", 10, 25, 15, 25, function(self)
+                    if self.owner then
+                        game.manager:changePlayerDefinition("default definition")
+                        game.manager:setCurrentGamemode("timed")
+                        game.transitionManager:doTransition("gameLevelState")
+                        self.owner.selectSound:play()
+                    end
                 end),
 
                 textButton("denial", "fontBigUI", 10, 40, 15, 40, function()

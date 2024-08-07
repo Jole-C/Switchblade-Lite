@@ -11,6 +11,7 @@ local musicManager = require "src.music.musicmanager"
 
 local gauntlet = require "src.gamemode.gauntlet"
 local endless = require "src.gamemode.endless.endless"
+local timed = require "src.gamemode.timed.timed"
 
 colliderDefinitions = require "src.collision.colliderdefinitions"
 scoreDefinitions = require "src.objects.score.scoredefinitions"
@@ -195,7 +196,7 @@ function game:new()
     {
         ["gauntlet"] = gauntlet,
         ["endless"] = endless,
-        ["defence"] = nil,
+        ["timed"] = timed,
     })
 end
 
