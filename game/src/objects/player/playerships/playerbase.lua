@@ -93,7 +93,7 @@ function player:new(x, y)
     
     -- Ship components
     self.collider = collider(colliderDefinitions.player, self)
-    gameHelper:addCollider(self.collider, 0, 0, 16, 16)
+    gameHelper:addCollider(self.collider, 0, 0, 18, 18)
 
     self.boostCollider = collider(colliderDefinitions.none, self)
     gameHelper:addCollider(self.boostCollider, 0, 0, 32, 32)
