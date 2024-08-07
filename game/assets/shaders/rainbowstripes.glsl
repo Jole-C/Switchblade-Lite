@@ -20,7 +20,7 @@ vec4 colourFromGreyscale(float colour)
 
 vec4 effect(vec4 screenColour, Image texture, vec2 texCoord, vec2 screenCoord)
 {
-    vec2 center = vec2(resolution.x, resolution.y) / 
+    vec2 center = vec2(resolution.x, resolution.y) / (8.0 + (time * 2));
     vec2 pos = screenCoord / center;
     
     float radius = length(pos);
