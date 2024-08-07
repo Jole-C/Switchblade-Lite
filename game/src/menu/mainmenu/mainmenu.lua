@@ -8,6 +8,7 @@ local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
 
 local level1 = require "src.levels.level1"
+local boss1 = require "src.levels.boss1"
 local level2 = require "src.levels.level2"
 
 local mainMenu = class({name = "Main Menu", extends = menu})
@@ -366,26 +367,23 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena 1", "fontBigUI", 10, 10, 15, 10, function(self)
+                textButton("...", "fontBigUI", 10, 10, 15, 10, function(self)
+                end),
+
+                textButton("boss 1", "fontBigUI", 10, 25, 15, 25, function(self)
                     game.manager:changePlayerDefinition("default definition")
-                    game.manager.runSetup.level = level1
+                    game.manager.runSetup.level = boss1
                     game.transitionManager:doTransition("gameLevelState")
                     self.owner.selectSound:play()
                 end),
 
-                textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function(self)
-                    --game.manager:changePlayerDefinition("default definition")
-                    --game.manager.runSetup.level = level2
-                    --game.transitionManager:doTransition("gameLevelState")
+                textButton("...", "fontBigUI", 10, 40, 15, 40, function(self)
                 end),
 
-                textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function(self)
+                textButton("...", "fontBigUI", 10, 55, 15, 55, function(self)
                 end),
 
-                textButton("wippy wippy wip", "fontBigUI", 10, 55, 15, 55, function(self)
-                end),
-
-                textButton("not done lol", "fontBigUI", 10, 70, 15, 70, function(self)
+                textButton("...", "fontBigUI", 10, 70, 15, 70, function(self)
                 end),
 
                 textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
@@ -546,16 +544,12 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("arena 1", "fontBigUI", 10, 10, 15, 10, function()
-                    game.manager:changePlayerDefinition("default definition")
-                    game.manager.runSetup.level = level1
-                    game.transitionManager:doTransition("gameLevelState")
-                    self.owner.startSound:play()
+                textButton("...", "fontBigUI", 10, 10, 15, 10, function()
                 end),
 
-                textButton("arena 2", "fontBigUI", 10, 25, 15, 25, function()
+                textButton("", "fontBigUI", 10, 25, 15, 25, function()
                     game.manager:changePlayerDefinition("default definition")
-                    game.manager.runSetup.level = level2
+                    game.manager.runSetup.level = boss1
                     game.transitionManager:doTransition("gameLevelState")
                     self.owner.startSound:play()
                 end),

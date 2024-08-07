@@ -9,7 +9,6 @@ local levelDefinition =
         ["sticker"] = enemyDefinitions.sticker,
         ["charger"] = enemyDefinitions.charger,
         ["drone"] = enemyDefinitions.drone,
-        ["boss"] = enemyDefinitions.boss1
     },
     
     arenaSegmentDefinitions =
@@ -2033,20 +2032,6 @@ local levelDefinition =
                 {
                     conditionType = "timer",
                     timeUntilNextWave = 40
-                }
-            }
-        },
-        {
-            waveType = "bossWave",
-            bossID = "boss",
-            
-            segmentChanges =
-            {
-                {
-                    changeType = "size",
-                    arenaSegment = "mainCircle",
-                    newRadius = 350,
-                    lerpSpeed = 0.05,
                 }
             }
         }
