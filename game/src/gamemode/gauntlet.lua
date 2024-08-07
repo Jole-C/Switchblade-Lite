@@ -138,6 +138,16 @@ function gauntlet:update(dt)
     end
 end
 
+function gauntlet:start()
+    local player = game.playerManager.playerReference
+
+    if player then
+        player.health = 1
+        player.maxHealth = 1
+        player:setHealthCanRecharge(false)
+    end
+end
+
 function gauntlet:draw()
     timedGamemode.draw(self)
 end
