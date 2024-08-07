@@ -429,10 +429,6 @@ function player:handleCollision(colliderHit, collidedObject, colliderDefinition)
         if colliderDefinition == colliderDefinitions.enemy then
             if self.isBoosting and collidedObject.onHit then
                 local tookDamage = collidedObject:onHit("boost", self.boostDamage)
-
-                if tookDamage then
-                    self.shipTemperature = self.shipTemperature + (self.boostEnemyHitHeatAccumulation/self.boostHeatDividend)
-                end
                 
                 if collidedObject.markedForDelete then
                     if self.ammo < self.maxAmmo then
