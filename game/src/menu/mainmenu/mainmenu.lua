@@ -111,10 +111,8 @@ function mainMenu:new()
 
                     USEFUL TO KNOW:
                     Boosting into enemies restores ammo.
-                    Taking damage and boosting into enemies adds heat.
-                    Being hit while overheating causes instant death.
-                    Hitting enemies fast enough will damage them even while 
-                    not boosting.
+                    Boosting adds heat.
+                    Overheating causes instant death.
                     
                     
                     Have fun!"]], "fontMain", "left", 40, 18, 1000),
