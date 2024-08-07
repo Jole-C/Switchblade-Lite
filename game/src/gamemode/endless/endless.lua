@@ -1,20 +1,12 @@
-local timedGamemode = require "src.gamemode.gamemode"
-local worldAlertObject = require "src.objects.stagedirector.worldalertobject"
-
-local endless = class({name = "Endless", extends = timedGamemode})
+local endlessGamemode = require "src.gamemode.endlessgamemode"
+local endless = class({name = "Endless", extends = endlessGamemode})
 
 function endless:new()
-    self:super(3, 0)            
+    self:super("src.gamemode.endless.levels")            
     
-    self.levels = require "src.gamemode.endless.levels"
     self.maxSpawnTime = 3
     self.killsForLevelIncrement = 30
     self.oneUpScore = 5000
-
-    self.currentOneUps = 0
-    self.currentLevelIndex = 1
-    self.currentLevel = nil
-    self:parseCurrentLevel()
 
     self.spawnTime = 0
     gameHelper:getArena():addArenaSegment(0, 0, 300, "main")
@@ -50,54 +42,11 @@ function endless:update(dt)
         end
     end
 
-    local playerPosition = game.playerManager.playerPosition
-
     if self.totalKills > self.killsForLevelIncrement * self.currentLevelIndex and self.currentLevelIndex ~= #self.levels then
-        self.currentLevelIndex = self.currentLevelIndex + 1
-        self:parseCurrentLevel()
-        
-        gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "Level up!", "fontScore"))
+       self:incrementLevel()
     end
 
-    local scoreManager = gameHelper:getScoreManager()
-    local player = game.playerManager.playerReference
-
-    if scoreManager.score > self.oneUpScore then
-        if player then
-            if player.health == player.maxHealth then
-                player.maxHealth = player.maxHealth + 1
-            end
-
-            player.health = player.health + 1
-        end
-
-        self.oneUpScore = self.oneUpScore + self.oneUpScore
-        self.oneUpSound:play()        
-        
-        gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "One up!", "fontScore"))
-    end
-end
-
-function endless:parseCurrentLevel()
-    self.currentLevelIndex = math.clamp(self.currentLevelIndex, 1, #self.levels)
-    local currentLevel = self.levels[self.currentLevelIndex]
-
-    self.currentLevel = 
-    {
-        enemyClasses = {},
-        enemySpawnWeights = {},
-        minNumberSpawns = currentLevel.minEnemySpawns,
-        maxNumberSpawns = currentLevel.maxEnemySpawns,
-    }
-
-    for _, enemy in ipairs(currentLevel.spawns) do
-        table.insert(self.currentLevel.enemyClasses, enemy.enemyClass)
-        table.insert(self.currentLevel.enemySpawnWeights, enemy.spawnChance)
-    end
-end
-
-function endless:registerEnemyKill()
-    self.totalKills = self.totalKills + 1
+    self:handleOneups()
 end
 
 return endless
