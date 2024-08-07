@@ -32,6 +32,8 @@ function stageDirector:update(dt)
                 end
 
                 self.inIntro = false
+                self.gamemode:start()
+                
                 return
             end
 
