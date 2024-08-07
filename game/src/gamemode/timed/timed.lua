@@ -4,7 +4,7 @@ local timed = class({name = "Timed", extends = timedGamemode})
 function timed:new()
     self:super(3, 0)
 
-    self.maxSpawnTime = 2
+    self.maxSpawnTime = 3
     self.enemySpawns = 5
 
     self.level = require "src.gamemode.timed.levels"
