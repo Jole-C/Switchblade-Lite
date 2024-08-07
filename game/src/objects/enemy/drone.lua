@@ -16,7 +16,7 @@ function drone:new(x, y)
     self.chargeDuration = 2
     self.friction = 1
     self.bounceDampening = 0.75
-    self.score = 50
+    self.score = scoreDefinitions.scoreMedium
 
     -- Variables
     self.angle = math.random(0, 2 * math.pi)

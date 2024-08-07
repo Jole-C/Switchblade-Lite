@@ -268,7 +268,7 @@ function player:updateOverheating(dt)
         self.isBoosting = false
 
         if self.isOverheating == false then
-            self:onHit()
+            self:destroy()
             gameHelper:addGameObject(worldAlertObject(self.position.x, self.position.y, "Overheated!", "fontScore"))
         end
 

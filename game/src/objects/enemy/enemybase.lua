@@ -8,7 +8,7 @@ function enemyBase:new(x, y)
 
     self.health = 1
     self.maxInvulnerableTime = 0.15
-    self.score = 10
+    self.score = scoreDefinitions.scoreSmall
     self.multiplierToApply = 1
 
     self.invulnerableTime = 0

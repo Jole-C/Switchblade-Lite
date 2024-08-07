@@ -21,7 +21,7 @@ function shielder:new(x, y)
     self.maxSegmentOpenOffset = 10
     self.segmentOpenOffset = self.maxSegmentOpenOffset
     self.tailYOffset = 3
-    self.score = 50
+    self.score = scoreDefinitions.scoreMedium
     self.minShieldDistance = 40
     self.maxShieldDistance = 110
     self.shieldDistance = self.minShieldDistance

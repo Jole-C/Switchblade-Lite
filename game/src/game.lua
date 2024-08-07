@@ -13,6 +13,7 @@ local gauntlet = require "src.gamemode.gauntlet"
 local endless = require "src.gamemode.endless.endless"
 
 colliderDefinitions = require "src.collision.colliderdefinitions"
+scoreDefinitions = require "src.objects.score.scoredefinitions"
 
 local game = class({name = "Game"})
 
