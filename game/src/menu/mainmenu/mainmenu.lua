@@ -334,14 +334,17 @@ function mainMenu:new()
                 textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
                 end),
 
-                textButton("challenge", "fontBigUI", 10, 70, 15, 70, function(self)
+                textButton("defence", "fontBigUI", 10, 70, 15, 70, function()
+                end),
+
+                textButton("challenge", "fontBigUI", 10, 85, 15, 85, function(self)
                     self.owner:switchMenu("levelselect")
                     self.owner:setBackgroundSlideAmount(0.5)
                     self.owner.selectSound:play()
                     game.manager:setCurrentGamemode("gauntlet")
                 end),
 
-                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
+                textButton("back", "fontBigUI", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
