@@ -9,7 +9,7 @@ function endless:new()
     self.levels = require "src.gamemode.endless.levels"
     self.maxSpawnTime = 3
     self.killsForLevelIncrement = 30
-    self.oneUpScore = 2000
+    self.oneUpScore = 5000
 
     self.currentOneUps = 0
     self.currentLevelIndex = 1
