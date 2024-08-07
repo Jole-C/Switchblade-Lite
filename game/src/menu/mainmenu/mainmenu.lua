@@ -319,16 +319,16 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("gamemode 2", "fontBigUI", 10, 25, 15, 25, function(self)
+                textButton("timed", "fontBigUI", 10, 25, 15, 25, function(self)
                 end),
 
-                textButton("gamemode 3", "fontBigUI", 10, 40, 15, 40, function()
+                textButton("denial", "fontBigUI", 10, 40, 15, 40, function()
                 end),
 
-                textButton("boss", "fontBigUI", 10, 55, 15, 55, function()
+                textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
                 end),
 
-                textButton("arena", "fontBigUI", 10, 70, 15, 70, function(self)
+                textButton("challenge", "fontBigUI", 10, 70, 15, 70, function(self)
                     self.owner:switchMenu("levelselect")
                     self.owner:setBackgroundSlideAmount(0.5)
                     self.owner.selectSound:play()
