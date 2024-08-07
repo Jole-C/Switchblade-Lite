@@ -130,6 +130,11 @@ function mainMenu:new()
                 end),
 
                 textButton("help", "fontBigUI", 10, 40, 15, 40, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("help")
+                        self.owner:setBackgroundSlideAmount(0.7)
+                        self.owner.selectSound:play()
+                    end
                 end),
 
                 textButton("options", "fontBigUI", 10, 55, 15, 55, function(self)
@@ -141,6 +146,11 @@ function mainMenu:new()
                 end),
 
                 textButton("credits", "fontBigUI", 10, 70, 15, 70, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("credits")
+                        self.owner:setBackgroundSlideAmount(0.7)
+                        self.owner.selectSound:play()
+                    end
                 end),
 
                 textButton("about", "fontBigUI", 10, 85, 15, 85, function(self)
@@ -300,6 +310,91 @@ function mainMenu:new()
                     end
                     
                     game.manager:saveOptions()
+                end),
+            }
+        },
+
+        ["credits"] =
+        {
+            displayMenuName = false,
+
+            elements =
+            {
+                text([[
+                    "Programming art and sound effects:
+                    Noba
+                    
+                    Music:
+                    SuperSMZ on Twitter
+                    
+                    Libraries - GitHub:
+                    Ripple and Baton by Tesselode
+                    Batteries by 1bardesign
+                    Bump and Gamera by Kikito
+                    
+                    Special thanks:
+                    Gimblll, Nextop, JShip, Josh, Shadow, 
+                    String, the LOVE2D Discord server and
+                    whoever else I'm forgetting for their 
+                    helpful feedback
+                    Centuri for keeping me motivated and for putting up with
+                    my hyperfixations
+                    All my friends and family for supporting me throughout
+                    development of this project
+                    This game wouldn't be here without you all.
+                    Thank you so much!"]], "fontMain", "left", -70, 10, 1000),
+
+                textButton("back", "fontBigUI", 10, 230, 10, 230, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("main")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
+                    end
+                end),
+            }
+        },
+
+        ["help"] =
+        {
+            displayMenuName = false,
+
+            elements =
+            {
+                text([[
+                    "Welcome to Switchblade!
+                    
+                    I dunno what the story of this game is
+                    but I'm sure it's really cool.
+                    
+                    Standard asteroid controls, steer left and right
+                    and thrust. You can boost too, and fire bullets.
+                    
+                    Ramming into enemies with your boost gives you ammo back.
+                    
+                    Boosting adds heat to your heat gauge. If you
+                    overheat you instantly die, don't do that.
+                        
+                    The aim of the game is to be fast. Never stop moving.
+
+                    Ramming enemies increases your multiplier, and
+                    shooting them applies that multiplier to score.
+
+                    Controls - Keyboard:
+                    A/D - Steer, W - Thrust, 
+                    Space - Fire, Shift - Boost
+
+                    Controls - Gamepad:
+                    Left Thumbstick - Steer, A - Thrust, 
+                    Left Bumper - Boost, Right Bumper - Fire
+                    
+                    Have fun!"]], "fontMain", "left", -70, 10, 1000),
+
+                textButton("back", "fontBigUI", 10, 230, 10, 230, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("main")
+                        self.owner:setBackgroundSlideAmount(0.32)
+                        self.owner.backSound:play()
+                    end
                 end),
             }
         },
