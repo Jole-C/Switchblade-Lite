@@ -396,6 +396,11 @@ function game:setupResources()
 
     resourceManager:addAsset(assetGroup(
     {
+        mainPalette = {path = "assets/sprites/mainpalettes.png", type = "Image"}
+    }), "Palettes")
+
+    resourceManager:addAsset(assetGroup(
+    {
         sprites = assetGroup(
         {
             playerSprite = {path = "assets/sprites/player/player.png", type = "Image"}

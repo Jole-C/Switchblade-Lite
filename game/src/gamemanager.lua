@@ -9,6 +9,7 @@ function gameManager:new()
     self.palettes = {}
     self.currentPaletteGroup = {}
     self.currentPalette = {}
+    self.currentPaletteIndex = 0
     self.maxPaletteSwapCooldown = 3
     self.paletteSwapCooldown = -1
 
@@ -179,6 +180,7 @@ function gameManager:swapPalette()
 
     local paletteIndex = love.math.random(1, #self.currentPaletteGroup)
     self.currentPalette = self.currentPaletteGroup[paletteIndex]
+    self.currentPaletteIndex = paletteIndex
 
     self.paletteSwapCooldown = self.maxPaletteSwapCooldown
 end

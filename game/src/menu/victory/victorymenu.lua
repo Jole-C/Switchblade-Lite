@@ -23,6 +23,7 @@ function victoryMenu:new()
     self.scoreBlastEnd = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("scoreBlastEnd")
     self.victoryIntro = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("victoryIntro")
     self.victorySong = game.musicManager:getTrack("victoryMusic")
+    self.paletteImage = game.resourceManager:getAsset("Palettes"):get("mainPalette")
 
     self.scoreBlastEffect = game.particleManager:getEffect("Boss Intro Burst")
 
@@ -160,9 +161,12 @@ function victoryMenu:update(dt)
     self.foregroundShader:send("tiling", tiling)
     self.foregroundShader:send("resolution", resolution)
     self.foregroundShader:send("position", {0, 0})
-    
+
+    self.backgroundShader:send("paletteTexture", self.paletteImage)
+    self.backgroundShader:send("paletteIndex", game.manager.currentPaletteIndex)
+    self.backgroundShader:send("paletteResolution", {self.paletteImage:getWidth(), self.paletteImage:getHeight()})
     self.backgroundShader:send("resolution", resolution)
-    self.backgroundShader:send("time", self.backgroundShaderTime)
+    self.backgroundShader:send("time", self.shaderTime)
 
     local bgColour = game.manager.currentPalette.backgroundColour[1]
     self.backgroundShader:send("colour", {bgColour[1] * 0.5, bgColour[2] * 0.5, bgColour[3] * 0.5})

@@ -22,6 +22,7 @@ function gameoverMenu:new()
     self.infoFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontUI")
     self.tipFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontMain")
     self.gameoverSong = game.musicManager:getTrack("gameoverMusic")
+    self.paletteImage = game.resourceManager:getAsset("Palettes"):get("mainPalette")
     
     self.quadIncrementAmount = 60
     self.quadIncrements = 0
@@ -104,12 +105,12 @@ function gameoverMenu:update(dt)
     self.foregroundShader:send("tiling", tiling)
     self.foregroundShader:send("resolution", resolution)
     self.foregroundShader:send("position", {0, 0})
-    
-    self.backgroundShader:send("resolution", resolution)
-    self.backgroundShader:send("time", self.backgroundShaderTime)
 
-    local bgColour = game.manager.currentPalette.backgroundColour[1]
-    self.backgroundShader:send("colour", {bgColour[1], bgColour[2], bgColour[3]})
+    self.backgroundShader:send("paletteTexture", self.paletteImage)
+    self.backgroundShader:send("paletteIndex", game.manager.currentPaletteIndex)
+    self.backgroundShader:send("paletteResolution", {self.paletteImage:getWidth(), self.paletteImage:getHeight()})
+    self.backgroundShader:send("resolution", resolution)
+    self.backgroundShader:send("time", self.shaderTime)
 
     self.letterShakeAmount = math.lerpDT(self.letterShakeAmount, 0, self.letterShakeFade, dt)
     self.letterShake.x = math.random(-self.letterShakeAmount, self.letterShakeAmount)

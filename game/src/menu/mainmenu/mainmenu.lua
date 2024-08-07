@@ -67,6 +67,7 @@ function mainMenu:new()
     self.backSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuBack")
     self.startSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("gameStart")
 
+    self.paletteImage = game.resourceManager:getAsset("Palettes"):get("mainPalette")
     -- Initialise menu elements
     self.menus =
     {
@@ -598,12 +599,12 @@ function mainMenu:update(dt)
         self.menuBoxShader:send("tiling", tiling)
         self.menuBoxShader:send("resolution", resolution)
         self.menuBoxShader:send("position", {0, 0})
-        
+
+        self.menuBackgroundShader:send("paletteTexture", self.paletteImage)
+        self.menuBackgroundShader:send("paletteIndex", game.manager.currentPaletteIndex)
+        self.menuBackgroundShader:send("paletteResolution", {self.paletteImage:getWidth(), self.paletteImage:getHeight()})
         self.menuBackgroundShader:send("resolution", resolution)
         self.menuBackgroundShader:send("time", self.shaderTime)
-
-        local bgColour = game.manager.currentPalette.backgroundColour[1]
-        self.menuBackgroundShader:send("colour", {bgColour[1], bgColour[2], bgColour[3]})
 
         self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
 
