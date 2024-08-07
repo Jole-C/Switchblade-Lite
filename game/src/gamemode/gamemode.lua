@@ -14,6 +14,8 @@ function gamemode:new()
     game.interfaceRenderer:addHudElement(self.debugText)
 
     self.playerSpawnPosition = vec2(0, 0)
+
+    self.oneUpSound = game.resourceManager:getAsset("Player Assets"):get("sounds"):get("oneUp")
 end
 
 function gamemode:update()
