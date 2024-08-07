@@ -35,7 +35,7 @@ function gamemode:setupDebugText(inputText)
 end
 
 function gamemode:registerEnemyKill()
-
+    self.totalKills = self.totalKills + 1
 end
 
 function gamemode:cleanup()
