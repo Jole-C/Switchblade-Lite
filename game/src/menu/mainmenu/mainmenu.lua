@@ -328,7 +328,13 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("denial", "fontBigUI", 10, 40, 15, 40, function()
+                textButton("denial", "fontBigUI", 10, 40, 15, 40, function(self)
+                    if self.owner then
+                        game.manager:changePlayerDefinition("default definition")
+                        game.manager:setCurrentGamemode("denial")
+                        game.transitionManager:doTransition("gameLevelState")
+                        self.owner.selectSound:play()
+                    end
                 end),
 
                 textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
