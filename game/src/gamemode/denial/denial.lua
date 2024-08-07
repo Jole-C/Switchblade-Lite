@@ -23,6 +23,7 @@ function denial:update(dt)
 
     if player then
         player:setHealthCanRecharge(false)
+        player:setInvulnerable()
     end
 
     self.spawnTime = self.spawnTime - (1 * dt)
