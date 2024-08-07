@@ -4,3 +4,5 @@ local scoreDefinitions = {
     scoreLarge = 7,
     scoreBonus = 100,
 }
+
+return scoreDefinitions
