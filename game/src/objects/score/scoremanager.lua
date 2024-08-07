@@ -70,6 +70,7 @@ end
 
 function scoreManager:addScore(score)
     self.score = self.score + (score * self.scoreMultiplier)
+    return (score * self.scoreMultiplier)
 end
 
 function scoreManager:incrementMultiplier()

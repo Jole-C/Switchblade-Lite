@@ -42,10 +42,13 @@ end
 
 function gameHelper:addScore(score)
     local scoreManager = self:getScoreManager()
+    local scoreAdded = 0
 
     if scoreManager then
-        scoreManager:addScore(score)
+        scoreAdded = scoreManager:addScore(score)
     end
+
+    return scoreAdded
 end
 
 function gameHelper:resetMultiplier(playSound)
