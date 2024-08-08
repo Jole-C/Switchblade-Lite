@@ -13,14 +13,18 @@ function timed:new()
     self.spawnTime = self.maxSpawnTime
 end
 
-function timed:update(dt)
-    timedGamemode.update(self, dt)
-
+function timed:start()
     local player = game.playerManager.playerReference
 
     if player then
         player:setHealthCanRecharge(false)
     end
+    
+    self:setTimerPaused(false)
+end
+
+function timed:update(dt)
+    timedGamemode.update(self, dt)
 
     self.spawnTime = self.spawnTime - (1 * dt)
 
@@ -41,10 +45,6 @@ function timed:update(dt)
             end
         end
     end
-end
-
-function timed:start()
-    self:setTimerPaused(false)
 end
 
 return timed
