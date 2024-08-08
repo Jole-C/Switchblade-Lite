@@ -32,7 +32,7 @@ function gameManager:new()
 
     -- Set up the options
     self.optionsFile = "options.txt"
-    self.expectedOptionsVersion = "0.5"
+    self.expectedOptionsVersion = "0.6"
     
     self.options = {
         OPTIONS_VERSION = self.expectedOptionsVersion,
@@ -56,7 +56,7 @@ function gameManager:new()
         showPlayerHealth = false,
         disableTimeAlerts = false,
         showHealthRingHelpers = true,
-        cameraZoomScale = 100,
+        cameraZoomScale = 75,
     }
 
     self.unlocks = {
