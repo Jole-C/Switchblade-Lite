@@ -4,15 +4,25 @@ local timePickup = require "src.objects.stagedirector.timepickup"
 
 local timedGamemode = class({name = "Timed Gamemode", extends = gamemode})
 
-function timedGamemode:new(maxMinutes, maxSeconds)
-    self:super()
+function timedGamemode:new(path, maxMinutes, maxSeconds)
+    self:super(path)
     
     self.maxMinutes = maxMinutes
     self.maxSeconds = maxSeconds
+    self.levelProgress = 0
+    self.progressIncrement = 30
     self.timer = timer(self.maxMinutes, self.maxSeconds)
 
     gameHelper:addGameObject(self.timer)
     self:setTimerPaused(true)
+end
+
+function timedGamemode:update(dt)
+    self.levelProgress = self.levelProgress + (1 * dt)
+
+    if self.levelProgress >= self.progressIncrement * self.currentLevelIndex and self.currentLevelIndex < #self.levels then
+        self:incrementLevel()
+    end
 end
 
 function timedGamemode:setTime(minutes, seconds)

@@ -1,11 +1,18 @@
-local gamemode = class({name = "Gamemode"})
 local enemyWarning = require "src.objects.enemy.enemywarning"
 local worldAlertObject = require "src.objects.stagedirector.worldalertobject"
-
+local alertObject = require "src.objects.stagedirector.alertobject"
 local text = require "src.interface.text"
 
-function gamemode:new()
+local gamemode = class({name = "Gamemode"})
+
+function gamemode:new(levelPath)
     self.totalKills = 0
+    
+    self.levels = require(levelPath or "src.gamemode.endless.levels")
+
+    self.currentLevelIndex = 1
+    self.currentLevel = nil
+    self:parseCurrentLevel()
 
     self.oneUpScore = 5000
     self.currentOneUps = 0
@@ -74,6 +81,33 @@ function gamemode:handleOneups()
         
         gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "One up!", "fontScore"))
     end
+end
+
+function gamemode:parseCurrentLevel()
+    self.currentLevelIndex = math.clamp(self.currentLevelIndex, 1, #self.levels)
+    local currentLevel = self.levels[self.currentLevelIndex]
+
+    self.currentLevel = {}
+    self:parseLevelEntry(currentLevel)
+
+    for _, enemy in ipairs(currentLevel.spawns) do
+        table.insert(self.currentLevel.enemyClasses, enemy.enemyClass)
+        table.insert(self.currentLevel.enemySpawnWeights, enemy.spawnChance)
+    end
+end
+
+function gamemode:parseLevelEntry(currentLevel)
+    self.currentLevel.enemyClasses = {}
+    self.currentLevel.enemySpawnWeights = {}
+    self.currentLevel.minNumberSpawns = currentLevel.minEnemySpawns
+    self.currentLevel.maxNumberSpawns = currentLevel.maxEnemySpawns
+end
+
+function gamemode:incrementLevel()
+    self.currentLevelIndex = self.currentLevelIndex + 1
+    self:parseCurrentLevel()
+
+    gameHelper:addGameObject(alertObject("Level up!", 0.7, 0.2))
 end
 
 return gamemode

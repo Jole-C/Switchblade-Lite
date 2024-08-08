@@ -1,16 +1,16 @@
-local endlessGamemode = require "src.gamemode.endlessgamemode"
+local timedGamemode = require "src.gamemode.timedgamemode"
 local denialArea = require "src.objects.enemy.enemydenialarea"
 
-local denial = class({name = "Denial", extends = endlessGamemode})
+local denial = class({name = "Denial", extends = timedGamemode})
 
 function denial:new()
-    self:super("src.gamemode.denial.levels")
+    self:super("src.gamemode.denial.levels", 2, 0)
 
     self.maxSpawnTime = 3
     self.maxDenialSpawnTime = 3
     self.areaLifetime = 3
     self.killsForLevelIncrement = 30
-    self.oneUpScore = 5000
+    self.progressIncrement = 15
 
     self.spawnTime = 0
     self.denialSpawnTime = self.maxDenialSpawnTime
@@ -18,7 +18,13 @@ function denial:new()
     gameHelper:getArena():addArenaSegment(0, 0, 300, "main")
 end
 
+function denial:start()
+    self:setTimerPaused(false)
+end
+
 function denial:update(dt)
+    timedGamemode.update(self, dt)
+
     local player = game.playerManager.playerReference
 
     if player then
@@ -64,16 +70,10 @@ function denial:update(dt)
             gameHelper:addGameObject(denialArea(randomPosition.x, randomPosition.y, randomRadius, self.areaLifetime))
         end
     end
-
-    if self.totalKills > self.killsForLevelIncrement * self.currentLevelIndex and self.currentLevelIndex ~= #self.levels then
-       self:incrementLevel()
-    end
-
-    self:handleOneups()
 end
 
 function denial:parseLevelEntry(currentLevel)
-    endlessGamemode.parseLevelEntry(self, currentLevel)
+    timedGamemode.parseLevelEntry(self, currentLevel)
 
     self.currentLevel.numberOfAreas = currentLevel.numberOfAreas
     self.currentLevel.minAreaRadius = currentLevel.minAreaRadius

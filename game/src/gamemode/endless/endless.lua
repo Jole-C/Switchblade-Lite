@@ -1,5 +1,5 @@
-local endlessGamemode = require "src.gamemode.endlessgamemode"
-local endless = class({name = "Endless", extends = endlessGamemode})
+local gamemode = require "src.gamemode.gamemode"
+local endless = class({name = "Endless", extends = gamemode})
 
 function endless:new()
     self:super("src.gamemode.endless.levels")
@@ -7,8 +7,8 @@ function endless:new()
     self.maxSpawnTime = 3
     self.killsForLevelIncrement = 30
     self.oneUpScore = 1000
-
     self.spawnTime = 0
+    
     gameHelper:getArena():addArenaSegment(0, 0, 300, "main")
 end
 

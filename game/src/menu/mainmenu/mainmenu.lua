@@ -411,7 +411,13 @@ function mainMenu:new()
                 textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
                 end),
 
-                textButton("defence", "fontBigUI", 10, 70, 15, 70, function()
+                textButton("crowd", "fontBigUI", 10, 70, 15, 70, function()
+                    if self.owner then
+                        game.manager:changePlayerDefinition("default definition")
+                        game.manager:setCurrentGamemode("crowd")
+                        game.transitionManager:doTransition("gameLevelState")
+                        self.owner.selectSound:play()
+                    end
                 end),
 
                 textButton("challenge", "fontBigUI", 10, 85, 15, 85, function(self)
