@@ -1,5 +1,5 @@
 local timedGamemode = require "src.gamemode.timedgamemode"
-local worldAlertObject = require "src.objects.stagedirector.worldalertobject"
+local alertObject = require "src.objects.stagedirector.alertobject"
 
 local endlessGamemode = class({name = "Endless Gamemode", extends = timedGamemode})
 
@@ -39,8 +39,7 @@ function endlessGamemode:incrementLevel()
     self.currentLevelIndex = self.currentLevelIndex + 1
     self:parseCurrentLevel()
 
-    local playerPosition = game.playerManager.playerPosition
-    gameHelper:addGameObject(worldAlertObject(playerPosition.x, playerPosition.y, "Level up!", "fontScore"))
+    gameHelper:addGameObject(alertObject("Level up!", 0.7, 0.2))
 end
 
 return endlessGamemode
