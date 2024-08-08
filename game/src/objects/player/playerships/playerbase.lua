@@ -30,6 +30,7 @@ function player:new(x, y)
     self.boostExplosionDistance = self.boostExplosionDistance or 65
     self.maxBoostHeatDividend = self.maxBoostHeatDividend or 5
     self.invulnerableGracePeriod = self.invulnerableGracePeriod or 0.5
+    self.temperatureForWarning = 50
     
     -- Movement parameters of the ship
     self.steeringSpeedMoving = self.steeringSpeedMoving or 60
