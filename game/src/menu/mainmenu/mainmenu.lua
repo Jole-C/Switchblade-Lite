@@ -1,9 +1,10 @@
 local menu = require "src.menu.menu"
 local textButton = require "src.interface.textbutton"
+local spriteButton = require "src.interface.spritebutton"
 local text = require "src.interface.text"
 local toggleButton = require "src.interface.togglebutton"
 local slider = require "src.interface.slider"
-local sprite = require "src.interface.sprite"
+local gamemodeText = require "src.interface.gamemodetext"
 local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
 
@@ -23,34 +24,21 @@ function mainMenu:new()
 
     -- Menu box scroll
     self.backgroundScrollY = 0
+    self.backgroundScrollX = 0
     self.backgroundScrollSpeed = 20
 
     -- Offset for the menu box sliding
-    self.maxMenuBoxOffset = game.arenaValues.screenWidth
-    self.minMenuBoxOffset = -150
-    self.targetMenuBoxOffset = 0
+    self.maxSideMenuBoxOffset = game.arenaValues.screenWidth
+    self.minSideMenuBoxOffset = -150
+    self.targetSideMenuBoxOffset = 0
 
-    self.eyePositionOffset = vec2(-30, -30)
-    self.targetEyePositionOffset = vec2(0, 0)
-    self.maxEyeOffset = 100
-    self.minEyeOffset = 50
-    self.maxEyePositionChangeCooldown = 5
-    self.minEyePositionChangeCooldown = 2
-    self.eyePositionChangeCooldown = self.maxEyePositionChangeCooldown
-    self.eyePositionLerpRate = 0.05
-    self.eyeAlpha = 0.1
-    self.targetEyeOrigin = vec2(420, 200)
-    self.eyeOrigin = vec2(500, 400)
-    self.eyeOriginLerpRate = 0.1
-    self.showEye = false
-    self.pupilRadius = 30
-    self.maxPupilRadius = 50
-    self.minPupilRadius = 15
-    self.targetPupilRadius = self.pupilRadius
-    self.pupilRadiusLerpRate = 0.1
+    self.maxBottomMenuBoxOffset = -30
+    self.minBottomMenuBoxOffset = 280
+    self.targetBottomMenuBoxOffset = 280
 
     -- Initialise background rendering
     self.menuBackgroundSprite = game.resourceManager:getAsset("Interface Assets"):get("menuBackgroundMesh")
+    self.menuBackgroundSpriteBottom = game.resourceManager:getAsset("Interface Assets"):get("menuBackgroundMeshBottom")
     game.canvases.menuBackgroundCanvas.enabled = true
 
     -- Initialise the box shader
@@ -58,6 +46,8 @@ function mainMenu:new()
 
     -- Initialise the box offset
     self.menuBoxOffset = self.minMenuBoxOffset
+    self.sideMenuBoxOffset = self.minSideMenuBoxOffset
+    self.bottomMenuBoxOffset = self.minBottomMenuBoxOffset
 
     -- Initialise the background shader
     self.menuBackgroundShader = game.resourceManager:getAsset("Interface Assets"):get("shaders"):get("menuBackgroundShader")
@@ -68,7 +58,7 @@ function mainMenu:new()
     self.startSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("gameStart")
 
     self.paletteImage = game.resourceManager:getAsset("Palettes"):get("mainPalette")
-    -- Initialise menu elements
+    
     self.menus =
     {
         ["start"] =
@@ -81,7 +71,6 @@ function mainMenu:new()
                 textButton("press space", "fontBigUI", 10, game.arenaValues.screenHeight - 20, 10, game.arenaValues.screenHeight - 20, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.startSound:play()
                     end
                 end, true)
@@ -91,6 +80,12 @@ function mainMenu:new()
             {
                 "",
                 "",
+            },
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 0},
+                {boxName = "bottom", percentage = 0},
             },
             
             backgroundSlideAmount = 0,
@@ -105,7 +100,6 @@ function mainMenu:new()
                 textButton("start", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
-                        self.owner:setBackgroundSlideAmount(0.35)
                         self.owner.selectSound:play()
                     end
                 end),
@@ -116,7 +110,6 @@ function mainMenu:new()
                 textButton("help", "fontBigUI", 10, 40, 15, 40, function(self)
                     if self.owner then
                         self.owner:switchMenu("help")
-                        self.owner:setBackgroundSlideAmount(0.7)
                         self.owner.selectSound:play()
                     end
                 end),
@@ -124,7 +117,6 @@ function mainMenu:new()
                 textButton("options", "fontBigUI", 10, 55, 15, 55, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.35)
                         self.owner.selectSound:play()
                     end
                 end),
@@ -132,7 +124,6 @@ function mainMenu:new()
                 textButton("credits", "fontBigUI", 10, 70, 15, 70, function(self)
                     if self.owner then
                         self.owner:switchMenu("credits")
-                        self.owner:setBackgroundSlideAmount(0.7)
                         self.owner.selectSound:play()
                     end
                 end),
@@ -157,8 +148,12 @@ function mainMenu:new()
                 "About Switchblade, version etc",
                 "Quit Switchblade",
             },
-            
-            backgroundSlideAmount = 0.35,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 0.35},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["optionsSelect"] =
@@ -167,32 +162,27 @@ function mainMenu:new()
             {
                 textButton("Visual", "fontBigUI", 10, 10, 15, 10, function(self)
                     self.owner:switchMenu("optionsVisual")
-                    self.owner:setBackgroundSlideAmount(0.7)
                     self.owner.selectSound:play()
                 end),
 
                 textButton("Audio", "fontBigUI", 10, 25, 15, 25, function(self)
                     self.owner:switchMenu("optionsAudio")
-                    self.owner:setBackgroundSlideAmount(0.7)
                     self.owner.selectSound:play()
                 end),
 
                 textButton("Gameplay", "fontBigUI", 10, 40, 15, 40, function(self)
                     self.owner:switchMenu("optionsGameplay")
-                    self.owner:setBackgroundSlideAmount(0.7)
                     self.owner.selectSound:play()
                 end),
 
                 textButton("Accessibility", "fontBigUI", 10, 55, 15, 55, function(self)
                     self.owner:switchMenu("optionsAccessibility")
-                    self.owner:setBackgroundSlideAmount(0.8)
                     self.owner.selectSound:play()
                 end),
 
                 textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                 end)
@@ -206,8 +196,12 @@ function mainMenu:new()
                 "Change accessibility options",
                 "",
             },
-            
-            backgroundSlideAmount = 0.35,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 0.35},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["optionsGameplay"] =
@@ -229,7 +223,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 110, 15, 110, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                     
@@ -247,8 +240,12 @@ function mainMenu:new()
                 "Disable on-screen alerts for the timer",
                 "",
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["optionsAccessibility"] =
@@ -272,7 +269,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 125, 15, 125, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                     
@@ -291,8 +287,12 @@ function mainMenu:new()
                 "Set the base camera zoom scale",
                 ""
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["optionsVisual"] =
@@ -312,7 +312,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                     
@@ -329,8 +328,12 @@ function mainMenu:new()
                 "Slow down the background",
                 "",
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["optionsAudio"] = 
@@ -352,7 +355,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                     
@@ -369,8 +371,12 @@ function mainMenu:new()
                 "Mute all audio",
                 "",
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["credits"] =
@@ -406,7 +412,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 230, 10, 230, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                 end),
@@ -417,8 +422,12 @@ function mainMenu:new()
                 "",
                 "",
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["help"] =
@@ -459,7 +468,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 230, 10, 230, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
-                        self.owner:setBackgroundSlideAmount(0.32)
                         self.owner.backSound:play()
                     end
                 end),
@@ -470,17 +478,41 @@ function mainMenu:new()
                 "",
                 "",
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
 
         ["gamemodeselect"] =
         {
             displayMenuName = false,
+
+            menuDirection = "right",
             
             elements =
             {
-                textButton("endless", "fontBigUI", 10, 10, 15, 10, function(self)
+                gamemodeText(self, {
+                    {name = "", description = ""},
+                    {name = "", description = ""},
+                    {name = "Endless", description = "Defeat an endless barrage of enemies!"},
+                    {name = "Rush", description = "Beat your high score within the time limit!"},
+                    {name = "Denial", description = "Your ship is invulnerable, but\nareas spawn that heat your Switchblade!"},
+                    {name = "Chaos", description = "TO DO"},
+                    {name = "Crowd", description = "Enemies in proximity to your\nSwitchblade heat it up!"},
+                    {name = "Challenge", description = "Conquer a set of challenges\nand difficult bosses!"},
+                }),
+                
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("back"), 83, 225, 83, 225, function(self)
+                    if self.owner then
+                        self.owner:switchMenu("main")
+                        self.owner.backSound:play()
+                    end
+                end),
+
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("endless"), 155, 225, 155, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("endless")
@@ -489,7 +521,7 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("rush", "fontBigUI", 10, 25, 15, 25, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("rush"), 196, 225, 196, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("timed")
@@ -498,7 +530,7 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("denial", "fontBigUI", 10, 40, 15, 40, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("denial"), 237, 225, 237, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("denial")
@@ -507,10 +539,11 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("chaos"), 278, 225, 278, 225, function(self)
+                
                 end),
 
-                textButton("crowd", "fontBigUI", 10, 70, 15, 70, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("crowd"), 319, 225, 319, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("crowd")
@@ -519,34 +552,32 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("challenge", "fontBigUI", 10, 85, 15, 85, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("challenge"), 360, 225, 360, 225, function(self)
                     self.owner:switchMenu("levelselect")
-                    self.owner:setBackgroundSlideAmount(0.5)
                     self.owner.selectSound:play()
                     game.manager:setCurrentGamemode("gauntlet")
                 end),
-
-                textButton("back", "fontBigUI", 10, 110, 15, 110, function(self)
-                    if self.owner then
-                        self.owner:switchMenu("main")
-                        self.owner:setBackgroundSlideAmount(0.32)
-                        self.owner.backSound:play()
-                    end
-                end)
             },
-            
+
             toolTips =
             {
-                "Get a high score against a barrage of enemies!",
-                "Try to beat your high score within the time limit!",
-                "You're invincible but areas will make you overheat.\nGet a high score within the time limit!",
-                "To Do",
-                "Lots of enemies spawn - Nearby enemies make you overheat!\nGet a high score within the time limit!",
-                "Conquer a set of difficult challenges and bosses!",
+                "",
+                "",
+                "",
+                "",
+                "",
                 "",
             },
-            
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 0},
+                {boxName = "bottom", percentage = 0.3},
+            },
+
+            onElementChange = function(menuObject)
+                game.manager:swapPalette()
+            end
         },
 
         ["levelselect"] =
@@ -577,7 +608,6 @@ function mainMenu:new()
                 textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
-                        self.owner:setBackgroundSlideAmount(0.35)
                     end
                 end)
             },
@@ -591,14 +621,18 @@ function mainMenu:new()
                 "Do something fancy",
                 "",
             },
-                
-            backgroundSlideAmount = 1,
+
+            boxSlideParams =
+            {
+                {boxName = "side", percentage = 1},
+                {boxName = "bottom", percentage = 0},
+            },
         },
     }
 
     -- Switch to the main menu
     self:switchMenu("start")
-    self:setBackgroundSlideAmount(0)
+    self:setBackgroundSlideAmount()
 end
 
 function mainMenu:update(dt)
@@ -630,36 +664,37 @@ function mainMenu:update(dt)
         self.menuBackgroundShader:send("time", self.shaderTime)
 
         self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
+        self.backgroundScrollX = self.backgroundScrollX + self.backgroundScrollSpeed * dt
 
         if self.backgroundScrollY > game.arenaValues.screenHeight then
             self.backgroundScrollY = 0
         end
+
+        if self.backgroundScrollX > game.arenaValues.screenWidth then
+            self.backgroundScrollX = 0
+        end
     end
 
-    self.menuBoxOffset = math.lerpDT(self.menuBoxOffset, self.targetMenuBoxOffset, 0.2, dt)
-
-    self.eyePositionChangeCooldown = self.eyePositionChangeCooldown - (1 * dt)
-
-    if self.eyePositionChangeCooldown <= 0 then
-        self.eyePositionChangeCooldown = math.random(self.minEyePositionChangeCooldown, self.maxEyePositionChangeCooldown)
-        self.targetEyePositionOffset = vec2:polar(math.random(self.minEyeOffset, self.maxEyeOffset), math.rad(math.random(0, 360)))
-        self.targetPupilRadius = math.random(self.minPupilRadius, self.maxPupilRadius)
-    end
-
-    self.pupilRadius = math.lerpDT(self.pupilRadius, self.targetPupilRadius, self.pupilRadiusLerpRate, dt)
-
-    self.eyePositionOffset.x = math.lerpDT(self.eyePositionOffset.x, self.targetEyePositionOffset.x, self.eyePositionLerpRate, dt)
-    self.eyePositionOffset.y = math.lerpDT(self.eyePositionOffset.y, self.targetEyePositionOffset.y, self.eyePositionLerpRate, dt)
-
-    if self.showEye then
-        self.eyeOrigin.x = math.lerpDT(self.eyeOrigin.x, self.targetEyeOrigin.x, self.eyeOriginLerpRate, dt)
-        self.eyeOrigin.y = math.lerpDT(self.eyeOrigin.y, self.targetEyeOrigin.y, self.eyeOriginLerpRate, dt)
-    end
+    self.sideMenuBoxOffset = math.lerpDT(self.sideMenuBoxOffset, self.targetSideMenuBoxOffset, 0.2, dt)
+    self.bottomMenuBoxOffset = math.lerpDT(self.bottomMenuBoxOffset, self.targetBottomMenuBoxOffset, 0.2, dt)
 end
 
 function mainMenu:setBackgroundSlideAmount()
-    local percentage = self.currentMenu.backgroundSlideAmount or 0
-    self.targetMenuBoxOffset = math.lerp(self.minMenuBoxOffset, self.maxMenuBoxOffset, percentage)
+    local boxSlideParams = self.currentMenu.boxSlideParams
+    assert(boxSlideParams ~= nil, "Params for background box are nil!")
+
+    for _, param in ipairs(boxSlideParams) do
+        local boxName = param.boxName
+        assert(boxName ~= "side" or boxName ~= "bottom", "Not a valid background box!")
+
+        if boxName == "side" then
+            local percentage = param.percentage or 0
+            self.targetSideMenuBoxOffset = math.lerp(self.minSideMenuBoxOffset, self.maxSideMenuBoxOffset, percentage)
+        elseif boxName == "bottom" then
+            local percentage = param.percentage
+            self.targetBottomMenuBoxOffset = math.lerp(self.minBottomMenuBoxOffset, self.maxBottomMenuBoxOffset, percentage)
+        end
+    end
 end
 
 function mainMenu:draw()
@@ -674,39 +709,19 @@ function mainMenu:draw()
             love.graphics.setShader()
         end
 
-        if self.showEye then
-            local x = self.eyeOrigin.x
-            local y = self.eyeOrigin.y
-
-            love.graphics.setColor(0, 0, 0, self.eyeAlpha)
-            love.graphics.setLineWidth(50)
-            love.graphics.circle("line", x, y, 150)
-
-            love.graphics.stencil(function()
-                local angle = ((self.eyeOrigin + self.eyePositionOffset) - self.eyeOrigin):angle()
-                local normal = vec2(math.cos(angle), math.sin(angle))
-                local pupilMask = self.eyeOrigin + self.eyePositionOffset + (normal * self.pupilRadius/2)
-
-                love.graphics.circle("fill", pupilMask.x, pupilMask.y, self.pupilRadius/1.5)
-            end, "replace", 1)
-
-            love.graphics.setStencilTest("equal", 0)
-
-            love.graphics.circle("fill", x + self.eyePositionOffset.x, y + self.eyePositionOffset.y, self.pupilRadius)
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.setLineWidth(1)
-        end
-
-        love.graphics.setStencilTest()
         self:drawOverlay()
 
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, self.backgroundScrollY)
-        love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset + 5, self.backgroundScrollY - game.arenaValues.screenHeight)
+        love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset + 5, self.backgroundScrollY)
+        love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset + 5, self.backgroundScrollY - game.arenaValues.screenHeight)
+        love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX, self.bottomMenuBoxOffset - 5)
+        love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX - game.arenaValues.screenWidth, self.bottomMenuBoxOffset - 5)
 
         love.graphics.stencil(function()
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, self.backgroundScrollY)
-            love.graphics.draw(self.menuBackgroundSprite, self.menuBoxOffset, self.backgroundScrollY - game.arenaValues.screenHeight)
+            love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset, self.backgroundScrollY)
+            love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset, self.backgroundScrollY - game.arenaValues.screenHeight)
+            love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX, self.bottomMenuBoxOffset)
+            love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX - game.arenaValues.screenWidth, self.bottomMenuBoxOffset)
         end, "replace", 1, false)
 
         love.graphics.setStencilTest("greater", 0)
@@ -727,6 +742,11 @@ function mainMenu:draw()
     -- Reset the canvas and stencil
     love.graphics.setCanvas()
     love.graphics.setStencilTest()
+end
+
+function mainMenu:getMenuSubElements(menuName)
+    menu.getMenuSubElements(self, menuName)
+    self:setBackgroundSlideAmount()
 end
 
 function mainMenu:drawOverlay()
