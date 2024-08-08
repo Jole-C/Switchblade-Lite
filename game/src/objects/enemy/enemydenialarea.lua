@@ -38,6 +38,12 @@ function denialArea:update(dt)
     if distance < self.radius then
         player:accumulateTemperature(dt, self.temperatureAccumulateRate)
     end
+
+    local randomAngle = math.rad(math.random(0, 360))
+    local randomLength = math.random(0, self.radius)
+    local randomPosition = vec2:polar(randomLength, randomAngle)
+
+    game.particleManager:burstEffect("Player Smoke", 1, self.position + randomPosition)
 end
 
 function denialArea:draw()

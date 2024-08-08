@@ -480,6 +480,20 @@ function game:setupResources()
             deathSound = {path = "assets/audio/sfx/snakedeath.wav", type = "Source", parameters = {tag = self.tags.sfx}},
         }),
 
+        exploder = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/exploder.png", type = "Image"},
+            warningSound = {path = "assets/audio/sfx/exploderwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            explosionSound = {path = "assets/audio/sfx/exploderexplosion.wav", type = "Source", parameters = {tag = self.tags.sfx}}
+        }),
+
+        denier = assetGroup(
+        {
+            bodySprite = {path = "assets/sprites/enemy/denier.png", type = "Image"},
+            warningSound = {path = "assets/audio/sfx/denierwarning.wav", type = "Source", parameters = {tag = self.tags.sfx}},
+            explosionSound = {path = "assets/audio/sfx/denierexplosion.wav", type = "Source", parameters = {tag = self.tags.sfx}}
+        }),
+
         boss1 = assetGroup(
         {
             sprites = assetGroup(
