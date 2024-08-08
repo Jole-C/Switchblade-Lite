@@ -43,7 +43,7 @@ function victoryMenu:new()
     self.shaderTime = 0
     self.backgroundShaderTime = 0
 
-    self.playerScore = game.manager:getRunInfoElement("score")
+    self.playerScore = game.manager:getRunInfoElement("score") or 0
     self.displayScore = 0
     self.displayScoreLerpRate = 0.05
 
@@ -167,9 +167,6 @@ function victoryMenu:update(dt)
     self.backgroundShader:send("paletteResolution", {self.paletteImage:getWidth(), self.paletteImage:getHeight()})
     self.backgroundShader:send("resolution", resolution)
     self.backgroundShader:send("time", self.shaderTime)
-
-    local bgColour = game.manager.currentPalette.backgroundColour[1]
-    self.backgroundShader:send("colour", {bgColour[1] * 0.5, bgColour[2] * 0.5, bgColour[3] * 0.5})
 end
 
 function victoryMenu:draw()
