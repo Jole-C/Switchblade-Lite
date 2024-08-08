@@ -619,6 +619,7 @@ function game:setupResources()
                 crowd = {path = "assets/sprites/interface/crowd.png", type = "Image"},
                 chaos = {path = "assets/sprites/interface/chaos.png", type = "Image"},
                 challenge = {path = "assets/sprites/interface/challenge.png", type = "Image"},
+                back = {path = "assets/sprites/interface/back.png", type = "Image"},
             })
         }),
 
@@ -684,6 +685,41 @@ function game:setupResources()
     -- Set the vertices and register the resource with the resource manager
     mesh:setVertices(vertices)
     resourceManager:getAsset("Interface Assets"):add(mesh, "menuBackgroundMesh")
+-------------------------------------------
+    -- Set up the mesh with given parameters
+    local numberOfVertices = 10
+    local baseVertexY = 0
+    local mesh = love.graphics.newMesh(2 + numberOfVertices + 1, "fan")
+
+    -- Create a table to hold the vertices, and insert the bottom left vertex
+    local vertices = {
+        {0, self.arenaValues.screenHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1},
+    }
+    
+    -- Generate the zigzag vertex pattern
+    local generateInnerVertex = false
+
+    for i = 0, numberOfVertices do
+        generateInnerVertex = not generateInnerVertex
+
+        local vertexYoffset = 0
+        
+        if generateInnerVertex == false then
+            vertexYoffset = 30
+        end
+
+        local vertexX = (self.arenaValues.screenWidth / numberOfVertices) * i
+        local vertexY = baseVertexY + vertexYoffset
+        
+        table.insert(vertices, {vertexX, vertexY, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1})
+    end
+
+    -- Insert a vertex at the bottom right position
+    table.insert(vertices, {self.arenaValues.screenWidth, self.arenaValues.screenHeight, 0, 0, backgroundMeshColour, backgroundMeshColour, backgroundMeshColour, 1})
+
+    -- Set the vertices and register the resource with the resource manager
+    mesh:setVertices(vertices)
+    resourceManager:getAsset("Interface Assets"):add(mesh, "menuBackgroundMeshBottom")
 end
 
 function game:setupParticles()
