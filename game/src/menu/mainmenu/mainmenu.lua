@@ -85,7 +85,15 @@ function mainMenu:new()
                         self.owner.startSound:play()
                     end
                 end, true)
-            }
+            },
+
+            toolTips =
+            {
+                "",
+                "",
+            },
+            
+            backgroundSlideAmount = 0,
         },
 
         ["main"] =
@@ -137,7 +145,20 @@ function mainMenu:new()
                 end),
 
                 text("demo v0.4", "fontUI", "left", 10, 250, 500, 0, 1, 1, false, {0.4, 0.4, 0.4, 1})
-            }
+            },
+            
+            toolTips =
+            {
+                "Choose a gamemode and play!",
+                "View achievements",
+                "View a quick guide on how to play",
+                "Change the options",
+                "View the credits",
+                "About Switchblade, version etc",
+                "Quit Switchblade",
+            },
+            
+            backgroundSlideAmount = 0.35,
         },
 
         ["optionsSelect"] =
@@ -175,7 +196,18 @@ function mainMenu:new()
                         self.owner.backSound:play()
                     end
                 end)
-            }
+            },
+            
+            toolTips =
+            {
+                "Change screen and background options",
+                "Change audio volume and mute",
+                "Change gameplay options",
+                "Change accessibility options",
+                "",
+            },
+            
+            backgroundSlideAmount = 0.35,
         },
 
         ["optionsGameplay"] =
@@ -203,7 +235,20 @@ function mainMenu:new()
                     
                     game.manager:saveOptions()
                 end),
-            }
+            },
+            
+            toolTips =
+            {
+                "",
+                "Scale of the health ring surrounding the player",
+                "Show a number for the player's health",
+                "Center the camera on the player",
+                "Show the current FPS",
+                "Disable on-screen alerts for the timer",
+                "",
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["optionsAccessibility"] =
@@ -233,7 +278,21 @@ function mainMenu:new()
                     
                     game.manager:saveOptions()
                 end),
-            }
+            },
+            
+            toolTips =
+            {
+                "",
+                "Enable debug mode to show colliders and info",
+                "Adds a cooldown between palette swaps",
+                "Turns off screen shake",
+                "Sets the intensity of the screen shake",
+                "Disables angle changes for the screenshake",
+                "Set the base camera zoom scale",
+                ""
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["optionsVisual"] =
@@ -259,7 +318,19 @@ function mainMenu:new()
                     
                     game.manager:saveOptions()
                 end),
-            }
+            },
+            
+            toolTips =
+            {
+                "",
+                "Toggle fullscreen",
+                "Toggle the background",
+                "Add a grey overlay on top of the background",
+                "Slow down the background",
+                "",
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["optionsAudio"] = 
@@ -287,7 +358,19 @@ function mainMenu:new()
                     
                     game.manager:saveOptions()
                 end),
-            }
+            },
+            
+            toolTips =
+            {
+                "",
+                "Change the volume of all audio",
+                "Change the volume of the music",
+                "Change the volume of the sound effects",
+                "Mute all audio",
+                "",
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["credits"] =
@@ -327,7 +410,15 @@ function mainMenu:new()
                         self.owner.backSound:play()
                     end
                 end),
-            }
+            },
+
+            toolTips =
+            {
+                "",
+                "",
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["help"] =
@@ -372,7 +463,15 @@ function mainMenu:new()
                         self.owner.backSound:play()
                     end
                 end),
-            }
+            },
+
+            toolTips =
+            {
+                "",
+                "",
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["gamemodeselect"] =
@@ -434,7 +533,20 @@ function mainMenu:new()
                         self.owner.backSound:play()
                     end
                 end)
-            }
+            },
+            
+            toolTips =
+            {
+                "Get a high score against a barrage of enemies!",
+                "Try to beat your high score within the time limit!",
+                "You're invincible but areas will make you overheat.\nGet a high score within the time limit!",
+                "To Do",
+                "Lots of enemies spawn - Nearby enemies make you overheat!\nGet a high score within the time limit!",
+                "Conquer a set of difficult challenges and bosses!",
+                "",
+            },
+            
+            backgroundSlideAmount = 1,
         },
 
         ["levelselect"] =
@@ -468,185 +580,19 @@ function mainMenu:new()
                         self.owner:setBackgroundSlideAmount(0.35)
                     end
                 end)
-            }
-        },
-    }
+            },
 
-    self.tooltips =
-    {
-        ["start"] =
-        {
-            elements =
+            toolTips =
             {
+                "Do something cool",
+                "Defeat the boss within the time limit!",
+                "Touch your toes",
+                "Do a cool flip",
+                "Do something fancy",
                 "",
-                "",
-            }
-        },
-
-        ["main"] =
-        {
-            elements =
-            {
-                "Choose a gamemode and play!",
-                "Change the options",
-                "View the credits",
-                "View about the game and help",
-                "Quit Switchblade",
-            }
-        },
-
-        ["optionsSelect"] =
-        {
-            elements =
-            {
-                "Change screen and background options",
-                "Change audio volume and mute",
-                "Change gameplay options",
-                "Change accessibility options",
-            }
-        },
-
-        ["optionsGameplay"] =
-        {
-            elements = 
-            {
-                "Scale of the health ring surrounding the player",
-                "Show a number for the player's health",
-                "Center the camera on the player",
-                "Show the current FPS",
-                "Disable on-screen alerts for the timer"
-            }
-        },
-
-        ["optionsAccessibility"] =
-        {
-            elements =
-            {
-                "Enable debug mode to show colliders and info",
-                "Adds a cooldown between palette swaps",
-                "Turns off screen shake",
-                "Sets the intensity of the screen shake",
-                "Disables angle changes for the screenshake",
-                "Set the base camera zoom scale"
-            }
-        },
-
-        ["optionsVisual"] =
-        {
-            elements =
-            {
-                text("visual", "fontBigUI", "left", 10, 10, 1000),
-
-                toggleButton("fullscreen.", "fontBigUI", 10, 25, 20, 25, "enableFullscreen"),
-
-                toggleButton("toggle bg.", "fontBigUI", 10, 40, 20, 40, "enableBackground"),
-
-                slider("bg. fading", "fontBigUI", 0, 100, 10, 55, "fadingPercentage"),
-
-                slider("bg. speed", "fontBigUI", 0, 100, 10, 70, "speedPercentage"),
+            },
                 
-                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
-                    if self.owner then
-                        self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.32)
-                    end
-                    
-                    game.manager:saveOptions()
-                end),
-            }
-        },
-
-        ["optionsAudio"] = 
-        {
-            displayMenuName = false,
-
-            elements =
-            {
-                text("audio", "fontBigUI", "left", 10, 10, 1000),
-
-                slider("master vol.", "fontBigUI",  0, 100, 10, 25, "masterVolPercentage"),
-
-                slider("music vol.", "fontBigUI",  0, 100, 10, 40, "musicVolPercentage"),
-
-                slider("sfx vol.", "fontBigUI",  0, 100, 10, 55, "sfxVolPercentage"),
-
-                toggleButton("mute", "fontBigUI", 10, 70, 20, 70, "muteAudio"),
-
-                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
-                    if self.owner then
-                        self.owner:switchMenu("optionsSelect")
-                        self.owner:setBackgroundSlideAmount(0.32)
-                    end
-                    
-                    game.manager:saveOptions()
-                end),
-            }
-        },
-
-        ["gamemodeselect"] =
-        {
-            displayMenuName = false,
-            
-            elements =
-            {
-                textButton("arena", "fontBigUI", 10, 10, 15, 10, function(self)
-                    if self.owner then
-                        self.owner:switchMenu("levelselect")
-                        self.owner:setBackgroundSlideAmount(0.5)
-                    end
-                end),
-
-                textButton("gamemodes", "fontBigUI", 10, 25, 15, 25, function()
-                end),
-
-                textButton("unlocks", "fontBigUI", 10, 40, 15, 40, function()
-                end),
-
-                textButton("achievements", "fontBigUI", 10, 55, 15, 55, function()
-                end),
-
-                textButton("back", "fontBigUI", 10, 80, 15, 80, function(self)
-                    if self.owner then
-                        self.owner:switchMenu("main")
-                        self.owner:setBackgroundSlideAmount(0.32)
-                    end
-                end)
-            }
-        },
-
-        ["levelselect"] =
-        {
-            displayMenuName = false,
-            
-            elements =
-            {
-                textButton("...", "fontBigUI", 10, 10, 15, 10, function()
-                end),
-
-                textButton("", "fontBigUI", 10, 25, 15, 25, function()
-                    game.manager:changePlayerDefinition("default definition")
-                    game.manager.runSetup.level = boss1
-                    game.transitionManager:doTransition("gameLevelState")
-                    self.owner.startSound:play()
-                end),
-
-                textButton("WIPPITY WIP", "fontBigUI", 10, 40, 15, 40, function()
-                end),
-
-                textButton("wippy wippy wip", "fontBigUI", 10, 55, 15, 55, function()
-                end),
-
-                textButton("not done lol", "fontBigUI", 10, 70, 15, 70, function()
-                end),
-
-                textButton("back", "fontBigUI", 10, 95, 15, 95, function(self)
-                    if self.owner then
-                        self.owner:switchMenu("gamemodeselect")
-                        self.owner:setBackgroundSlideAmount(0.35)
-                        self.owner.backSound:play()
-                    end
-                end)
-            }
+            backgroundSlideAmount = 1,
         },
     }
 
@@ -711,7 +657,8 @@ function mainMenu:update(dt)
     end
 end
 
-function mainMenu:setBackgroundSlideAmount(percentage)
+function mainMenu:setBackgroundSlideAmount()
+    local percentage = self.currentMenu.backgroundSlideAmount or 0
     self.targetMenuBoxOffset = math.lerp(self.minMenuBoxOffset, self.maxMenuBoxOffset, percentage)
 end
 

@@ -1,4 +1,6 @@
 local gameObject = require "src.objects.gameobject"
+local text = require "src.interface.text"
+
 local menu = class({name = "Menu", extends = gameObject})
 
 function menu:new()
@@ -6,11 +8,16 @@ function menu:new()
 
     self.menus = {}
     self.elements = {}
+    self.toolTips = {}
+    self.currentMenu = {}
     self.selectionIndex = 1
     self.inputDelay = 0.5
-
+    
     self.menuUpSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuUp")
     self.menuDownSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuDown")
+
+    self.toolTipText = text("", "fontMain", "right", 0, 250, 470)
+    game.interfaceRenderer:addHudElement(self.toolTipText)
 end
 
 function menu:update(dt)
@@ -59,6 +66,10 @@ function menu:update(dt)
     -- Execute the selected button when pressed
     if game.input:pressed("select") and selectedElement.enabled then
         selectedElement:execute()
+    end
+
+    if self.toolTips then
+        self.toolTipText.text = self.toolTips[self.selectionIndex] or ""
     end
 end
 
@@ -115,6 +126,8 @@ end
 function menu:getMenuSubElements(menuName)
     self:clearMenuSubElements()
     self.elements = self.menus[menuName].elements
+    self.toolTips = self.menus[menuName].toolTips
+    self.currentMenu = self.menus[menuName]
     self:updateInterfaceRenderer()
 end
 
@@ -125,6 +138,7 @@ end
 
 function menu:cleanup()
     self:clearMenuSubElements()
+    game.interfaceRenderer:removeHudElement(self.toolTipText)
 end
  
 function menu:getNextSelectableElement(direction)
