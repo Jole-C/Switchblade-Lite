@@ -637,6 +637,7 @@ function player:onHit(damage)
 
     if self.health <= 0 then
         self:destroy()
+        gameHelper:addGameObject(worldAlertObject(self.position.x, self.position.y, "You died!", "fontScore"))
     else
         game.manager:setFreezeFrames(7, function()
             gameHelper:screenShake(0.3)
