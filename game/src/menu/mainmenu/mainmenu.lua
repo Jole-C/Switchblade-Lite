@@ -94,30 +94,6 @@ function mainMenu:new()
             
             elements =
             {
-                rectangle(100, 10, 480, 230, "fill", {0.1, 0.1, 0.1, 0.8}),
-                text([[
-                    "READ ME:
-                    Welcome to Switchblade!
-                    Things are unfinished. This is a temporary readme.
-                    Only one level is done for now with a boss at the end.
-
-
-                    Controls - Keyboard:
-                    W - thrust, A/D - steer, SPACE - fire, LSHIFT - boost
-
-                    Controls - Gamepad:
-                    A - thrust, LBUMPER - boost, RBUMPER - fire
-                    LSTICK - steer, B - flip direction
-
-
-                    USEFUL TO KNOW:
-                    Boosting into enemies restores ammo.
-                    Boosting adds heat.
-                    Overheating causes instant death.
-                    
-                    
-                    Have fun!"]], "fontMain", "left", 40, 18, 1000),
-
                 textButton("start", "fontBigUI", 10, 10, 15, 10, function(self)
                     if self.owner then
                         self.owner:switchMenu("gamemodeselect")
