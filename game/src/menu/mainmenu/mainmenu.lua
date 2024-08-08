@@ -577,6 +577,7 @@ function mainMenu:new()
 
             onElementChange = function(menuObject)
                 game.manager:swapPalette()
+                menuObject.currentMenu.elements[1]:shake()
             end
         },
 

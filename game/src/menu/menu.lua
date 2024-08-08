@@ -55,7 +55,7 @@ function menu:update(dt)
         direction = -1
 
         if self.currentMenu.onElementChange then
-            self.currentMenu:onElementChange(self)
+            self.currentMenu.onElementChange(self)
         end
     end
 
@@ -66,7 +66,7 @@ function menu:update(dt)
         direction = 1
 
         if self.currentMenu.onElementChange then
-            self.currentMenu:onElementChange(self)
+            self.currentMenu.onElementChange(self)
         end
     end
 
