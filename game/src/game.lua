@@ -13,6 +13,7 @@ local gauntlet = require "src.gamemode.gauntlet"
 local endless = require "src.gamemode.endless.endless"
 local timed = require "src.gamemode.timed.timed"
 local denial = require "src.gamemode.denial.denial"
+local crowd = require "src.gamemode.crowd.crowd"
 
 colliderDefinitions = require "src.collision.colliderdefinitions"
 scoreDefinitions = require "src.objects.score.scoredefinitions"
@@ -198,7 +199,8 @@ function game:new()
         ["gauntlet"] = gauntlet,
         ["endless"] = endless,
         ["timed"] = timed,
-        ["denial"] = denial
+        ["denial"] = denial,
+        ["crowd"] = crowd
     })
 end
 

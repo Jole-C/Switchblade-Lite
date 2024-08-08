@@ -411,7 +411,7 @@ function mainMenu:new()
                 textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
                 end),
 
-                textButton("crowd", "fontBigUI", 10, 70, 15, 70, function()
+                textButton("crowd", "fontBigUI", 10, 70, 15, 70, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("crowd")
