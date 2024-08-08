@@ -6,7 +6,7 @@ local bossWarning = require "src.objects.enemy.boss.bosswarning"
 local gauntlet = class({name = "Gauntlet", extends = timedGamemode})
 
 function gauntlet:new()
-    self:super(3, 0)
+    self:super(nil, 3, 0)
     
     self.hasTimer = true
 
