@@ -12,6 +12,7 @@ function menu:new()
     self.currentMenu = {}
     self.selectionIndex = 1
     self.inputDelay = 0.5
+    self.menuDirection = "down"
     
     self.menuUpSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuUp")
     self.menuDownSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuDown")
@@ -38,19 +39,35 @@ function menu:update(dt)
     end
 
     -- Change the selected element
+    local menuForward = "menuDown"
+    local menuBackward = "menuUp"
+
+    if self.menuDirection == "right" then
+        menuForward = "menuRight"
+        menuBackward = "menuLeft"
+    end
+
     local direction = 1
-    if game.input:pressed("menuUp") then
+    if game.input:pressed(menuBackward) then
         self.menuUpSound:play()
         
         self.selectionIndex = self.selectionIndex - 1
         direction = -1
+
+        if self.currentMenu.onElementChange then
+            self.currentMenu:onElementChange(self)
+        end
     end
 
-    if game.input:pressed("menuDown") then
+    if game.input:pressed(menuForward) then
         self.menuDownSound:play()
         
         self.selectionIndex = self.selectionIndex + 1
         direction = 1
+
+        if self.currentMenu.onElementChange then
+            self.currentMenu:onElementChange(self)
+        end
     end
 
     -- Wrap the selection to prevent overflow
@@ -124,8 +141,19 @@ function menu:updateInterfaceRenderer()
 end
 
 function menu:getMenuSubElements(menuName)
+    if self.elements.onMenuLeave then
+        self.elements.onMenuLeave(self)
+    end
+
     self:clearMenuSubElements()
     self.elements = self.menus[menuName].elements
+    
+    self.menuDirection = self.menus[menuName].menuDirection or "down"
+
+    if self.elements.onMenuEnter then
+        self.elements.onMenuEnter(self)
+    end
+    
     self.toolTips = self.menus[menuName].toolTips
     self.currentMenu = self.menus[menuName]
     self:updateInterfaceRenderer()
