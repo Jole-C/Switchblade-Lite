@@ -1,5 +1,6 @@
 local menu = require "src.menu.menu"
 local textButton = require "src.interface.textbutton"
+local spriteButton = require "src.interface.spritebutton"
 local text = require "src.interface.text"
 local toggleButton = require "src.interface.togglebutton"
 local slider = require "src.interface.slider"
@@ -68,7 +69,7 @@ function mainMenu:new()
     self.startSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("gameStart")
 
     self.paletteImage = game.resourceManager:getAsset("Palettes"):get("mainPalette")
-    -- Initialise menu elements
+
     self.menus =
     {
         ["start"] =
@@ -480,7 +481,8 @@ function mainMenu:new()
             
             elements =
             {
-                textButton("endless", "fontBigUI", 10, 10, 15, 10, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("endless"), 32, 16, 32, 16,
+                function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("endless")
@@ -489,7 +491,8 @@ function mainMenu:new()
                     end
                 end),
 
-                textButton("rush", "fontBigUI", 10, 25, 15, 25, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("rush"), 192, 16, 192, 16,
+                function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("timed")
@@ -497,8 +500,9 @@ function mainMenu:new()
                         self.owner.selectSound:play()
                     end
                 end),
-
-                textButton("denial", "fontBigUI", 10, 40, 15, 40, function(self)
+                
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("denial"), 352, 16, 352, 16,
+                function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("denial")
@@ -506,11 +510,9 @@ function mainMenu:new()
                         self.owner.selectSound:play()
                     end
                 end),
-
-                textButton("chaos", "fontBigUI", 10, 55, 15, 55, function()
-                end),
-
-                textButton("crowd", "fontBigUI", 10, 70, 15, 70, function(self)
+                
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("crowd"), 32, 120, 32, 120,
+                function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("crowd")
@@ -518,15 +520,23 @@ function mainMenu:new()
                         self.owner.selectSound:play()
                     end
                 end),
-
-                textButton("challenge", "fontBigUI", 10, 85, 15, 85, function(self)
-                    self.owner:switchMenu("levelselect")
-                    self.owner:setBackgroundSlideAmount(0.5)
-                    self.owner.selectSound:play()
-                    game.manager:setCurrentGamemode("gauntlet")
+                
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("chaos"), 192, 120, 192, 120,
+                function(self)
+                
+                end),
+                
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("challenge"), 352, 120, 352, 120,
+                function(self)
+                    if self.owner then
+                        self.owner:switchMenu("levelselect")
+                        self.owner:setBackgroundSlideAmount(0.5)
+                        self.owner.selectSound:play()
+                        game.manager:setCurrentGamemode("gauntlet")
+                    end
                 end),
 
-                textButton("back", "fontBigUI", 10, 110, 15, 110, function(self)
+                textButton("back", "fontBigUI", 10, 230, 10, 230, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner:setBackgroundSlideAmount(0.32)
@@ -540,8 +550,8 @@ function mainMenu:new()
                 "Get a high score against a barrage of enemies!",
                 "Try to beat your high score within the time limit!",
                 "You're invincible but areas will make you overheat.\nGet a high score within the time limit!",
-                "To Do",
                 "Lots of enemies spawn - Nearby enemies make you overheat!\nGet a high score within the time limit!",
+                "To Do",
                 "Conquer a set of difficult challenges and bosses!",
                 "",
             },
@@ -672,29 +682,6 @@ function mainMenu:draw()
             love.graphics.setShader(self.menuBackgroundShader)
             love.graphics.rectangle("fill", 0, 0, game.arenaValues.screenWidth, game.arenaValues.screenHeight)
             love.graphics.setShader()
-        end
-
-        if self.showEye then
-            local x = self.eyeOrigin.x
-            local y = self.eyeOrigin.y
-
-            love.graphics.setColor(0, 0, 0, self.eyeAlpha)
-            love.graphics.setLineWidth(50)
-            love.graphics.circle("line", x, y, 150)
-
-            love.graphics.stencil(function()
-                local angle = ((self.eyeOrigin + self.eyePositionOffset) - self.eyeOrigin):angle()
-                local normal = vec2(math.cos(angle), math.sin(angle))
-                local pupilMask = self.eyeOrigin + self.eyePositionOffset + (normal * self.pupilRadius/2)
-
-                love.graphics.circle("fill", pupilMask.x, pupilMask.y, self.pupilRadius/1.5)
-            end, "replace", 1)
-
-            love.graphics.setStencilTest("equal", 0)
-
-            love.graphics.circle("fill", x + self.eyePositionOffset.x, y + self.eyePositionOffset.y, self.pupilRadius)
-            love.graphics.setColor(1, 1, 1, 1)
-            love.graphics.setLineWidth(1)
         end
 
         love.graphics.setStencilTest()

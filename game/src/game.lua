@@ -610,6 +610,16 @@ function game:setupResources()
             victoryOutline = {path = "assets/sprites/interface/victoryoutline.png", type = "Image"},
             clock = {path = "assets/sprites/interface/clock.png", type = "Image"},
             skull = {path = "assets/sprites/interface/skull.png", type = "Image"},
+
+            gamemodes = assetGroup(
+            {
+                endless = {path = "assets/sprites/interface/endless.png", type = "Image"},
+                rush = {path = "assets/sprites/interface/rush.png", type = "Image"},
+                denial = {path = "assets/sprites/interface/denial.png", type = "Image"},
+                crowd = {path = "assets/sprites/interface/crowd.png", type = "Image"},
+                chaos = {path = "assets/sprites/interface/chaos.png", type = "Image"},
+                challenge = {path = "assets/sprites/interface/challenge.png", type = "Image"},
+            })
         }),
 
         sounds = assetGroup(
