@@ -6,9 +6,7 @@ local toggleButton = require "src.interface.togglebutton"
 local slider = require "src.interface.slider"
 local gamemodeText = require "src.interface.gamemodetext"
 local logo = require "src.menu.mainmenu.logo"
-local rectangle = require "src.interface.rect"
 local list = require "src.interface.list"
-local selector = require "src.interface.selector"
 
 local level1 = require "src.levels.level1"
 local boss1 = require "src.levels.boss1"
@@ -136,28 +134,6 @@ function mainMenu:new()
                 textButton("quit", "fontBigUI", 10, 110, 15, 110, function()
                     love.event.quit()
                 end),
-                
-                selector(
-                {
-                    {
-                        name = "test1",
-                        onEnter = function(owner, selector)
-
-                        end
-                    },
-                    {
-                        name = "test2",
-                        onEnter = function(owner, selector)
-
-                        end
-                    },
-                    {
-                        name = "test3",
-                        onEnter = function(owner, selector)
-
-                        end
-                    },
-                }, 10, 125, "fontBigUI", 1),
 
                 text("demo v0.4", "fontUI", "left", 10, 250, 500, 0, 1, 1, false, {0.4, 0.4, 0.4, 1})
             },
@@ -523,20 +499,20 @@ function mainMenu:new()
                     {name = "", description = ""},
                     {name = "Endless", description = "Defeat an endless barrage of enemies!"},
                     {name = "Rush", description = "Beat your high score within the time limit!"},
-                    {name = "Denial", description = "Your ship is invulnerable, but\nareas spawn that heat your Switchblade!"},
+                    {name = "Denial", description = "Dodge the heatspots with your\ninvulnerable Switchblade as you\nblast your way to victory!"},
                     {name = "Chaos", description = "TO DO"},
                     {name = "Crowd", description = "Enemies in proximity to your\nSwitchblade heat it up!"},
                     {name = "Challenge", description = "Conquer a set of challenges\nand difficult bosses!"},
                 }),
                 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("back"), 83, 225, 83, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("back"), 5, 225, 5, 225, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner.backSound:play()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("endless"), 155, 225, 155, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("endless"), 125, 225, 125, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("endless")
@@ -545,7 +521,7 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("rush"), 196, 225, 196, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("rush"), 164, 225, 164, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("timed")
@@ -554,7 +530,7 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("denial"), 237, 225, 237, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("denial"), 203, 225, 203, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("denial")
@@ -563,11 +539,11 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("chaos"), 278, 225, 278, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("chaos"), 242, 225, 242, 225, function(self)
                 
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("crowd"), 319, 225, 319, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("crowd"), 281, 225, 281, 225, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("crowd")
@@ -576,7 +552,7 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("challenge"), 360, 225, 360, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("challenge"), 320, 225, 320, 225, function(self)
                     self.owner:switchMenu("levelselect")
                     self.owner.selectSound:play()
                     game.manager:setCurrentGamemode("gauntlet")

@@ -39,7 +39,11 @@ function gamemodeText:draw()
     love.graphics.printf(currentGamemodeSelection.name, 0 + shakeX, 0 + shakeY, game.arenaValues.screenWidth, "center")
 
     love.graphics.setFont(self.infoFont)
-    love.graphics.printf(currentGamemodeSelection.description, 0 + shakeX, 135 + shakeY, game.arenaValues.screenWidth, "center")
+
+    local _, wrappedText = self.infoFont:getWrap(currentGamemodeSelection.description, 480)
+    local textY = 125 - (self.infoFont:getHeight() * #wrappedText) / 2
+
+    love.graphics.printf(currentGamemodeSelection.description, 0 + shakeX, textY + shakeY, game.arenaValues.screenWidth, "center")
 
     love.graphics.setColor(1, 1, 1, 1)
 end
