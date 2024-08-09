@@ -40,9 +40,11 @@ function interactableHudElement:execute()
 end
 
 function interactableHudElement:onSelectionEnter(inputPressed)
+    return false
 end
 
 function interactableHudElement:onSelectionExit(inputPressed)
+    return false
 end
 
 function interactableHudElement:reset()

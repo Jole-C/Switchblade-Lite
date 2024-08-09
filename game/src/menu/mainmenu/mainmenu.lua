@@ -8,6 +8,7 @@ local gamemodeText = require "src.interface.gamemodetext"
 local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
 local list = require "src.interface.list"
+local selector = require "src.interface.selector"
 
 local level1 = require "src.levels.level1"
 local boss1 = require "src.levels.boss1"
@@ -135,28 +136,28 @@ function mainMenu:new()
                 textButton("quit", "fontBigUI", 10, 110, 15, 110, function()
                     love.event.quit()
                 end),
-
-                list(
+                
+                selector(
                 {
                     {
-                        text = "Test 1",
-                        execute = function(owner, list)
+                        name = "test1",
+                        onEnter = function(owner, selector)
 
                         end
                     },
                     {
-                        text = "Test 2",
-                        execute = function(owner, list)
+                        name = "test2",
+                        onEnter = function(owner, selector)
 
                         end
                     },
                     {
-                        text = "Test 3",
-                        execute = function(owner, list)
+                        name = "test3",
+                        onEnter = function(owner, selector)
 
                         end
                     },
-                }, 10, 125, 15, 15, "fontBigUI"),
+                }, 10, 125, "fontBigUI", 1),
 
                 text("demo v0.4", "fontUI", "left", 10, 250, 500, 0, 1, 1, false, {0.4, 0.4, 0.4, 1})
             },
