@@ -1,7 +1,7 @@
 local interactableHudElement = require "src.interface.interactablehudelement"
-local selector = class({name = "Selector", extends = interactableHudElement})
+local list = class({name = "List", extends = interactableHudElement})
 
-function selector:new(options, x, y, optionSelectX, dividerAmount, font)
+function list:new(options, x, y, optionSelectX, dividerAmount, font)
     self:super()
 
     self.options = options
@@ -20,7 +20,7 @@ function selector:new(options, x, y, optionSelectX, dividerAmount, font)
     self.font = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get(font)
 end
 
-function selector:onSelectionEnter(inputName, direction)
+function list:onSelectionEnter(inputName, direction)
     if direction == -1 then
         self.selectionIndex = #self.options
     elseif direction == 1 then
@@ -28,7 +28,7 @@ function selector:onSelectionEnter(inputName, direction)
     end
 end
 
-function selector:onSelectionExit(inputName, direction)
+function list:onSelectionExit(inputName, direction)
     self.selectionIndex = self.selectionIndex + (1 * direction)
 
     if self.selectionIndex > #self.options or self.selectionIndex < 1 then
@@ -38,7 +38,7 @@ function selector:onSelectionExit(inputName, direction)
     return true
 end
 
-function selector:execute()
+function list:execute()
     local selectedElement = self.options[self.selectionIndex]
 
     if selectedElement.execute then
@@ -46,7 +46,7 @@ function selector:execute()
     end
 end
 
-function selector:update(dt)
+function list:update(dt)
     interactableHudElement.update(self, dt)
 
     for index, option in ipairs(self.options) do
@@ -60,7 +60,7 @@ function selector:update(dt)
     end
 end
 
-function selector:draw()
+function list:draw()
     love.graphics.setFont(self.font)
 
     for index, option in ipairs(self.options) do
@@ -77,4 +77,4 @@ function selector:draw()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
-return selector
+return list

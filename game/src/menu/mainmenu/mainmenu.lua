@@ -7,7 +7,7 @@ local slider = require "src.interface.slider"
 local gamemodeText = require "src.interface.gamemodetext"
 local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
-local selector = require "src.interface.selector"
+local list = require "src.interface.list"
 
 local level1 = require "src.levels.level1"
 local boss1 = require "src.levels.boss1"
@@ -136,23 +136,23 @@ function mainMenu:new()
                     love.event.quit()
                 end),
 
-                selector(
+                list(
                 {
                     {
                         text = "Test 1",
-                        execute = function(owner, selector)
+                        execute = function(owner, list)
 
                         end
                     },
                     {
                         text = "Test 2",
-                        execute = function(owner, selector)
+                        execute = function(owner, list)
 
                         end
                     },
                     {
                         text = "Test 3",
-                        execute = function(owner, selector)
+                        execute = function(owner, list)
 
                         end
                     },
