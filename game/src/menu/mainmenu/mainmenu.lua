@@ -625,8 +625,8 @@ function mainMenu:new()
 
             boxSlideParams =
             {
-                {boxName = "side", percentage = 1},
-                {boxName = "bottom", percentage = 0},
+                {boxName = "side", percentage = 0},
+                {boxName = "bottom", percentage = 1},
             },
         },
     }
