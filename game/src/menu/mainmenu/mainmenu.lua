@@ -24,7 +24,7 @@ function mainMenu:new()
 
     -- Menu box scroll
     self.backgroundScrollSpeed = 20
-    self.quad = love.graphics.newQuad(0, 0, 480, 270, 480, 270)
+    self.quad = love.graphics.newQuad(0, 0, 480, 520, 480, 520)
 
     -- Offset for the menu box sliding
     self.maxSideMenuBoxOffset = game.arenaValues.screenWidth + 30
@@ -668,7 +668,7 @@ function mainMenu:update(dt)
     local scrollSpeed = self.backgroundScrollSpeed * dt
 
     local x, y, w, h = self.quad:getViewport()
-    self.quad:setViewport(x + scrollSpeed, y, w, h, 480, 270)
+    self.quad:setViewport(x + scrollSpeed, y, w, h, 480, 520)
 
     self.sideMenuBoxOffset = math.lerpDT(self.sideMenuBoxOffset, self.targetSideMenuBoxOffset, 0.2, dt)
     self.bottomMenuBoxOffset = math.lerpDT(self.bottomMenuBoxOffset, self.targetBottomMenuBoxOffset, 0.2, dt)
@@ -684,10 +684,10 @@ function mainMenu:setBackgroundSlideAmount()
 
         if boxName == "side" then
             local percentage = param.percentage or 0
-            self.targetSideMenuBoxOffset = math.lerp(self.minSideMenuBoxOffset, self.maxSideMenuBoxOffset, percentage)
+            self.targetSideMenuBoxOffset = math.floor(math.lerp(self.minSideMenuBoxOffset, self.maxSideMenuBoxOffset, percentage))
         elseif boxName == "bottom" then
             local percentage = param.percentage
-            self.targetBottomMenuBoxOffset = math.lerp(self.minBottomMenuBoxOffset, self.maxBottomMenuBoxOffset, percentage)
+            self.targetBottomMenuBoxOffset = math.floor(math.lerp(self.minBottomMenuBoxOffset, self.maxBottomMenuBoxOffset, percentage))
         end
     end
 end
