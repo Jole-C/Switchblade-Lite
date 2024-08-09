@@ -5,6 +5,10 @@ function gamemodeText:new(owner, gamemodes)
     self.owner = owner
     self.enabled = true
 
+    self.gamemodeTextSpacing = 480
+    self.shakeIntensity = 3
+    self.shakeFade = 0.95
+
     self.gamemodes = gamemodes or {
         {name = "", description = ""},
         {name = "Back", description = "Return to the main menu"},
@@ -20,32 +24,35 @@ function gamemodeText:new(owner, gamemodes)
     self.alertFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontAlert")
 
     self.shakeAmount = 0
-    self.shakeIntensity = 3
-    self.shakeFade = 0.95
+    self.gamemodeTextXOffset = 0
 end
 
 function gamemodeText:update(dt)
     self.shakeAmount = self.shakeAmount * self.shakeFade
+    self.gamemodeTextXOffset = math.lerpDT(self.gamemodeTextXOffset, self.gamemodeTextSpacing * self.owner.selectionIndex - 1, 0.1, dt)
 end
 
 function gamemodeText:draw()
-    local currentGamemodeSelection = self.gamemodes[self.owner.selectionIndex] or {name = "", description = ""}
-    local shakeX = math.random(-self.shakeAmount, self.shakeAmount)
-    local shakeY = math.random(-self.shakeAmount, self.shakeAmount)
-
-    love.graphics.setColor(game.manager.currentPalette.uiColour)
-
-    love.graphics.setFont(self.alertFont)
-    love.graphics.printf(currentGamemodeSelection.name, 0 + shakeX, 0 + shakeY, game.arenaValues.screenWidth, "center")
-
-    love.graphics.setFont(self.infoFont)
-
-    local _, wrappedText = self.infoFont:getWrap(currentGamemodeSelection.description, 480)
-    local textY = 125 - (self.infoFont:getHeight() * #wrappedText) / 2
-
-    love.graphics.printf(currentGamemodeSelection.description, 0 + shakeX, textY + shakeY, game.arenaValues.screenWidth, "center")
-
     love.graphics.setColor(1, 1, 1, 1)
+    
+    if self.owner.selectionIndex == 1 then
+        return
+    end
+
+    for index, gamemode in ipairs(self.gamemodes) do
+        local spacing = (self.gamemodeTextSpacing * index - self.owner.selectionIndex) - self.gamemodeTextXOffset
+        love.graphics.setColor(game.manager.currentPalette.uiColour)
+    
+        love.graphics.setFont(self.alertFont)
+        love.graphics.printf(gamemode.name, 0 + spacing, 0, game.arenaValues.screenWidth, "center")
+    
+        love.graphics.setFont(self.infoFont)
+    
+        local _, wrappedText = self.infoFont:getWrap(gamemode.description, 480)
+        local textY = 125 - (self.infoFont:getHeight() * #wrappedText) / 2
+    
+        love.graphics.printf(gamemode.description, 0 + spacing, textY, game.arenaValues.screenWidth, "center")
+    end
 end
 
 function gamemodeText:shake()
