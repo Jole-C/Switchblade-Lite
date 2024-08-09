@@ -7,6 +7,7 @@ local slider = require "src.interface.slider"
 local gamemodeText = require "src.interface.gamemodetext"
 local logo = require "src.menu.mainmenu.logo"
 local rectangle = require "src.interface.rect"
+local selector = require "src.interface.selector"
 
 local level1 = require "src.levels.level1"
 local boss1 = require "src.levels.boss1"
@@ -134,6 +135,28 @@ function mainMenu:new()
                 textButton("quit", "fontBigUI", 10, 110, 15, 110, function()
                     love.event.quit()
                 end),
+
+                selector(
+                {
+                    {
+                        text = "Test 1",
+                        execute = function(owner, selector)
+
+                        end
+                    },
+                    {
+                        text = "Test 2",
+                        execute = function(owner, selector)
+
+                        end
+                    },
+                    {
+                        text = "Test 3",
+                        execute = function(owner, selector)
+
+                        end
+                    },
+                }, 10, 125, 15, 15, "fontBigUI"),
 
                 text("demo v0.4", "fontUI", "left", 10, 250, 500, 0, 1, 1, false, {0.4, 0.4, 0.4, 1})
             },
