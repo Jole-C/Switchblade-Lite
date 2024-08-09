@@ -33,15 +33,10 @@ function gamemodeText:update(dt)
 end
 
 function gamemodeText:draw()
-    love.graphics.setColor(1, 1, 1, 1)
-    
-    if self.owner.selectionIndex == 1 then
-        return
-    end
+    love.graphics.setColor(game.manager.currentPalette.uiColour)
 
     for index, gamemode in ipairs(self.gamemodes) do
         local spacing = (self.gamemodeTextSpacing * index - self.owner.selectionIndex) - self.gamemodeTextXOffset
-        love.graphics.setColor(game.manager.currentPalette.uiColour)
     
         love.graphics.setFont(self.alertFont)
         love.graphics.printf(gamemode.name, 0 + spacing, 0, game.arenaValues.screenWidth, "center")
