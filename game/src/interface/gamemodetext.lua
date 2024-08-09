@@ -20,7 +20,7 @@ function gamemodeText:new(owner, gamemodes)
     self.alertFont = game.resourceManager:getAsset("Interface Assets"):get("fonts"):get("fontAlert")
 
     self.shakeAmount = 0
-    self.shakeIntensity = 5
+    self.shakeIntensity = 3
     self.shakeFade = 0.95
 end
 

@@ -23,26 +23,26 @@ function mainMenu:new()
     self.shaderAngle = 0.25
 
     -- Menu box scroll
-    self.backgroundScrollY = 0
-    self.backgroundScrollX = 0
     self.backgroundScrollSpeed = 20
+    self.quad = love.graphics.newQuad(0, 0, 480, 270, 480, 270)
 
     -- Offset for the menu box sliding
-    self.maxSideMenuBoxOffset = game.arenaValues.screenWidth
-    self.minSideMenuBoxOffset = -150
+    self.maxSideMenuBoxOffset = game.arenaValues.screenWidth + 30
+    self.minSideMenuBoxOffset = -5
     self.targetSideMenuBoxOffset = 0
 
     self.maxBottomMenuBoxOffset = -30
-    self.minBottomMenuBoxOffset = 280
-    self.targetBottomMenuBoxOffset = 280
+    self.minBottomMenuBoxOffset = 275
+    self.targetBottomMenuBoxOffset = 275
 
     -- Initialise background rendering
-    self.menuBackgroundSprite = game.resourceManager:getAsset("Interface Assets"):get("menuBackgroundMesh")
-    self.menuBackgroundSpriteBottom = game.resourceManager:getAsset("Interface Assets"):get("menuBackgroundMeshBottom")
+    self.menuBackgroundSprite = game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("menuTeeth")
     game.canvases.menuBackgroundCanvas.enabled = true
 
     -- Initialise the box shader
     self.menuBoxShader = game.resourceManager:getAsset("Interface Assets"):get("shaders"):get("menuBoxShader")
+
+    self.mask = game.resourceManager:getAsset("Interface Assets"):get("shaders"):get("maskShader")
 
     -- Initialise the box offset
     self.menuBoxOffset = self.minMenuBoxOffset
@@ -151,7 +151,7 @@ function mainMenu:new()
 
             boxSlideParams =
             {
-                {boxName = "side", percentage = 0.35},
+                {boxName = "side", percentage = 0.4},
                 {boxName = "bottom", percentage = 0},
             },
         },
@@ -199,7 +199,7 @@ function mainMenu:new()
 
             boxSlideParams =
             {
-                {boxName = "side", percentage = 0.35},
+                {boxName = "side", percentage = 0.4},
                 {boxName = "bottom", percentage = 0},
             },
         },
@@ -505,14 +505,14 @@ function mainMenu:new()
                     {name = "Challenge", description = "Conquer a set of challenges\nand difficult bosses!"},
                 }),
                 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("back"), 5, 225, 5, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("back"), 9, 225, 9, 225, function(self)
                     if self.owner then
                         self.owner:switchMenu("main")
                         self.owner.backSound:play()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("endless"), 125, 225, 125, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("endless"), 125, 225, 125, 220, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("endless")
@@ -521,7 +521,7 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("rush"), 164, 225, 164, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("rush"), 164, 225, 164, 220, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("timed")
@@ -530,7 +530,7 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("denial"), 203, 225, 203, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("denial"), 203, 225, 203, 220, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("denial")
@@ -539,11 +539,11 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("chaos"), 242, 225, 242, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("chaos"), 242, 225, 242, 220, function(self)
                 
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("crowd"), 281, 225, 281, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("crowd"), 281, 225, 281, 220, function(self)
                     if self.owner then
                         game.manager:changePlayerDefinition("default definition")
                         game.manager:setCurrentGamemode("crowd")
@@ -552,7 +552,7 @@ function mainMenu:new()
                     end
                 end),
 
-                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("challenge"), 320, 225, 320, 225, function(self)
+                spriteButton(game.resourceManager:getAsset("Interface Assets"):get("sprites"):get("gamemodes"):get("challenge"), 320, 225, 320, 220, function(self)
                     self.owner:switchMenu("levelselect")
                     self.owner.selectSound:play()
                     game.manager:setCurrentGamemode("gauntlet")
@@ -663,18 +663,12 @@ function mainMenu:update(dt)
         self.menuBackgroundShader:send("paletteResolution", {self.paletteImage:getWidth(), self.paletteImage:getHeight()})
         self.menuBackgroundShader:send("resolution", resolution)
         self.menuBackgroundShader:send("time", self.shaderTime)
-
-        self.backgroundScrollY = self.backgroundScrollY + self.backgroundScrollSpeed * dt
-        self.backgroundScrollX = self.backgroundScrollX + self.backgroundScrollSpeed * dt
-
-        if self.backgroundScrollY > game.arenaValues.screenHeight then
-            self.backgroundScrollY = 0
-        end
-
-        if self.backgroundScrollX > game.arenaValues.screenWidth then
-            self.backgroundScrollX = 0
-        end
     end
+
+    local scrollSpeed = self.backgroundScrollSpeed * dt
+
+    local x, y, w, h = self.quad:getViewport()
+    self.quad:setViewport(x + scrollSpeed, y, w, h, 480, 270)
 
     self.sideMenuBoxOffset = math.lerpDT(self.sideMenuBoxOffset, self.targetSideMenuBoxOffset, 0.2, dt)
     self.bottomMenuBoxOffset = math.lerpDT(self.bottomMenuBoxOffset, self.targetBottomMenuBoxOffset, 0.2, dt)
@@ -713,16 +707,14 @@ function mainMenu:draw()
         self:drawOverlay()
 
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset + 5, self.backgroundScrollY)
-        love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset + 5, self.backgroundScrollY - game.arenaValues.screenHeight)
-        love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX, self.bottomMenuBoxOffset - 5)
-        love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX - game.arenaValues.screenWidth, self.bottomMenuBoxOffset - 5)
+        love.graphics.draw(self.menuBackgroundSprite, self.quad, 0, self.bottomMenuBoxOffset - 5)
+        love.graphics.draw(self.menuBackgroundSprite, self.quad, self.sideMenuBoxOffset + 5, 0, math.rad(90))
 
         love.graphics.stencil(function()
-            love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset, self.backgroundScrollY)
-            love.graphics.draw(self.menuBackgroundSprite, self.sideMenuBoxOffset, self.backgroundScrollY - game.arenaValues.screenHeight)
-            love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX, self.bottomMenuBoxOffset)
-            love.graphics.draw(self.menuBackgroundSpriteBottom, self.backgroundScrollX - game.arenaValues.screenWidth, self.bottomMenuBoxOffset)
+            love.graphics.setShader(self.mask)
+            love.graphics.draw(self.menuBackgroundSprite, self.quad, self.sideMenuBoxOffset, 0, math.rad(90))
+            love.graphics.draw(self.menuBackgroundSprite, self.quad, 0, self.bottomMenuBoxOffset)
+            love.graphics.setShader()
         end, "replace", 1, false)
 
         love.graphics.setStencilTest("greater", 0)
@@ -761,6 +753,7 @@ end
 function mainMenu:cleanup()
     menu.cleanup(self)
     game.canvases.menuBackgroundCanvas.enabled = false
+    self.quad:release()
 end
 
 return mainMenu
