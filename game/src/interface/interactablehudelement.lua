@@ -35,9 +35,14 @@ function interactableHudElement:checkForInteractions()
 
 end
 
--- Used when enter is pressed on the button
 function interactableHudElement:execute()
 
+end
+
+function interactableHudElement:onSelectionEnter(inputPressed)
+end
+
+function interactableHudElement:onSelectionExit(inputPressed)
 end
 
 function interactableHudElement:reset()

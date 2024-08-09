@@ -13,6 +13,7 @@ function menu:new()
     self.selectionIndex = 1
     self.inputDelay = 0.5
     self.menuDirection = "down"
+    self.currentElement = nil
     
     self.menuUpSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuUp")
     self.menuDownSound = game.resourceManager:getAsset("Interface Assets"):get("sounds"):get("menuDown")
@@ -48,11 +49,20 @@ function menu:update(dt)
     end
 
     local direction = 1
+    local inputPressed = ""
+
     if game.input:pressed(menuBackward) then
         self.menuUpSound:play()
+
+        direction = -1
+        inputPressed = menuBackward
+
+        if self:wasInputConsumed(inputPressed, direction) then
+            return
+        end
         
         self.selectionIndex = self.selectionIndex - 1
-        direction = -1
+
 
         if self.currentMenu.onElementChange then
             self.currentMenu.onElementChange(self)
@@ -61,9 +71,15 @@ function menu:update(dt)
 
     if game.input:pressed(menuForward) then
         self.menuDownSound:play()
-        
-        self.selectionIndex = self.selectionIndex + 1
+
         direction = 1
+        inputPressed = menuForward
+        
+        if self:wasInputConsumed(menuForward, direction) then
+            return
+        end
+
+        self.selectionIndex = self.selectionIndex + 1
 
         if self.currentMenu.onElementChange then
             self.currentMenu.onElementChange(self)
@@ -80,6 +96,11 @@ function menu:update(dt)
         return
     end
 
+    if self.currentElement ~= selectedElement then
+        self.currentElement = selectedElement
+        selectedElement:onSelectionEnter(inputPressed, direction)
+    end
+
     -- Execute the selected button when pressed
     if game.input:pressed("select") and selectedElement.enabled then
         selectedElement:execute()
@@ -88,10 +109,22 @@ function menu:update(dt)
     if self.toolTips then
         self.toolTipText.text = self.toolTips[self.selectionIndex] or ""
     end
+
+    self.currentElement = selectedElement
 end
 
 function menu:draw()
 
+end
+
+function menu:wasInputConsumed(menuInput, menuDirection)
+    if self.currentElement == nil or self.currentElement.execute == nil then
+        return false
+    end
+
+    local inputConsumed = self.currentElement:onSelectionExit(menuInput, menuDirection)
+
+    return inputConsumed
 end
 
 function menu:setElementsEnabled(enabled)
